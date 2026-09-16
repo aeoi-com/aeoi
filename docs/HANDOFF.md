@@ -63,7 +63,13 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 - Rules catalogue: every code of the Wegleitung with section, page, excerpt, status and the place
   in the code base that enforces it (`tools/build_rules_catalogue.py`); a test proves that every
   "implemented" code is referenced in code or tests.
-- 152 tests: `.venv/Scripts/python -m pytest`.
+- Status outcomes (`aeoi.estv.status`, CLI `aeoi estv status FILE`): parses an OECD CRS Status
+  Message 2.0 (expected M2M format) or plain portal text pasted by the pilot into findings with
+  code, DocRefIds, fields; looks each code up in the catalogue and flags findings on rules the
+  toolkit claims to enforce as bugs. The real ESTV format is still open question 4.
+- OECD status-message codes not listed by the ESTV are mapped in docs/ESTV-RULES.md (60016,
+  70000-70012, 80012, 80013-80015, 90000-90002, 99999).
+- 157 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -103,10 +109,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 1. Week 2: done (see above). Open: IBAN/ISIN checksum validation (60000/60001) and the
    partner-state list (98200/98201) belong to the week-3 rule engine.
-2. Week 3 (in progress): partner states, IBAN/ISIN, rules catalogue done. Still open: the OECD
-   business rules of User Guide 4.0 not yet in the checks, the status-message parser skeleton;
-   first pilot test upload (2.0 payload). Yearly maintenance: rerun `tools/partner_states.py`
-   when the SIF list changes.
+2. Week 3: done except the first pilot test upload (2.0 payload), which needs the pilot. Yearly
+   maintenance: rerun `tools/partner_states.py` when the SIF list changes.
 3. Week 4: local submission registry (SQLite: input row → DocRefId → message → outcome), then
    corrections/cancellations (Wegleitung Ziffer 6) and the status parser.
 4. Week 5: CLI build/validate/correct, docs, page "what changes with 3.0".

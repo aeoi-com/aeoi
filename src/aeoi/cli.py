@@ -5,6 +5,7 @@ aeoi crs check     --input filled.xlsx --version 3.0
 aeoi crs build     --input filled.xlsx --version 3.0 --out report.xml [--test] [--key ESTV-PublicKey.pem --package Test-report.zip]
 aeoi estv package  --xml report.xml --key ESTV-PublicKey.pem --out Test-report.zip --test
 aeoi estv inspect  Test-report.zip [--key ESTV-PublicKey.pem] [--test|--prod]
+aeoi estv status   outcome.xml | outcome.txt
 """
 
 from __future__ import annotations
@@ -125,6 +126,19 @@ def _cmd_estv_inspect(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def _cmd_estv_status(args: argparse.Namespace) -> int:
+    from aeoi.estv import status
+
+    path = Path(args.file)
+    raw = path.read_bytes()
+    if raw.lstrip().startswith(b"<"):
+        outcome = status.parse_status_message(raw)
+    else:
+        outcome = status.parse_text(raw.decode("utf-8", "replace"))
+    print(status.render(outcome))
+    return 0 if outcome.accepted else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="aeoi", description="AEOI reporting toolkit")
     parser.add_argument("--version", action="version", version=f"aeoi {__version__}")
@@ -171,6 +185,12 @@ def build_parser() -> argparse.ArgumentParser:
     g.add_argument("--test", dest="test", action="store_true", default=None)
     g.add_argument("--prod", dest="test", action="store_false")
     i.set_defaults(func=_cmd_estv_inspect)
+
+    st = estv_sub.add_parser(
+        "status", help="read a validation outcome (OECD status message XML or portal text)"
+    )
+    st.add_argument("file", help="status message .xml, or a text file pasted from the portal")
+    st.set_defaults(func=_cmd_estv_status)
     return parser
 
 

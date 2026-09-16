@@ -5,6 +5,14 @@ Source: Technische Wegleitung AIA (ESTV, September 2026), sections 5.1-5.3.11. G
 
 65 rule codes: **47 implemented** in the toolkit, **12** waiting for the submission registry / corrections, **6** checkable only by the portal. (98999 is a range bound and 70012 a change-log reference, not rules.)
 
+OECD codes of the CRS Status Message User Guide v3.0 that the ESTV does not list for the
+FI -> ESTV leg and that the toolkit therefore treats through the ESTV equivalents: 60016
+(= 60005), 70000/70002/70003/70012 (empty or whitespace-only values: refused by the input
+model, 50007 at the ESTV), 80012 (one reporting period: by construction), 80009 and
+80013-80015 (resend/CA-to-CA cases, not used), 90000-90002 (TIN structure/algorithm: the
+ESTV states TINs cannot be validated technically; a per-jurisdiction TIN check may come as
+a warning later), 99999 (custom).
+
 | code | section | page | status | where | rule (German, excerpt) |
 |---|---|---|---|---|---|
 | 50001 | 5.1 Dateivalidierung | 17 | portal | transport error | Die Datei wurde nicht korrekt übertragen oder ist fehlerhaft und kann nicht geöffnet werden. |
