@@ -40,6 +40,7 @@ def test_two_packages_of_the_same_xml_differ(key_pair):
 
 
 def test_structure_matches_wegleitung(key_pair):
+    """Also OECD 50013 (AES key size / cipher mode / IV) by construction: CBC, 48-byte blob, IV."""
     private, public = key_pair
     package, _ = pk.build_package(XML, public, file_name="Test-structure.zip", test=True)
     outer = zipfile.ZipFile(io.BytesIO(package))

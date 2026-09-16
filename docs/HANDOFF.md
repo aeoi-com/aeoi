@@ -67,9 +67,11 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   Message 2.0 (expected M2M format) or plain portal text pasted by the pilot into findings with
   code, DocRefIds, fields; looks each code up in the catalogue and flags findings on rules the
   toolkit claims to enforce as bugs. The real ESTV format is still open question 4.
-- OECD status-message codes not listed by the ESTV are mapped in docs/ESTV-RULES.md (60016,
-  70000-70012, 80012, 80013-80015, 90000-90002, 99999).
-- 157 tests: `.venv/Scripts/python -m pytest`.
+- OECD status-message codes not listed by the ESTV are mapped in docs/ESTV-RULES.md: 50013
+  (packaging by construction), 60011/60012 (CA-to-CA sorting, superseded by 98200-98202),
+  60016 (= 60005), 70000/70002/70003/70012 (deleted by User Guide v3.0), 80009/80012-80015,
+  90000-90002 (TIN, not applied by the ESTV), 99999.
+- 158 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -79,7 +81,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 - 65 ESTV rule codes (67 distinct five-digit numbers in the Wegleitung: 98999 is the range bound
   and 70012 only a change-log reference); catalogue with status and page in
   `src/aeoi/estv/rules_catalogue.json` / `docs/ESTV-RULES.md` (47 implemented, 12 waiting for the
-  registry/corrections, 6 portal-only); ESTV-specific range 98000-98999; ReportingFI cannot be corrected or
+  registry/corrections, 6 portal-only; plus OECD 50013/60011/60012 with origin "oecd"; sections
+  are cumulative across pages and 50010/50011 keep both wordings); ESTV-specific range 98000-98999; ReportingFI cannot be corrected or
   cancelled (80004); CorrMessageRefId forbidden (80006); DocRefId = CH+year+CH+1-42 chars
   (80001); MessageRefId `CH[0-9]{4}CH.{1,162}`, UUID recommended, no customer data (50008/50009);
   ISO 8859-1 minus Anhang 7.2 (50005); test DocTypeIndic OECD10/OECD11.
