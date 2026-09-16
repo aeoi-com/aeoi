@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<crs:CRS_OECD xmlns:cfc="urn:oecd:ties:commontypesfatcacrs:v2" xmlns:crs="urn:oecd:ties:crs:v2" xmlns:stf="urn:oecd:ties:crsstf:v5" version="2.0">
+  <crs:MessageSpec>
+    <crs:SendingCompanyIN>052.1111.1111</crs:SendingCompanyIN>
+    <crs:TransmittingCountry>CH</crs:TransmittingCountry>
+    <crs:ReceivingCountry>CH</crs:ReceivingCountry>
+    <crs:MessageType>CRS</crs:MessageType>
+    <crs:MessageRefId>CH2017CH48608ee6-19ec-4b9a-9c0c-2d7f2669061f</crs:MessageRefId>
+    <crs:MessageTypeIndic>CRS703</crs:MessageTypeIndic>
+    <!--Indicator for Nil Return-->
+    <crs:ReportingPeriod>2017-12-31</crs:ReportingPeriod>
+    <crs:Timestamp>2017-06-15T15:32:28Z</crs:Timestamp>
+  </crs:MessageSpec>
+  <crs:CrsBody>
+    <crs:ReportingFI>
+      <crs:ResCountryCode>CH</crs:ResCountryCode>
+      <crs:IN issuedBy="CH">CHE-234.567.890</crs:IN>
+      <crs:Name nameType="OECD207">Empty &amp; Cie.</crs:Name>
+      <crs:Address>
+        <cfc:CountryCode>CH</cfc:CountryCode>
+        <cfc:AddressFix>
+          <cfc:Street>Bahnhofstrasse</cfc:Street>
+          <cfc:BuildingIdentifier>1</cfc:BuildingIdentifier>
+          <cfc:PostCode>4004</cfc:PostCode>
+          <cfc:City>Basel</cfc:City>
+        </cfc:AddressFix>
+      </crs:Address>
+      <crs:DocSpec>
+        <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+        <stf:DocRefId>CH2017CH_FI2</stf:DocRefId>
+      </crs:DocSpec>
+    </crs:ReportingFI>
+    <crs:ReportingGroup/>
+    <!--ReportingGroup without AccountReports-->
+  </crs:CrsBody>
+</crs:CRS_OECD>

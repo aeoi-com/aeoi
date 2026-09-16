@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<crs:CRS_OECD xmlns:cfc="urn:oecd:ties:commontypesfatcacrs:v2" xmlns:crs="urn:oecd:ties:crs:v2" xmlns:stf="urn:oecd:ties:crsstf:v5" version="2.0">
+  <crs:MessageSpec>
+    <crs:SendingCompanyIN>052.0000.0000</crs:SendingCompanyIN>
+    <crs:TransmittingCountry>CH</crs:TransmittingCountry>
+    <crs:ReceivingCountry>CH</crs:ReceivingCountry>
+    <crs:MessageType>CRS</crs:MessageType>
+    <crs:MessageRefId>CH2017CH503e1eea-0aa2-4d2f-aba1-e48578b5f8e2</crs:MessageRefId>
+    <crs:MessageTypeIndic>CRS701</crs:MessageTypeIndic>
+    <crs:ReportingPeriod>2017-12-31</crs:ReportingPeriod>
+    <crs:Timestamp>2017-06-14T09:30:47Z</crs:Timestamp>
+  </crs:MessageSpec>
+  <crs:CrsBody>
+    <crs:ReportingFI>
+      <crs:ResCountryCode>CH</crs:ResCountryCode>
+      <crs:IN issuedBy="CH">CHE-123.456.789</crs:IN>
+      <crs:Name nameType="OECD207">Beispiel AG</crs:Name>
+      <crs:Address legalAddressType="OECD304">
+        <cfc:CountryCode>CH</cfc:CountryCode>
+        <cfc:AddressFix>
+          <cfc:Street>Bahnhofstrasse</cfc:Street>
+          <cfc:BuildingIdentifier>1</cfc:BuildingIdentifier>
+          <cfc:POB>100</cfc:POB>
+          <cfc:PostCode>8001</cfc:PostCode>
+          <cfc:City>Zürich</cfc:City>
+        </cfc:AddressFix>
+        <cfc:AddressFree>Bahnhofstrasse 1, Postfach 100, 8001 Zürich </cfc:AddressFree>
+      </crs:Address>
+      <crs:DocSpec>
+        <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+        <stf:DocRefId>CH2017CH_FI1</stf:DocRefId>
+      </crs:DocSpec>
+    </crs:ReportingFI>
+    <crs:ReportingGroup>
+      <crs:AccountReport>
+        <!--Account of an individial-->
+        <crs:DocSpec>
+          <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+          <stf:DocRefId>CH2017CH_AR1</stf:DocRefId>
+        </crs:DocSpec>
+        <crs:AccountNumber AcctNumberType="OECD601">DE17120700000012345678</crs:AccountNumber>
+        <crs:AccountHolder>
+          <crs:Individual>
+            <crs:ResCountryCode>DE</crs:ResCountryCode>
+            <crs:TIN issuedBy="DE">123456798</crs:TIN>
+            <crs:Name nameType="OECD202">
+              <crs:Title>Dr.</crs:Title>
+              <crs:FirstName>Hans</crs:FirstName>
+              <crs:MiddleName>Rudolf</crs:MiddleName>
+              <crs:NamePrefix>von</crs:NamePrefix>
+              <crs:LastName>Muster</crs:LastName>
+              <crs:GenerationIdentifier>Jr.</crs:GenerationIdentifier>
+            </crs:Name>
+            <crs:Address legalAddressType="OECD305">
+              <cfc:CountryCode>DE</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Lange Straße</cfc:Street>
+                <cfc:BuildingIdentifier>25</cfc:BuildingIdentifier>
+                <cfc:PostCode>10101</cfc:PostCode>
+                <cfc:City>Berlin</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+            <crs:BirthInfo>
+              <crs:BirthDate>1967-08-13</crs:BirthDate>
+              <crs:City>Hamburg</crs:City>
+              <crs:CountryInfo>
+                <crs:CountryCode>DE</crs:CountryCode>
+              </crs:CountryInfo>
+            </crs:BirthInfo>
+          </crs:Individual>
+        </crs:AccountHolder>
+        <crs:AccountBalance currCode="CHF">500000</crs:AccountBalance>
+        <crs:Payment>
+          <crs:Type>CRS502</crs:Type>
+          <crs:PaymentAmnt currCode="CHF">4814.50</crs:PaymentAmnt>
+        </crs:Payment>
+      </crs:AccountReport>
+      <crs:AccountReport>
+        <!--Account of a Passive NFE with Controlling Persons-->
+        <crs:DocSpec>
+          <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+          <stf:DocRefId>CH2017CH_AR2</stf:DocRefId>
+        </crs:DocSpec>
+        <crs:AccountNumber>12345678</crs:AccountNumber>
+        <crs:AccountHolder>
+          <crs:Organisation>
+            <crs:ResCountryCode>GG</crs:ResCountryCode>
+            <crs:Name>Example Trust</crs:Name>
+            <crs:Address>
+              <cfc:CountryCode>GG</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Main Street 25</cfc:Street>
+                <cfc:City>Guernsey</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+          </crs:Organisation>
+          <crs:AcctHolderType>CRS101</crs:AcctHolderType>
+        </crs:AccountHolder>
+        <crs:ControllingPerson>
+          <crs:Individual>
+            <crs:ResCountryCode>DE</crs:ResCountryCode>
+            <crs:ResCountryCode>MC</crs:ResCountryCode>
+            <crs:Name>
+              <crs:FirstName>Richie</crs:FirstName>
+              <crs:MiddleName>M.</crs:MiddleName>
+              <crs:LastName>Rich</crs:LastName>
+            </crs:Name>
+            <crs:Address>
+              <cfc:CountryCode>DE</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Lange Strasse</cfc:Street>
+                <cfc:PostCode>12345</cfc:PostCode>
+                <cfc:City>Grossstadt</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+          </crs:Individual>
+          <crs:CtrlgPersonType>CRS801</crs:CtrlgPersonType>
+        </crs:ControllingPerson>
+        <crs:ControllingPerson>
+          <crs:Individual>
+            <crs:ResCountryCode>PL</crs:ResCountryCode>
+            <crs:ResCountryCode>RU</crs:ResCountryCode>
+            <crs:TIN issuedBy="PL">65498732543121</crs:TIN>
+            <crs:TIN issuedBy="RU">A2349827</crs:TIN>
+            <crs:Name>
+              <crs:FirstName>Grzegorz</crs:FirstName>
+              <crs:LastName>Brzeczyszczykiewicz</crs:LastName>
+            </crs:Name>
+            <crs:Address>
+              <cfc:CountryCode>PL</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Ulica Zielona</cfc:Street>
+                <cfc:BuildingIdentifier>513</cfc:BuildingIdentifier>
+                <cfc:SuiteIdentifier>42</cfc:SuiteIdentifier>
+                <cfc:FloorIdentifier>4</cfc:FloorIdentifier>
+                <cfc:DistrictName>Powiat Zamojski</cfc:DistrictName>
+                <cfc:PostCode>22-460</cfc:PostCode>
+                <cfc:City>Szczebrzeszyn</cfc:City>
+                <cfc:CountrySubentity>Lublin</cfc:CountrySubentity>
+              </cfc:AddressFix>
+            </crs:Address>
+          </crs:Individual>
+          <crs:CtrlgPersonType>CRS803</crs:CtrlgPersonType>
+        </crs:ControllingPerson>
+        <crs:AccountBalance currCode="EUR">3867851365.78</crs:AccountBalance>
+      </crs:AccountReport>
+      <crs:AccountReport>
+        <!--Undocumented Account-->
+        <crs:DocSpec>
+          <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+          <stf:DocRefId>CH2017CH_AR3</stf:DocRefId>
+        </crs:DocSpec>
+        <crs:AccountNumber AcctNumberType="OECD602" UndocumentedAccount="true">1234567890</crs:AccountNumber>
+        <crs:AccountHolder>
+          <crs:Individual>
+            <crs:ResCountryCode>CH</crs:ResCountryCode>
+            <crs:Name>
+              <crs:FirstName>NFN</crs:FirstName>
+              <crs:LastName>Smith</crs:LastName>
+            </crs:Name>
+            <crs:Address>
+              <cfc:CountryCode>CH</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:City>Undocumented</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+          </crs:Individual>
+        </crs:AccountHolder>
+        <crs:AccountBalance currCode="AUD">1200512.52</crs:AccountBalance>
+        <crs:Payment>
+          <crs:Type>CRS502</crs:Type>
+          <crs:PaymentAmnt currCode="AUD">28345.82</crs:PaymentAmnt>
+        </crs:Payment>
+      </crs:AccountReport>
+    </crs:ReportingGroup>
+  </crs:CrsBody>
+</crs:CRS_OECD>

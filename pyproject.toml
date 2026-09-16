@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aeoi"
+version = "0.0.1"
+description = "Open toolkit for Automatic Exchange of Information reporting: CRS (OECD XML Schema 2.0/3.0), CARF, FATCA. Swiss ESTV portal first."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+authors = [{ name = "aeoi contributors" }]
+keywords = ["CRS", "AEOI", "CARF", "FATCA", "OECD", "ESTV", "XML", "tax reporting"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Financial and Insurance Industry",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial",
+]
+dependencies = [
+  "xsdata>=24.0",
+  "lxml>=5.0",
+  "xmlschema>=3.0",
+  "cryptography>=42.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "xsdata[cli]>=24.0", "openpyxl>=3.1"]
+
+[project.scripts]
+aeoi = "aeoi.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aeoi"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["src/aeoi/schemas"]

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+# never commit real reporting data, keys or portal downloads
+data/
+*.pem
+*.p12
+*.key
+Test*.zip
+CRS_Payload*
+CRS_KEY

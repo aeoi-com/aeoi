@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<crs:CRS_OECD xmlns:cfc="urn:oecd:ties:commontypesfatcacrs:v2" xmlns:crs="urn:oecd:ties:crs:v2" xmlns:stf="urn:oecd:ties:crsstf:v5" version="2.0">
+  <crs:MessageSpec>
+    <crs:SendingCompanyIN>052.0000.0000</crs:SendingCompanyIN>
+    <crs:TransmittingCountry>CH</crs:TransmittingCountry>
+    <crs:ReceivingCountry>CH</crs:ReceivingCountry>
+    <crs:MessageType>CRS</crs:MessageType>
+    <crs:MessageRefId>CH2017CH85ca907e-8dd0-4c0f-bc9d-42b5119f4655</crs:MessageRefId>
+    <crs:MessageTypeIndic>CRS702</crs:MessageTypeIndic>
+    <crs:ReportingPeriod>2017-12-31</crs:ReportingPeriod>
+    <crs:Timestamp>2017-06-16T16:04:42Z</crs:Timestamp>
+  </crs:MessageSpec>
+  <crs:CrsBody>
+    <crs:ReportingFI>
+      <crs:ResCountryCode>CH</crs:ResCountryCode>
+      <crs:IN issuedBy="CH">CHE-123.456.789</crs:IN>
+      <crs:Name nameType="OECD207">Beispiel AG</crs:Name>
+      <crs:Address legalAddressType="OECD304">
+        <cfc:CountryCode>CH</cfc:CountryCode>
+        <cfc:AddressFix>
+          <cfc:Street>Bahnhofstrasse</cfc:Street>
+          <cfc:BuildingIdentifier>1</cfc:BuildingIdentifier>
+          <cfc:POB>100</cfc:POB>
+          <cfc:PostCode>8001</cfc:PostCode>
+          <cfc:City>Zürich</cfc:City>
+        </cfc:AddressFix>
+        <cfc:AddressFree>Bahnhofstrasse 1, Postfach 100, 8001 Zürich</cfc:AddressFree>
+      </crs:Address>
+      <crs:DocSpec>
+        <stf:DocTypeIndic>OECD0</stf:DocTypeIndic>
+        <!--Alternatively use OECD1 with new DocRefId-->
+        <stf:DocRefId>CH2017CH_FI1</stf:DocRefId>
+      </crs:DocSpec>
+    </crs:ReportingFI>
+    <crs:ReportingGroup>
+      <crs:AccountReport>
+        <!--Same content as previously, only DocSpec changed-->
+        <crs:DocSpec>
+          <stf:DocTypeIndic>OECD3</stf:DocTypeIndic>
+          <!--Deletion Code-->
+          <stf:DocRefId>CH2017CH_AR6</stf:DocRefId>
+          <!--New DocRefId-->
+          <stf:CorrDocRefId>CH2017CH_AR5</stf:CorrDocRefId>
+          <!--Reference to corrected 
+AccountReport-->
+        </crs:DocSpec>
+        <crs:AccountNumber AcctNumberType="OECD601">DE17120700000012345678</crs:AccountNumber>
+        <crs:AccountHolder>
+          <crs:Individual>
+            <crs:ResCountryCode>DE</crs:ResCountryCode>
+            <crs:TIN issuedBy="DE">123456798</crs:TIN>
+            <crs:Name nameType="OECD202">
+              <crs:Title>Dr.</crs:Title>
+              <crs:FirstName>Hans</crs:FirstName>
+              <crs:MiddleName>Rudolf</crs:MiddleName>
+              <crs:NamePrefix>von</crs:NamePrefix>
+              <crs:LastName>Muster</crs:LastName>
+              <crs:GenerationIdentifier>Jr.</crs:GenerationIdentifier>
+            </crs:Name>
+            <crs:Address legalAddressType="OECD305">
+              <cfc:CountryCode>DE</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Lange Straße</cfc:Street>
+                <cfc:BuildingIdentifier>25</cfc:BuildingIdentifier>
+                <cfc:PostCode>10101</cfc:PostCode>
+                <cfc:City>Berlin</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+            <crs:Address>
+              <cfc:CountryCode>CH</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Munotgasse</cfc:Street>
+                <cfc:BuildingIdentifier>2</cfc:BuildingIdentifier>
+                <cfc:PostCode>8200</cfc:PostCode>
+                <cfc:City>Schaffhausen</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+            <crs:BirthInfo>
+              <crs:BirthDate>1967-08-13</crs:BirthDate>
+              <crs:City>Hamburg</crs:City>
+              <crs:CountryInfo>
+                <crs:CountryCode>DE</crs:CountryCode>
+              </crs:CountryInfo>
+            </crs:BirthInfo>
+          </crs:Individual>
+        </crs:AccountHolder>
+        <crs:AccountBalance currCode="CHF">1560032</crs:AccountBalance>
+        <crs:Payment>
+          <crs:Type>CRS502</crs:Type>
+          <crs:PaymentAmnt currCode="CHF">4814.50</crs:PaymentAmnt>
+        </crs:Payment>
+      </crs:AccountReport>
+    </crs:ReportingGroup>
+  </crs:CrsBody>
+</crs:CRS_OECD>

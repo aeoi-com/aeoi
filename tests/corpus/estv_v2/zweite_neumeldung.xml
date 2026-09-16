@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<crs:CRS_OECD xmlns:cfc="urn:oecd:ties:commontypesfatcacrs:v2" xmlns:crs="urn:oecd:ties:crs:v2" xmlns:stf="urn:oecd:ties:crsstf:v5" version="2.0">
+  <crs:MessageSpec>
+    <crs:SendingCompanyIN>052.0000.0000</crs:SendingCompanyIN>
+    <crs:TransmittingCountry>CH</crs:TransmittingCountry>
+    <crs:ReceivingCountry>CH</crs:ReceivingCountry>
+    <crs:MessageType>CRS</crs:MessageType>
+    <crs:MessageRefId>CH2017CHf6aa251f-3341-46a1-8bcb-cfde7433df55</crs:MessageRefId>
+    <crs:MessageTypeIndic>CRS701</crs:MessageTypeIndic>
+    <crs:ReportingPeriod>2017-12-31</crs:ReportingPeriod>
+    <crs:Timestamp>2017-06-15T10:47:21Z</crs:Timestamp>
+  </crs:MessageSpec>
+  <crs:CrsBody>
+    <crs:ReportingFI>
+      <crs:ResCountryCode>CH</crs:ResCountryCode>
+      <crs:IN issuedBy="CH">CHE-123.456.789</crs:IN>
+      <crs:Name nameType="OECD207">Beispiel AG</crs:Name>
+      <crs:Address legalAddressType="OECD304">
+        <cfc:CountryCode>CH</cfc:CountryCode>
+        <cfc:AddressFix>
+          <cfc:Street>Bahnhofstrasse</cfc:Street>
+          <cfc:BuildingIdentifier>1</cfc:BuildingIdentifier>
+          <cfc:POB>100</cfc:POB>
+          <cfc:PostCode>8001</cfc:PostCode>
+          <cfc:City>Zürich</cfc:City>
+        </cfc:AddressFix>
+        <cfc:AddressFree>Bahnhofstrasse 1, Postfach 100, 8001 Zürich</cfc:AddressFree>
+      </crs:Address>
+      <crs:DocSpec>
+        <stf:DocTypeIndic>OECD0</stf:DocTypeIndic>
+        <!--Alternatively use OECD1 with new DocRefId-->
+        <stf:DocRefId>CH2017CH_FI1</stf:DocRefId>
+      </crs:DocSpec>
+    </crs:ReportingFI>
+    <crs:ReportingGroup>
+      <crs:AccountReport>
+        <!--Additional AccountReport-->
+        <crs:DocSpec>
+          <stf:DocTypeIndic>OECD1</stf:DocTypeIndic>
+          <stf:DocRefId>CH2017CH_AR4</stf:DocRefId>
+        </crs:DocSpec>
+        <crs:AccountNumber>291348578</crs:AccountNumber>
+        <crs:AccountHolder>
+          <crs:Individual>
+            <crs:ResCountryCode>ES</crs:ResCountryCode>
+            <crs:Name>
+              <crs:FirstName>Juan</crs:FirstName>
+              <crs:LastName>Rodriguez Gonzales</crs:LastName>
+            </crs:Name>
+            <crs:Address>
+              <cfc:CountryCode>ES</cfc:CountryCode>
+              <cfc:AddressFix>
+                <cfc:Street>Campo de Villa</cfc:Street>
+                <cfc:POB>681</cfc:POB>
+                <cfc:City>Madrid</cfc:City>
+              </cfc:AddressFix>
+            </crs:Address>
+          </crs:Individual>
+        </crs:AccountHolder>
+        <crs:AccountBalance currCode="EUR">6546832</crs:AccountBalance>
+      </crs:AccountReport>
+    </crs:ReportingGroup>
+  </crs:CrsBody>
+</crs:CRS_OECD>
