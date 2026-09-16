@@ -29,6 +29,10 @@ Status: pre-alpha, week 2. What exists today:
   nil reports, outcomes; `aeoi crs correct`, `aeoi crs registry`, `aeoi estv status --registry`.
 - **Outcome parser** (`aeoi.estv.status`): OECD CRS Status Message 2.0 or pasted portal text,
   every code explained from the catalogue.
+- **Validator for any file** (`aeoi crs validate report.xml`): schema, header and DocSpec rules,
+  character set, content rules - for XML produced by this or another tool, 2.0 and 3.0.
+- **German user pages** for reporting FIs and fiduciaries: `docs/de/ANLEITUNG.md` and
+  `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 
 Not yet: the browser validator, the pilot's first test upload (needs a registered FI), CARF.
 

@@ -88,7 +88,15 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   `accepted` (not merely built or submitted); the ReportingFI is resent (OECD0) only from an
   accepted message, otherwise OECD1 with a new DocRefId; `discarded` marks a built message that
   was never uploaded and frees its chain targets.
-- 176 tests: `.venv/Scripts/python -m pytest`.
+- Week 5 (in progress): `aeoi crs validate FILE.xml` (`aeoi.crs.validate` on top of
+  `aeoi.crs.read_xml`, the inverse of the builder): XSD, header/DocSpec rules readable from the
+  file (80004-80011, 98100, 98101, 60007-60010, 60013, 50010/50011 from the file name, the
+  Wegleitung-header namespace case), character set on every text node, size limit, then the
+  content rules through `check_message`; works on files from any tool, both versions.
+  German pages for the pilot: `docs/de/ANLEITUNG.md` (step by step) and
+  `docs/de/WAS-AENDERT-SICH-MIT-3.0.md` (dates, new mandatory elements, transitional values,
+  online-form limits, header question), all statements cited from the Wegleitung / XSD.
+- 184 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -133,7 +141,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    maintenance: rerun `tools/partner_states.py` when the SIF list changes.
 3. Week 4: done (registry, corrections, deletions, outcomes; see above). Open: the real ESTV
    outcome format (question 4) decides whether `aeoi estv status` can be fed automatically.
-4. Week 5: CLI build/validate/correct, docs, page "what changes with 3.0".
+4. Week 5: validate + German pages done; open: README/CLI polish, packaging for PyPI (needs
+   the token), a German summary for associations.
 5. Week 6: PyPI (`aeoi`, name free as of 2026-09-16), GitHub, Pyodide browser validator (lxml +
    rule engine only, no analytics, no server logs).
 

@@ -4,7 +4,8 @@ aeoi crs template  --out template.xlsx [--example]
 aeoi crs check     --input filled.xlsx --version 3.0
 aeoi crs build     --input filled.xlsx --version 3.0 --out report.xml [--test] [--registry reg.sqlite] [--key ESTV-PublicKey.pem --package Test-report.zip]
 aeoi crs correct   --input fixed.xlsx --version 3.0 --out corr.xml --registry reg.sqlite [--cancel KEY ...] [--test] [--key ... --package ...]
-aeoi crs registry  --registry reg.sqlite
+aeoi crs registry  --registry reg.sqlite [--discard REF]
+aeoi crs validate  report.xml [--test|--prod]
 aeoi estv package  --xml report.xml --key ESTV-PublicKey.pem --out Test-report.zip --test
 aeoi estv inspect  Test-report.zip [--key ESTV-PublicKey.pem] [--test|--prod]
 aeoi estv status   outcome.xml | outcome.txt [--registry reg.sqlite --message CH2026CH...]
@@ -175,6 +176,15 @@ def _cmd_crs_correct(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_crs_validate(args: argparse.Namespace) -> int:
+    from aeoi.crs import validate
+
+    test = None if args.test is None else args.test
+    rep = validate.validate_file(args.file, test=test)
+    print(rep.render())
+    return 0 if rep.ok else 1
+
+
 def _cmd_crs_registry(args: argparse.Namespace) -> int:
     from aeoi.crs import submit
     from aeoi.registry import Registry, RegistryError
@@ -279,6 +289,14 @@ def build_parser() -> argparse.ArgumentParser:
     co.add_argument("--key")
     co.add_argument("--package")
     co.set_defaults(func=_cmd_crs_correct)
+
+    va = crs_sub.add_parser("validate", help="check an existing CRS XML file like the portal would")
+    va.add_argument("file")
+    g2 = va.add_mutually_exclusive_group()
+    g2.add_argument("--test", dest="test", action="store_true", default=None,
+                    help="treat as a test file (default: from the file name)")  # fmt: skip
+    g2.add_argument("--prod", dest="test", action="store_false")
+    va.set_defaults(func=_cmd_crs_validate)
 
     rg = crs_sub.add_parser("registry", help="list the messages of a registry")
     rg.add_argument("--registry", required=True)
