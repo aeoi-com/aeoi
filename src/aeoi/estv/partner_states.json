@@ -1,0 +1,1009 @@
+{
+  "source_url": "https://www.sif.admin.ch/de/automatischer-informationsaustausch-aia",
+  "source_stand": "25.08.2026",
+  "retrieved": "2026-09-16",
+  "source_sha256": "fb7b053b91c961a055a90375ddad36c9c02582ab210261a30c095218821bd766",
+  "count": 116,
+  "states": [
+    {
+      "code": "AD",
+      "name_de": "Andorra",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "AE",
+      "name_de": "Vereinigte Arabische Emirate",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "AG",
+      "name_de": "Antigua und Barbuda",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "AI",
+      "name_de": "Anguilla",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "AL",
+      "name_de": "Albanien",
+      "in_force": "2021-01-01",
+      "in_force_year": 2021,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "AR",
+      "name_de": "Argentinien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "AT",
+      "name_de": "Österreich",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "AU",
+      "name_de": "Australien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.076",
+      "notes": []
+    },
+    {
+      "code": "AW",
+      "name_de": "Aruba",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "AZ",
+      "name_de": "Aserbaidschan",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "BB",
+      "name_de": "Barbados",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "BE",
+      "name_de": "Belgien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "BG",
+      "name_de": "Bulgarien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "BH",
+      "name_de": "Bahrain",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "BM",
+      "name_de": "Bermuda",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "BN",
+      "name_de": "Brunei Darussalam",
+      "in_force": "2021-01-01",
+      "in_force_year": 2021,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "BQ",
+      "name_de": "Niederlande, Überseegemeinden (Bonaire, Saint Eustatius, Saba)",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": []
+    },
+    {
+      "code": "BR",
+      "name_de": "Brasilien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "BS",
+      "name_de": "Bahamas",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "BZ",
+      "name_de": "Belize",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CA",
+      "name_de": "Kanada",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "CK",
+      "name_de": "Cookinseln",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CL",
+      "name_de": "Chile",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CN",
+      "name_de": "China (Volksrepublik)",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CO",
+      "name_de": "Kolumbien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CR",
+      "name_de": "Costa Rica",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "CW",
+      "name_de": "Curaçao",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "CY",
+      "name_de": "Zypern",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "CZ",
+      "name_de": "Tschechien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "DE",
+      "name_de": "Deutschland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "DK",
+      "name_de": "Dänemark",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "DM",
+      "name_de": "Dominica",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "EC",
+      "name_de": "Ecuador",
+      "in_force": "2023-01-01",
+      "in_force_year": 2023,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "EE",
+      "name_de": "Estland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "ES",
+      "name_de": "Spanien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "footnote 6"
+      ]
+    },
+    {
+      "code": "FI",
+      "name_de": "Finnland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "footnote 6"
+      ]
+    },
+    {
+      "code": "FO",
+      "name_de": "Färöer Inseln",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "FR",
+      "name_de": "Frankreich",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "footnote 6"
+      ]
+    },
+    {
+      "code": "GB",
+      "name_de": "Vereinigtes Königreich",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "UK: multilateral basis since 01.01.2021"
+      ]
+    },
+    {
+      "code": "GD",
+      "name_de": "Grenada",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "GE",
+      "name_de": "Georgien",
+      "in_force": "2025-01-01",
+      "in_force_year": 2025,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "GG",
+      "name_de": "Guernsey",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "GH",
+      "name_de": "Ghana",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "GI",
+      "name_de": "Gibraltar",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "UK: multilateral basis since 01.01.2021"
+      ]
+    },
+    {
+      "code": "GL",
+      "name_de": "Grönland",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "GR",
+      "name_de": "Griechenland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "HK",
+      "name_de": "Hongkong",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "18.055",
+      "notes": [
+        "multilateral basis since 01.01.2024"
+      ]
+    },
+    {
+      "code": "HR",
+      "name_de": "Kroatien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "HU",
+      "name_de": "Ungarn",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "ID",
+      "name_de": "Indonesien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "IE",
+      "name_de": "Irland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "IL",
+      "name_de": "Israel",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "IM",
+      "name_de": "Insel Man",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "IN",
+      "name_de": "Indien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "IS",
+      "name_de": "Island",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "IT",
+      "name_de": "Italien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "JE",
+      "name_de": "Jersey",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "JM",
+      "name_de": "Jamaika",
+      "in_force": "2023-01-01",
+      "in_force_year": 2023,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "JP",
+      "name_de": "Japan",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "KE",
+      "name_de": "Kenia",
+      "in_force": "2024-01-01",
+      "in_force_year": 2024,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "KN",
+      "name_de": "Saint Kitts und Nevis",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "KR",
+      "name_de": "Südkorea",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "KW",
+      "name_de": "Kuwait",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "KY",
+      "name_de": "Cayman Inseln",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "KZ",
+      "name_de": "Kasachstan",
+      "in_force": "2022-01-01",
+      "in_force_year": 2022,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "LB",
+      "name_de": "Libanon",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "LC",
+      "name_de": "Saint-Lucia",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "LI",
+      "name_de": "Liechtenstein",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "LT",
+      "name_de": "Litauen",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "LU",
+      "name_de": "Luxemburg",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "LV",
+      "name_de": "Lettland",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "MC",
+      "name_de": "Monaco",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "MD",
+      "name_de": "Moldau",
+      "in_force": "2025-01-01",
+      "in_force_year": 2025,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "MH",
+      "name_de": "Marshallinseln",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "MO",
+      "name_de": "Macao",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "MS",
+      "name_de": "Montserrat",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "MT",
+      "name_de": "Malta",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "MU",
+      "name_de": "Mauritius",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "MV",
+      "name_de": "Malediven",
+      "in_force": "2022-01-01",
+      "in_force_year": 2022,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "MX",
+      "name_de": "Mexiko",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "MY",
+      "name_de": "Malaysia",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "NC",
+      "name_de": "Neukaledonien",
+      "in_force": "2023-01-01",
+      "in_force_year": 2023,
+      "business_number": "22.048",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "NG",
+      "name_de": "Nigeria",
+      "in_force": "2021-01-01",
+      "in_force_year": 2021,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "NL",
+      "name_de": "Niederlande",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "footnote 6"
+      ]
+    },
+    {
+      "code": "NO",
+      "name_de": "Norwegen",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "16.057",
+      "notes": []
+    },
+    {
+      "code": "NR",
+      "name_de": "Nauru",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "NZ",
+      "name_de": "Neuseeland",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "OM",
+      "name_de": "Oman",
+      "in_force": "2022-01-01",
+      "in_force_year": 2022,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "PA",
+      "name_de": "Panama",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": []
+    },
+    {
+      "code": "PE",
+      "name_de": "Peru",
+      "in_force": "2021-01-01",
+      "in_force_year": 2021,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "PK",
+      "name_de": "Pakistan",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "PL",
+      "name_de": "Polen",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "PT",
+      "name_de": "Portugal",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "footnote 6"
+      ]
+    },
+    {
+      "code": "QA",
+      "name_de": "Katar",
+      "in_force": "2019-01-01",
+      "in_force_year": 2019,
+      "business_number": "18.055",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "RO",
+      "name_de": "Rumänien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "RU",
+      "name_de": "Russland",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "transmission to Russia suspended; data still collected and delivered to the ESTV"
+      ]
+    },
+    {
+      "code": "SA",
+      "name_de": "Saudi-Arabien",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "SC",
+      "name_de": "Seychellen",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "SE",
+      "name_de": "Schweden",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "SG",
+      "name_de": "Singapur",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "18.055",
+      "notes": [
+        "multilateral basis since 01.01.2024"
+      ]
+    },
+    {
+      "code": "SI",
+      "name_de": "Slowenien",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "SK",
+      "name_de": "Slowakei",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "15.081",
+      "notes": []
+    },
+    {
+      "code": "SM",
+      "name_de": "San Marino",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "SX",
+      "name_de": "Sint Maarten",
+      "in_force": "2023-01-01",
+      "in_force_year": 2023,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "TC",
+      "name_de": "Turks und Caicos Inseln",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "TH",
+      "name_de": "Thailand",
+      "in_force": "2024-01-01",
+      "in_force_year": 2024,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "TR",
+      "name_de": "Türkei",
+      "in_force": "2021-01-01",
+      "in_force_year": 2021,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "TT",
+      "name_de": "Trinidad und Tobago",
+      "in_force": "2026-01-01",
+      "in_force_year": 2026,
+      "business_number": "19.033",
+      "notes": []
+    },
+    {
+      "code": "UA",
+      "name_de": "Ukraine",
+      "in_force": "2025-01-01",
+      "in_force_year": 2025,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "UG",
+      "name_de": "Uganda",
+      "in_force": "2026-01-01",
+      "in_force_year": 2026,
+      "business_number": "22.048",
+      "notes": []
+    },
+    {
+      "code": "UY",
+      "name_de": "Uruguay",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    },
+    {
+      "code": "VC",
+      "name_de": "Saint Vincent und die Grenadinen",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "VG",
+      "name_de": "Britische Jungferninseln",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": [
+        "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "VU",
+      "name_de": "Vanuatu",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "WS",
+      "name_de": "Samoa",
+      "in_force": "2020-01-01",
+      "in_force_year": 2020,
+      "business_number": "19.033",
+      "notes": [
+        "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "ZA",
+      "name_de": "Südafrika",
+      "in_force": "2018-01-01",
+      "in_force_year": 2018,
+      "business_number": "17.040",
+      "notes": []
+    }
+  ]
+}

@@ -52,7 +52,11 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   98004/98005/60015, ESTV-ID shape only a warning, joint-account consistency (3.0), duplicate
   DocRefId on rows (80000), no Contact in MessageSpec, `aeoi crs build` validates against the XSD
   before writing (XSDs shipped in `src/aeoi/xsd`, synced by `tools/generate_models.py`).
-- 124 tests: `.venv/Scripts/python -m pytest`.
+- Week 3 (started): partner states by reporting year from the SIF list, pinned in
+  `src/aeoi/estv/partner_states.json` (116 states, "Stand per 25.08.2026", page SHA-256,
+  refresh with `python tools/partner_states.py`), rules 98200/98201/98202 with the undocumented
+  and controlling-person exceptions; IBAN mod-97 and ISIN Luhn (60000/60001).
+- 143 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -89,8 +93,10 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 1. Week 2: done (see above). Open: IBAN/ISIN checksum validation (60000/60001) and the
    partner-state list (98200/98201) belong to the week-3 rule engine.
-2. Week 3: rule engine — XSD, OECD rules (User Guide 4.0), the 67 ESTV codes mapped one by one
-   with text and page; first pilot test upload (2.0 payload).
+2. Week 3 (in progress): partner states, IBAN/ISIN done. Still open: the remaining ESTV codes
+   as a catalogue (code -> text -> page, covered/not covered), the OECD business rules of User
+   Guide 4.0 not yet in the checks, the status-message parser skeleton; first pilot test upload
+   (2.0 payload). Yearly maintenance: rerun `tools/partner_states.py` when the SIF list changes.
 3. Week 4: local submission registry (SQLite: input row → DocRefId → message → outcome), then
    corrections/cancellations (Wegleitung Ziffer 6) and the status parser.
 4. Week 5: CLI build/validate/correct, docs, page "what changes with 3.0".

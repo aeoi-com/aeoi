@@ -19,8 +19,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from aeoi.crs import codes
-from aeoi.estv import ids
+from aeoi.crs import checksums, codes
+from aeoi.estv import ids, partners
 
 Version = Literal["2.0", "3.0"]
 COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
@@ -253,8 +253,69 @@ def _check_organisation(rep: Report, where: str, o: Organisation) -> None:
     _check_address(rep, f"{where}.address", o.address)
 
 
-def check_account(rep: Report, acc: Account, version: Version, *, today: dt.date) -> None:
+def _partner_hits(countries: list[str], year: int) -> list[str]:
+    return [c for c in countries if partners.is_partner(c, year)]
+
+
+def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
+    """98200 / 98201 / 98202: at least one ResCountryCode must be a partner state of the year.
+
+    Individuals: exception for undocumented accounts (CH only, 98203). Organisations: if no
+    residence is a partner state, at least one controlling person with a partner-state residence
+    saves the record (98201). Controlling persons: each needs a partner-state residence (98202).
+    """
+    active = partners.partner_codes(year)
+    if not active:
+        rep.add(f"{w}.residence_countries", f"no partner-state list for {year}", "info")
+        return
+    person = acc.holder_person
+    if (
+        person is not None
+        and not acc.undocumented
+        and not _partner_hits(person.residence_countries, year)
+    ):
+        rep.add(
+            f"{w}.holder.residence_countries",
+            f"none of {person.residence_countries} was a Swiss AEOI partner state in {year} "
+            f"(SIF list, Stand {partners.source()['source_stand']})",
+            "98200",
+        )
+    org = acc.holder_organisation
+    if org is not None and not _partner_hits(org.residence_countries, year):
+        cp_ok = any(
+            _partner_hits(cp.person.residence_countries, year) for cp in acc.controlling_persons
+        )
+        if not cp_ok:
+            rep.add(
+                f"{w}.holder.residence_countries",
+                f"none of {org.residence_countries} was a partner state in {year} and no "
+                "controlling person resides in one",
+                "98201",
+            )
+    for i, cp in enumerate(acc.controlling_persons):
+        if not _partner_hits(cp.person.residence_countries, year):
+            rep.add(f"{w}.controlling_persons[{i}].residence_countries",
+                    f"none of {cp.person.residence_countries} was a partner state in {year}; "
+                    "controlling persons outside partner states must not be sent", "98202")  # fmt: skip
+
+
+def _check_account_number(rep: Report, w: str, acc: Account) -> None:
+    """60000 (IBAN, OECD601) and 60001 (ISIN, OECD603) with the ESTV checksum requirements."""
+    if acc.account_number_type == "OECD601" and not checksums.is_valid_iban(acc.account_number):
+        rep.add(f"{w}.account_number",
+                "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)", "60000")  # fmt: skip
+    if acc.account_number_type == "OECD603" and not checksums.is_valid_isin(acc.account_number):
+        rep.add(f"{w}.account_number",
+                "AcctNumberType OECD603 requires a valid ISIN (12 characters, Luhn checksum)", "60001")  # fmt: skip
+
+
+def check_account(
+    rep: Report, acc: Account, version: Version, *, today: dt.date, year: int | None = None
+) -> None:
     w = f"Accounts[key={acc.key}]"
+    _check_account_number(rep, w, acc)
+    if year is not None:
+        _check_partner_states(rep, w, acc, year)
     if not acc.account_number:
         rep.add(f"{w}.account_number", "mandatory; use NANUM when there is no number", "50007")
     _check_text(rep, f"{w}.account_number", acc.account_number)
@@ -394,7 +455,7 @@ def check_message(msg: Message, version: Version, *, today: dt.date | None = Non
     for r in sorted({r for r in refs if refs.count(r) > 1}):
         rep.add(f"Accounts[doc_ref_id={r}]", "DocRefId used on more than one row", "80000")
     for acc in msg.accounts:
-        check_account(rep, acc, version, today=today)
+        check_account(rep, acc, version, today=today, year=msg.reporting_year)
     _check_joint_accounts(rep, msg, version)
     return rep
 
