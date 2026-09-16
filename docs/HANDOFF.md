@@ -41,7 +41,12 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 - ESTV packaging/encryption: `src/aeoi/estv/packaging.py`; identifiers and charset:
   `src/aeoi/estv/ids.py`; CLI `aeoi estv package|inspect`.
 - Corpus: `tests/corpus/estv_v2/` (five Wegleitung annex examples, valid, round-trip valid).
-- 66 tests: `.venv/Scripts/python -m pytest`.
+- Week 2 (done): flat input format `docs/FLAT-FORMAT.md` (`aeoi.crs.flat`, template in
+  `aeoi.crs.template`), domain model with version-aware talking checks (`aeoi.crs.model`),
+  builder to 2.0/3.0 XML (`aeoi.crs.build`), example message (`aeoi.crs.example`), CLI
+  `aeoi crs template|check|build`. End-to-end: workbook -> check -> XML (valid 2.0 and 3.0) ->
+  ESTV package.
+- 113 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -76,8 +81,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 ## Next steps
 
-1. Week 2: flat input model (pydantic) → domain → XML 2.0 and 3.0; public Excel template with
-   column validations mirroring the flat schema; new 3.0 fields mandatory with talking errors.
+1. Week 2: done (see above). Open: IBAN/ISIN checksum validation (60000/60001) and the
+   partner-state list (98200/98201) belong to the week-3 rule engine.
 2. Week 3: rule engine — XSD, OECD rules (User Guide 4.0), the 67 ESTV codes mapped one by one
    with text and page; first pilot test upload (2.0 payload).
 3. Week 4: local submission registry (SQLite: input row → DocRefId → message → outcome), then
