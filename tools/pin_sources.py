@@ -62,12 +62,14 @@ def main() -> None:
             digest = hashlib.sha256(path.read_bytes()).hexdigest()
             rel = path.relative_to(ROOT).as_posix()
             rows.append((rel, path.stat().st_size, digest, URLS.get(path.name, "")))
-    today = datetime.date.today().isoformat()
+    today = datetime.datetime.now(tz=datetime.UTC).date().isoformat()
     lines = [
         "# Pinned sources",
         "",
-        f"Downloaded on {today}. File names encode the version the document declares; "
-        "the hash pins the exact bytes. Regenerate with `python tools/pin_sources.py`.",
+        (
+            f"Downloaded on {today}. File names encode the version the document declares; "
+            "the hash pins the exact bytes. Regenerate with `python tools/pin_sources.py`."
+        ),
         "",
         "| File | Bytes | SHA-256 | URL |",
         "|---|---|---|---|",

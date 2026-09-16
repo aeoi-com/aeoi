@@ -125,7 +125,7 @@ def test_load_public_key_from_pem_and_certificate(key_pair, tmp_path):
     from cryptography.x509.oid import NameOID
 
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "test")])
-    now = datetime.datetime.now(datetime.timezone.utc)
+    now = datetime.datetime.now(datetime.UTC)
     cert = (
         x509.CertificateBuilder()
         .subject_name(name)
