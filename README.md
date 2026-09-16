@@ -74,6 +74,15 @@ aeoi crs registry --registry fi.sqlite
 The registry file contains the account data needed to build deletions: keep it next to the
 workbook, back it up, never send it.
 
+## Browser validator
+
+`web/index.html` is a static page that runs the validator in the browser with Pyodide: choose a
+CRS XML file or a filled workbook, get the same report as `aeoi crs validate` / `aeoi crs check`.
+The file never leaves the browser; the page has no analytics and no server side. Build it with
+`python -m build && python tools/build_web.py`; `node tools/web_smoke.mjs` runs the same code
+headlessly (see the script header for the one-time Pyodide setup). CI publishes it to GitHub
+Pages once Pages is enabled for the repository.
+
 ## Sources
 
 All schemas and guidance documents are pinned with SHA-256 in [docs/SOURCES.md](docs/SOURCES.md).

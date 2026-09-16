@@ -33,11 +33,18 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.5", "xsdata[cli]>=24.0", "pycountry>=24.0"]
 
+[project.urls]
+Homepage = "https://github.com/"
+Changelog = "https://github.com/"
+
 [project.scripts]
 aeoi = "aeoi.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/aeoi"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["docs/sources/", ".local/", "web/*.whl", "dist/", ".github/"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -16,3 +16,4 @@ CRS_Payload*
 CRS_KEY
 .local/
 docs/sources/estv/*.pdf
+web/*.whl
