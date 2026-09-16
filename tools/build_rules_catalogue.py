@@ -5,7 +5,7 @@ where the toolkit enforces the rule:
 
 - implemented: enforced before the file leaves the machine (model checks, builder by
   construction, packaging, XSD validation)
-- registry: needs the local submission registry / corrections (week 4)
+- registry: needs the local submission registry / corrections (none left since week 4)
 - portal: can only be checked by the ESTV portal (transport, decryption, virus scan,
   registration of the FI, history the portal alone knows)
 
@@ -42,7 +42,7 @@ STATUS: dict[str, tuple[str, str]] = {  # code -> (status, where / note)
     "50006": ("portal", "virus scan"),
     "50007": ("implemented", "aeoi.crs.xsd.validate before writing/packaging; XML never signed"),
     "50008": ("implemented", "aeoi.estv.ids.message_ref_id / check_message_ref_id; build"),
-    "50009": ("registry", "MessageRefId never reused: UUID today, registry check later"),
+    "50009": ("implemented", "aeoi.registry: MessageRefId never reused (assert_message_ref_id_unused)"),
     "50010": ("implemented", "packaging.check_file_name + build(test=False) writes OECD1 only"),
     "50011": ("implemented", "packaging.check_file_name + build(test=True) writes OECD11 only"),
     "50012": ("implemented", "build: ReceivingCountry = CH"),
@@ -68,17 +68,17 @@ STATUS: dict[str, tuple[str, str]] = {  # code -> (status, where / note)
     "60022": ("implemented", "model.check_account: CRS1104 -> CRS503/CRS504"),
     "60023": ("implemented", "model.check_account: CRS1103 -> CRS503/CRS504"),
     "70015": ("implemented", "model.check_message: UID format when given; build omits IN otherwise"),
-    "80000": ("registry", "unique within the file today (model); against all earlier messages with the registry"),
+    "80000": ("implemented", "model: unique in the file; aeoi.registry: never reused across messages"),
     "80001": ("implemented", "aeoi.estv.ids.doc_ref_id / check_doc_ref_id; build"),
-    "80002": ("registry", "CorrDocRefId must be an earlier DocRefId of the same FI"),
-    "80003": ("registry", "a record may be corrected once per chain"),
+    "80002": ("implemented", "aeoi.registry.correction_target: CorrDocRefId = last valid DocRefId of this FI"),
+    "80003": ("implemented", "aeoi.registry: only the chain head can be corrected (superseded_by)"),
     "80004": ("implemented", "build: ReportingFI DocSpec never carries CorrDocRefId"),
-    "80005": ("registry", "corrections/deletions need CorrDocRefId"),
+    "80005": ("implemented", "aeoi.crs.build RecordPlan: OECD2/OECD3 always carry CorrDocRefId"),
     "80006": ("implemented", "build: CorrMessageRefId never written in DocSpec"),
     "80007": ("implemented", "build: MessageSpec.CorrMessageRefId never written"),
-    "80008": ("registry", "Resend Data (OECD0/OECD10) not used by the builder; rule complete with corrections"),
-    "80010": ("registry", "CRS702 refused today (model); DocTypeIndic/MessageTypeIndic consistency with corrections"),
-    "80011": ("registry", "CorrDocRefId unique within a correction message"),
+    "80008": ("implemented", "aeoi.crs.submit: AccountReports never OECD0; only the ReportingFI is resent"),
+    "80010": ("implemented", "aeoi.crs.submit: CRS701 -> OECD1 only, CRS702 -> OECD2/OECD3 only; model refuses CRS702 without the registry"),
+    "80011": ("implemented", "aeoi.crs.submit.plan_correction: one CorrDocRefId per message"),
     "98000": ("implemented", "build: version attribute 2.0 / 3.0 with the matching namespace"),
     "98001": ("implemented", "model: ESTV-ID present (format only a warning); the portal compares with the registration"),
     "98002": ("implemented", "build: TransmittingCountry = CH"),
@@ -88,17 +88,17 @@ STATUS: dict[str, tuple[str, str]] = {  # code -> (status, where / note)
     "98006": ("implemented", "build: ReportingPeriod = 31.12 of the MessageRefId year"),
     "98007": ("implemented", "model.check_message: reporting year <= current year"),
     "98008": ("implemented", "build: Timestamp = now (UTC)"),
-    "98009": ("registry", "no nil report after data for the same year"),
+    "98009": ("implemented", "aeoi.crs.submit.build_new: nil report refused while valid records exist"),
     "98100": ("implemented", "build: exactly one CrsBody"),
     "98101": ("implemented", "build: ReportingFI DocTypeIndic OECD1 or OECD11 only"),
-    "98102": ("registry", "resend keeps the DocRefId"),
-    "98103": ("registry", "a deleted record cannot be corrected again"),
+    "98102": ("implemented", "aeoi.crs.submit: ReportingFI resent as OECD0 with its DocRefId"),
+    "98103": ("implemented", "aeoi.registry.correction_target: a deleted record (OECD3) cannot be corrected"),
     "98104": ("implemented", "model._check_address: City mandatory (AddressFix)"),
     "98200": ("implemented", "model._check_partner_states with the SIF list by year; undocumented exception"),
     "98201": ("implemented", "model._check_partner_states; controlling-person fallback"),
     "98202": ("implemented", "model._check_partner_states for controlling persons"),
     "98203": ("implemented", "model.check_account: undocumented -> individual with ResCountryCode CH"),
-    "98204": ("registry", "deletion carries the ResCountryCodes of the deleted record"),
+    "98204": ("implemented", "aeoi.crs.submit: deletions reuse the stored account content (same ResCountryCodes)"),
 }  # fmt: skip
 
 OECD_EXTRA: list[dict] = [  # OECD Status Message codes the ESTV does not list for FI -> ESTV

@@ -52,9 +52,12 @@ def test_implemented_codes_are_referenced_in_sources_or_tests():
     assert not missing, f"implemented in the catalogue but never mentioned in code/tests: {missing}"
 
 
-def test_registry_codes_are_the_correction_family():
+def test_no_rule_waits_for_the_registry_any_more():
     registry = {e["code"] for e in _entries() if e["status"] == "registry"}
-    assert registry == {
+    assert registry == set()
+    correction_family = {
         "50009", "80000", "80002", "80003", "80005", "80008", "80010", "80011",
         "98009", "98102", "98103", "98204",
     }  # fmt: skip
+    by = {e["code"]: e for e in _entries()}
+    assert all(by[c]["status"] == "implemented" for c in correction_family)

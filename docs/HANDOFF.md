@@ -71,7 +71,16 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   (packaging by construction), 60011/60012 (CA-to-CA sorting, superseded by 98200-98202),
   60016 (= 60005), 70000/70002/70003/70012 (deleted by User Guide v3.0), 80009/80012-80015,
   90000-90002 (TIN, not applied by the ESTV), 99999.
-- 158 tests: `.venv/Scripts/python -m pytest`.
+- Week 4 (done): submission registry `aeoi.registry` (SQLite, one file per reporting FI, kept
+  on the FI's machine; stores messages, DocSpecs with chains, account content for deletions,
+  portal findings) and the workflow `aeoi.crs.submit`: `build_new` (CRS701/CRS703 with fresh
+  identifiers, FI resent as OECD0 after the first message, 98009), `build_correction` (CRS702:
+  OECD2 for changed rows by content hash, OECD3 via `--cancel`, CorrDocRefId = chain head,
+  unchanged rows left out, new rows refused), `record_outcome` (accepted/rejected; a rejected
+  correction frees its targets). CLI: `aeoi crs build --registry`, `aeoi crs correct`,
+  `aeoi crs registry`, `aeoi estv status --registry`. The 12 "registry" rules are implemented;
+  catalogue: 59 implemented, 6 portal-only.
+- 171 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -81,7 +90,7 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 - 65 ESTV rule codes (67 distinct five-digit numbers in the Wegleitung: 98999 is the range bound
   and 70012 only a change-log reference); catalogue with status and page in
   `src/aeoi/estv/rules_catalogue.json` / `docs/ESTV-RULES.md` (47 implemented, 12 waiting for the
-  registry/corrections, 6 portal-only; plus OECD 50013/60011/60012 with origin "oecd"; sections
+  registry/corrections (0 since week 4: 59 implemented), 6 portal-only; plus OECD 50013/60011/60012 with origin "oecd"; sections
   are cumulative across pages and 50010/50011 keep both wordings); ESTV-specific range 98000-98999; ReportingFI cannot be corrected or
   cancelled (80004); CorrMessageRefId forbidden (80006); DocRefId = CH+year+CH+1-42 chars
   (80001); MessageRefId `CH[0-9]{4}CH.{1,162}`, UUID recommended, no customer data (50008/50009);
@@ -114,8 +123,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    partner-state list (98200/98201) belong to the week-3 rule engine.
 2. Week 3: done except the first pilot test upload (2.0 payload), which needs the pilot. Yearly
    maintenance: rerun `tools/partner_states.py` when the SIF list changes.
-3. Week 4: local submission registry (SQLite: input row → DocRefId → message → outcome), then
-   corrections/cancellations (Wegleitung Ziffer 6) and the status parser.
+3. Week 4: done (registry, corrections, deletions, outcomes; see above). Open: the real ESTV
+   outcome format (question 4) decides whether `aeoi estv status` can be fed automatically.
 4. Week 5: CLI build/validate/correct, docs, page "what changes with 3.0".
 5. Week 6: PyPI (`aeoi`, name free as of 2026-09-16), GitHub, Pyodide browser validator (lxml +
    rule engine only, no analytics, no server logs).

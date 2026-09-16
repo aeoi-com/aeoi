@@ -442,8 +442,17 @@ def check_account(
                 rep.add(f"{w}.{name}", "ignored in 2.0 (element does not exist)", "info")
 
 
-def check_message(msg: Message, version: Version, *, today: dt.date | None = None) -> Report:
-    """All problems of a message for the given schema version; empty report means buildable."""
+def check_message(
+    msg: Message,
+    version: Version,
+    *,
+    today: dt.date | None = None,
+    correction: bool = False,
+) -> Report:
+    """All problems of a message for the given schema version; empty report means buildable.
+
+    ``correction=True`` is used by the submission workflow for CRS702 messages (only there the
+    registry can supply the CorrDocRefIds the Wegleitung requires, Ziffer 6.3)."""
     today = today or dt.datetime.now(tz=dt.UTC).date()
     rep = Report()
     fi = msg.reporting_fi
@@ -468,10 +477,13 @@ def check_message(msg: Message, version: Version, *, today: dt.date | None = Non
         rep.add("ReportingFI.reporting_year", "reporting year must be 2017..current year", "98007")
     _check_code(rep, "Message.message_type_indic", msg.message_type_indic, codes.MESSAGE_TYPE_INDIC,
                 required=True, rule="98004")  # fmt: skip
-    if msg.message_type_indic == "CRS702":
+    if msg.message_type_indic == "CRS702" and not correction:
         rep.add("Message.message_type_indic",
-                "CRS702 (corrections) is not supported yet: a correction needs the DocRefIds of the "
-                "records sent before (submission registry, Wegleitung Ziffer 6)", "80010")  # fmt: skip
+                "CRS702 (corrections) needs the submission registry: use 'aeoi crs correct' with "
+                "the registry of the earlier messages (Wegleitung Ziffer 6)", "80010")  # fmt: skip
+    if correction and msg.message_type_indic != "CRS702":
+        rep.add("Message.message_type_indic",
+                "a correction message must carry CRS702", "80010")  # fmt: skip
     if msg.message_type_indic == "CRS703" and msg.accounts:
         rep.add("Message.accounts", "a nil report (CRS703) must not contain accounts", "98005")
     if msg.message_type_indic != "CRS703" and not msg.accounts:

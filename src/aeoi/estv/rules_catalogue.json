@@ -108,8 +108,8 @@
     "texts_de": [
       "Darf nicht gleich der MessageRefId einer früheren Meldung sein. Wert ≠ frühere MessageRefId"
     ],
-    "status": "registry",
-    "where": "MessageRefId never reused: UUID today, registry check later",
+    "status": "implemented",
+    "where": "aeoi.registry: MessageRefId never reused (assert_message_ref_id_unused)",
     "origin": "estv"
   },
   {
@@ -461,8 +461,8 @@
       "Darf nicht gleich einer anderen DocRefId in dieser oder einer früher erhaltenen Meldung sein, ausser für DocTypeIndic=„OECD0“ bzw. „OECD10“. Wert ≠ frühere DocRefId, falls DocTypeIndic ≠ („OECD0“ oder „OECD10“)",
       "Darf nicht gleich einer anderen DocRefId in dieser oder einer früher erhaltenen Meldung sein. Wert ≠ andere DocRefId"
     ],
-    "status": "registry",
-    "where": "unique within the file today (model); against all earlier messages with the registry",
+    "status": "implemented",
+    "where": "model: unique in the file; aeoi.registry: never reused across messages",
     "origin": "estv"
   },
   {
@@ -486,8 +486,8 @@
     "texts_de": [
       "Der Wert der CorrDocRefId muss einer DocRefId in einer früheren Meldung des gleichen FI entsprechen. Wert = frühere DocRefId des gleichen FI"
     ],
-    "status": "registry",
-    "where": "CorrDocRefId must be an earlier DocRefId of the same FI",
+    "status": "implemented",
+    "where": "aeoi.registry.correction_target: CorrDocRefId = last valid DocRefId of this FI",
     "origin": "estv"
   },
   {
@@ -498,8 +498,8 @@
     "texts_de": [
       "Der korrigierte Datensatz darf nicht bereits früher korrigiert worden sein. Wert ≠ frühere CorrDocRefId"
     ],
-    "status": "registry",
-    "where": "a record may be corrected once per chain",
+    "status": "implemented",
+    "where": "aeoi.registry: only the chain head can be corrected (superseded_by)",
     "origin": "estv"
   },
   {
@@ -525,8 +525,8 @@
       "Eine Korrektur- oder Stornomeldung muss eine CorrDocRefId enthalten (vgl. Regel bei CorrDocRefId). Falls Wert = („OECD2“, „OECD3“, „OECD12“ oder „OECD13“), muss CorrDocRefId in diesen DocSpec ausgefüllt sein.",
       "Eine Korrektur- oder Stornomeldung muss eine CorrDocRefId enthalten (vgl. Regel bei DocTypeIndic). Falls DocTypeIndic = („OECD2“, „OECD3“, „OECD12“ oder „OECD13“), muss CorrDocRefId vorhanden sein."
     ],
-    "status": "registry",
-    "where": "corrections/deletions need CorrDocRefId",
+    "status": "implemented",
+    "where": "aeoi.crs.build RecordPlan: OECD2/OECD3 always carry CorrDocRefId",
     "origin": "estv"
   },
   {
@@ -562,8 +562,8 @@
     "texts_de": [
       "Resend Data darf nicht verwendet werden. Wert ≠ (“OECD0“ oder „OECD10“)"
     ],
-    "status": "registry",
-    "where": "Resend Data (OECD0/OECD10) not used by the builder; rule complete with corrections",
+    "status": "implemented",
+    "where": "aeoi.crs.submit: AccountReports never OECD0; only the ReportingFI is resent",
     "origin": "estv"
   },
   {
@@ -575,8 +575,8 @@
       "Eine Neumeldung darf keine Korrektur- oder Stornodatensätze enthalten. Falls Wert = „CRS701“: Kein DocTypeIndic in der ganzen Meldung darf den Wert („OECD2“, „OECD3“, „OECD12“ oder „OECD13“) haben.",
       "Eine Korrekturmeldung darf keine neuen Datensätze enthalten. Falls Wert = „CRS702“: Kein AccountReport in der ganzen Meldung darf einen DocTypeIndic mit dem Wert („OECD1“ oder „OECD11“) haben."
     ],
-    "status": "registry",
-    "where": "CRS702 refused today (model); DocTypeIndic/MessageTypeIndic consistency with corrections",
+    "status": "implemented",
+    "where": "aeoi.crs.submit: CRS701 -> OECD1 only, CRS702 -> OECD2/OECD3 only; model refuses CRS702 without the registry",
     "origin": "estv"
   },
   {
@@ -587,8 +587,8 @@
     "texts_de": [
       "Die gleiche CorrDocRefId darf nicht mehrfach in der gleichen Meldung verwendet werden. Wert ≠ andere CorrDocRefId in der gleichen Meldung"
     ],
-    "status": "registry",
-    "where": "CorrDocRefId unique within a correction message",
+    "status": "implemented",
+    "where": "aeoi.crs.submit.plan_correction: one CorrDocRefId per message",
     "origin": "estv"
   },
   {
@@ -707,8 +707,8 @@
     "texts_de": [
       "Nach der Meldung von Daten darf keine Nullmeldung folgen. Es können allerdings sämtliche Datensätze storniert und danach eine Nullmeldung übermittelt werden. Falls Wert = „CRS703“, dürfen keine AccountReports des FI für das Berichtsjahr vorliegen"
     ],
-    "status": "registry",
-    "where": "no nil report after data for the same year",
+    "status": "implemented",
+    "where": "aeoi.crs.submit.build_new: nil report refused while valid records exist",
     "origin": "estv"
   },
   {
@@ -743,8 +743,8 @@
     "texts_de": [
       "Wird ein Datensatz erneut gesendet („Resend Data“) muss der letzte zuvor übermittelte Datensatz die gleiche DocRefId haben. Wert = vorangehende DocRefId, falls DocTypeIndic = („OECD0“ oder „OECD10“)"
     ],
-    "status": "registry",
-    "where": "resend keeps the DocRefId",
+    "status": "implemented",
+    "where": "aeoi.crs.submit: ReportingFI resent as OECD0 with its DocRefId",
     "origin": "estv"
   },
   {
@@ -755,8 +755,8 @@
     "texts_de": [
       "Eine Stornomeldung kann nicht erneut korrigiert oder storniert werden. CorrDocRefId darf nicht auf einen Datensatz vom Typ („OECD3“ oder „OECD13“) verweisen."
     ],
-    "status": "registry",
-    "where": "a deleted record cannot be corrected again",
+    "status": "implemented",
+    "where": "aeoi.registry.correction_target: a deleted record (OECD3) cannot be corrected",
     "origin": "estv"
   },
   {
@@ -827,8 +827,8 @@
     "texts_de": [
       "Der Storno eines AccountReports muss dieselben ResCountryCodes enthalten wie der AccountReport, der storniert werden soll. Falls DocTypeIndic = „OECD3“ oder „OECD13“ muss dieser AccountReport alle ResCountryCodes des mittels CorrDocRefID angegebenen AccountReports enthalten."
     ],
-    "status": "registry",
-    "where": "deletion carries the ResCountryCodes of the deleted record",
+    "status": "implemented",
+    "where": "aeoi.crs.submit: deletions reuse the stored account content (same ResCountryCodes)",
     "origin": "estv"
   }
 ]

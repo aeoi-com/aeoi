@@ -20,7 +20,7 @@ Joint accounts: one row per reportable holder, same `account_number`, the full b
 row, and for 3.0 `joint_account_number` = number of joint holders on every row. Trustee-documented
 trusts: the trust's name in `ReportingFI.name` plus `trustee_documented_trust = true`; the builder
 writes `TDT=` before the name (ESTV 5.3.4). `uid` may be empty when the FI has no UID (70015).
-Corrections (`CRS702`) are refused until the submission registry exists.
+Corrections (`CRS702`) are built only through `aeoi crs correct` with the submission registry: changed rows become OECD2, `--cancel KEY` rows OECD3, unchanged rows are left out, new rows must go into a new `aeoi crs build` message.
 
 
 ## ReportingFI

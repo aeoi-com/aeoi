@@ -63,6 +63,33 @@ def schema_module(version: Version) -> SimpleNamespace:
     return SimpleNamespace(**merged)
 
 
+TEST_INDIC = {"OECD0": "OECD10", "OECD1": "OECD11", "OECD2": "OECD12", "OECD3": "OECD13"}
+
+
+@dataclass(frozen=True)
+class RecordPlan:
+    """How one account goes into the message (Wegleitung Ziffer 6).
+
+    ``doc_type_indic``: OECD1 new, OECD2 correction, OECD3 deletion (test variants are derived
+    from the ``test`` flag of the build). ``corr_doc_ref_id`` is mandatory for OECD2/OECD3 and
+    must be the DocRefId of the last valid link of the record's chain (80002, 80003, 98103).
+    """
+
+    key: str
+    doc_ref_id: str
+    doc_type_indic: str = "OECD1"
+    corr_doc_ref_id: str | None = None
+
+
+@dataclass(frozen=True)
+class FiPlan:
+    """ReportingFI DocSpec: OECD1 with a new DocRefId, or OECD0 resend with the DocRefId already
+    sent (6.4.1, 6.4.6; 98102). The ReportingFI is never corrected or deleted (80004)."""
+
+    doc_ref_id: str
+    resend: bool = False
+
+
 @dataclass(frozen=True)
 class BuildResult:
     xml: str
@@ -70,6 +97,8 @@ class BuildResult:
     message_ref_id: str
     doc_ref_ids: dict[str, str]  # account key -> DocRefId
     reporting_fi_doc_ref_id: str
+    records: tuple[RecordPlan, ...] = ()
+    fi_plan: FiPlan | None = None
 
 
 def _address(m: SimpleNamespace, a: Address):
@@ -146,15 +175,24 @@ def _organisation(m: SimpleNamespace, o: Organisation):
     )
 
 
-def _doc_spec(m: SimpleNamespace, doc_ref_id: str, *, test: bool):
+def _doc_spec(
+    m: SimpleNamespace,
+    doc_ref_id: str,
+    *,
+    test: bool,
+    doc_type_indic: str = "OECD1",
+    corr_doc_ref_id: str | None = None,
+):
+    indic = TEST_INDIC[doc_type_indic] if test else doc_type_indic
     return m.DocSpecType(
-        doc_type_indic=m.OecddocTypeIndicEnumType("OECD11" if test else "OECD1"),
+        doc_type_indic=m.OecddocTypeIndicEnumType(indic),
         doc_ref_id=doc_ref_id,
+        corr_doc_ref_id=corr_doc_ref_id,
     )
 
 
 def _account_report(
-    m: SimpleNamespace, acc: Account, version: Version, doc_ref_id: str, *, test: bool
+    m: SimpleNamespace, acc: Account, version: Version, plan: RecordPlan, *, test: bool
 ):
     if acc.holder_person is not None:
         holder_kwargs = {"individual": _person(m, acc.holder_person)}
@@ -186,7 +224,13 @@ def _account_report(
         cps.append(m.ControllingPersonType(**kwargs))
 
     kwargs = {
-        "doc_spec": _doc_spec(m, doc_ref_id, test=test),
+        "doc_spec": _doc_spec(
+            m,
+            plan.doc_ref_id,
+            test=test,
+            doc_type_indic=plan.doc_type_indic,
+            corr_doc_ref_id=plan.corr_doc_ref_id,
+        ),
         "account_number": m.FiaccountNumberType(
             value=account_number_for_xml(acc),
             acct_number_type=(
@@ -242,14 +286,27 @@ def build(
     *,
     test: bool = False,
     now: dt.datetime | None = None,
+    records: list[RecordPlan] | None = None,
+    fi_plan: FiPlan | None = None,
 ) -> BuildResult:
-    """Render the message as CRS XML. Run :func:`aeoi.crs.model.check_message` first."""
+    """Render the message as CRS XML. Run :func:`aeoi.crs.model.check_message` first.
+
+    Without ``records`` every account is a new record (OECD1) with its ``doc_ref_id`` or a
+    generated one; without ``fi_plan`` the ReportingFI is OECD1 with a new DocRefId. The
+    submission registry supplies both for follow-up and correction messages.
+    """
     m = schema_module(version)
     now = now or dt.datetime.now(dt.UTC)
     year = msg.reporting_year
     message_ref_id = msg.message_ref_id or ids.message_ref_id(year)
     fi = msg.reporting_fi
-    fi_doc_ref_id = ids.doc_ref_id(year)
+    fi_plan = fi_plan or FiPlan(ids.doc_ref_id(year))
+    fi_doc_ref_id = fi_plan.doc_ref_id
+    plans = {p.key: p for p in records} if records is not None else {}
+    if records is not None:
+        missing = [a.key for a in msg.accounts if a.key not in plans]
+        if missing:
+            raise ValueError(f"no record plan for accounts {missing}")
 
     reporting_fi = m.CorrectableOrganisationPartyType(
         res_country_code=[m.CountryCodeType("CH")],
@@ -265,14 +322,18 @@ def build(
             )
         ],  # trustee-documented trust: "TDT=" + trust name (Wegleitung 5.3.4)
         address=[_address(m, fi.address)],
-        doc_spec=_doc_spec(m, fi_doc_ref_id, test=test),
+        doc_spec=_doc_spec(
+            m, fi_doc_ref_id, test=test, doc_type_indic="OECD0" if fi_plan.resend else "OECD1"
+        ),
     )
     doc_ref_ids: dict[str, str] = {}
     reports = []
+    used: list[RecordPlan] = []
     for acc in msg.accounts:
-        ref = acc.doc_ref_id or ids.doc_ref_id(year)
-        doc_ref_ids[acc.key] = ref
-        reports.append(_account_report(m, acc, version, ref, test=test))
+        plan = plans.get(acc.key) or RecordPlan(acc.key, acc.doc_ref_id or ids.doc_ref_id(year))
+        doc_ref_ids[acc.key] = plan.doc_ref_id
+        used.append(plan)
+        reports.append(_account_report(m, acc, version, plan, test=test))
 
     doc = m.CrsOecd(
         version=version,
@@ -296,4 +357,6 @@ def build(
     xml = XmlSerializer(config=SerializerConfig(indent="  ", encoding="UTF-8")).render(
         doc, ns_map=NS[version]
     )
-    return BuildResult(xml, version, message_ref_id, doc_ref_ids, fi_doc_ref_id)
+    return BuildResult(
+        xml, version, message_ref_id, doc_ref_ids, fi_doc_ref_id, tuple(used), fi_plan
+    )

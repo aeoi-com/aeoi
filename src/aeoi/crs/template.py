@@ -61,8 +61,9 @@ Conventions
   each row; for 3.0 put the number of joint holders in joint_account_number on every row.
 - Trustee-documented trusts: put the trust's name in ReportingFI.name and set
   trustee_documented_trust = true; the 'TDT=' prefix required by the ESTV is added at build time.
-- Corrections (CRS702) are not supported yet: a correction needs the identifiers of the records
-  already sent, which the submission registry will provide.
+- Corrections (CRS702): keep this workbook, fix the rows, and run 'aeoi crs correct' with the
+  registry of the earlier messages; changed rows become corrections, --cancel KEY deletes a
+  record, unchanged rows are left out, new rows go into a new 'aeoi crs build' message.
 - Allowed characters: ISO 8859-1 without ! " # $ < > ^ ~ and the symbols listed by the ESTV
   (Anhang 7.2); never the sequences --  /*  &#
 

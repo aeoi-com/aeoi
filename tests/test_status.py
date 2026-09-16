@@ -92,9 +92,9 @@ def test_parse_portal_text():
     assert out.original_message_ref_id == "CH2026CH8b0f7048-e2ff-11e6-bf01-fe55135034f3"
     assert out.codes == ["80002", "98003"]
     assert out.findings[0].doc_ref_ids == ("CH2026CHc0e1a474-558a-414d-82e1-5ba5811cb936",)
-    assert out.findings[0].rule["status"] == "registry"
+    assert out.findings[0].rule["status"] == "implemented"  # registry rule, since week 4
     assert out.findings[1].rule["status"] == "portal"
-    assert not out.should_have_been_caught()
+    assert [f.code for f in out.should_have_been_caught()] == ["80002"]
 
 
 def test_parse_portal_text_accepted():

@@ -22,8 +22,15 @@ Status: pre-alpha, week 2. What exists today:
 - Test corpus: the five annex examples of the Technische Wegleitung (2.0), validated against the
   OECD schema and round-tripped through the models; a complete 3.0 example built by construction.
 
-Not yet: the full rule engine (67 ESTV codes with partner-state list and IBAN/ISIN checksums),
-the local submission registry, corrections, the status-message parser, the browser validator.
+- **Rule engine**: 59 of the 65 ESTV rules enforced before the file leaves the machine
+  (`docs/ESTV-RULES.md`), partner states by year from the pinned SIF list, IBAN/ISIN checksums.
+- **Submission registry** (`aeoi.registry`, SQLite on the FI's machine) and workflow
+  (`aeoi.crs.submit`): new messages, corrections (OECD2), deletions (OECD3), correction chains,
+  nil reports, outcomes; `aeoi crs correct`, `aeoi crs registry`, `aeoi estv status --registry`.
+- **Outcome parser** (`aeoi.estv.status`): OECD CRS Status Message 2.0 or pasted portal text,
+  every code explained from the catalogue.
+
+Not yet: the browser validator, the pilot's first test upload (needs a registered FI), CARF.
 
 ## Why
 
@@ -50,6 +57,18 @@ aeoi estv inspect Test-report.zip --key ESTV-PublicKey.pem --test
 ```
 
 Until 14.12.2026 the ESTV accepts only schema 2.0 (`--version 2.0`); from 16.01.2027 only 3.0.
+
+With a registry (recommended: it is what makes corrections possible):
+
+```bash
+aeoi crs build   --input filled.xlsx --version 3.0 --out m1.xml --registry fi.sqlite
+aeoi estv status outcome.txt --registry fi.sqlite --message CH2026CH...   # after the portal answered
+aeoi crs correct --input fixed.xlsx --version 3.0 --out m2.xml --registry fi.sqlite --cancel A7
+aeoi crs registry --registry fi.sqlite
+```
+
+The registry file contains the account data needed to build deletions: keep it next to the
+workbook, back it up, never send it.
 
 ## Sources
 
