@@ -14,3 +14,4 @@ data/
 Test*.zip
 CRS_Payload*
 CRS_KEY
+.local/
