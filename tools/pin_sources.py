@@ -1,37 +1,27 @@
-"""Regenerate docs/SOURCES.md with SHA-256 hashes of the pinned source documents."""
+"""Pinned source documents: manifest, download and hash check, SOURCES.md generation.
+
+    python tools/pin_sources.py            # verify hashes of present files, rewrite docs/SOURCES.md
+    python tools/pin_sources.py --fetch    # also download files that are missing
+    python tools/pin_sources.py --add PATH URL   # add a local file to the manifest (hash computed)
+
+The manifest is ``docs/sources/manifest.json``. OECD files are committed (CC BY 4.0). The ESTV
+PDFs are not committed: Swiss federal official documents are likely free of copyright (URG Art. 5),
+but "likely" is not enough for a public repository, and the manifest makes them reproducible.
+"""
 
 from __future__ import annotations
 
+import argparse
 import datetime
 import hashlib
+import json
+import sys
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OECD = "https://www.oecd.org/content/dam/oecd/en/"
-TOPIC = OECD + "topics/policy-issues/tax-transparency-and-international-co-operation/"
-PUB = OECD + "publications/reports/"
-
-URLS = {
-    "crs-xml-schema-v3.0.zip": TOPIC + "xml-schema-crs.zip",
-    "crs-xml-schema-v2.0.zip": TOPIC + "crs-schema-v2.0.zip",
-    "crs-status-message-xml-schema-v2.0.zip": TOPIC + "crs-status-message-v2.0.zip",
-    "carf-xml-schema-v1.5.zip": TOPIC + "xml-schema-carf-v1.5.zip",
-    "carf-status-message-xml-schema-v1.1.zip": TOPIC + "carf-status-message-xml-schema-v1.1.zip",
-    "generic-status-message-xml-schema-v2.0.zip": TOPIC
-    + "generic-status-message-xml-schema-v2.0.zip",
-    "crs-xml-schema-user-guide-v4.0-2024-10.pdf": PUB
-    + "2024/10/amended-common-reporting-standard-xml-schema_27960161/dd7ee57a-en.pdf",
-    "crs-status-message-user-guide-v3.0-2025-06.pdf": PUB
-    + "2025/06/common-reporting-standard-status-message-xml-schema_6b5a1079/6c08db84-en.pdf",
-    "crs-xml-schema-user-guide-v3.0-2019-06.pdf": PUB
-    + "2019/06/common-reporting-standard-xml-schema-user-guide-for-tax-administrations-version-3-0-june-2019_32dc1e5a/93b6aa4a-en.pdf",
-    "crs-status-message-user-guide-v2.0-2019-06.pdf": PUB
-    + "2019/06/common-reporting-standard-status-message-xml-schema-user-guide-for-tax-administrations-version-2-0-june-2019_934c12ea/4aaa6516-en.pdf",
-    "carf-xml-schema-user-guide-v2.0-2025-07.pdf": PUB
-    + "2024/10/crypto-asset-reporting-framework-xml-schema_d15d81d3/578052ec-en.pdf",
-    "estv-technische-wegleitung-aia-2026-09.pdf": "https://www.estv.admin.ch/dam/de/sd-web/nawtcd6uyf89/int-aia-technische-wegleitung-de.pdf",
-    "estv-wegleitung-aia-2026-01-15.pdf": "https://www.estv.admin.ch/dam/de/sd-web/hEtJr9vx6Ej-/20260115_Wegleitung_D_Publikation_Clean.pdf",
-}
+MANIFEST = ROOT / "docs" / "sources" / "manifest.json"
+USER_AGENT = "Mozilla/5.0 (aeoi pin_sources)"
 
 NOTES = """
 ## What is what
@@ -48,37 +38,110 @@ NOTES = """
   second module.
 - **ESTV Technische Wegleitung AIA** (September 2026): Swiss portal rules, 67 error codes,
   packaging/encryption, test messages. **ESTV Wegleitung AIA** (15.01.2026): substantive guidance.
+  Not committed; `python tools/pin_sources.py --fetch` downloads them and checks the hash.
 
-Licensing: OECD content published from 1 July 2024 is CC BY 4.0 by default (OECD open access
-policy); Swiss federal official documents are not protected by copyright (URG Art. 5).
+## Licences and citations
+
+OECD material is published under CC BY 4.0 (OECD open access policy; pre-July-2024 items may be
+copied and distributed for commercial and non-commercial purposes with attribution). Citations in the
+form the OECD requests:
+
+{citations}
+
+Swiss federal documents: official acts, decisions and reports of authorities are not protected by
+copyright (URG Art. 5); a Wegleitung is probably covered but not certainly, hence not redistributed.
 """
 
 
-def main() -> None:
-    rows = []
-    for sub in ("oecd", "estv"):
-        folder = ROOT / "docs" / "sources" / sub
-        for path in sorted(folder.iterdir()):
-            digest = hashlib.sha256(path.read_bytes()).hexdigest()
-            rel = path.relative_to(ROOT).as_posix()
-            rows.append((rel, path.stat().st_size, digest, URLS.get(path.name, "")))
+def sha256_of(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_manifest() -> list[dict]:
+    return json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+
+def save_manifest(entries: list[dict]) -> None:
+    MANIFEST.write_text(json.dumps(entries, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+
+def fetch(url: str, dest: Path) -> None:
+    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=120) as resp:
+        dest.write_bytes(resp.read())
+
+
+def verify(entries: list[dict], do_fetch: bool) -> bool:
+    ok = True
+    for e in entries:
+        path = ROOT / e["path"]
+        if not path.exists():
+            if do_fetch:
+                print(f"downloading {e['path']}")
+                path.parent.mkdir(parents=True, exist_ok=True)
+                fetch(e["url"], path)
+            else:
+                print(f"MISSING  {e['path']} (run with --fetch)")
+                ok = False
+                continue
+        digest = sha256_of(path)
+        if digest != e["sha256"]:
+            print(f"HASH MISMATCH {e['path']}: {digest} != {e['sha256']}")
+            ok = False
+        else:
+            print(f"ok       {e['path']}")
+    return ok
+
+
+def write_sources_md(entries: list[dict]) -> None:
     today = datetime.datetime.now(tz=datetime.UTC).date().isoformat()
     lines = [
         "# Pinned sources",
         "",
         (
-            f"Downloaded on {today}. File names encode the version the document declares; "
-            "the hash pins the exact bytes. Regenerate with `python tools/pin_sources.py`."
+            f"Manifest: `docs/sources/manifest.json` (regenerated {today}). File names encode the "
+            "version the document declares; the hash pins the exact bytes. "
+            "`python tools/pin_sources.py --fetch` downloads what is missing and checks every hash."
         ),
         "",
-        "| File | Bytes | SHA-256 | URL |",
-        "|---|---|---|---|",
+        "| File | Bytes | SHA-256 | Committed | URL |",
+        "|---|---|---|---|---|",
     ]
-    for rel, size, digest, url in rows:
-        lines.append(f"| `{rel}` | {size} | `{digest}` | {url} |")
-    (ROOT / "docs" / "SOURCES.md").write_text("\n".join(lines) + "\n" + NOTES, encoding="utf-8")
-    print(f"wrote docs/SOURCES.md with {len(rows)} rows")
+    for e in entries:
+        committed = "yes" if e.get("committed", True) else "no"
+        lines.append(
+            f"| `{e['path']}` | {e['bytes']} | `{e['sha256']}` | {committed} | {e['url']} |"
+        )
+    citations = "\n".join(f"- {e['citation']}" for e in entries if e.get("citation"))
+    (ROOT / "docs" / "SOURCES.md").write_text(
+        "\n".join(lines) + "\n" + NOTES.format(citations=citations), encoding="utf-8"
+    )
+
+
+def add_entry(entries: list[dict], path: str, url: str) -> None:
+    p = ROOT / path
+    entries.append(
+        {"path": path, "url": url, "bytes": p.stat().st_size, "sha256": sha256_of(p),
+         "committed": True, "citation": ""}
+    )  # fmt: skip
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--fetch", action="store_true", help="download missing files")
+    ap.add_argument(
+        "--add", nargs=2, metavar=("PATH", "URL"), help="add a local file to the manifest"
+    )
+    args = ap.parse_args(argv)
+    entries = load_manifest()
+    if args.add:
+        add_entry(entries, *args.add)
+        save_manifest(entries)
+    ok = verify(entries, args.fetch)
+    write_sources_md(entries)
+    print("wrote docs/SOURCES.md")
+    return 0 if ok else 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

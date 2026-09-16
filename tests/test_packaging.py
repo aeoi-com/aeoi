@@ -138,3 +138,8 @@ def test_load_public_key_from_pem_and_certificate(key_pair, tmp_path):
     )
     cert_pem = cert.public_bytes(serialization.Encoding.PEM)
     assert pk.load_public_key(cert_pem).public_numbers() == public.public_numbers()
+
+
+def test_limits_are_decimal_megabytes():
+    assert pk.MAX_XML_BYTES == 100_000_000
+    assert pk.MAX_PACKAGE_BYTES == 10_000_000

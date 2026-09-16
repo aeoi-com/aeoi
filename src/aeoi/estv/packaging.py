@@ -40,8 +40,10 @@ KEY_ENTRY = "CRS_KEY"
 AES_KEY_BYTES = 32
 AES_IV_BYTES = 16
 KEY_BLOB_BYTES = AES_KEY_BYTES + AES_IV_BYTES  # 48
-MAX_XML_BYTES = 100 * 1024 * 1024  # Ziffer 4.1.1
-MAX_PACKAGE_BYTES = 10 * 1024 * 1024  # Ziffer 4.1.1
+# Ziffer 4.1.1 says "100 MB" / "10 MB" without defining the unit; the decimal reading is the
+# stricter one, so a file we accept is never one the portal rejects for size.
+MAX_XML_BYTES = 100_000_000
+MAX_PACKAGE_BYTES = 10_000_000
 TEST_PREFIX = "test"
 
 

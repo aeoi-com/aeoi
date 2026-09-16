@@ -70,3 +70,15 @@ def test_forbidden_sequences(seq):
 def test_pilcrow_is_not_excluded():
     # U+00B6 is absent from the Anhang 7.2 table; keep the rule literal until the ESTV says otherwise
     assert ids.is_clean("a¶b")
+
+
+@pytest.mark.parametrize("code", [0x00, 0x1B, 0x7F, 0x85, 0x9F])
+def test_control_characters_rejected(code):
+    problems = ids.invalid_characters("ab" + chr(code) + "cd")
+    assert problems and "control character" in problems[0].reason
+
+
+def test_tab_newline_cr_allowed():
+    # AddressFree may use CR/LF as delimiter (CommonTypesFatcaCrs Address_Type documentation)
+    text = "Bahnhofstrasse 1" + chr(0x0D) + chr(0x0A) + "8001 Zürich" + chr(0x09) + "CH"
+    assert ids.is_clean(text)

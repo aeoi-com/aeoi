@@ -8,18 +8,20 @@ Each item names the source that raised it. Answers go back into the rule engine 
    annex examples (7.1) are still 2.0 documents. A file that follows the Wegleitung literally fails
    XSD validation against the OECD 3.0 schema; a file that follows the OECD schema deviates from the
    Wegleitung example. Working assumption: the Wegleitung example is a leftover and the portal
-   validates against the OECD 3.0 schema (`crs:v3`). To be settled by the first 3.0 test upload in
-   the week of 16.01.2027. The validator supports both and reports the mismatch explicitly.
+   validates against the OECD 3.0 schema (`crs:v3`). The generator emits `crs:v3` only; the
+   validator accepts both and reports the mismatch. To be settled by the first 3.0 test upload in
+   the week of 16.01.2027.
 
 2. **Gap between 14.12.2026 and 16.01.2027.** Wegleitung 5.3.1: "Bis zum 14.12.2026 wird nur die
    Version 2.0 unterstützt. Ab dem 16.1.2027 wird nur noch die Version 3.0 unterstützt." What the
    portal accepts in between (nothing? both?) is not written. Ask the pilot to check the portal
    notice in December.
 
-3. **Element name `EquityInterestType` vs `EntityInterestType`.** The XSD 3.0 and xsdata models say
-   `EquityInterestType` (on AccountHolder); the Wegleitung change log (5.3.8/5.3.9) says
-   "EntityInterestType". Presumably a typo in the Wegleitung; the XSD wins for generation, the
-   rule text quotes both.
+3. **Transitional "not reported" values.** The 3.0 schema carries CRS800 (CtrlgPersonType), CRS900
+   (SelfCert of the account holder), CRS1000 (SelfCert of a controlling person), CRS1100
+   (AccountType) and CRS1200 (DDProcedure), documented as "available as a transitional measure" for
+   records first reported under 2.0. The Wegleitung does not mention them. Does the ESTV accept them,
+   and for which reporting years? This decides how a 2026 AccountReport is corrected in 2027.
 
 4. **Status message version returned by the portal.** The Wegleitung refers to the CRS Status Message
    User Guide v3.0 (2025) for codes; the portal shows results in the "AIA Meldungsübersicht" and via
@@ -36,6 +38,19 @@ Each item names the source that raised it. Answers go back into the rule engine 
 
 7. **Character `¶` (U+00B6).** Absent from the Anhang 7.2 exclusion table while its neighbours are
    excluded. The validator keeps the table literal; flag if the portal rejects it.
+
+## Closed
+
+- **`EquityInterestType` vs `EntityInterestType`** — closed. The body of the Wegleitung (5.3.8 and
+  rule 60019) says `EquityInterestType`, matching the XSD; `EntityInterestType` appears only in the
+  change log. Typo, not a doubt.
+
+## Rule-text defects to handle in the rule engine (Wegleitung 09.2026)
+
+- **60018**: the formula says "Wenn AccountNumber = OECD606" but the prose says "Internationale
+  Bankkontonummer (OECD601)". Implement the prose (IBAN = OECD601); note the discrepancy in the
+  rule's text.
+- **60021**: "Tyoe" for "Type" in the rule text. Cosmetic; keep the code, fix the label.
 
 ## Policy for the pilot exchange
 

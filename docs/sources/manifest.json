@@ -1,0 +1,106 @@
+[
+  {
+    "path": "docs/sources/oecd/crs-xml-schema-v3.0.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/xml-schema-crs.zip",
+    "bytes": 18382,
+    "sha256": "71328994cf1e0924c119e78cf2e798bcb0bf6f2939c2f9ab7f3c5d2e0d7915e3",
+    "committed": true,
+    "citation": "OECD (2024), Amended Common Reporting Standard XML Schema (Version 3.0), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/xml-schema-crs.zip"
+  },
+  {
+    "path": "docs/sources/oecd/crs-xml-schema-user-guide-v4.0-2024-10.pdf",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2024/10/amended-common-reporting-standard-xml-schema_27960161/dd7ee57a-en.pdf",
+    "bytes": 3863202,
+    "sha256": "7dfc3cac58bff32710f8ab548e10c3d5d4cdc6117a7c0649dc118be359a1862f",
+    "committed": true,
+    "citation": "OECD (2024), Amended Common Reporting Standard XML Schema: User Guide for Tax Administrations (Version 4.0), OECD Publishing, Paris, https://doi.org/10.1787/dd7ee57a-en"
+  },
+  {
+    "path": "docs/sources/oecd/crs-xml-schema-v2.0.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/crs-schema-v2.0.zip",
+    "bytes": 17549,
+    "sha256": "d770d7c426759691c57c89c41d808790f0f3b841e9cb61d514334c55ccb0a524",
+    "committed": true,
+    "citation": "OECD (2019), Common Reporting Standard XML Schema (Version 2.0), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/crs-schema-v2.0.zip"
+  },
+  {
+    "path": "docs/sources/oecd/crs-xml-schema-user-guide-v3.0-2019-06.pdf",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2019/06/common-reporting-standard-xml-schema-user-guide-for-tax-administrations-version-3-0-june-2019_32dc1e5a/93b6aa4a-en.pdf",
+    "bytes": 5861707,
+    "sha256": "7864e5c8bdddd59dbf7f5fd64e80224bb979eeda2324e49f6d154bc2208a79c6",
+    "committed": true,
+    "citation": "OECD (2019), Common Reporting Standard XML Schema: User Guide for Tax Administrations, Version 3.0 - June 2019, OECD Publishing, Paris, https://doi.org/10.1787/93b6aa4a-en"
+  },
+  {
+    "path": "docs/sources/oecd/crs-status-message-xml-schema-v2.0.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/crs-status-message-v2.0.zip",
+    "bytes": 8617,
+    "sha256": "20dbf04cfba775adb5e32b5e1d6373b5cf97dd6cf1a7b42f8b71a7e13d5826d9",
+    "committed": true,
+    "citation": "OECD (2019), Common Reporting Standard Status Message XML Schema (Version 2.0), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/crs-status-message-v2.0.zip"
+  },
+  {
+    "path": "docs/sources/oecd/crs-status-message-user-guide-v3.0-2025-06.pdf",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/common-reporting-standard-status-message-xml-schema_6b5a1079/6c08db84-en.pdf",
+    "bytes": 1037972,
+    "sha256": "7d6800d3a92c6784544bbeb52a129e47820c987b79c55196fa5a5ca88090038e",
+    "committed": true,
+    "citation": "OECD (2025), Common Reporting Standard Status Message XML Schema: User Guide for Tax Administrations (Version 3.0), OECD Publishing, Paris, https://doi.org/10.1787/6c08db84-en"
+  },
+  {
+    "path": "docs/sources/oecd/crs-status-message-user-guide-v2.0-2019-06.pdf",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2019/06/common-reporting-standard-status-message-xml-schema-user-guide-for-tax-administrations-version-2-0-june-2019_934c12ea/4aaa6516-en.pdf",
+    "bytes": 2460269,
+    "sha256": "fb865ae709cf69edb0e4a659502d0bdce3e9c8be760ccf6d6673d56222879fe8",
+    "committed": true,
+    "citation": "OECD (2019), Common Reporting Standard Status Message XML Schema: User Guide for Tax Administrations, Version 2.0 - June 2019, OECD Publishing, Paris, https://doi.org/10.1787/4aaa6516-en"
+  },
+  {
+    "path": "docs/sources/oecd/carf-xml-schema-v1.5.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/xml-schema-carf-v1.5.zip",
+    "bytes": 17208,
+    "sha256": "e55d533f88551d41ceec4f4b84258c6ff45116603c37cff3c11581097aa1898b",
+    "committed": true,
+    "citation": "OECD (2025), Crypto-Asset Reporting Framework XML Schema (Version 1.5), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/xml-schema-carf-v1.5.zip"
+  },
+  {
+    "path": "docs/sources/oecd/carf-xml-schema-user-guide-v2.0-2025-07.pdf",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2024/10/crypto-asset-reporting-framework-xml-schema_d15d81d3/578052ec-en.pdf",
+    "bytes": 2714592,
+    "sha256": "72cc636d3c52ad10ec3720e7660d222d85b8a3c93de80de9af0b2604278adec2",
+    "committed": true,
+    "citation": "OECD (2025), Crypto-Asset Reporting Framework XML Schema: User Guide for Tax Administrations (Version 2.0), OECD Publishing, Paris, https://doi.org/10.1787/578052ec-en"
+  },
+  {
+    "path": "docs/sources/oecd/carf-status-message-xml-schema-v1.1.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/carf-status-message-xml-schema-v1.1.zip",
+    "bytes": 8687,
+    "sha256": "208ef41fdb313bd7c5485eb57a540d77100313835f022dc64f18c4bb40100421",
+    "committed": true,
+    "citation": "OECD (2025), Crypto-Asset Reporting Framework Status Message XML Schema (Version 1.1), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/carf-status-message-xml-schema-v1.1.zip"
+  },
+  {
+    "path": "docs/sources/oecd/generic-status-message-xml-schema-v2.0.zip",
+    "url": "https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/generic-status-message-xml-schema-v2.0.zip",
+    "bytes": 8953,
+    "sha256": "b9f81ad8fa6847b8039f472c53f55afff2d929a83e618fb3271571452f443b23",
+    "committed": true,
+    "citation": "OECD (2020), Generic Status Message XML Schema (Version 2.0), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/generic-status-message-xml-schema-v2.0.zip"
+  },
+  {
+    "path": "docs/sources/estv/estv-technische-wegleitung-aia-2026-09.pdf",
+    "url": "https://www.estv.admin.ch/dam/de/sd-web/nawtcd6uyf89/int-aia-technische-wegleitung-de.pdf",
+    "bytes": 1664518,
+    "sha256": "ab5eb730f6477d84d9262e8c2d50ea7cd1a2d5a64319a3553899783dfd8ad34d",
+    "committed": false,
+    "citation": "ESTV (2026), Technische Wegleitung - Standard fuer den automatischen Informationsaustausch ueber Finanzkonten, Bern, September 2026"
+  },
+  {
+    "path": "docs/sources/estv/estv-wegleitung-aia-2026-01-15.pdf",
+    "url": "https://www.estv.admin.ch/dam/de/sd-web/hEtJr9vx6Ej-/20260115_Wegleitung_D_Publikation_Clean.pdf",
+    "bytes": 4063364,
+    "sha256": "d13f3c1de784bafcd6abe1a0ed94e9566c9e1bef6538ed1216cca1cfd43cb502",
+    "committed": false,
+    "citation": "ESTV (2026), Wegleitung - Standard fuer den automatischen Informationsaustausch ueber Finanzkonten, Bern, 15.01.2026"
+  }
+]

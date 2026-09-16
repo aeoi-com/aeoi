@@ -15,7 +15,8 @@ DocRefId (error 80000 / 80001)
 
 Character set (error 50005)
     Only ISO 8859-1, minus the characters listed in Anhang 7.2, and never the sequences
-    ``--``, ``/*``, ``&#``.
+    ``--``, ``/*``, ``&#``. Control characters (C0 except tab/LF/CR, DEL and C1 0x80-0x9F) are
+    part of ISO 8859-1 but have no place in data elements and are rejected here as well.
 """
 
 from __future__ import annotations
@@ -32,46 +33,14 @@ DOC_REF_ID_RE = re.compile(r"^CH(?P<year>[0-9]{4})CH(?P<unique>[0-9A-Za-z._-]{1,
 EXCLUDED_CHARS: frozenset[str] = frozenset(
     chr(c)
     for c in (
-        0x21,
-        0x22,
-        0x23,
-        0x24,
-        0x3C,
-        0x3E,
-        0x5E,
-        0x7E,
-        0xA3,
-        0xA4,
-        0xA5,
-        0xA6,
-        0xA7,
-        0xA8,
-        0xA9,
-        0xAA,
-        0xAB,
-        0xAC,
-        0xAD,
-        0xAE,
-        0xAF,
-        0xB0,
-        0xB1,
-        0xB2,
-        0xB3,
-        0xB4,
-        0xB5,
-        0xB7,
-        0xB8,
-        0xB9,
-        0xBA,
-        0xBB,
-        0xBC,
-        0xBD,
-        0xBE,
-        0xBF,
+        0x21, 0x22, 0x23, 0x24, 0x3C, 0x3E, 0x5E, 0x7E,
+        0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF,
+        0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
         0xF7,
     )
-)
+)  # fmt: skip
 FORBIDDEN_SEQUENCES: tuple[str, ...] = ("--", "/*", "&#")
+ALLOWED_CONTROL_CHARS: frozenset[str] = frozenset({chr(0x09), chr(0x0A), chr(0x0D)})
 
 
 def message_ref_id(reporting_year: int) -> str:
@@ -136,13 +105,16 @@ class CharProblem:
 
 
 def invalid_characters(text: str) -> list[CharProblem]:
-    """Characters outside ISO 8859-1 or excluded by Anhang 7.2, plus forbidden sequences."""
+    """Characters outside ISO 8859-1, control characters, Anhang 7.2 exclusions and sequences."""
     problems: list[CharProblem] = []
     for i, ch in enumerate(text):
-        if ord(ch) > 0xFF:
+        code = ord(ch)
+        if code > 0xFF:
             problems.append(CharProblem(i, ch, "not in ISO 8859-1"))
         elif ch in EXCLUDED_CHARS:
-            problems.append(CharProblem(i, ch, f"excluded by Anhang 7.2 (U+{ord(ch):04X})"))
+            problems.append(CharProblem(i, ch, f"excluded by Anhang 7.2 (U+{code:04X})"))
+        elif (code < 0x20 and ch not in ALLOWED_CONTROL_CHARS) or 0x7F <= code <= 0x9F:
+            problems.append(CharProblem(i, ch, f"control character (U+{code:04X})"))
     for seq in FORBIDDEN_SEQUENCES:
         start = 0
         while (pos := text.find(seq, start)) != -1:

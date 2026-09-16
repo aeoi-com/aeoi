@@ -34,7 +34,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 ## What exists (see README.md)
 
-- Pinned sources with SHA-256: `docs/SOURCES.md`.
+- Pinned sources with SHA-256: `docs/SOURCES.md` from `docs/sources/manifest.json`; OECD files
+  committed (CC BY 4.0), ESTV PDFs not committed — `python tools/pin_sources.py --fetch`.
 - Generated models: `src/aeoi/schemas/` (`tools/generate_models.py`, includes the Address_Type
   field-order patch).
 - ESTV packaging/encryption: `src/aeoi/estv/packaging.py`; identifiers and charset:
@@ -51,10 +52,27 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   cancelled (80004); CorrMessageRefId forbidden (80006); DocRefId = CH+year+CH+1-42 chars
   (80001); MessageRefId `CH[0-9]{4}CH.{1,162}`, UUID recommended, no customer data (50008/50009);
   ISO 8859-1 minus Anhang 7.2 (50005); test DocTypeIndic OECD10/OECD11.
-- XSD 3.0 vs 2.0: new mandatory `SelfCert` (AccountHolder, ControllingPerson) and `DDProcedure`
-  (AccountReport); optional `AccountType`, `JointAccount`, `EquityInterestType`.
+- XSD 3.0 vs 2.0 (verified on `CrsXML_v3.0.xsd`, tests by construction in
+  `tests/test_models_roundtrip.py`):
+  - new **mandatory**: `SelfCert` in AccountHolder and in ControllingPerson; `DDProcedure` and
+    `AccountType` in AccountReport; `CtrlgPersonType` goes from optional (2.0) to mandatory and
+    repeatable (3.0);
+  - **optional**: `JointAccount` (AccountReport), `EquityInterestType` (AccountHolder, 0..n);
+  - **element order** (the week-2 mapping must respect it): AccountHolder = `EquityInterestType*`,
+    `SelfCert`, then `Individual` | (`Organisation`, `AcctHolderType`); ControllingPerson =
+    `Individual`, `CtrlgPersonType+`, `SelfCert` (last); AccountReport = DocSpec, AccountNumber,
+    AccountHolder, ControllingPerson*, AccountBalance, Payment*, `DDProcedure`, `AccountType`,
+    `JointAccount?`;
+  - transitional "not reported" values exist in 3.0 for records first sent under 2.0: CRS800
+    (CtrlgPersonType), CRS900 (SelfCert holder), CRS1000 (SelfCert controlling person), CRS1100
+    (AccountType), CRS1200 (DDProcedure). The Wegleitung does not mention them — pilot question.
+  - the 3.0 generator emits only `urn:oecd:ties:crs:v3`; the validator accepts v2 and v3 and
+    reports the mismatch with the Wegleitung example.
 - Open discrepancies: `docs/OPEN-QUESTIONS.md` (namespace v2 vs v3 in the 3.0 header, the
-  14.12–16.01 gap, EquityInterestType vs EntityInterestType, status message format).
+  14.12–16.01 gap, transitional values, status message format, rule-text typos 60018/60021).
+- Size limits are decimal (100'000'000 / 10'000'000 bytes): the stricter reading of "100 MB / 10 MB".
+- Character set: Anhang 7.2 exclusions plus control characters (C0 except tab/LF/CR, DEL, C1);
+  the serializer writes raw UTF-8, never numeric references (`&#` is a forbidden sequence).
 
 ## Next steps
 
