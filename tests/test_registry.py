@@ -149,7 +149,12 @@ def test_correction_needs_a_recorded_outcome(reg):
     submit.build_new(sample_message(), "3.0", reg)
     changed = sample_message()
     changed.accounts[0].balance = Decimal(1)
-    with pytest.raises(RegistryError, match="no recorded outcome"):
+    with pytest.raises(RegistryError, match="not accepted"):
+        submit.build_correction(changed, "3.0", reg)
+    # 'submitted' is not enough either: the portal may still reject the message
+    first = reg.messages()[0]["message_ref_id"]
+    reg.set_status(first, "submitted")
+    with pytest.raises(RegistryError, match="is submitted, not accepted"):
         submit.build_correction(changed, "3.0", reg)
 
 
@@ -214,3 +219,100 @@ def test_crs702_from_the_workbook_alone_is_still_refused():
     msg.message_type_indic = "CRS702"
     rules = {p.rule for p in model.check_message(msg, "3.0").problems}
     assert "80010" in rules
+
+
+# --- schema switch: records sent in 2.0, workbook reopened under 3.0 ---------------------------
+
+
+def _v2_message():
+    """A 2026 workbook: 3.0 columns empty, one CtrlgPersonType per controlling person."""
+    msg = sample_message()
+    for acc in msg.accounts:
+        acc.self_cert = acc.dd_procedure = acc.account_type = None
+        acc.joint_account_number = None
+        acc.equity_interest_types = []
+        for cp in acc.controlling_persons:
+            cp.self_cert = None
+            cp.ctrlg_person_types = cp.ctrlg_person_types[:1]
+    return msg
+
+
+def _accept_v2(reg):
+    first = submit.build_new(_v2_message(), "2.0", reg)
+    _accept(reg, first.message_ref_id)
+    return first
+
+
+def test_switch_to_3_0_does_not_make_unchanged_records_look_changed(reg):
+    _accept_v2(reg)
+    result, plan = submit.build_correction(sample_message(), "3.0", reg)  # 3.0 columns filled
+    assert result is None and sorted(plan.skipped_unchanged) == ["A1", "A2"]
+    # a real change is still seen under 3.0
+    changed = sample_message()
+    changed.accounts[0].balance = Decimal(1)
+    result, plan = submit.build_correction(changed, "3.0", reg)
+    assert [p.key for p in result.records] == ["A1"] and plan.skipped_unchanged == ["A2"]
+    assert not xsd.validate(result.xml, "3.0")
+
+
+def test_deleting_a_2_0_record_under_3_0_uses_transitional_values(reg):
+    first = _accept_v2(reg)
+    only_a1 = sample_message()
+    only_a1.accounts = [only_a1.accounts[0]]
+    result, _ = submit.build_correction(only_a1, "3.0", reg, cancel=["A2"])
+    xml = result.xml
+    assert not xsd.validate(xml, "3.0")
+    assert "CRS900" in xml and "CRS1000" in xml and "CRS1100" in xml and "CRS1200" in xml
+    _accept(reg, result.message_ref_id)
+    # a record whose 3.0 values are known keeps them: no transitional value for A1's chain
+    changed = sample_message()
+    changed.accounts = [changed.accounts[0]]
+    changed.accounts[0].balance = Decimal(1)
+    result2, _ = submit.build_correction(changed, "3.0", reg)
+    assert "CRS900" not in result2.xml and "CRS1101" in result2.xml
+    specs = _doc_specs(xml)
+    assert specs[1][0] == "OECD3" and specs[1][2] == first.doc_ref_ids["A2"]
+
+
+def test_deletion_always_starts_from_the_stored_content(reg):
+    first = submit.build_new(sample_message(), "3.0", reg)
+    _accept(reg, first.message_ref_id)
+    tampered = sample_message()
+    tampered.accounts[1].holder_organisation.residence_countries = ["DE"]  # was FR
+    result, _ = submit.build_correction(tampered, "3.0", reg, cancel=["A2"])
+    root = etree.fromstring(result.xml.encode())
+    codes = {e.text for e in root.iter("{urn:oecd:ties:crs:v3}ResCountryCode")}
+    assert "FR" in codes and "DE" not in codes  # 98204: same ResCountryCodes as the record deleted
+
+
+def test_fi_is_resent_only_after_an_accepted_message(reg):
+    first = submit.build_new(sample_message(), "3.0", reg)  # built, not yet accepted
+    more = sample_message()
+    more.accounts = [more.accounts[0].model_copy(update={"key": "A3", "account_number": "NANUM",
+                                                         "account_number_type": None})]  # fmt: skip
+    second = submit.build_new(more, "3.0", reg)
+    specs = _doc_specs(second.xml)
+    assert specs[0][0] == "OECD1" and specs[0][1] != first.reporting_fi_doc_ref_id
+    _accept(reg, first.message_ref_id)
+    third = sample_message()
+    third.accounts = [third.accounts[0].model_copy(update={"key": "A4", "account_number": "NANUM",
+                                                           "account_number_type": None})]  # fmt: skip
+    specs3 = _doc_specs(submit.build_new(third, "3.0", reg).xml)
+    assert specs3[0] == ("OECD0", first.reporting_fi_doc_ref_id, None)
+
+
+def test_discarded_message_frees_the_chain(reg):
+    first = submit.build_new(sample_message(), "3.0", reg)
+    _accept(reg, first.message_ref_id)
+    changed = sample_message()
+    changed.accounts[0].balance = Decimal(1)
+    corr, _ = submit.build_correction(changed, "3.0", reg)
+    submit.discard(reg, corr.message_ref_id)
+    assert reg.message(corr.message_ref_id)["status"] == "discarded"
+    assert reg.record(first.doc_ref_ids["A1"]).superseded_by is None
+    corr2, _ = submit.build_correction(changed, "3.0", reg)
+    assert _doc_specs(corr2.xml)[1][2] == first.doc_ref_ids["A1"]
+    # a discarded new message does not block the same accounts either
+    again = submit.build_new(sample_message(year=2025), "3.0", reg)
+    submit.discard(reg, again.message_ref_id)
+    submit.build_new(sample_message(year=2025), "3.0", reg)

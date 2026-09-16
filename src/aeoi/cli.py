@@ -176,9 +176,17 @@ def _cmd_crs_correct(args: argparse.Namespace) -> int:
 
 
 def _cmd_crs_registry(args: argparse.Namespace) -> int:
-    from aeoi.registry import Registry
+    from aeoi.crs import submit
+    from aeoi.registry import Registry, RegistryError
 
     with Registry(args.registry) as reg:
+        if args.discard:
+            try:
+                submit.discard(reg, args.discard)
+            except RegistryError as exc:
+                print(f"error: {exc}", file=sys.stderr)
+                return 2
+            print(f"discarded {args.discard}")
         print(reg.summary())
     return 0
 
@@ -274,6 +282,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     rg = crs_sub.add_parser("registry", help="list the messages of a registry")
     rg.add_argument("--registry", required=True)
+    rg.add_argument(
+        "--discard",
+        metavar="MESSAGE_REF_ID",
+        help="mark a built, never uploaded message as discarded",
+    )
     rg.set_defaults(func=_cmd_crs_registry)
 
     estv = sub.add_parser("estv", help="Swiss ESTV AIA portal tools")

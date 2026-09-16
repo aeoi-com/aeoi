@@ -9,8 +9,12 @@ Follows Wegleitung Ziffer 6:
   its chain (6.3.3); unchanged accounts are left out; new accounts are refused (they belong in
   a new CRS701 message); the ReportingFI is resent (OECD0);
 - nil report (CRS703): refused while valid records exist for the year (98009);
-- outcome: the registry marks the message accepted/rejected; a rejected correction frees its
-  targets so the chain stays at the previous link.
+- outcome: the registry marks the message accepted/rejected/discarded; a rejected or discarded
+  correction frees its targets so the chain stays at the previous link;
+- schema switch: "changed" is judged on the projection of the version the record was sent in
+  (a 3.0 workbook does not make every 2.0 record look changed), and a deletion of a record sent
+  in 2.0 built under 3.0 fills the new mandatory elements with the OECD transitional values
+  (CRS900, CRS1000, CRS800, CRS1100, CRS1200).
 """
 
 from __future__ import annotations
@@ -25,6 +29,31 @@ from aeoi.crs.build import BuildResult, FiPlan, RecordPlan
 from aeoi.crs.model import Account, Message, Version
 from aeoi.estv import ids, status
 from aeoi.registry import Registry, RegistryError, content_hash
+
+TRANSITIONAL = {
+    "self_cert": "CRS900",
+    "dd_procedure": "CRS1200",
+    "account_type": "CRS1100",
+}
+TRANSITIONAL_CP_SELF_CERT = "CRS1000"
+TRANSITIONAL_CP_TYPE = "CRS800"
+
+
+def upgrade_for_version(acc: Account, *, from_version: str, to_version: Version) -> Account:
+    """Stored 2.0 content reused under 3.0: fill the 3.0-only mandatory elements with the
+    transitional 'not reported' values the OECD schema provides for exactly this case."""
+    if from_version == to_version or to_version != "3.0":
+        return acc
+    acc = acc.model_copy(deep=True)
+    for name, value in TRANSITIONAL.items():
+        if getattr(acc, name) is None:
+            setattr(acc, name, value)
+    for cp in acc.controlling_persons:
+        if cp.self_cert is None:
+            cp.self_cert = TRANSITIONAL_CP_SELF_CERT
+        if not cp.ctrlg_person_types:
+            cp.ctrlg_person_types = [TRANSITIONAL_CP_TYPE]
+    return acc
 
 
 @dataclass
@@ -114,8 +143,24 @@ def build_new(
     return _finish(reg, msg, version, result, test=test, out_path=out_path)
 
 
+def _deletion_account(reg: Registry, key: str, head, version: Version) -> Account:
+    """An OECD3 record always starts from the stored content of the record it deletes: that is
+    what guarantees the same ResCountryCodes (98204) whatever the workbook row says now."""
+    stored = reg.stored_account(head.doc_ref_id)
+    if stored is None:
+        raise RegistryError(f"account {key!r}: no stored content to build the deletion from")
+    stored.key = key
+    stored.doc_ref_id = None
+    return upgrade_for_version(stored, from_version=head.version, to_version=version)
+
+
 def plan_correction(
-    msg: Message, reg: Registry, *, test: bool, cancel: list[str] | None = None
+    msg: Message,
+    reg: Registry,
+    *,
+    version: Version,
+    test: bool,
+    cancel: list[str] | None = None,
 ) -> Plan:
     """Decide OECD2 / OECD3 per account from the workbook and the registry."""
     year = msg.reporting_year
@@ -126,9 +171,9 @@ def plan_correction(
         head = reg.correction_target(acc.key, year=year, test=test)
         if acc.key in cancel:
             plan.records.append(RecordPlan(acc.key, ids.doc_ref_id(year), "OECD3", head.doc_ref_id))
-            plan.accounts.append(acc)
-        elif content_hash(acc) == head.content_sha256:
-            plan.skipped_unchanged.append(acc.key)
+            plan.accounts.append(_deletion_account(reg, acc.key, head, version))
+        elif content_hash(acc, head.version) == head.content_sha256:
+            plan.skipped_unchanged.append(acc.key)  # unchanged as the sent version reports it
         else:
             plan.records.append(RecordPlan(acc.key, ids.doc_ref_id(year), "OECD2", head.doc_ref_id))
             plan.accounts.append(acc)
@@ -136,13 +181,8 @@ def plan_correction(
         if key in keys_in_msg:
             continue
         head = reg.correction_target(key, year=year, test=test)
-        stored = reg.stored_account(head.doc_ref_id)
-        if stored is None:
-            raise RegistryError(f"account {key!r}: no stored content to build the deletion from")
-        stored.key = key
-        stored.doc_ref_id = None
         plan.records.append(RecordPlan(key, ids.doc_ref_id(year), "OECD3", head.doc_ref_id))
-        plan.accounts.append(stored)
+        plan.accounts.append(_deletion_account(reg, key, head, version))
     targets = [p.corr_doc_ref_id for p in plan.records]
     if len(targets) != len(set(targets)):
         raise RegistryError("the same record would be corrected twice in one message (80011)")
@@ -160,7 +200,7 @@ def build_correction(
     now: dt.datetime | None = None,
 ) -> tuple[BuildResult | None, Plan]:
     """CRS702 with the registry. Returns (None, plan) when nothing changed."""
-    plan = plan_correction(msg, reg, test=test, cancel=cancel)
+    plan = plan_correction(msg, reg, version=version, test=test, cancel=cancel)
     if not plan.records:
         return None, plan
     corr = msg.model_copy(update={"accounts": plan.accounts, "message_type_indic": "CRS702"})
@@ -169,6 +209,12 @@ def build_correction(
         corr, version, test=test, now=now, records=plan.records, fi_plan=plan.fi_plan
     )
     return _finish(reg, corr, version, result, test=test, out_path=out_path), plan
+
+
+def discard(reg: Registry, message_ref_id: str) -> None:
+    """A message that was built but never uploaded: frees its chain targets and identifiers'
+    obligations without inventing a portal rejection."""
+    reg.set_status(message_ref_id, "discarded", source="discarded by the user")
 
 
 def record_outcome(

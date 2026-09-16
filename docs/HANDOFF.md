@@ -78,9 +78,17 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   OECD2 for changed rows by content hash, OECD3 via `--cancel`, CorrDocRefId = chain head,
   unchanged rows left out, new rows refused), `record_outcome` (accepted/rejected; a rejected
   correction frees its targets). CLI: `aeoi crs build --registry`, `aeoi crs correct`,
-  `aeoi crs registry`, `aeoi estv status --registry`. The 12 "registry" rules are implemented;
-  catalogue: 59 implemented, 6 portal-only.
-- 171 tests: `.venv/Scripts/python -m pytest`.
+  `aeoi crs registry [--discard REF]`, `aeoi estv status --registry`. The 12 "registry" rules
+  are implemented; catalogue: 59 implemented, 6 portal-only.
+- Schema switch handled in the registry: each record stores the version it was sent in;
+  "changed" is judged on the projection of that version (a 3.0 workbook does not make 2.0
+  records look changed); deletions always start from the stored content (98204) and, built in
+  3.0 for a 2.0 record, fill the new mandatory elements with the transitional values CRS900 /
+  CRS1000 / CRS800 / CRS1100 / CRS1200. Corrections require the target message to be
+  `accepted` (not merely built or submitted); the ReportingFI is resent (OECD0) only from an
+  accepted message, otherwise OECD1 with a new DocRefId; `discarded` marks a built message that
+  was never uploaded and frees its chain targets.
+- 176 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 

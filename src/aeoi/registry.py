@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS records (
     content_json TEXT,
     res_country_codes TEXT,
     superseded_by TEXT,
-    created_at TEXT NOT NULL
+    created_at TEXT NOT NULL,
+    version TEXT                        -- CRS schema version the record was written in
 );
 CREATE INDEX IF NOT EXISTS records_key ON records(account_key);
 CREATE INDEX IF NOT EXISTS records_msg ON records(message_ref_id);
@@ -70,17 +71,39 @@ CREATE TABLE IF NOT EXISTS findings (
 );
 """
 
-VALID_STATUSES = ("built", "submitted", "accepted", "rejected")
+VALID_STATUSES = ("built", "submitted", "accepted", "rejected", "discarded")
+DEAD_STATUSES = ("rejected", "discarded")  # the ESTV never accepted these records
+V2_ONLY_EXCLUDED = {
+    "self_cert", "dd_procedure", "account_type", "joint_account_number", "equity_interest_types"
+}  # fmt: skip
 
 
 class RegistryError(ValueError):
     """A rule of Wegleitung Ziffer 6 / 5.3.x would be violated (the ESTV code is in the text)."""
 
 
-def content_hash(acc: Account) -> str:
-    """Hash of the account's reportable content (key and DocRefId excluded)."""
+def projected(acc: Account, version: str) -> dict:
+    """The account as the given schema version reports it (key and DocRefId excluded).
+
+    Under 2.0 the 3.0-only elements are not written, and a controlling person carries at most
+    one CtrlgPersonType and no SelfCert: comparing a 3.0 workbook with a record sent in 2.0 must
+    ignore exactly those fields, otherwise every row looks changed after the schema switch.
+    """
     data = acc.model_dump(mode="json", exclude={"key", "doc_ref_id"})
-    canonical = json.dumps(data, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    if version == "2.0":
+        for name in V2_ONLY_EXCLUDED:
+            data.pop(name, None)
+        for cp in data.get("controlling_persons", []):
+            cp.pop("self_cert", None)
+            cp["ctrlg_person_types"] = cp.get("ctrlg_person_types", [])[:1]
+    return data
+
+
+def content_hash(acc: Account, version: str = "3.0") -> str:
+    """Hash of the account's reportable content under the given schema version."""
+    canonical = json.dumps(
+        projected(acc, version), sort_keys=True, ensure_ascii=True, separators=(",", ":")
+    )
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
@@ -113,12 +136,13 @@ class RecordRow:
     message_status: str
     test: bool
     reporting_year: int
+    version: str
 
     @property
     def valid(self) -> bool:
-        """A valid link: not rejected, not superseded, not a deletion."""
+        """A valid link: not rejected/discarded, not superseded, not a deletion."""
         return (
-            self.message_status != "rejected"
+            self.message_status not in DEAD_STATUSES
             and self.superseded_by is None
             and self.doc_type_indic != "OECD3"
         )
@@ -130,6 +154,9 @@ class Registry:
         self.conn = sqlite3.connect(self.path)
         self.conn.row_factory = sqlite3.Row
         self.conn.executescript(SCHEMA)
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(records)")}
+        if "version" not in columns:  # registries created before the column existed
+            self.conn.execute("ALTER TABLE records ADD COLUMN version TEXT")
 
     def close(self) -> None:
         self.conn.close()
@@ -152,7 +179,8 @@ class Registry:
 
     def record(self, doc_ref_id: str) -> RecordRow | None:
         row = self.conn.execute(
-            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year "
+            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year, "
+            "m.version AS msg_version "
             "FROM records r JOIN messages m ON m.message_ref_id = r.message_ref_id "
             "WHERE r.doc_ref_id = ?",
             (doc_ref_id,),
@@ -173,12 +201,14 @@ class Registry:
             message_status=row["message_status"],
             test=bool(row["test"]),
             reporting_year=int(row["year"]),
+            version=row["version"] or row["msg_version"],
         )
 
     def chain_head(self, account_key: str, *, year: int, test: bool) -> RecordRow | None:
         """The last valid AccountReport link for this account key in this year (test/prod)."""
         rows = self.conn.execute(
-            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year "
+            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year, "
+            "m.version AS msg_version "
             "FROM records r JOIN messages m ON m.message_ref_id = r.message_ref_id "
             "WHERE r.kind = 'AR' AND r.account_key = ? AND m.reporting_year = ? AND m.test = ? "
             "ORDER BY r.created_at DESC, r.rowid DESC",
@@ -192,7 +222,8 @@ class Registry:
 
     def chain_heads(self, *, year: int, test: bool) -> list[RecordRow]:
         rows = self.conn.execute(
-            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year "
+            "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year, "
+            "m.version AS msg_version "
             "FROM records r JOIN messages m ON m.message_ref_id = r.message_ref_id "
             "WHERE r.kind = 'AR' AND m.reporting_year = ? AND m.test = ? ORDER BY r.created_at, r.rowid",
             (year, int(test)),
@@ -202,7 +233,7 @@ class Registry:
             rec = self._row(row)
             if rec.valid:
                 heads[rec.account_key or rec.doc_ref_id] = rec
-            elif rec.doc_type_indic == "OECD3" and rec.message_status != "rejected":
+            elif rec.doc_type_indic == "OECD3" and rec.message_status not in DEAD_STATUSES:
                 heads.pop(rec.account_key or "", None)
         return list(heads.values())
 
@@ -215,10 +246,12 @@ class Registry:
         return Account.model_validate_json(row["content_json"])
 
     def fi_doc_ref_id(self, *, year: int, test: bool) -> str | None:
-        """DocRefId of the ReportingFI to resend (OECD0), if one was sent and not rejected."""
+        """DocRefId of the ReportingFI to resend (OECD0): only from an accepted message, so a
+        rejection of the earlier message can never invalidate this one (98102; 6.4.6 allows a
+        new OECD1 ReportingFI otherwise)."""
         row = self.conn.execute(
             "SELECT r.doc_ref_id FROM records r JOIN messages m ON m.message_ref_id = r.message_ref_id "
-            "WHERE r.kind = 'FI' AND m.reporting_year = ? AND m.test = ? AND m.status != 'rejected' "
+            "WHERE r.kind = 'FI' AND m.reporting_year = ? AND m.test = ? AND m.status = 'accepted' "
             "ORDER BY r.created_at DESC, r.rowid DESC LIMIT 1",
             (year, int(test)),
         ).fetchone()
@@ -242,7 +275,8 @@ class Registry:
         head = self.chain_head(account_key, year=year, test=test)
         if head is None:
             rows = self.conn.execute(
-                "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year "
+                "SELECT r.*, m.status AS message_status, m.test AS test, m.reporting_year AS year, "
+                "m.version AS msg_version "
                 "FROM records r JOIN messages m ON m.message_ref_id = r.message_ref_id "
                 "WHERE r.kind = 'AR' AND r.account_key = ? AND m.reporting_year = ? AND m.test = ? "
                 "ORDER BY r.created_at DESC, r.rowid DESC LIMIT 1",
@@ -254,21 +288,26 @@ class Registry:
                     "new message (CRS701), not a correction (80002)"
                 )
             last = self._row(rows[0])
+            if last.message_status in ("built", "submitted"):
+                raise RegistryError(
+                    f"account {account_key!r}: message {last.message_ref_id} is "
+                    f"{last.message_status}, not accepted; record the portal result first (80002)"
+                )
             if last.doc_type_indic == "OECD3":
                 raise RegistryError(
                     f"account {account_key!r} was deleted ({last.doc_ref_id}); a deleted record "
                     "cannot be corrected - send it again as a new record (98103, 6.4.7)"
                 )
-            if last.message_status == "rejected":
+            if last.message_status in DEAD_STATUSES:
                 raise RegistryError(
-                    f"account {account_key!r}: the last message was rejected; fix and send it as "
-                    "a new record (80002)"
+                    f"account {account_key!r}: the last message was {last.message_status}; send "
+                    "the record again in a new message (80002)"
                 )
             raise RegistryError(f"account {account_key!r}: no valid record to correct (80002)")
-        if head.message_status == "built":
+        if head.message_status != "accepted":
             raise RegistryError(
-                f"account {account_key!r}: message {head.message_ref_id} has no recorded outcome "
-                "yet; record the portal result before correcting (80002)"
+                f"account {account_key!r}: message {head.message_ref_id} is {head.message_status}, "
+                "not accepted; record the portal result before correcting (80002)"
             )
         return head
 
@@ -305,17 +344,17 @@ class Registry:
             )  # fmt: skip
             if not fi_resend:
                 self.conn.execute(
-                    "INSERT INTO records (doc_ref_id, message_ref_id, kind, doc_type_indic, created_at)"
-                    " VALUES (?,?,?,?,?)",
-                    (fi_doc_ref_id, message_ref_id, "FI", "OECD1", now),
+                    "INSERT INTO records (doc_ref_id, message_ref_id, kind, doc_type_indic, "
+                    "created_at, version) VALUES (?,?,?,?,?,?)",
+                    (fi_doc_ref_id, message_ref_id, "FI", "OECD1", now, version),
                 )
             for doc_ref_id, acc, indic, corr in records:
                 self.conn.execute(
-                    "INSERT INTO records VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                    "INSERT INTO records VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
                     (
-                        doc_ref_id, message_ref_id, "AR", acc.key, indic, corr, content_hash(acc),
-                        acc.model_dump_json(exclude={"doc_ref_id"}),
-                        json.dumps(res_country_codes(acc)), None, now,
+                        doc_ref_id, message_ref_id, "AR", acc.key, indic, corr,
+                        content_hash(acc, version), acc.model_dump_json(exclude={"doc_ref_id"}),
+                        json.dumps(res_country_codes(acc)), None, now, version,
                     ),
                 )  # fmt: skip
                 if corr:
@@ -332,7 +371,8 @@ class Registry:
         source: str = "",
         findings: list[tuple[str | None, str, str]] | None = None,
     ) -> None:
-        """Record the portal outcome. A rejected correction message frees its targets again."""
+        """Record the portal outcome (or 'discarded' for a message never uploaded). A rejected or
+        discarded correction message frees its targets again."""
         if status not in VALID_STATUSES:
             raise RegistryError(f"unknown status {status!r}")
         msg = self.message(message_ref_id)
@@ -345,7 +385,7 @@ class Registry:
                 "WHERE message_ref_id = ?",
                 (status, now, source, message_ref_id),
             )
-            if status == "rejected":
+            if status in DEAD_STATUSES:
                 for row in self.conn.execute(
                     "SELECT doc_ref_id, corr_doc_ref_id FROM records WHERE message_ref_id = ?",
                     (message_ref_id,),
