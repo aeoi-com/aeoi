@@ -10,10 +10,14 @@ meldendes Finanzinstitut (für Testmeldungen und den öffentlichen Schlüssel de
 
 ## 1. Installation
 
+Bis das Paket auf PyPI veröffentlicht ist, installieren Sie aus dem Repository:
+
 ```bash
-pip install aeoi
+pip install "aeoi @ git+https://<repository-url>"
 aeoi --version
 ```
+
+(Später: `pip install aeoi`.)
 
 ## 2. Vorlage ausfüllen
 
@@ -63,8 +67,10 @@ error  | Accounts[key=A7].holder.residence_countries: none of ['US'] was a Swiss
 
 ## 4. XML erstellen und verschlüsseln
 
-Den öffentlichen Schlüssel der ESTV (`ESTV-PublicKey.pem`) laden Sie im AIA-Portal auf der Seite
-für den XML-Upload herunter (Technische Wegleitung, Ziffer 3.3).
+Den öffentlichen Schlüssel der ESTV finden Sie im AIA-Portal an zwei Stellen (Technische
+Wegleitung, Ziffer 3.3): das AIA-Zertifikat auf der Seite für den XML-Upload (Ziffer 3.3.1) oder
+die Datei `ESTV-PublicKey.pem` im Archiv `estv-encryptor-*.zip` des ESTV-Encryptors (Ziffer
+3.3.2). `aeoi` nimmt beides mit `--key` entgegen.
 
 ```bash
 aeoi crs build --input meldung-2026.xlsx --version 3.0 --out meldung-2026.xml \
@@ -77,7 +83,9 @@ verschlüsselte Paket, das Sie im Portal hochladen.
 
 **Testmeldung** (jederzeit möglich, wird validiert und nicht weitergeleitet, Ziffer 5.3.5):
 `--test` anfügen und das Paket `Test-….zip` nennen. Das Werkzeug setzt dann die
-Test-Kennzeichen (OECD11 usw.) und verweigert einen Dateinamen ohne «Test».
+Test-Kennzeichen (OECD11 usw.) und verweigert einen Dateinamen ohne «Test». Beachten Sie:
+«Testmeldungen werden wöchentlich in der Nacht von Samstag auf Sonntag gelöscht» (Ziffer 5.3.5)
+- das Ergebnis also vorher aus der Meldungsübersicht sichern.
 
 Eine vorhandene XML-Datei - auch aus einem anderen Programm - prüfen Sie mit
 `aeoi crs validate datei.xml`.

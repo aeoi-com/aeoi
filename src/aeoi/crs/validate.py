@@ -107,8 +107,13 @@ def validate_file(
     # --- header and DocSpecs (readable without the domain model) ---------------------------------
     try:
         parsed = read_xml.parse(data)
-    except Exception as exc:  # noqa: BLE001 - the XSD errors above explain most of these
-        rep.add("file", f"cannot read the message content: {exc}", "50007")
+    except Exception:  # noqa: BLE001 - a file outside the schema cannot be mapped
+        rep.info(
+            "file",
+            "content checks skipped: the file does not follow the schema (see the 50007 errors)"
+            if not rep.ok
+            else "content checks skipped: the file could not be read into the model",
+        )
         return rep
     if parsed.transmitting_country != "CH":
         rep.add("MessageSpec/TransmittingCountry", "must be CH", "98002")
@@ -122,10 +127,21 @@ def validate_file(
     check = ids.check_message_ref_id(ref)
     for p in check.problems:
         rep.add("MessageSpec/MessageRefId", p, "50008")
-    year = parsed.message.reporting_year
-    if check.ok and check.year != year:
-        rep.add("MessageSpec/ReportingPeriod",
-                f"{parsed.reporting_period} is outside the MessageRefId year {check.year}", "98006")  # fmt: skip
+    period_year = parsed.message.reporting_year
+    ref_year = check.year if check.ok else period_year  # 80001 compares with the MessageRefId year
+    if check.ok and not (ref_year <= period_year <= ref_year + 1):
+        rep.add(
+            "MessageSpec/ReportingPeriod",
+            f"{parsed.reporting_period} is outside 1.1.{ref_year} - 31.12.{ref_year + 1} "
+            f"(MessageRefId year {ref_year})",
+            "98006",
+        )
+    elif check.ok and period_year != ref_year:
+        rep.info(
+            "MessageSpec/ReportingPeriod",
+            f"{parsed.reporting_period} is in the year after the MessageRefId year {ref_year}; "
+            "allowed by 98006, unusual for a Swiss FI",
+        )
     if not parsed.reporting_period.endswith("-12-31"):
         rep.info("MessageSpec/ReportingPeriod", "not 31 December; unusual for a Swiss FI")
     if parsed.crs_bodies != 1:
@@ -157,7 +173,7 @@ def validate_file(
     indic = parsed.message.message_type_indic
     for i, sp in enumerate(specs):
         where = "ReportingFI/DocSpec" if i == 0 else f"AccountReport[{i}]/DocSpec"
-        c = ids.check_doc_ref_id(sp.doc_ref_id, message_year=year)
+        c = ids.check_doc_ref_id(sp.doc_ref_id, message_year=ref_year)
         for p in c.problems:
             rep.add(f"{where}/DocRefId", p, "80001")
         if sp.doc_ref_id in seen and sp.doc_type_indic not in ("OECD0", "OECD10"):
@@ -200,8 +216,8 @@ def validate_file(
     for p in content.problems:
         if p.rule == "info":
             rep.info(p.where, p.message)
-        elif p.rule in ("80000", "98001") and p.where.startswith("Accounts[doc_ref_id"):
-            continue  # already reported above from the DocSpecs
+        elif p.rule == "50005" or (p.rule == "80000" and p.where.startswith("Accounts[doc_ref_id")):
+            continue  # already reported above from the XML nodes / DocSpecs
         else:
             rep.add(p.where, p.message, p.rule)
     if version == "3.0" and re.search(

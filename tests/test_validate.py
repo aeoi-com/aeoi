@@ -101,3 +101,37 @@ def test_content_rules_reach_the_validator(tmp_path):
 def test_signed_or_malformed_files(tmp_path):
     rep = validate.validate_file(_write(tmp_path, "<not xml", "x.xml"))
     assert not rep.ok and rep.problems[0].rule == "50007"
+
+
+def test_80001_compares_with_the_message_ref_id_year(tmp_path):
+    """MessageRefId CH2017CH..., ReportingPeriod 2018-12-31: 98006 allows year+1, and the DocRefIds
+    carry 2017 like the MessageRefId - no 80001 (ESTV: 'Das Berichtsjahr muss dabei dem Wert aus
+    der MessageRefId entsprechen')."""
+    msg = sample_message(year=2017)
+    xml = build.build(msg, "3.0", test=True).xml.replace("2017-12-31", "2018-12-31")
+    rep = validate.validate_file(_write(tmp_path, xml), today=TODAY)
+    assert "80001" not in {p.rule for p in rep.problems}, rep.render()
+    assert "98006" not in {p.rule for p in rep.problems}  # year + 1 is within the ESTV formula
+    assert any("year after the MessageRefId year" in p.message for p in rep.infos)
+    xml = build.build(msg, "3.0", test=True).xml.replace("2017-12-31", "2019-12-31")
+    rep = validate.validate_file(_write(tmp_path, xml), today=TODAY)
+    assert "98006" in {p.rule for p in rep.problems}
+    assert "80001" not in {p.rule for p in rep.problems}
+
+
+def test_forbidden_character_is_reported_once(tmp_path):
+    xml = build.build(sample_message(), "3.0", test=True).xml.replace(
+        "Beispiel AG", "Beispiel # AG"
+    )
+    rep = validate.validate_file(_write(tmp_path, xml), today=TODAY)
+    assert [p.rule for p in rep.problems] == ["50005"], rep.render()
+
+
+def test_non_schema_file_has_no_traceback(tmp_path):
+    xml = build.build(sample_message(), "3.0", test=True).xml.replace(
+        "<crs:CrsBody>", "<crs:CrsBody><crs:X/>"
+    )
+    rep = validate.validate_file(_write(tmp_path, xml), today=TODAY)
+    assert rep.problems and all(p.rule == "50007" for p in rep.problems)
+    assert any("content checks skipped" in i.message for i in rep.infos)
+    assert not any("__init__" in p.message for p in rep.problems)
