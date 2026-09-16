@@ -97,7 +97,7 @@ def test_joint_account_rows_need_a_consistent_number():
     second.key = "A1b"
     second.holder_person.first_name = "Bruno"
     msg.accounts.append(second)
-    assert any(r == "3.0" and w.startswith("Accounts[account_number=") for w, r in _rules(msg))
+    assert any(r == "aeoi" and w.startswith("Accounts[account_number=") for w, r in _rules(msg))
     msg.accounts[0].joint_account_number = 2
     second.joint_account_number = 2
     assert not _errors(msg)

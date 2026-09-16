@@ -49,10 +49,32 @@ FOOTNOTES = {
     "3": "permanently non-reciprocal",
     "4": "UK: multilateral basis since 01.01.2021",
     "5": "temporarily non-reciprocal",
+    "6": "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, "
+    "Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin",
     "7": "exchange blocked by the Global Forum (security incident); data still collected",
     "8": "multilateral basis since 01.01.2024",
     "9": "transmission to Russia suspended; data still collected and delivered to the ESTV",
 }
+
+
+# SIF footnote 6: the bilateral EU agreement also applies to these territories. Seven of them have
+# their own ISO 3166-1 code and are therefore possible ResCountryCodes; Azores, Madeira and the
+# Canary Islands are covered by PT / ES. In force with the EU agreement, i.e. 2017.
+EU_TERRITORIES = {
+    "AX": "Aland-Inseln (FI)",
+    "GF": "Franzoesisch-Guayana (FR)",
+    "GP": "Guadeloupe (FR)",
+    "MQ": "Martinique (FR)",
+    "YT": "Mayotte (FR)",
+    "RE": "Reunion (FR)",
+    "MF": "Saint-Martin (FR)",
+}
+
+
+def table_sha256(states: list[dict]) -> str:
+    """Hash of the canonical table (sorted JSON): the pin, independent of page dynamics."""
+    canonical = json.dumps(states, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def german_names() -> dict[str, str]:
@@ -118,6 +140,20 @@ def parse(page: str) -> tuple[list[dict], str]:
                 "notes": [FOOTNOTES.get(n, f"footnote {n}") for n in notes],
             }
         )
+    if any(
+        r["code"] == "FR" and any(n.startswith("EU agreement") for n in r["notes"]) for r in rows
+    ):
+        for code, name in EU_TERRITORIES.items():
+            rows.append(
+                {
+                    "code": code,
+                    "name_de": name,
+                    "in_force": "2017-01-01",
+                    "in_force_year": 2017,
+                    "business_number": "",
+                    "notes": ["derived from SIF footnote 6 (EU agreement territory)"],
+                }
+            )
     rows.sort(key=lambda r: r["code"])
     stand = re.search(
         r"Stand per (\d{2}\.\d{2}\.\d{4})", html.unescape(re.sub(r"<[^>]+>", " ", page))
@@ -142,7 +178,8 @@ def main(argv: list[str] | None = None) -> int:
         "source_url": URL,
         "source_stand": stand,
         "retrieved": dt.datetime.now(tz=dt.UTC).date().isoformat(),
-        "source_sha256": hashlib.sha256(raw).hexdigest(),
+        "table_sha256": table_sha256(rows),  # the pin: canonical table + 'Stand per'
+        "page_sha256": hashlib.sha256(raw).hexdigest(),  # informational: the page is dynamic
         "count": len(rows),
         "states": rows,
     }

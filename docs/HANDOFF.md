@@ -53,10 +53,14 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   DocRefId on rows (80000), no Contact in MessageSpec, `aeoi crs build` validates against the XSD
   before writing (XSDs shipped in `src/aeoi/xsd`, synced by `tools/generate_models.py`).
 - Week 3 (started): partner states by reporting year from the SIF list, pinned in
-  `src/aeoi/estv/partner_states.json` (116 states, "Stand per 25.08.2026", page SHA-256,
-  refresh with `python tools/partner_states.py`), rules 98200/98201/98202 with the undocumented
-  and controlling-person exceptions; IBAN mod-97 and ISIN Luhn (60000/60001).
-- 143 tests: `.venv/Scripts/python -m pytest`.
+  `src/aeoi/estv/partner_states.json` (116 states + 7 EU-agreement territories AX GF GP MQ YT RE
+  MF from SIF footnote 6, "Stand per 25.08.2026"; pin = `table_sha256` of the canonical table,
+  page hash only informational because the page is dynamic; refresh with
+  `python tools/partner_states.py`), rules 98200/98201/98202 with the undocumented and
+  controlling-person exceptions and messages that show the way out (US -> FATCA; CH-only
+  controlling person of a CRS101 -> declare CRS102/CRS103); IBAN mod-97 and ISIN Luhn
+  (60000/60001), IBAN/ISIN written normalised (no spaces, upper case) with an info note.
+- 146 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 

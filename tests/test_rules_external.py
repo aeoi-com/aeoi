@@ -18,7 +18,8 @@ def _rules(msg, version="3.0"):
 def test_partner_list_is_pinned_and_plausible():
     src = partners.source()
     assert src["source_url"].startswith("https://www.sif.admin.ch/")
-    assert src["source_stand"] and len(src["source_sha256"]) == 64
+    assert src["source_stand"] and len(src["page_sha256"]) == 64
+    assert src["table_sha256"] == partners.table_sha256()  # the pin is the canonical table
     assert src["count"] >= 100
     assert {"DE", "FR", "IT", "GB", "AU", "JP", "CN"} <= partners.partner_codes(2026)
     assert "US" not in partners.partner_codes(2026)  # FATCA, not CRS
@@ -98,3 +99,45 @@ def test_60000_and_60001_in_check_message():
     msg.accounts[1].account_type = "CRS1102"
     msg.accounts[1].equity_interest_types = []
     assert ("Accounts[key=A2].account_number", "60001") in _rules(msg)
+
+
+def test_eu_agreement_territories_are_partner_states():
+    """SIF footnote 6: the EU agreement also applies to Aland, French Guiana, Guadeloupe,
+    Martinique, Mayotte, Reunion and Saint-Martin, which have their own ISO codes."""
+    for code in ("AX", "GF", "GP", "MQ", "YT", "RE", "MF"):
+        assert partners.is_partner(code, 2017), code
+        assert any("footnote 6" in n for n in partners.notes(code))
+    msg = sample_message()
+    msg.accounts[0].holder_person.residence_countries = ["RE"]
+    assert not any(r == "98200" for _, r in _rules(msg))
+
+
+def test_messages_show_the_way_out():
+    msg = sample_message()
+    msg.accounts[0].holder_person.residence_countries = ["US"]
+    texts = [
+        p.message
+        for p in model.check_message(msg, "3.0", today=TODAY).problems
+        if p.rule == "98200"
+    ]
+    assert texts and "FATCA" in texts[0]
+    msg = sample_message()
+    msg.accounts[1].controlling_persons[0].person.residence_countries = ["CH"]
+    texts = [
+        p.message
+        for p in model.check_message(msg, "3.0", today=TODAY).problems
+        if p.rule == "98202"
+    ]
+    assert texts and "CRS102 or CRS103" in texts[0]
+
+
+def test_iban_is_written_normalised():
+    from aeoi.crs import build
+
+    msg = sample_message()
+    msg.accounts[0].account_number = "ch93 0076-2011 6238 5295 7"
+    problems = model.check_message(msg, "3.0", today=TODAY).problems
+    assert any(p.rule == "info" and "will be written as" in p.message for p in problems)
+    assert not [p for p in problems if p.rule != "info"]
+    xml = build.build(msg, "3.0").xml
+    assert "CH9300762011623852957" in xml and "ch93 0076" not in xml

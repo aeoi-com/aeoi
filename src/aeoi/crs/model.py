@@ -277,7 +277,9 @@ def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
         rep.add(
             f"{w}.holder.residence_countries",
             f"none of {person.residence_countries} was a Swiss AEOI partner state in {year} "
-            f"(SIF list, Stand {partners.source()['source_stand']})",
+            f"(SIF list, Stand {partners.source()['source_stand']})"
+            + _us_hint(person.residence_countries)
+            + "; the account is not reportable under the CRS for this year",
             "98200",
         )
     org = acc.holder_organisation
@@ -289,18 +291,44 @@ def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
             rep.add(
                 f"{w}.holder.residence_countries",
                 f"none of {org.residence_countries} was a partner state in {year} and no "
-                "controlling person resides in one",
+                "controlling person resides in one"
+                + _us_hint(org.residence_countries)
+                + "; nothing to report for this account",
                 "98201",
             )
     for i, cp in enumerate(acc.controlling_persons):
         if not _partner_hits(cp.person.residence_countries, year):
-            rep.add(f"{w}.controlling_persons[{i}].residence_countries",
-                    f"none of {cp.person.residence_countries} was a partner state in {year}; "
-                    "controlling persons outside partner states must not be sent", "98202")  # fmt: skip
+            hint = ""
+            if org is not None and org.acct_holder_type == "CRS101":
+                hint = (
+                    "; remove this row: if no controlling person remains and the entity itself is "
+                    "a reportable person, declare it as CRS102 or CRS103 without controlling "
+                    "persons, otherwise the account is not reportable"
+                )
+            rep.add(
+                f"{w}.controlling_persons[{i}].residence_countries",
+                f"none of {cp.person.residence_countries} was a partner state in {year}; "
+                "controlling persons outside partner states must not be sent"
+                + _us_hint(cp.person.residence_countries)
+                + hint,
+                "98202",
+            )
+
+
+def _us_hint(countries: list[str]) -> str:
+    if "US" in countries:
+        return " (US is not an AEOI partner state: US persons fall under FATCA, not the CRS)"
+    return ""
 
 
 def _check_account_number(rep: Report, w: str, acc: Account) -> None:
     """60000 (IBAN, OECD601) and 60001 (ISIN, OECD603) with the ESTV checksum requirements."""
+    if acc.account_number_type in ("OECD601", "OECD603"):
+        normalised = checksums.normalise(acc.account_number)
+        if normalised != acc.account_number:
+            rep.add(f"{w}.account_number",
+                    f"will be written as {normalised!r} (spaces/hyphens removed, upper case): the "
+                    "ESTV checks the raw format", "info")  # fmt: skip
     if acc.account_number_type == "OECD601" and not checksums.is_valid_iban(acc.account_number):
         rep.add(f"{w}.account_number",
                 "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)", "60000")  # fmt: skip
@@ -477,4 +505,4 @@ def _check_joint_accounts(rep: Report, msg: Message, version: Version) -> None:
             rep.add(f"Accounts[account_number={number}]",
                     f"{len(rows)} rows share this account number: for a joint account set "
                     "joint_account_number (number of joint holders) to the same value on every "
-                    "row; otherwise use distinct account numbers", "3.0")  # fmt: skip
+                    "row; otherwise use distinct account numbers", "aeoi")  # fmt: skip

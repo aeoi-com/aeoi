@@ -2,8 +2,9 @@
   "source_url": "https://www.sif.admin.ch/de/automatischer-informationsaustausch-aia",
   "source_stand": "25.08.2026",
   "retrieved": "2026-09-16",
-  "source_sha256": "fb7b053b91c961a055a90375ddad36c9c02582ab210261a30c095218821bd766",
-  "count": 116,
+  "table_sha256": "502bc336f6b48477afb60064891e99381a9c639f5168149be6b4cd37c1d0739e",
+  "page_sha256": "fb7b053b91c961a055a90375ddad36c9c02582ab210261a30c095218821bd766",
+  "count": 123,
   "states": [
     {
       "code": "AD",
@@ -82,6 +83,16 @@
       "in_force_year": 2019,
       "business_number": "17.040",
       "notes": []
+    },
+    {
+      "code": "AX",
+      "name_de": "Aland-Inseln (FI)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
+      ]
     },
     {
       "code": "AZ",
@@ -302,7 +313,7 @@
       "in_force_year": 2017,
       "business_number": "15.081",
       "notes": [
-        "footnote 6"
+        "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin"
       ]
     },
     {
@@ -312,7 +323,7 @@
       "in_force_year": 2017,
       "business_number": "15.081",
       "notes": [
-        "footnote 6"
+        "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin"
       ]
     },
     {
@@ -330,7 +341,7 @@
       "in_force_year": 2017,
       "business_number": "15.081",
       "notes": [
-        "footnote 6"
+        "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin"
       ]
     },
     {
@@ -358,6 +369,16 @@
       "in_force_year": 2025,
       "business_number": "22.048",
       "notes": []
+    },
+    {
+      "code": "GF",
+      "name_de": "Franzoesisch-Guayana (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
+      ]
     },
     {
       "code": "GG",
@@ -392,6 +413,16 @@
       "in_force_year": 2018,
       "business_number": "17.040",
       "notes": []
+    },
+    {
+      "code": "GP",
+      "name_de": "Guadeloupe (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
+      ]
     },
     {
       "code": "GR",
@@ -626,6 +657,16 @@
       "notes": []
     },
     {
+      "code": "MF",
+      "name_de": "Saint-Martin (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
+      ]
+    },
+    {
       "code": "MH",
       "name_de": "Marshallinseln",
       "in_force": "2019-01-01",
@@ -643,6 +684,16 @@
       "business_number": "19.033",
       "notes": [
         "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "MQ",
+      "name_de": "Martinique (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
       ]
     },
     {
@@ -720,7 +771,7 @@
       "in_force_year": 2017,
       "business_number": "15.081",
       "notes": [
-        "footnote 6"
+        "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin"
       ]
     },
     {
@@ -798,7 +849,7 @@
       "in_force_year": 2017,
       "business_number": "15.081",
       "notes": [
-        "footnote 6"
+        "EU agreement; also applies to Aland Islands, Azores, French Guiana, Guadeloupe, Canary Islands, Madeira, Martinique, Mayotte, Reunion and Saint-Martin"
       ]
     },
     {
@@ -809,6 +860,16 @@
       "business_number": "18.055",
       "notes": [
         "permanently non-reciprocal"
+      ]
+    },
+    {
+      "code": "RE",
+      "name_de": "Reunion (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
       ]
     },
     {
@@ -995,6 +1056,16 @@
       "business_number": "19.033",
       "notes": [
         "temporarily non-reciprocal"
+      ]
+    },
+    {
+      "code": "YT",
+      "name_de": "Mayotte (FR)",
+      "in_force": "2017-01-01",
+      "in_force_year": 2017,
+      "business_number": "",
+      "notes": [
+        "derived from SIF footnote 6 (EU agreement territory)"
       ]
     },
     {

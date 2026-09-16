@@ -23,6 +23,7 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDate, XmlDateTime
 
+from aeoi.crs import checksums
 from aeoi.crs.model import TDT_PREFIX, Account, Address, Message, Organisation, Person, Version
 from aeoi.estv import ids
 
@@ -187,7 +188,7 @@ def _account_report(
     kwargs = {
         "doc_spec": _doc_spec(m, doc_ref_id, test=test),
         "account_number": m.FiaccountNumberType(
-            value=acc.account_number,
+            value=account_number_for_xml(acc),
             acct_number_type=(
                 m.AcctNumberTypeEnumType(acc.account_number_type)
                 if acc.account_number_type
@@ -220,6 +221,15 @@ def _account_report(
                 number=acc.joint_account_number
             )
     return m.CorrectableAccountReportType(**kwargs)
+
+
+def account_number_for_xml(acc: Account) -> str:
+    """IBAN and ISIN are written normalised (no spaces or hyphens, upper case): the ESTV checks
+    '2 Buchstaben & 2 Ziffern & max. 30 Buchstaben oder Ziffern' on the raw value (60000/60001),
+    while bank exports usually space the IBAN."""
+    if acc.account_number_type in ("OECD601", "OECD603"):
+        return checksums.normalise(acc.account_number)
+    return acc.account_number
 
 
 def _money(value: Decimal) -> Decimal:
