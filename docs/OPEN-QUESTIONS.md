@@ -45,7 +45,7 @@ Each item names the source that raised it. Answers go back into the rule engine 
   rule 60019) says `EquityInterestType`, matching the XSD; `EntityInterestType` appears only in the
   change log. Typo, not a doubt.
 
-## Rule-text defects to handle in the rule engine (Wegleitung 09.2026)
+## Rule-text defects handled in the rule engine (Wegleitung 09.2026)
 
 - **60018**: the formula says "Wenn AccountNumber = OECD606" but the prose says "Internationale
   Bankkontonummer (OECD601)". Implement the prose (IBAN = OECD601); note the discrepancy in the

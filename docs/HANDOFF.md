@@ -60,14 +60,20 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   controlling-person exceptions and messages that show the way out (US -> FATCA; CH-only
   controlling person of a CRS101 -> declare CRS102/CRS103); IBAN mod-97 and ISIN Luhn
   (60000/60001), IBAN/ISIN written normalised (no spaces, upper case) with an info note.
-- 146 tests: `.venv/Scripts/python -m pytest`.
+- Rules catalogue: every code of the Wegleitung with section, page, excerpt, status and the place
+  in the code base that enforces it (`tools/build_rules_catalogue.py`); a test proves that every
+  "implemented" code is referenced in code or tests.
+- 152 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
 - Wegleitung 3.3.1: CRS_Payload.xml → zip → AES-256-CBC (fresh IV, PKCS#7) → key+IV 48 bytes in
   RSA PKCS#1 v1.5 → zip {CRS_Payload, CRS_KEY}; test files start with "Test"; XML ≤ 100 MB,
   package ≤ 10 MB; XML must not be signed (50007).
-- 67 distinct ESTV error codes; ESTV-specific range 98000-98999; ReportingFI cannot be corrected or
+- 65 ESTV rule codes (67 distinct five-digit numbers in the Wegleitung: 98999 is the range bound
+  and 70012 only a change-log reference); catalogue with status and page in
+  `src/aeoi/estv/rules_catalogue.json` / `docs/ESTV-RULES.md` (47 implemented, 12 waiting for the
+  registry/corrections, 6 portal-only); ESTV-specific range 98000-98999; ReportingFI cannot be corrected or
   cancelled (80004); CorrMessageRefId forbidden (80006); DocRefId = CH+year+CH+1-42 chars
   (80001); MessageRefId `CH[0-9]{4}CH.{1,162}`, UUID recommended, no customer data (50008/50009);
   ISO 8859-1 minus Anhang 7.2 (50005); test DocTypeIndic OECD10/OECD11.
@@ -97,10 +103,10 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 1. Week 2: done (see above). Open: IBAN/ISIN checksum validation (60000/60001) and the
    partner-state list (98200/98201) belong to the week-3 rule engine.
-2. Week 3 (in progress): partner states, IBAN/ISIN done. Still open: the remaining ESTV codes
-   as a catalogue (code -> text -> page, covered/not covered), the OECD business rules of User
-   Guide 4.0 not yet in the checks, the status-message parser skeleton; first pilot test upload
-   (2.0 payload). Yearly maintenance: rerun `tools/partner_states.py` when the SIF list changes.
+2. Week 3 (in progress): partner states, IBAN/ISIN, rules catalogue done. Still open: the OECD
+   business rules of User Guide 4.0 not yet in the checks, the status-message parser skeleton;
+   first pilot test upload (2.0 payload). Yearly maintenance: rerun `tools/partner_states.py`
+   when the SIF list changes.
 3. Week 4: local submission registry (SQLite: input row → DocRefId → message → outcome), then
    corrections/cancellations (Wegleitung Ziffer 6) and the status parser.
 4. Week 5: CLI build/validate/correct, docs, page "what changes with 3.0".

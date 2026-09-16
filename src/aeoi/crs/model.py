@@ -465,7 +465,7 @@ def check_message(msg: Message, version: Version, *, today: dt.date | None = Non
     _check_text(rep, "ReportingFI.name", fi.name)
     _check_address(rep, "ReportingFI.address", fi.address)
     if not 2017 <= msg.reporting_year <= today.year:
-        rep.add("ReportingFI.reporting_year", "reporting year must be 2017..current year", "98003")
+        rep.add("ReportingFI.reporting_year", "reporting year must be 2017..current year", "98007")
     _check_code(rep, "Message.message_type_indic", msg.message_type_indic, codes.MESSAGE_TYPE_INDIC,
                 required=True, rule="98004")  # fmt: skip
     if msg.message_type_indic == "CRS702":

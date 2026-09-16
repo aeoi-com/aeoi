@@ -1,0 +1,522 @@
+[
+  {
+    "code": "50001",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "Die Datei wurde nicht korrekt übertragen oder ist fehlerhaft und kann nicht geöffnet werden.",
+    "status": "portal",
+    "where": "transport error"
+  },
+  {
+    "code": "50002",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "Die Datei konnte nicht entschlüsselt werden.",
+    "status": "portal",
+    "where": "decryption by the ESTV (aeoi.estv.packaging builds the package)"
+  },
+  {
+    "code": "50003",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "Die Datei konnte nicht dekomprimiert werden.",
+    "status": "portal",
+    "where": "decompression by the ESTV"
+  },
+  {
+    "code": "50004",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "Die Signatur der Datei konnte nicht verifiziert werden oder fehlt.",
+    "status": "portal",
+    "where": "signature check of the package by the ESTV"
+  },
+  {
+    "code": "50005",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "eten, erhält das meldende FI als Ergebnis eine Fehlermeldung mit einem File Validation Fehlercode. Die Datenelemente einer CRS-XML-Datei dürfen nur Zeichen aus der ISO 8859-1 Codepage enthalten. Ausgenommen sind die Zeichen, welche im Anhang 7.2 aufgeführt werden. Ungültige Zeichen werden als Fehler",
+    "status": "implemented",
+    "where": "aeoi.estv.ids.invalid_characters via model._check_text on every text element"
+  },
+  {
+    "code": "50006",
+    "section": "5.1 Dateivalidierung",
+    "page": 17,
+    "text_de": "Es wurde ein Virus in der Datei entdeckt. Auch die Validierungen mit 50’000er-Fehlercodes im Message Header bzw. in den DocSpec- Elementen (vgl. Ziffer",
+    "status": "portal",
+    "where": "virus scan"
+  },
+  {
+    "code": "50007",
+    "section": "5.2 Schemavalidierung",
+    "page": 17,
+    "text_de": "Die Datei entspricht nicht dem CRS-XML-Schema.",
+    "status": "implemented",
+    "where": "aeoi.crs.xsd.validate before writing/packaging; XML never signed"
+  },
+  {
+    "code": "50008",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": " maximal 170 Zeichen lang sein • Die Ländercodes müssen in Grossbuchstaben geschrieben werden • Zulässig sind alle Zeichen gemäss Ziffer 7.2. Als regulärer Ausdruck: CH[0-9]{4}CH.{1,162}  Die Struktur der MessageRefId muss dem vorgegebenen Schema entsprechen. Wert = „CH“ & Berichtsjahr & „CH“ & UUID",
+    "status": "implemented",
+    "where": "aeoi.estv.ids.message_ref_id / check_message_ref_id; build"
+  },
+  {
+    "code": "50009",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "Darf nicht gleich der MessageRefId einer früheren Meldung sein. Wert ≠ frühere MessageRefId",
+    "status": "registry",
+    "where": "MessageRefId never reused: UUID today, registry check later"
+  },
+  {
+    "code": "50010",
+    "section": "5.3.4 ReportingFI",
+    "page": 23,
+    "text_de": "Eine produktive Meldung (Dateiname beginnt nicht mit „Test“) darf keine Test- DocTypeIndics enthalten. Wert = „OECD0“ oder „OECD1“ und Dateiname ≠ „Test*.zip“",
+    "status": "implemented",
+    "where": "packaging.check_file_name + build(test=False) writes OECD1 only"
+  },
+  {
+    "code": "50011",
+    "section": "5.3.4 ReportingFI",
+    "page": 23,
+    "text_de": "Eine Testmeldung (Dateiname beginnt mit „Test“) darf keine produktiven DocTypeIndics enthalten. Wert = „OECD10“ oder „OECD11“ und Dateiname = „Test*.zip“",
+    "status": "implemented",
+    "where": "packaging.check_file_name + build(test=True) writes OECD11 only"
+  },
+  {
+    "code": "50012",
+    "section": "5.3.2 Message",
+    "page": 19,
+    "text_de": "ReceivingCountry ISO-Ländercode des Empfängerstaates. Da die Meldungen der meldenden schweizerischen FI an die ESTV übermittelt werden und Daten für mehrere Empfängerstaaten enthalten können, muss hier als Empfängerstaat „CH“ eingetragen werden.  ISO-Ländercode des Empfängerlandes. Wert = „CH“",
+    "status": "implemented",
+    "where": "build: ReceivingCountry = CH"
+  },
+  {
+    "code": "60000",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": "anden und darf nicht leer sein oder nur Leerzeichen enthalten. Für IBAN und ISIN wird ausserdem kontrolliert, dass das Format und die Prüfsummen stimmen.  Falls AcctNumberType=„OECD601“, muss das Element eine gültige IBAN enthalten. 2 Buchstaben & korrekte Prüfsumme & max. 30 Buchstaben oder Ziffern",
+    "status": "implemented",
+    "where": "aeoi.crs.checksums.is_valid_iban; model._check_account_number"
+  },
+  {
+    "code": "60001",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": "Falls AcctNumberType=„OECD603“, muss das Element eine gültige ISIN enthalten. 2 Buchstaben & 9 Buchstaben oder Ziffern & korrekte Prüfsumme",
+    "status": "implemented",
+    "where": "aeoi.crs.checksums.is_valid_isin; model._check_account_number"
+  },
+  {
+    "code": "60002",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": "ezeitraums (ReportingPeriod), üblicherweise also per 31. Dezember des Berichtsjahres. Es dürfen keine negativen Kontostände gemeldet werden. In diesem Fall sowie bei geschlossenen Konten muss als Kontostand der Wert Null gemeldet werden.  AccountBalance darf keinen negativen Wert enthalten. Wert ≥ 0",
+    "status": "implemented",
+    "where": "model.check_account: balance >= 0"
+  },
+  {
+    "code": "60003",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": "AccountBalance geschlossener Konten muss Null sein. Wert = 0, falls AccountNumber:ClosedAccount = 1",
+    "status": "implemented",
+    "where": "model.check_account: closed -> balance 0"
+  },
+  {
+    "code": "60004",
+    "section": "5.3.4 ReportingFI",
+    "page": 22,
+    "text_de": "gegeben werden, wobei vor dem Namen „TDT=“ hinzuzufügen ist. Das Attribut Att:nameType ist optional, falls verwendet muss es den Werten aus OECDNameType_EnumType entsprechen. Dabei darf nicht der Wert „OECD201“ verwendet werden.  Att:nameType darf nicht den Wert „OECD201“ enthalten. Wert ≠ „OECD201“",
+    "status": "implemented",
+    "where": "model: nameType OECD201 refused (holder, organisation); build writes OECD207 for the FI"
+  },
+  {
+    "code": "60005",
+    "section": "5.3.10 ControllingPerson",
+    "page": 30,
+    "text_de": ") oder „CRS103“ (Passive Non-Financial Entity that is a CRS Reportable Person) ist, dürfen keine beherrschenden Personen angegeben werden. ControllingPerson darf nicht vorhanden sein, falls AccountHolder eine natürliche Person ist oder eine Organisation mit AcctHolderType = („CRS102“ oder „CRS103“).",
+    "status": "implemented",
+    "where": "model.check_account: no controlling persons for individuals / CRS102 / CRS103"
+  },
+  {
+    "code": "60006",
+    "section": "5.3.10 ControllingPerson",
+    "page": 30,
+    "text_de": "Falls der AccountHolder ein Rechtsträger und der AcctHolderType „CRS101“ (Passive Non-Financial Entity with one or more controlling person that is a Reportable Person) ist, müssen die beherrschenden Personen angegeben werden. ControllingPerson muss vorhanden sein, falls AcctHolderType = „CRS101“.",
+    "status": "implemented",
+    "where": "model.check_account: CRS101 needs controlling persons"
+  },
+  {
+    "code": "60007",
+    "section": "5.3.6 ReportingGroup",
+    "page": 24,
+    "text_de": "p beinhaltet die Konto-Datensätze (AccountReport). Dieses Element muss immer vorhanden sein, darf im CRS aber nur einmal pro CrsBody verwendet werden, bei der Übermittlung zwischen FI und ESTV also nur einmal pro Meldung.  ReportingGroup darf nicht wiederholt werden. Element ist nur einmal vorhanden",
+    "status": "implemented",
+    "where": "build: exactly one ReportingGroup"
+  },
+  {
+    "code": "60008",
+    "section": "5.3.6 ReportingGroup",
+    "page": 24,
+    "text_de": "up enthält im CRS-XML-Schema mehrere Elemente, von denen ausser dem AccountReport im CRS allerdings keines genutzt wird. Im CRS-XML-Schema dürfen diese Elemente deshalb nicht verwendet werden: Sponsor Das Element darf im CRS nicht verwendet werden.  Element darf nicht vorhanden sein. Existiert nicht",
+    "status": "implemented",
+    "where": "build: Sponsor never written"
+  },
+  {
+    "code": "60009",
+    "section": "5.3.6 ReportingGroup",
+    "page": 24,
+    "text_de": "Intermediary Das Element darf im CRS nicht verwendet werden.  Element darf nicht vorhanden sein. Existiert nicht",
+    "status": "implemented",
+    "where": "build: Intermediary never written"
+  },
+  {
+    "code": "60010",
+    "section": "5.3.6 ReportingGroup",
+    "page": 25,
+    "text_de": "25/53 PoolReport Das Element darf im CRS nicht verwendet werden.  Element darf nicht vorhanden sein. Existiert nicht",
+    "status": "implemented",
+    "where": "build: PoolReport never written"
+  },
+  {
+    "code": "60013",
+    "section": "5.3.4 ReportingFI",
+    "page": 21,
+    "text_de": " Hier wird das Land angegeben, in dem das FI steuerlich ansässig ist (vgl. Art. 5 AIAG). Dies muss die Schweiz sein, sonst muss das FI der ESTV keine Daten melden.  Das FI muss seine steuerliche Ansässigkeit in der Schweiz haben. Ein Wert muss dem Wert in MessageSpec.TransmittingCountry entsprechen.",
+    "status": "implemented",
+    "where": "build: ReportingFI.ResCountryCode = CH = TransmittingCountry"
+  },
+  {
+    "code": "60014",
+    "section": "5.3.8 AccountHolder",
+    "page": 28,
+    "text_de": "f Plausibilität hin, d.h. dass es nicht in der Zukunft und nicht vor 1900 liegt. Der Wert „1.1.1900“ ist nicht möglich. Wenn das korrekte Datum unbekannt ist, soll das Element weggelassen werden.  Das Geburtsdatum darf nicht in der Zukunft und muss nach dem 1.1.1900 liegen. 1900-01-01 < Wert < Heute",
+    "status": "implemented",
+    "where": "model._check_person: 1900-01-01 < birth date < today"
+  },
+  {
+    "code": "60015",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": " jeder Neu- oder Korrekturmeldung muss mindestens ein AccountReport vorhanden sein. Lediglich in einer Nullmeldung kann dieses Element weggelassen werden.  AccountReport kann nur weggelassen werden, falls es sich um eine Nullmeldung handelt. Element darf nur fehlen, falls MessageTypeIndic = „CRS703“",
+    "status": "implemented",
+    "where": "model.check_message: accounts required unless CRS703"
+  },
+  {
+    "code": "60017",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": " des Elements AccountType lässt sich die Art des Finanzkontos ermitteln, das das meldende Finanzinstitut für den Kontoinhaber führt.  Ein spezifiziertes E-Geld-Produkt (AccountNumber = OECD606) muss ein Einlagenkonto sein (AccountType is CRS1101). Wenn AccountNumber = OECD606 ➔ AccountType = CRS1101",
+    "status": "implemented",
+    "where": "model.check_account: OECD606 -> CRS1101"
+  },
+  {
+    "code": "60018",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Eine Internationale Bankkontonummer (AccountNumber = OECD601) muss ein Einlagenkonto sein (AccountType = CRS1101). Wenn AccountNumber = OECD606 ➔ AccountType = CRS1101",
+    "status": "implemented",
+    "where": "model.check_account: OECD601 -> CRS1101 (prose; the formula in the Wegleitung says OECD606 by mistake)"
+  },
+  {
+    "code": "60019",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Wenn die Art der Eigenkapitalbeteiligung angegeben ist, muss der AccountType Fremd- oder Eigenkapitalbeteiligung an einem Investmentunternehmen sein (AccountType = CRS1104). Wenn EquityInterestType ≠ leer ➔ AccountType = CRS1104",
+    "status": "implemented",
+    "where": "model.check_account: EquityInterestType -> CRS1104"
+  },
+  {
+    "code": "60020",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Ein rückkaufsfähiger Versicherungsvertrag oder Rentenversicherungsvertrag (AccountType = CRS1103) kann nur „Sonstige – jede sonstige Art von Kontonummer, z. B. Versicherungsvertrag“ sein (AccountNumber = OECD605). Wenn AccountType = CRS1103 ➔ AccountNumber = OECD605",
+    "status": "implemented",
+    "where": "model.check_account: CRS1103 -> OECD605"
+  },
+  {
+    "code": "60021",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Wenn der Kontotyp ein Einlagenkonto ist (AccountType = CRS1101), muss der Zahlungstyp Zinsen sein (Type = CRS502). Wenn AccountType = CRS1101 ➔ Tyoe = CRS502",
+    "status": "implemented",
+    "where": "model.check_account: CRS1101 -> payments CRS502 only ('Tyoe' typo in the Wegleitung)"
+  },
+  {
+    "code": "60022",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Wenn der Kontotyp eine Fremd- oder Eigenkapitalbeteiligung an einem Investmentunternehmen ist (AccountType = CRS1104), muss der Zahlungstyp Bruttoerlöse/Rückkäufe oder sonstige - GMS sein (Type = CRS503 oder CRS504). Wenn AccountType = CRS1104 ➔ Type = CRS503 ou CRS504",
+    "status": "implemented",
+    "where": "model.check_account: CRS1104 -> CRS503/CRS504"
+  },
+  {
+    "code": "60023",
+    "section": "5.3.7 AccountReport",
+    "page": 26,
+    "text_de": "Wenn der Kontotyp ein rückkaufsfähiger Versicherungsvertrag oder Rentenversicherungsvertrag ist (AccountType = CRS1103), muss der Zahlungstyp Bruttoerlöse/Rückkäufe oder sonstige - GMS sein (Type = CRS503 oder CRS504). Wenn AccountType = CRS1103 ➔ Type = CRS503 oder CRS504",
+    "status": "implemented",
+    "where": "model.check_account: CRS1103 -> CRS503/CRS504"
+  },
+  {
+    "code": "70015",
+    "section": "5.3.4 ReportingFI",
+    "page": 22,
+    "text_de": "wird geprüft, dass der Wert vorhanden ist, falls das FI eine UID hat, und dass er der UID des FI entspricht, welches die Meldung übermittelt hat.  Als IN muss die korrekte UID des meldenden FI angegeben werden, sofern das FI eine UID hat. Andernfalls kann das Element leer gelassen werden. Wert = UID",
+    "status": "implemented",
+    "where": "model.check_message: UID format when given; build omits IN otherwise"
+  },
+  {
+    "code": "80000",
+    "section": "5.3.4 ReportingFI",
+    "page": 24,
+    "text_de": "lässig sind alle Zeichen gemäss Ziffer 7.2. Als regulärer Ausdruck: CH[0-9]{4}CH.{1,192}  Darf nicht gleich einer anderen DocRefId in dieser oder einer früher erhaltenen Meldung sein, ausser für DocTypeIndic=„OECD0“ bzw. „OECD10“. Wert ≠ frühere DocRefId, falls DocTypeIndic ≠ („OECD0“ oder „OECD10“)",
+    "status": "registry",
+    "where": "unique within the file today (model); against all earlier messages with the registry"
+  },
+  {
+    "code": "80001",
+    "section": "5.3.4 ReportingFI",
+    "page": 24,
+    "text_de": "Die Struktur der DocRefId muss dem vorgegebenen Schema entsprechen. Das Berichtsjahr muss dabei dem Wert aus der MessageRefId entsprechen. Wert =„CH“ & Berichtsjahr & „CH“ & 1-42 Ziffern, Buchstaben, Bindestriche, Unterstriche oder Punkte",
+    "status": "implemented",
+    "where": "aeoi.estv.ids.doc_ref_id / check_doc_ref_id; build"
+  },
+  {
+    "code": "80002",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 34,
+    "text_de": "dürfen Test- und Produktivdaten nicht vermischt werden. Daher darf die CorrDocRefId einer Testmeldung nicht auf eine Produktivmeldung verweisen und umgekehrt.  Der Wert der CorrDocRefId muss einer DocRefId in einer früheren Meldung des gleichen FI entsprechen. Wert = frühere DocRefId des gleichen FI",
+    "status": "registry",
+    "where": "CorrDocRefId must be an earlier DocRefId of the same FI"
+  },
+  {
+    "code": "80003",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 34,
+    "text_de": "Der korrigierte Datensatz darf nicht bereits früher korrigiert worden sein. Wert ≠ frühere CorrDocRefId",
+    "status": "registry",
+    "where": "a record may be corrected once per chain"
+  },
+  {
+    "code": "80004",
+    "section": "5.3.4 ReportingFI",
+    "page": 24,
+    "text_de": "CorrDocRefId Das Element ReportingFI kann nicht korrigiert oder storniert werden, daher wird die CorrDocRefId nicht benötigt.  ReportingFI kann nicht korrigiert oder storniert werden. Element darf nicht vorhanden sein.",
+    "status": "implemented",
+    "where": "build: ReportingFI DocSpec never carries CorrDocRefId"
+  },
+  {
+    "code": "80005",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 32,
+    "text_de": "Eine Korrektur- oder Stornomeldung muss eine CorrDocRefId enthalten (vgl. Regel bei CorrDocRefId). Falls Wert = („OECD2“, „OECD3“, „OECD12“ oder „OECD13“), muss CorrDocRefId in diesen DocSpec ausgefüllt sein.",
+    "status": "registry",
+    "where": "corrections/deletions need CorrDocRefId"
+  },
+  {
+    "code": "80006",
+    "section": "5.3.4 ReportingFI",
+    "page": 24,
+    "text_de": "CorrMessageRefId Die CorrMessageRefId darf im CRS nicht verwendet werden.  Element darf nicht vorhanden sein Existiert nicht",
+    "status": "implemented",
+    "where": "build: CorrMessageRefId never written in DocSpec"
+  },
+  {
+    "code": "80007",
+    "section": "5.3.2 Message",
+    "page": 21,
+    "text_de": "21/53 CorrMessageRefId Dieses Element darf im CRS nicht verwendet werden.  Element darf nicht vorhanden sein. Existiert nicht",
+    "status": "implemented",
+    "where": "build: MessageSpec.CorrMessageRefId never written"
+  },
+  {
+    "code": "80008",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 32,
+    "text_de": "Resend Data darf nicht verwendet werden. Wert ≠ (“OECD0“ oder „OECD10“)",
+    "status": "registry",
+    "where": "Resend Data (OECD0/OECD10) not used by the builder; rule complete with corrections"
+  },
+  {
+    "code": "80010",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "rt in diesem Element im CrsBody nur entweder Neu-, Korrektur- oder gar keine Datensätze erfasst sein.  Eine Neumeldung darf keine Korrektur- oder Stornodatensätze enthalten. Falls Wert = „CRS701“: Kein DocTypeIndic in der ganzen Meldung darf den Wert („OECD2“, „OECD3“, „OECD12“ oder „OECD13“) haben.",
+    "status": "registry",
+    "where": "CRS702 refused today (model); DocTypeIndic/MessageTypeIndic consistency with corrections"
+  },
+  {
+    "code": "80011",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 34,
+    "text_de": "Die gleiche CorrDocRefId darf nicht mehrfach in der gleichen Meldung verwendet werden. Wert ≠ andere CorrDocRefId in der gleichen Meldung",
+    "status": "registry",
+    "where": "CorrDocRefId unique within a correction message"
+  },
+  {
+    "code": "98000",
+    "section": "5.3 Erweiterte",
+    "page": 18,
+    "text_de": "det werden. Es werden die Regeln und Fehlercodes der OECD [vgl. Referenz Nr. 6] verwendet. In den folgenden Ziffern werden diese Regeln konkretisiert. Einige Regeln wurden durch die ESTV leicht angepasst und für den Datenaustausch zwischen FI und ESTV wurden zusätzliche Regeln definiert (Fehlercodes",
+    "status": "implemented",
+    "where": "build: version attribute 2.0 / 3.0 with the matching namespace"
+  },
+  {
+    "code": "98001",
+    "section": "5.3.2 Message",
+    "page": 18,
+    "text_de": "ei der ESTV für das FI gespeichert ist, in dessen Name die Datei hochgeladen wurde. Damit wird sichergestellt, dass kein Benutzer Meldungen im Namen eines FI einreichen kann, für welches er keine Berechtigung hat, auch nicht versehentlich.  Muss die ESTV-ID des sendenden FI enthalten. Wert = ESTV-ID",
+    "status": "implemented",
+    "where": "model: ESTV-ID present (format only a warning); the portal compares with the registration"
+  },
+  {
+    "code": "98002",
+    "section": "5.3.2 Message",
+    "page": 19,
+    "text_de": "19/53 TransmittingCountry ISO-Ländercode des Senderstaates, in unserem Fall ist dies immer die Schweiz.  ISO-Ländercode der Schweiz. Wert = „CH“",
+    "status": "implemented",
+    "where": "build: TransmittingCountry = CH"
+  },
+  {
+    "code": "98003",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "Das FI muss für das angegebene Berichtsjahr angemeldet sein. Beginn der Meldepflicht ≤ Berichtsjahr ≤ Abmeldedatum",
+    "status": "portal",
+    "where": "FI registered for the reporting year"
+  },
+  {
+    "code": "98004",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "MessageTypeIndic muss verwendet werden. Element muss vorhanden und nicht leer sein.",
+    "status": "implemented",
+    "where": "model.check_message: MessageTypeIndic present and valid"
+  },
+  {
+    "code": "98005",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "Eine Nullmeldung darf keine AccountReports enthalten. Falls Wert = „CRS703“: AccountReport darf in der Meldung nicht vorhanden sein.",
+    "status": "implemented",
+    "where": "model.check_message: CRS703 without accounts"
+  },
+  {
+    "code": "98006",
+    "section": "5.3.2 Message",
+    "page": 21,
+    "text_de": "ReportingPeriod Im Normalfall entspricht der Meldezeitraum dem Kalenderjahr, dann wird hier der 31.12. des entsprechenden Jahres angegeben.  Der Meldezeitraum darf nicht ausserhalb des Berichtsjahrs in der MessageRefId liegen. 1.1. des Berichtsjahrs ≤ Wert ≤ 31.12. des Berichtjahrs + 1",
+    "status": "implemented",
+    "where": "build: ReportingPeriod = 31.12 of the MessageRefId year"
+  },
+  {
+    "code": "98007",
+    "section": "5.3.2 Message",
+    "page": 21,
+    "text_de": "Es können keine Meldungen für Meldezeiträume eingereicht werden, die noch gar nicht begonnen haben. Wert ≤ 31.12. des aktuellen Jahres",
+    "status": "implemented",
+    "where": "model.check_message: reporting year <= current year"
+  },
+  {
+    "code": "98008",
+    "section": "5.3.2 Message",
+    "page": 21,
+    "text_de": "men nicht immer völlig synchron laufen. Der Wert sollte zudem auch nicht allzu weit in der Vergangenheit liegen.  Der Wert darf nicht mehr als einen Tag in der Zukunft und nicht mehr als ein Jahr in der Vergangenheit liegen. Aktuelles Datum und Zeit − 1 Jahr ≤ Wert ≤ aktuelles Datum und Zeit + 1 Tag",
+    "status": "implemented",
+    "where": "build: Timestamp = now (UTC)"
+  },
+  {
+    "code": "98009",
+    "section": "5.3.2 Message",
+    "page": 20,
+    "text_de": "Nach der Meldung von Daten darf keine Nullmeldung folgen. Es können allerdings sämtliche Datensätze storniert und danach eine Nullmeldung übermittelt werden. Falls Wert = „CRS703“, dürfen keine AccountReports des FI für das Berichtsjahr vorliegen",
+    "status": "registry",
+    "where": "no nil report after data for the same year"
+  },
+  {
+    "code": "98100",
+    "section": "5.3.3 CrsBody",
+    "page": 21,
+    "text_de": "ren Partnerstaat zu senden. Bei der Übermittlung zwischen FI und ESTV kann eine Meldung jedoch immer nur die Daten genau eines FI enthalten, entsprechend darf es nur einen CrsBody geben.  CrsBody darf für Übermittlungen zwischen FI und ESTV nicht wiederholt werden. Element darf nur einmal vorkommen.",
+    "status": "implemented",
+    "where": "build: exactly one CrsBody"
+  },
+  {
+    "code": "98101",
+    "section": "5.3.4 ReportingFI",
+    "page": 23,
+    "text_de": "h wie eine produktive Meldung hochgeladen werden. Testmeldungen werden wöchentlich in der Nacht von Samstag auf Sonntag gelöscht.  Die Werte für „Correction“ („OECD2“ und „OECD12“) und „Deletion“ („OECD3“ und „OECD13“) dürfen nicht verwendet werden. Wert = („OECD0“, „OECD1“, „OECD10“ oder „OECD11“).",
+    "status": "implemented",
+    "where": "build: ReportingFI DocTypeIndic OECD1 or OECD11 only"
+  },
+  {
+    "code": "98102",
+    "section": "5.3.4 ReportingFI",
+    "page": 24,
+    "text_de": "Wird ein Datensatz erneut gesendet („Resend Data“) muss der letzte zuvor übermittelte Datensatz die gleiche DocRefId haben. Wert = vorangehende DocRefId, falls DocTypeIndic = („OECD0“ oder „OECD10“)",
+    "status": "registry",
+    "where": "resend keeps the DocRefId"
+  },
+  {
+    "code": "98103",
+    "section": "5.3.11 AccountReport.DocSpec",
+    "page": 34,
+    "text_de": "Eine Stornomeldung kann nicht erneut korrigiert oder storniert werden. CorrDocRefId darf nicht auf einen Datensatz vom Typ („OECD3“ oder „OECD13“) verweisen.",
+    "status": "registry",
+    "where": "a deleted record cannot be corrected again"
+  },
+  {
+    "code": "98104",
+    "section": "5.3.4 ReportingFI",
+    "page": 22,
+    "text_de": "zielle Sitzadresse des FI anzugeben. Es muss AddressFix verwendet werden. Gemäss CRS-XML-Schema muss mindestens ein Ort (City) angegeben werden. Falls zusätzlich AddressFree genutzt wird, darf das Element nicht leer sein.  AddressFix muss verwendet werden. Element muss vorhanden und nicht leer sein.",
+    "status": "implemented",
+    "where": "model._check_address: City mandatory (AddressFix)"
+  },
+  {
+    "code": "98200",
+    "section": "5.3.8 AccountHolder",
+    "page": 27,
+    "text_de": " (vgl. Ziffer 5.3.7).  Mindestens 1 Wert muss einem Partnerstaat der Schweiz für den betreffenden Meldezeitraum entsprechen, ausser bei undokumentierten Konten. Wert in Liste der Partnerstaaten, die im Berichtsjahr aktiv waren. Falls AccountNumber:UndocumentedAccount = TRUE, darf der Wert=\"CH\" sein.",
+    "status": "implemented",
+    "where": "model._check_partner_states with the SIF list by year; undocumented exception"
+  },
+  {
+    "code": "98201",
+    "section": "5.3.8 AccountHolder",
+    "page": 29,
+    "text_de": " Schweiz für das betreffende Berichtsjahr entsprechen. Falls nicht, muss mindestens eine ControllingPerson mit einem ResCountryCode vorhanden sein, welche einem Partnerstaat entspricht. Wert in Liste der Partnerstaaten, die im Berichtsjahr aktiv waren, ausser falls ControllingPersons vorhanden sind.",
+    "status": "implemented",
+    "where": "model._check_partner_states; controlling-person fallback"
+  },
+  {
+    "code": "98202",
+    "section": "5.3.10 ControllingPerson",
+    "page": 31,
+    "text_de": "31/53  Mindestens 1 Wert muss einem Partnerstaat der Schweiz für das betreffende Berichtsjahr entsprechen. Wert in Liste der Partnerstaaten, die im Berichtsjahr aktiv waren.",
+    "status": "implemented",
+    "where": "model._check_partner_states for controlling persons"
+  },
+  {
+    "code": "98203",
+    "section": "5.3.7 AccountReport",
+    "page": 25,
+    "text_de": "ountHolder vom Typ „Individual“ haben, als dessen ResCountryCode darf nur „CH“ angegeben werden, denn diese AccountReports sollen nicht an die Partnerstaaten weitergeleitet werden. Falls AccountNumber:Undocumen- tedAccount = TRUE, muss der einzige AccountHolder.Individual.ResCountr yCode = ”CH” sein",
+    "status": "implemented",
+    "where": "model.check_account: undocumented -> individual with ResCountryCode CH"
+  },
+  {
+    "code": "98204",
+    "section": "5.3.8 AccountHolder",
+    "page": 27,
+    "text_de": "Der Storno eines AccountReports muss dieselben ResCountryCodes enthalten wie der AccountReport, der storniert werden soll. Falls DocTypeIndic = „OECD3“ oder „OECD13“ muss dieser AccountReport alle ResCountryCodes des mittels CorrDocRefID angegebenen AccountReports enthalten.",
+    "status": "registry",
+    "where": "deletion carries the ResCountryCodes of the deleted record"
+  }
+]
