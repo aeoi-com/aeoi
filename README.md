@@ -45,7 +45,7 @@ application):
 ```bash
 aeoi crs template --out template.xlsx            # empty template (add --example for invented data)
 aeoi crs check    --input filled.xlsx --version 3.0
-aeoi crs build    --input filled.xlsx --version 3.0 --out report.xml --test                   --key ESTV-PublicKey.pem --package Test-report.zip
+aeoi crs build    --input filled.xlsx --version 3.0 --out report.xml --test --key ESTV-PublicKey.pem --package Test-report.zip
 aeoi estv inspect Test-report.zip --key ESTV-PublicKey.pem --test
 ```
 
