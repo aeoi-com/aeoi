@@ -22,6 +22,17 @@ from aeoi.crs.model import Account, Address, Message, Person, Tin
 
 HEADER_FILL = PatternFill("solid", fgColor="DDEBF7")
 REQUIRED_FILL = PatternFill("solid", fgColor="FFF2CC")
+CONDITIONAL_FILL = PatternFill("solid", fgColor="FCE4D6")
+
+
+def _fill(required: bool | str) -> PatternFill:
+    if required is True:
+        return REQUIRED_FILL
+    if required:
+        return CONDITIONAL_FILL
+    return HEADER_FILL
+
+
 MAX_ROWS = 5000
 
 README = """aeoi - CRS reporting template
@@ -42,8 +53,16 @@ Conventions
 - TINs / INs: value@CC (CC = issuing country), several separated by ';'.
 - true/false columns accept true/false, 1/0, yes/no, ja/nein, oui/non.
 - Dates: YYYY-MM-DD or an Excel date. Amounts: numbers, dot as decimal separator.
-- Yellow headers are mandatory. Columns marked 3.0 are mandatory for CRS schema 3.0
-  (ESTV: only 3.0 from 16.01.2027), ignored for 2.0.
+- Yellow headers are mandatory; orange headers are mandatory for one holder_type only
+  (first_name/last_name for 'individual', org_name/acct_holder_type for 'organisation').
+  Columns marked 3.0 are mandatory for CRS schema 3.0 (ESTV: only 3.0 from 16.01.2027),
+  ignored for 2.0.
+- Joint accounts: one row per reportable holder, same account_number, the FULL balance on
+  each row; for 3.0 put the number of joint holders in joint_account_number on every row.
+- Trustee-documented trusts: put the trust's name in ReportingFI.name and set
+  trustee_documented_trust = true; the 'TDT=' prefix required by the ESTV is added at build time.
+- Corrections (CRS702) are not supported yet: a correction needs the identifiers of the records
+  already sent, which the submission registry will provide.
 - Allowed characters: ISO 8859-1 without ! " # $ < > ^ ~ and the symbols listed by the ESTV
   (Anhang 7.2); never the sequences --  /*  &#
 
@@ -66,8 +85,11 @@ def _write_table(ws, columns: list[Column]) -> None:
     for i, col in enumerate(columns, start=1):
         cell = ws.cell(row=1, column=i, value=col.name)
         cell.font = Font(bold=True)
-        cell.fill = REQUIRED_FILL if col.required else HEADER_FILL
-        cell.comment = Comment(col.description, "aeoi")
+        cell.fill = _fill(col.required)
+        note = col.description
+        if isinstance(col.required, str):
+            note += f" - mandatory when holder_type = {col.required}"
+        cell.comment = Comment(note, "aeoi")
         ws.column_dimensions[get_column_letter(i)].width = max(14, min(32, len(col.name) + 4))
         if col.codes and col.kind != "multi":
             _add_validation(ws, i, list(col.codes))
@@ -241,7 +263,7 @@ def write_message(msg: Message, path: str | Path) -> None:
         "estv_id": fi.estv_id,
         "uid": fi.uid,
         "name": fi.name,
-        "contact": fi.contact,
+        "trustee_documented_trust": "true" if fi.trustee_documented_trust else "false",
         "reporting_year": msg.reporting_year,
         "message_type_indic": msg.message_type_indic,
         **_address_cells(fi.address),

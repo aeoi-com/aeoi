@@ -25,7 +25,14 @@ Conventions: several values in one cell are separated by `;`; TINs/INs are `valu
 `YYYY-MM-DD`, `DD.MM.YYYY` or Excel dates; amounts are numbers with a dot (or Excel numbers).
 Codes are the OECD values (see `src/aeoi/crs/codes.py` and the `Codes` sheet). Columns marked
 "3.0" are mandatory for CRS schema 3.0 and ignored for 2.0. Empty `doc_ref_id` cells are filled
-with generated `CH<year>CH<uuid>` identifiers at build time.
+with generated `CH<year>CH<uuid>` identifiers at build time; a DocRefId can never be reused
+(ESTV 80000), so fill the column only with identifiers that have never been sent.
+
+Joint accounts: one row per reportable holder, same `account_number`, the full balance on each
+row, and for 3.0 `joint_account_number` = number of joint holders on every row. Trustee-documented
+trusts: the trust's name in `ReportingFI.name` plus `trustee_documented_trust = true`; the builder
+writes `TDT=` before the name (ESTV 5.3.4). `uid` may be empty when the FI has no UID (70015).
+Corrections (`CRS702`) are refused until the submission registry exists.
 
 """
 
@@ -34,9 +41,8 @@ def table(columns: list[flat.Column]) -> str:
     lines = ["| column | required | kind | description |", "|---|---|---|---|"]
     for c in columns:
         codes = f" Codes: {', '.join(c.codes)}." if c.codes else ""
-        lines.append(
-            f"| `{c.name}` | {'yes' if c.required else ''} | {c.kind} | {c.description}{codes} |"
-        )
+        required = "yes" if c.required is True else (f"if {c.required}" if c.required else "")
+        lines.append(f"| `{c.name}` | {required} | {c.kind} | {c.description}{codes} |")
     return "\n".join(lines)
 
 

@@ -169,7 +169,7 @@ def test_missing_v3_fields_are_reported_with_location():
         (lambda m: setattr(m.accounts[0].payments[0], "payment_type", "CRS501"), "60021"),
         (lambda m: setattr(m.accounts[0], "undocumented", True), "98203"),
         (lambda m: setattr(m.reporting_fi, "uid", "123"), "70015"),
-        (lambda m: setattr(m.reporting_fi, "estv_id", "x"), "98001"),
+        (lambda m: setattr(m.reporting_fi, "estv_id", ""), "98001"),
     ],
 )
 def test_estv_rules_are_detected(mutate, rule):

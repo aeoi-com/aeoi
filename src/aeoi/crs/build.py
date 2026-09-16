@@ -23,7 +23,7 @@ from xsdata.formats.dataclass.serializers import XmlSerializer
 from xsdata.formats.dataclass.serializers.config import SerializerConfig
 from xsdata.models.datatype import XmlDate, XmlDateTime
 
-from aeoi.crs.model import Account, Address, Message, Organisation, Person, Version
+from aeoi.crs.model import TDT_PREFIX, Account, Address, Message, Organisation, Person, Version
 from aeoi.estv import ids
 
 NS = {
@@ -243,8 +243,17 @@ def build(
 
     reporting_fi = m.CorrectableOrganisationPartyType(
         res_country_code=[m.CountryCodeType("CH")],
-        in_value=[m.OrganisationInType(value=fi.uid, issued_by=m.CountryCodeType("CH"))],
-        name=[m.NameOrganisationType(value=fi.name, name_type=m.OecdnameTypeEnumType("OECD207"))],
+        in_value=(
+            [m.OrganisationInType(value=fi.uid, issued_by=m.CountryCodeType("CH"))]
+            if fi.uid
+            else []
+        ),  # IN only when the FI has a UID (70015)
+        name=[
+            m.NameOrganisationType(
+                value=(TDT_PREFIX if fi.trustee_documented_trust else "") + fi.name,
+                name_type=m.OecdnameTypeEnumType("OECD207"),
+            )
+        ],  # trustee-documented trust: "TDT=" + trust name (Wegleitung 5.3.4)
         address=[_address(m, fi.address)],
         doc_spec=_doc_spec(m, fi_doc_ref_id, test=test),
     )
@@ -262,7 +271,6 @@ def build(
             transmitting_country=m.CountryCodeType("CH"),
             receiving_country=m.CountryCodeType("CH"),
             message_type=m.MessageTypeEnumType("CRS"),
-            contact=fi.contact,
             message_ref_id=message_ref_id,
             message_type_indic=m.CrsMessageTypeIndicEnumType(msg.message_type_indic),
             reporting_period=XmlDate(year, 12, 31),

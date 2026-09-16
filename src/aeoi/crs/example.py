@@ -29,7 +29,6 @@ def sample_message(year: int = 2026) -> Message:
             city="Zürich",
             legal_address_type="OECD304",
         ),
-        contact="AIA Team, +41 44 000 00 00",
     )
     individual = Account(
         key="A1",

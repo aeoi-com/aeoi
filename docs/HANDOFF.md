@@ -46,7 +46,13 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   builder to 2.0/3.0 XML (`aeoi.crs.build`), example message (`aeoi.crs.example`), CLI
   `aeoi crs template|check|build`. End-to-end: workbook -> check -> XML (valid 2.0 and 3.0) ->
   ESTV package.
-- 113 tests: `.venv/Scripts/python -m pytest`.
+- Week-2 review fixes: `uid` optional (IN omitted, 70015), trustee-documented trusts
+  (`trustee_documented_trust` flag -> `TDT=` prefix, 5.3.4), Anhang 7.2 character set enforced on
+  every text field (50005), CRS702 refused until the registry exists (80010), header codes
+  98004/98005/60015, ESTV-ID shape only a warning, joint-account consistency (3.0), duplicate
+  DocRefId on rows (80000), no Contact in MessageSpec, `aeoi crs build` validates against the XSD
+  before writing (XSDs shipped in `src/aeoi/xsd`, synced by `tools/generate_models.py`).
+- 124 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 

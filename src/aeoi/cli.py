@@ -62,12 +62,21 @@ def _cmd_crs_check(args: argparse.Namespace) -> int:
 
 
 def _cmd_crs_build(args: argparse.Namespace) -> int:
-    from aeoi.crs import build
+    from aeoi.crs import build, xsd
 
     msg, rc = _load_message(args.input, args.version)
     if msg is None:
         return rc
     result = build.build(msg, args.version, test=args.test)
+    xsd_errors = xsd.validate(result.xml, args.version)
+    if xsd_errors:  # never hand over a file the portal would reject with 50007
+        for e in xsd_errors:
+            print(f"xsd    | {e}", file=sys.stderr)
+        print(
+            "error: built XML is not valid against the OECD schema; nothing written",
+            file=sys.stderr,
+        )
+        return 1
     Path(args.out).write_text(result.xml, encoding="utf-8")
     summary = {
         "xml": args.out,

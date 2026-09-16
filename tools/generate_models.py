@@ -75,8 +75,18 @@ def patch_address_order() -> int:
     return patched
 
 
+def sync_xsd_into_package() -> None:
+    """The package needs the XSDs at runtime (validation); keep a copy under src/aeoi/xsd."""
+    target = SRC / "aeoi" / "xsd"
+    for name in ("crs_v2.0", "crs_v3.0", "crs_status_message_v2.0"):
+        shutil.rmtree(target / name, ignore_errors=True)
+        shutil.copytree(ROOT / "schemas" / name, target / name)
+    print("synced XSDs into src/aeoi/xsd")
+
+
 def main() -> None:
     generate()
+    sync_xsd_into_package()
     n = patch_address_order()
     (SRC / "aeoi" / "schemas" / "__init__.py").write_text(
         '"""Generated from the pinned OECD XSDs by tools/generate_models.py - do not edit."""\n',

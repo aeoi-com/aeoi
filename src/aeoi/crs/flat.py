@@ -16,6 +16,7 @@ ISO ``YYYY-MM-DD`` or real Excel dates; amounts use a dot as decimal separator o
 from __future__ import annotations
 
 import csv
+import dataclasses
 import datetime as dt
 import re
 from dataclasses import dataclass, field
@@ -48,8 +49,11 @@ class Column:
     name: str
     description: str
     codes: dict | None = None  # allowed values -> meaning (for validation lists)
-    required: bool = False
+    required: bool | str = False  # True, False, or the holder_type the column is mandatory for
     kind: str = "text"  # text | bool | date | decimal | int | multi | tins
+
+    def with_required(self, required: bool | str) -> Column:
+        return dataclasses.replace(self, required=required)
 
 
 ADDRESS_COLUMNS = [
@@ -84,9 +88,9 @@ PERSON_COLUMNS = [
 
 REPORTING_FI_FIELDS = [
     Column("estv_id", "ESTV-ID of the reporting FI (SendingCompanyIN), e.g. 052.0000.0000", required=True),
-    Column("uid", "UID of the reporting FI (IN), e.g. CHE-123.456.789", required=True),
-    Column("name", "Legal name of the reporting FI", required=True),
-    Column("contact", "Contact for queries (MessageSpec.Contact), optional"),
+    Column("uid", "UID of the reporting FI (IN), e.g. CHE-123.456.789; leave empty if the FI has no UID"),
+    Column("name", "Official name of the reporting FI; for a trustee-documented trust the trust's name (without TDT=)", required=True),
+    Column("trustee_documented_trust", "true if this is a Trustee-Documented Trust: 'TDT=' is put before the name (ESTV 5.3.4)", kind="bool"),
     Column("reporting_year", "Reporting year (calendar year the data refers to)", required=True, kind="int"),
     Column("message_type_indic", "CRS701 new data / CRS703 nil report (no accounts)", codes.MESSAGE_TYPE_INDIC),
     *ADDRESS_COLUMNS,
@@ -94,17 +98,17 @@ REPORTING_FI_FIELDS = [
 
 ACCOUNT_COLUMNS = [
     Column("key", "Row identifier, unique per workbook; links ControllingPersons and Payments", required=True),
-    Column("doc_ref_id", "Leave empty: generated (CH<year>CH<uuid>). Fill only to reuse a known DocRefId"),
+    Column("doc_ref_id", "Leave empty: generated (CH<year>CH<uuid>). Fill only to fix an identifier that has never been sent (a DocRefId can never be reused, ESTV 80000)"),
     Column("account_number", "Account number; NANUM if none (ESTV 5.3.7)", required=True),
     Column("account_number_type", "OECD601 IBAN, 602 OBAN, 603 ISIN, 604 OSIN, 605 Other, 606 e-money", codes.ACCT_NUMBER_TYPE),
     Column("undocumented", "true/false - undocumented account (holder must be CH individual)", kind="bool"),
     Column("closed", "true/false - closed during the year (balance must be 0)", kind="bool"),
     Column("dormant", "true/false - dormant account", kind="bool"),
     Column("holder_type", "individual or organisation", {"individual": "natural person", "organisation": "entity"}, required=True),
-    *PERSON_COLUMNS,
-    Column("org_name", "Organisation: legal name"),
+    *[c.with_required("individual") if c.required is True and c.name != "residence_countries" else c for c in PERSON_COLUMNS],
+    Column("org_name", "Organisation: legal name", required="organisation"),
     Column("org_name_type", "Organisation: OECD202-208", codes.NAME_TYPE),
-    Column("acct_holder_type", "Organisation: CRS101 passive NFE with CPs / CRS102 reportable person / CRS103 passive NFE reportable", codes.ACCT_HOLDER_TYPE),
+    Column("acct_holder_type", "Organisation: CRS101 passive NFE with CPs / CRS102 reportable person / CRS103 passive NFE reportable", codes.ACCT_HOLDER_TYPE, required="organisation"),
     Column("org_ins", "Organisation: INs as value@CC;value@CC", kind="tins"),
     *ADDRESS_COLUMNS,
     Column("balance", "Account balance at year end, >= 0 (0 if closed)", required=True, kind="decimal"),
@@ -335,12 +339,19 @@ def read(path: str | Path) -> ReadResult:
         problems.append(InputProblem("ReportingFI", None, "reporting_year", "must be a year"))
         reporting_year = 0
     try:
+        tdt = _bool(fi_values.get("trustee_documented_trust"))
+        if tdt is None:
+            problems.append(
+                InputProblem(
+                    "ReportingFI", None, "trustee_documented_trust", "must be true or false"
+                )
+            )
         fi = ReportingFI(
             estv_id=_text(fi_values.get("estv_id")),
-            uid=_text(fi_values.get("uid")).upper(),
+            uid=_text(fi_values.get("uid")).upper() or None,
             name=_text(fi_values.get("name")),
-            contact=_text(fi_values.get("contact")) or None,
-            address=Address(**_address({k: v for k, v in fi_values.items()})),
+            trustee_documented_trust=bool(tdt),
+            address=Address(**_address(dict(fi_values.items()))),
         )
     except ValidationError as exc:
         for e in exc.errors():

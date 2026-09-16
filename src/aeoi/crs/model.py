@@ -20,12 +20,16 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from aeoi.crs import codes
+from aeoi.estv import ids
 
 Version = Literal["2.0", "3.0"]
 COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
 CURRENCY_RE = re.compile(r"^[A-Z]{3}$")
-ESTV_ID_RE = re.compile(r"^\d{3}\.\d{4}\.\d{4}$")  # e.g. 052.0000.0000 (Wegleitung examples)
+# The Wegleitung does not define the ESTV-ID format; 052.0000.0000 is its example. Rule 98001
+# compares the value with the one registered in the portal, so another shape is only a warning.
+ESTV_ID_RE = re.compile(r"^\d{3}\.\d{4}\.\d{4}$")
 UID_RE = re.compile(r"^CHE-\d{3}\.\d{3}\.\d{3}$")
+TDT_PREFIX = "TDT="
 
 
 class Strict(BaseModel):
@@ -113,10 +117,10 @@ class Account(Strict):
 
 class ReportingFI(Strict):
     estv_id: str  # SendingCompanyIN, e.g. 052.0000.0000
-    uid: str  # IN, e.g. CHE-123.456.789
-    name: str
+    uid: str | None = None  # IN, e.g. CHE-123.456.789; empty when the FI has no UID (70015)
+    name: str  # official name; for a trustee-documented trust the trust's name, without "TDT="
+    trustee_documented_trust: bool = False  # builder writes "TDT=" + name (Wegleitung 5.3.4)
     address: Address
-    contact: str | None = None
 
 
 class Message(Strict):
@@ -171,8 +175,31 @@ def _check_country(rep: Report, where: str, value: str | None, *, required: bool
         rep.add(where, f"{value!r} is not a two-letter ISO country code", "XSD")
 
 
+def _check_text(rep: Report, where: str, value: str | None) -> None:
+    """Anhang 7.2 character set on a data element; the portal rejects the whole file (50005)."""
+    if not value:
+        return
+    problems = ids.invalid_characters(value)
+    if problems:
+        first = problems[0]
+        rep.add(where, f"{first.text!r} at position {first.position}: {first.reason}", "50005")
+
+
 def _check_address(rep: Report, where: str, a: Address) -> None:
     _check_country(rep, f"{where}.country", a.country, required=True)
+    for name in (
+        "city",
+        "street",
+        "building_identifier",
+        "suite_identifier",
+        "floor_identifier",
+        "district_name",
+        "pob",
+        "post_code",
+        "country_subentity",
+        "address_free",
+    ):
+        _check_text(rep, f"{where}.{name}", getattr(a, name))  # fmt: skip
     if not a.city:
         rep.add(f"{where}.city", "City is mandatory (AddressFix must be used)", "98104")
     if a.address_free is not None and not a.address_free:
@@ -186,6 +213,8 @@ def _check_person(rep: Report, where: str, p: Person, *, today: dt.date) -> None
         rep.add(f"{where}.first_name", "FirstName is mandatory; use NFN if unknown", "50007")
     if not p.last_name:
         rep.add(f"{where}.last_name", "LastName is mandatory", "50007")
+    for name in ("first_name", "last_name", "middle_name", "birth_city"):
+        _check_text(rep, f"{where}.{name}", getattr(p, name))
     if p.name_type == "OECD201":
         rep.add(f"{where}.name_type", "nameType OECD201 is not allowed", "60004")
     else:
@@ -197,6 +226,7 @@ def _check_person(rep: Report, where: str, p: Person, *, today: dt.date) -> None
     for i, t in enumerate(p.tins):
         if not t.value:
             rep.add(f"{where}.tins[{i}]", "a TIN, when present, must not be empty", "XSD")
+        _check_text(rep, f"{where}.tins[{i}]", t.value)
         _check_country(rep, f"{where}.tins[{i}].issued_by", t.issued_by, required=False)
     if p.birth_date is not None and not (dt.date(1900, 1, 1) < p.birth_date < today):
         rep.add(f"{where}.birth_date", "must be after 1900-01-01 and before today", "60014")
@@ -207,6 +237,7 @@ def _check_person(rep: Report, where: str, p: Person, *, today: dt.date) -> None
 def _check_organisation(rep: Report, where: str, o: Organisation) -> None:
     if not o.name:
         rep.add(f"{where}.name", "organisation Name is mandatory", "XSD")
+    _check_text(rep, f"{where}.name", o.name)
     if o.name_type == "OECD201":
         rep.add(f"{where}.name_type", "nameType OECD201 is not allowed", "60004")
     _check_code(rep, f"{where}.acct_holder_type", o.acct_holder_type, codes.ACCT_HOLDER_TYPE,
@@ -218,6 +249,7 @@ def _check_organisation(rep: Report, where: str, o: Organisation) -> None:
     for i, t in enumerate(o.ins):
         if not t.value:
             rep.add(f"{where}.ins[{i}]", "an IN, when present, must not be empty", "XSD")
+        _check_text(rep, f"{where}.ins[{i}]", t.value)
     _check_address(rep, f"{where}.address", o.address)
 
 
@@ -225,6 +257,8 @@ def check_account(rep: Report, acc: Account, version: Version, *, today: dt.date
     w = f"Accounts[key={acc.key}]"
     if not acc.account_number:
         rep.add(f"{w}.account_number", "mandatory; use NANUM when there is no number", "50007")
+    _check_text(rep, f"{w}.account_number", acc.account_number)
+    _check_text(rep, f"{w}.doc_ref_id", acc.doc_ref_id)
     _check_code(rep, f"{w}.account_number_type", acc.account_number_type, codes.ACCT_NUMBER_TYPE,
                 required=False)  # fmt: skip
     if acc.balance < 0:
@@ -324,26 +358,62 @@ def check_message(msg: Message, version: Version, *, today: dt.date | None = Non
     today = today or dt.datetime.now(tz=dt.UTC).date()
     rep = Report()
     fi = msg.reporting_fi
-    if not ESTV_ID_RE.match(fi.estv_id or ""):
-        rep.add(
-            "ReportingFI.estv_id", "SendingCompanyIN must be the ESTV-ID (nnn.nnnn.nnnn)", "98001"
-        )
-    if not UID_RE.match(fi.uid or ""):
-        rep.add("ReportingFI.uid", "IN must be the UID (CHE-nnn.nnn.nnn)", "70015")
+    if not fi.estv_id:
+        rep.add("ReportingFI.estv_id", "SendingCompanyIN must be the ESTV-ID of the FI", "98001")
+    elif not ESTV_ID_RE.match(fi.estv_id):
+        rep.add("ReportingFI.estv_id",
+                "does not look like the ESTV-ID example (052.0000.0000); the portal compares it "
+                "with the registered value", "info")  # fmt: skip
+    _check_text(rep, "ReportingFI.estv_id", fi.estv_id)
+    if fi.uid and not UID_RE.match(fi.uid):
+        rep.add("ReportingFI.uid", "IN, when given, must be the UID (CHE-nnn.nnn.nnn)", "70015")
     if not fi.name:
         rep.add("ReportingFI.name", "Name is mandatory", "XSD")
+    elif fi.name.upper().startswith(TDT_PREFIX) and not fi.trustee_documented_trust:
+        rep.add("ReportingFI.name",
+                "starts with TDT= but trustee_documented_trust is not set: write the trust's name "
+                "and set the flag, the prefix is added at build time", "5.3.4")  # fmt: skip
+    _check_text(rep, "ReportingFI.name", fi.name)
     _check_address(rep, "ReportingFI.address", fi.address)
     if not 2017 <= msg.reporting_year <= today.year:
         rep.add("ReportingFI.reporting_year", "reporting year must be 2017..current year", "98003")
     _check_code(rep, "Message.message_type_indic", msg.message_type_indic, codes.MESSAGE_TYPE_INDIC,
-                required=True, rule="80010")  # fmt: skip
+                required=True, rule="98004")  # fmt: skip
+    if msg.message_type_indic == "CRS702":
+        rep.add("Message.message_type_indic",
+                "CRS702 (corrections) is not supported yet: a correction needs the DocRefIds of the "
+                "records sent before (submission registry, Wegleitung Ziffer 6)", "80010")  # fmt: skip
     if msg.message_type_indic == "CRS703" and msg.accounts:
-        rep.add("Message.accounts", "a nil report (CRS703) must not contain accounts", "98004")
+        rep.add("Message.accounts", "a nil report (CRS703) must not contain accounts", "98005")
     if msg.message_type_indic != "CRS703" and not msg.accounts:
         rep.add("Message.accounts", "at least one account is required unless CRS703", "60015")
     keys = [a.key for a in msg.accounts]
     for k in sorted({k for k in keys if keys.count(k) > 1}):
         rep.add(f"Accounts[key={k}]", "account key is not unique", "input")
+    refs = [a.doc_ref_id for a in msg.accounts if a.doc_ref_id]
+    for r in sorted({r for r in refs if refs.count(r) > 1}):
+        rep.add(f"Accounts[doc_ref_id={r}]", "DocRefId used on more than one row", "80000")
     for acc in msg.accounts:
         check_account(rep, acc, version, today=today)
+    _check_joint_accounts(rep, msg, version)
     return rep
+
+
+def _check_joint_accounts(rep: Report, msg: Message, version: Version) -> None:
+    """Joint accounts: one AccountReport per reportable holder with the same account number and
+    the full balance; in 3.0 every row carries JointAccount.Number = number of joint holders."""
+    if version != "3.0":
+        return
+    by_number: dict[str, list[Account]] = {}
+    for acc in msg.accounts:
+        if acc.account_number and acc.account_number != codes.NO_ACCOUNT_NUMBER:
+            by_number.setdefault(acc.account_number, []).append(acc)
+    for number, rows in by_number.items():
+        if len(rows) < 2:
+            continue
+        numbers = {a.joint_account_number for a in rows}
+        if None in numbers or len(numbers) > 1:
+            rep.add(f"Accounts[account_number={number}]",
+                    f"{len(rows)} rows share this account number: for a joint account set "
+                    "joint_account_number (number of joint holders) to the same value on every "
+                    "row; otherwise use distinct account numbers", "3.0")  # fmt: skip
