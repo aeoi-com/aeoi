@@ -14,7 +14,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { mkdirSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scratch = process.env.PYODIDE_DIR || join(root, ".local", "pyodide-test");
@@ -53,37 +53,65 @@ try {
   const page = await browser.newPage();
   const requests = [];
   const cspViolations = [];
-  page.on("request", (req) => requests.push({ host: new URL(req.url()).host, method: req.method(), url: req.url() }));
+  page.on("request", (req) => {
+    const u = new URL(req.url());
+    if (u.protocol === "blob:" || u.protocol === "data:") return; // in-browser only, cannot leave the machine
+    requests.push({ host: u.host, method: req.method(), url: req.url() });
+  });
   page.on("console", (msg) => {
     if (/Content Security Policy|Refused to/.test(msg.text())) cspViolations.push(msg.text());
   });
   page.on("pageerror", (err) => cspViolations.push("pageerror: " + err.message));
-  const ready = page.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:ready", timeout: 240000 });
+  const ready = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
   await page.goto(`http://127.0.0.1:${port}/index.html`);
   await ready;
   console.log("runtime ready; version", await page.locator("#ver").textContent());
   const bootRequests = requests.length;
 
-  async function upload(id, file) {
+  const resultText = () => page.locator("#out").textContent();
+  async function upload(file) {
     const done = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:result"), timeout: 120000 });
-    await page.locator(`#${id}`).setInputFiles(file);
+    await page.locator("#file").setInputFiles(file);
     await done;
-    return await page.locator("#out").textContent();
+    return await resultText();
   }
-  const good = await upload("xml", join(fixtures, "Test-report.xml"));
+  async function click(id) {
+    const done = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:result"), timeout: 120000 });
+    await page.locator(`#${id}`).click();
+    await done;
+    return await resultText();
+  }
+  const good = await upload(join(fixtures, "Test-report.xml"));
   check("valid XML -> OK: " + good.split("\n")[0], good.startsWith("OK"));
-  const bad = await upload("xml", join(fixtures, "Test-bad.xml"));
+  check("verdict card in the OK state", (await page.locator("#verdict").getAttribute("class")).includes("ok") && (await page.locator("#verdict-title").textContent()).length > 0);
+  const bad = await upload(join(fixtures, "Test-bad.xml"));
   check("broken XML -> NOT OK with 50005", bad.startsWith("NOT OK") && bad.includes("[50005]"));
-  const wb = await upload("xlsx", join(fixtures, "EXAMPLE.XLSX"));
+  const firstTitle = await page.locator(".finding.error .title").first().textContent();
+  const firstFix = await page.locator(".finding.error .fix").first().textContent();
+  check("finding card with German title and remedy", firstTitle === "Unzulässiges Zeichen" && firstFix.includes("#"));
+  const wb = await upload(join(fixtures, "EXAMPLE.XLSX"));
   check("workbook (.XLSX) -> OK: " + wb.split("\n")[0], wb.startsWith("OK"));
+  check("overview rendered (residence bars, holder ring)", (await page.locator("#ov-bars .row").count()) >= 2 && (await page.locator("#ov-ring circle.seg").count()) >= 1);
 
-  // language switch: page texts change, the English report and the ready status survive
-  for (const [lang, h1, ready] of [["it", "aeoi - Verificare", "Pronto."], ["fr", "aeoi - Vérifier", "Prêt."], ["de", "aeoi - CRS-Datei", "Bereit."]]) {
+  // built-in samples and the report download (blob:, stays in the browser)
+  const demo = await click("sample-bad");
+  check("sample with errors -> four distinct rules", ["50005", "60000", "60002", "60014"].every((c) => demo.includes(`[${c}]`)));
+  const dl = page.waitForEvent("download", { timeout: 30000 });
+  await page.locator("#download").click();
+  const saved = join(fixtures, "downloaded-report.txt");
+  await (await dl).saveAs(saved);
+  check("downloaded report equals the shown text", readFileSync(saved, "utf-8") === demo);
+  const okSample = await click("sample-ok");
+  check("valid sample -> OK", okSample.startsWith("OK"));
+
+  // language switch: page texts and finding titles change, the English report and the ready status survive
+  for (const [lang, h1, ready, none] of [["it", "Verificare", "Pronto.", "Nessun rilievo"], ["fr", "Vérifier", "Prêt.", "Aucune constatation"], ["de", "CRS-Datei", "Bereit.", "Keine Befunde"]]) {
     await page.locator("#lang").selectOption(lang);
     const heading = await page.locator("h1").textContent();
     const st = await page.locator("#status").textContent();
-    const rep = await page.locator("#out").textContent();
-    check(`language ${lang}: heading, status and kept report`, heading.startsWith(h1) && st.startsWith(ready) && rep === wb);
+    const rep = await resultText();
+    const noFindings = await page.locator("#no-findings").textContent();
+    check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep === okSample && noFindings.startsWith(none));
   }
 
   const after = requests.slice(bootRequests);

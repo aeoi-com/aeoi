@@ -32,6 +32,7 @@ class ValidationReport:
     version: Version | None = None
     problems: list[model.Problem] = field(default_factory=list)
     infos: list[model.Problem] = field(default_factory=list)
+    message: model.Message | None = None  # the parsed content, when the file could be read
 
     @property
     def ok(self) -> bool:
@@ -118,6 +119,7 @@ def validate_file(
             else "content checks skipped: the file could not be read into the model",
         )
         return rep
+    rep.message = parsed.message
     if parsed.transmitting_country != "CH":
         rep.add("MessageSpec/TransmittingCountry", "must be CH", "98002")
     if parsed.receiving_country != "CH":

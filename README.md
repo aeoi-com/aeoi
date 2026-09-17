@@ -78,8 +78,12 @@ workbook, back it up, never send it.
 
 ## Browser validator
 
-`web/index.html` is a static page that runs the validator in the browser with Pyodide: choose a
-CRS XML file or a filled workbook, get the same report as `aeoi crs validate` / `aeoi crs check`.
+`web/index.html` is a static page that runs the validator in the browser with Pyodide: drop a
+CRS XML file or a filled workbook and get the same checks as `aeoi crs validate` / `aeoi crs check`,
+rendered as a verdict card, an overview of the message (holders, residence countries, balances)
+and one card per finding with a title and a remedy in German, French or Italian
+(`src/aeoi/estv/rule_titles.json`), the technical message and the official ESTV wording behind
+a disclosure. Built-in samples, report download, light/dark theme, self-hosted Inter font.
 The file never leaves the browser; the page has no analytics and no server side. Build it with
 `python -m build && python tools/build_web.py`; `node tools/web_smoke.mjs` runs the same code
 headlessly (see the script header for the one-time Pyodide setup);

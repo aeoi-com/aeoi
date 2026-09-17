@@ -168,7 +168,16 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    Italian and French versions (`docs/it/RIASSUNTO.md`, `docs/fr/RESUME.md`) whose quotes come
    from the official FR/IT editions of the Technische Wegleitung (pinned in the manifest, not
    committed). The web page has a language switch (DE/FR/IT, `web/i18n.js`; choice kept in
-   localStorage, no request); the check results stay English. Not translated on purpose until
+   localStorage, no request). Design pass (17.09.2026): own design system (`web/styles.css`,
+   Inter self-hosted under OFL in `web/fonts/`), boot stepper, drop zone, verdict card, stats
+   with count-up, overview (holder-type ring, residence bars via `Intl.DisplayNames`), finding
+   cards with title + remedy in the page language from `src/aeoi/estv/rule_titles.json`
+   (`aeoi.estv.titles`; a test asserts every catalogue code and every code the engine emits has
+   de/fr/it/en), technical message and official German wording behind a disclosure; built-in
+   samples (valid, four errors, workbook), report download (blob:), copy, theme toggle.
+   `aeoi.crs.overview.report_dict` is the JSON the page renders; `ValidationReport.message`
+   carries the parsed content. Browser test: 16 checks incl. samples, download, three languages.
+   The technical messages stay English. Not translated on purpose until
    the pilot confirms the German content: the two long German guides and the ~200 program
    messages (would need a message catalogue keyed by rule code first).
 5. Week 6: browser validator, packages and CI done locally; waiting on the owner for the PyPI

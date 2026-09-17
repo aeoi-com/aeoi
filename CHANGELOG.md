@@ -26,7 +26,9 @@ First working version, CRS for the Swiss ESTV portal.
 - `aeoi crs validate FILE.xml` for files from any tool (2.0 and 3.0).
 - Browser validator (`web/`, Pyodide, no server side, no analytics; Content-Security-Policy
   and SRI on the page, verified in a real browser: no request after the file selection); page
-  texts in German, French and Italian (`web/i18n.js`), check results in English.
+  texts in German, French and Italian (`web/i18n.js`); findings with a title and a remedy per
+  rule code in de/fr/it/en (`aeoi.estv.titles`, `rule_titles.json`), overview of the message
+  (`aeoi.crs.overview`), built-in samples, report download, light/dark theme.
 - German pages for reporting FIs: `docs/de/ANLEITUNG.md`, `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 - CLI: `aeoi crs template | check | build | correct | validate | registry`,
   `aeoi estv package | inspect | status`.
