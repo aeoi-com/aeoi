@@ -148,20 +148,68 @@ def _write_codes(ws) -> None:
     ws.freeze_panes = "A2"
 
 
+STEPS = [
+    "1. ReportingFI: fill the 'value' column (ESTV-ID, name, address, reporting year).",
+    (
+        "2. Accounts: one row per reportable account; choose holder_type first, the coloured "
+        "headers show which columns then apply."
+    ),
+    "3. ControllingPersons and Payments: only where needed; 'key' points to the account row.",
+    (
+        "4. Check before building: 'aeoi crs check file.xlsx' or the browser page - every finding "
+        "names the sheet, the row and the ESTV rule."
+    ),
+    "5. Build and package: 'aeoi crs build' then 'aeoi estv package'; upload in the AIA portal.",
+]
+
+
+def _write_readme(ws) -> None:
+    """ReadMe as structured rows: title, steps, then the conventions, one paragraph per row."""
+    title = Font(bold=True, size=14)
+    heading = Font(bold=True, size=11)
+    wrap = Alignment(wrap_text=True, vertical="top")
+    ws.column_dimensions["A"].width = 118
+    ws["A1"] = "aeoi - CRS reporting template"
+    ws["A1"].font = title
+    ws["A2"] = "One workbook = one reporting financial institution = one CRS message to the ESTV."
+    row = 4
+    ws.cell(row=row, column=1, value="Five steps").font = heading
+    for step in STEPS:
+        row += 1
+        ws.cell(row=row, column=1, value=step).alignment = wrap
+    row += 2
+    for line in README.splitlines()[4:]:  # after the title and the one-line summary
+        if not line.strip():
+            continue
+        if not line.startswith(("-", " ")):
+            row += 1
+            cell = ws.cell(row=row, column=1, value=line.strip())
+            if line.rstrip().endswith("."):  # closing sentence, not a heading
+                cell.alignment = wrap
+            else:
+                cell.font = heading
+            continue
+        if line.startswith("- "):
+            row += 1
+            ws.cell(row=row, column=1, value=line[2:].strip()).alignment = wrap
+        else:  # continuation of the previous bullet
+            cell = ws.cell(row=row, column=1)
+            cell.value = f"{cell.value} {line.strip()}"
+    ws.sheet_view.showGridLines = False
+
+
 def new_workbook() -> Workbook:
     wb = Workbook()
     ws = wb.active
     ws.title = "ReadMe"
-    ws["A1"] = README
-    ws["A1"].alignment = Alignment(wrap_text=True, vertical="top")
-    ws.column_dimensions["A"].width = 110
-    ws.row_dimensions[1].height = 400
+    _write_readme(ws)
     for name, columns in SHEETS.items():
         sheet = wb.create_sheet(name)
         if name == "ReportingFI":
             _write_reporting_fi(sheet, columns)
         else:
             _write_table(sheet, columns)
+            sheet.auto_filter.ref = f"A1:{get_column_letter(len(columns))}{MAX_ROWS}"
     _write_codes(wb.create_sheet("Codes"))
     return wb
 
