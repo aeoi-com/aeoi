@@ -162,8 +162,9 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    maintenance: rerun `tools/partner_states.py` when the SIF list changes.
 3. Week 4: done (registry, corrections, deletions, outcomes; see above). Open: the real ESTV
    outcome format (question 4) decides whether `aeoi estv status` can be fed automatically.
-4. Week 5: validate + German pages done; open: README/CLI polish, packaging for PyPI (needs
-   the token), a German summary for associations.
+4. Week 5: validate + German pages done; the one-page summary for associations is
+   `docs/de/KURZFASSUNG.md` (pricing bands from the decisions; "pilots pay nothing" is an
+   assumption for the owner to confirm; contact and repository URL are placeholders).
 5. Week 6: browser validator, packages and CI done locally; waiting on the owner for the PyPI
    token (upload 0.0.1) and the GitHub repository (push, enable Pages, replace the placeholder
    links in README/pyproject/docs/de/ANLEITUNG.md and web/index.html).
