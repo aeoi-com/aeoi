@@ -85,6 +85,7 @@ FOOTER = f"""<footer class="site-footer">
         <ul>
           <li><a href="impressum.html" data-i18n="foot_imprint">Impressum</a></li>
           <li><a href="datenschutz.html" data-i18n="foot_privacy">Datenschutz</a></li>
+          <li><a href="agb.html" data-i18n="foot_terms">AGB</a></li>
         </ul>
       </div>
     </div>
@@ -121,6 +122,7 @@ def page(name: str, title: str, body: str, *, desc: str) -> str:
 </main>
 {FOOTER}
 <script src="site-i18n.js"></script>
+<script src="site-i18n-agb.js"></script>
 <script src="site.js"></script>
 </body>
 </html>
@@ -379,6 +381,7 @@ PRICING = f"""
         <ul>{plan_li(["pr_lib_1", "pr_lib_2", "pr_lib_3", "pr_lib_4"], ["Python-Bibliothek in Ihrem Produkt einsetzen", "Technischer Support bei der Integration", "Frühzeitige Information zu Schema- und Regeländerungen", "Nennung als Partner, wenn gewünscht"])}</ul>
         <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Kontakt aufnehmen</a></div>
     </div>
+    <p class="small muted" style="margin-top:14px"><span data-i18n="pr_terms_note">Für Abonnemente gelten unsere Allgemeinen Geschäftsbedingungen.</span> <a href="agb.html" data-i18n="foot_terms">AGB</a></p>
     <div class="pilot reveal"><h3 data-i18n="pr_pilot_t">Pilotinstitute</h3><p data-i18n="pr_pilot_p">Ein bis drei Institute, die im November 2026 und im Januar 2027 Testmeldungen über das Portal senden, zahlen während des Pilotversuchs nichts und erhalten den vollen Pro-Support.</p></div>
     <h2 class="h2" style="margin-top:40px" data-i18n="pr_faq_t">Häufige Fragen</h2>
     <div class="faq">
@@ -467,6 +470,19 @@ PRIVACY = """
 </section>
 """
 
+sections = "".join(
+    f'<h2 data-i18n="agb_{i}_t"></h2><p data-i18n="agb_{i}"></p>' for i in range(1, 13)
+)
+TERMS = f"""
+<section class="section legal">
+  <div class="wrap">
+    <h1 class="h2" data-i18n="agb_h1">Allgemeine Geschäftsbedingungen (AGB)</h1>
+    <p class="lead" data-i18n="agb_stand">Stand: September 2026. Massgebend ist die deutsche Fassung.</p>
+    {sections}
+  </div>
+</section>
+"""
+
 PAGES = {
     "index.html": (
         "home",
@@ -498,6 +514,12 @@ PAGES = {
         "meldbar - Datenschutz",
         PRIVACY,
         "Datenschutzerklärung von meldbar.ch: keine Server-Verarbeitung, keine Cookies, keine Analytics.",
+    ),
+    "agb.html": (
+        "terms",
+        "meldbar - Allgemeine Geschäftsbedingungen",
+        TERMS,
+        "Allgemeine Geschäftsbedingungen von meldbar: kostenlose Leistungen, Abonnement Pro, Bibliothekslizenz, Haftung, Laufzeit.",
     ),
 }
 

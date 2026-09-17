@@ -11,8 +11,8 @@ mandatory at the Swiss ESTV from 16.01.2027; 2.0 accepted until 14.12.2026), lat
 Validates against the XSD, the OECD business rules and the portal rules, packages/encrypts for
 upload, keeps a local registry of what was sent, builds corrections, parses the returned status.
 
-Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are priced per named user
-(TRSuite: 1'169 USD for 1-3 users, +40 %/year maintenance; others on request). Swiss market:
+Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are priced per named
+user or on request (competitor details are kept out of this public file). Swiss market:
 ~9'000 reporting FIs registered at the ESTV, mostly vehicles run by fiduciaries.
 
 ## Decisions taken
@@ -231,6 +231,14 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    invented credentials, customers or numbers; contact address kontakt@meldbar.ch must exist;
    the imprint names "meldbar" without a legal-entity form. Browser test: 43 checks.
    Dark mode removed on the owner's request (light only; no theme toggle, no `aeoi-theme` key).
+   AGB (`agb.html`, `web/site-i18n-agb.js`, de binding + fr/it courtesy): free part under Apache
+   "as is", Pro contents defined (support within 2 working days, 1 in May-June; rule updates
+   within 30 days of publication; one review of the first message = tool check + explanation;
+   1-hour onboarding), no advice, customer responsible for content/deadlines/upload/registry,
+   prices CHF per year in advance, 12-month term with auto-renewal, liability excluded for slight
+   negligence and capped at one year's fee (Art. 100 OR reserved), Swiss law, Zurich. The
+   provider is still "meldbar, Salvatorstrasse 8" - replace with the legal entity once it exists;
+   have a Swiss lawyer read the AGB before the first paid contract.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

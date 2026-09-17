@@ -61,7 +61,7 @@ const I18N = {
     guidance: "Technische Wegleitung AIA der ESTV, September 2026",
     english_note: "Prüfmeldungen auf Deutsch, mit dem Fehlercode der ESTV; Feldpfade wie im Schema",
     report_name: "aeoi-pruefbericht",
-    nav_home: "Startseite", nav_features: "Funktionen", nav_how: "So funktioniert es", nav_pricing: "Preise", nav_about: "Über uns", nav_contact: "Kontakt", nav_menu: "Menü", foot_imprint: "Impressum", foot_privacy: "Datenschutz", foot_rights: "© 2026 meldbar. Alle Rechte vorbehalten.",
+    nav_home: "Startseite", nav_features: "Funktionen", nav_how: "So funktioniert es", nav_pricing: "Preise", nav_about: "Über uns", nav_contact: "Kontakt", nav_menu: "Menü", foot_imprint: "Impressum", foot_privacy: "Datenschutz", foot_terms: "AGB", foot_rights: "© 2026 meldbar. Alle Rechte vorbehalten.",
     update_text: "Neue Version verfügbar - bitte einmal neu laden.", update_btn: "Neu laden",
   },
   fr: {
@@ -120,7 +120,7 @@ const I18N = {
     guidance: "Directive technique EAR de l'AFC, septembre 2026",
     english_note: "Messages de vérification en anglais (allemand disponible), avec le code d'erreur de l'AFC",
     report_name: "aeoi-rapport",
-    nav_home: "Accueil", nav_features: "Fonctions", nav_how: "Comment ça marche", nav_pricing: "Tarifs", nav_about: "À propos", nav_contact: "Contact", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protection des données", foot_rights: "© 2026 meldbar. Tous droits réservés.",
+    nav_home: "Accueil", nav_features: "Fonctions", nav_how: "Comment ça marche", nav_pricing: "Tarifs", nav_about: "À propos", nav_contact: "Contact", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protection des données", foot_terms: "CG", foot_rights: "© 2026 meldbar. Tous droits réservés.",
     update_text: "Nouvelle version disponible - rechargez la page une fois.", update_btn: "Recharger",
   },
   it: {
@@ -179,7 +179,7 @@ const I18N = {
     guidance: "Direttiva tecnica SAI dell'AFC, settembre 2026",
     english_note: "Messaggi di verifica in inglese (disponibili in tedesco), con il codice di errore dell'AFC",
     report_name: "aeoi-rapporto",
-    nav_home: "Pagina iniziale", nav_features: "Funzioni", nav_how: "Come funziona", nav_pricing: "Prezzi", nav_about: "Chi siamo", nav_contact: "Contatto", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protezione dei dati", foot_rights: "© 2026 meldbar. Tutti i diritti riservati.",
+    nav_home: "Pagina iniziale", nav_features: "Funzioni", nav_how: "Come funziona", nav_pricing: "Prezzi", nav_about: "Chi siamo", nav_contact: "Contatto", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protezione dei dati", foot_terms: "CG", foot_rights: "© 2026 meldbar. Tutti i diritti riservati.",
     update_text: "Nuova versione disponibile - ricaricare la pagina una volta.", update_btn: "Ricaricare",
   },
 };

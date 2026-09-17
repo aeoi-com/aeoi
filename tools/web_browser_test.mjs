@@ -238,7 +238,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check("pricing page: three plans, FAQ", (await site.locator(".plan-card").count()) === 3 && (await site.locator(".faq details").count()) === 4);
   await site.goto(`http://127.0.0.1:${port}/kontakt.html`);
   check("contact page: form without a server (mailto)", (await site.locator("#contact-form").getAttribute("data-to")) === "kontakt@meldbar.ch");
-  for (const p of ["ueber-uns.html", "impressum.html", "datenschutz.html"]) {
+  for (const p of ["ueber-uns.html", "impressum.html", "datenschutz.html", "agb.html"]) {
     const r = await site.goto(`http://127.0.0.1:${port}/${p}`);
     check(`${p} answers 200 with the footer address`, r.status() === 200 && (await site.locator(".foot-bottom").textContent()).includes("Salvatorstrasse 8, 8050 Zürich"));
   }
