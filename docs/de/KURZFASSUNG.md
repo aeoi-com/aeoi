@@ -70,4 +70,4 @@ Aufwand: rund eine Stunde pro Testmeldung. Testmeldungen werden vom Portal valid
 weitergeleitet und wöchentlich gelöscht (Ziffer 5.3.5). Die offenen Fragen an die ESTV-Praxis,
 die der Pilot beantwortet, stehen in `docs/OPEN-QUESTIONS.md`.
 
-Kontakt: <Name, E-Mail> - Quellcode und Anleitung: https://github.com/aeoi-com/aeoi - Prüfung im Browser: https://aeoi-com.github.io/aeoi/
+Kontakt: <Name, E-Mail> - Quellcode und Anleitung: https://github.com/aeoi-com/aeoi - Prüfung im Browser: https://meldbar.ch/

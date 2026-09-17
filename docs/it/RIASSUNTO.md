@@ -75,4 +75,4 @@ portale, non inoltrate, e «sono cancellate una volta alla settimana, durante la
 domenica» (numero 5.3.5). Le domande aperte sulla prassi dell'AFC, a cui il pilota risponde,
 sono in `docs/OPEN-QUESTIONS.md`.
 
-Contatto: <nome, e-mail> - Codice sorgente e guida: https://github.com/aeoi-com/aeoi - Verifica nel browser: https://aeoi-com.github.io/aeoi/
+Contatto: <nome, e-mail> - Codice sorgente e guida: https://github.com/aeoi-com/aeoi - Verifica nel browser: https://meldbar.ch/

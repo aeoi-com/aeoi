@@ -81,7 +81,7 @@ workbook, back it up, never send it.
 
 ## Browser validator
 
-Online at https://aeoi-com.github.io/aeoi/ once GitHub Pages is enabled.
+Online at https://meldbar.ch/ (GitHub Pages, custom domain; the old address aeoi-com.github.io/aeoi redirects).
 
 `web/index.html` is a static page that runs the validator in the browser with Pyodide: drop a
 CRS XML file or a filled workbook and get the same checks as `aeoi crs validate` / `aeoi crs check`,

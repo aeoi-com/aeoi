@@ -77,4 +77,4 @@ portail, non transmises, et « sont effacées chaque semaine pendant la nuit du 
 dimanche » (chiffre 5.3.5). Les questions ouvertes sur la pratique de l'AFC, auxquelles le pilote
 répond, sont dans `docs/OPEN-QUESTIONS.md`.
 
-Contact : <nom, e-mail> - Code source et guide : https://github.com/aeoi-com/aeoi - Vérification dans le navigateur : https://aeoi-com.github.io/aeoi/
+Contact : <nom, e-mail> - Code source et guide : https://github.com/aeoi-com/aeoi - Vérification dans le navigateur : https://meldbar.ch/

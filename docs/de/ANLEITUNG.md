@@ -11,7 +11,7 @@ meldendes Finanzinstitut (für Testmeldungen und den öffentlichen Schlüssel de
 ## 0. Ohne Installation: die Webseite
 
 Der ganze Ablauf dieser Anleitung geht auch ohne Python, auf der Webseite
-<https://aeoi-com.github.io/aeoi/> (Deutsch, Französisch, Italienisch): Vorlage herunterladen,
+<https://meldbar.ch/> (Deutsch, Französisch, Italienisch): Vorlage herunterladen,
 ausgefüllte Vorlage prüfen, Register anlegen (die Datei `institut.sqlite` liegt bei Ihnen, ein
 Workbook = ein Register), öffentlichen Schlüssel der ESTV einmal wählen, Meldung erstellen und
 verschlüsseln, Paket im Portal hochladen, Ergebnis erfassen. Die Seite kontaktiert keinen

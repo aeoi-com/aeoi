@@ -1,6 +1,6 @@
 {
-  "name": "aeoi - CRS-Meldungen prüfen und erstellen",
-  "short_name": "aeoi",
+  "name": "meldbar - CRS-Meldungen prüfen und erstellen",
+  "short_name": "meldbar",
   "description": "CRS-Dateien prüfen, erstellen und verschlüsseln - im Browser, ohne Server.",
   "start_url": "./",
   "scope": "./",
