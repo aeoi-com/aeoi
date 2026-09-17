@@ -157,12 +157,9 @@ button { font: inherit; color: inherit; }
 }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
 .brand .mark {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  display: grid; place-items: center; color: #fff;
-  box-shadow: 0 6px 16px -6px var(--accent);
+  width: 34px; height: 34px; display: grid; place-items: center;
 }
-.brand .mark svg { width: 20px; height: 20px; }
+.brand .mark svg { width: 34px; height: 34px; }
 .brand .name { font-size: 1.15rem; }
 .brand .tag { font-weight: 500; color: var(--muted); font-size: 0.9rem; margin-left: 6px; }
 .controls { display: flex; align-items: center; gap: 8px; }
