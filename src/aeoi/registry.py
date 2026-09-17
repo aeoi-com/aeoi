@@ -62,6 +62,10 @@ CREATE TABLE IF NOT EXISTS records (
 );
 CREATE INDEX IF NOT EXISTS records_key ON records(account_key);
 CREATE INDEX IF NOT EXISTS records_msg ON records(message_ref_id);
+CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT
+);
 CREATE TABLE IF NOT EXISTS findings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     message_ref_id TEXT NOT NULL,
@@ -167,6 +171,20 @@ class Registry:
 
     def __exit__(self, *exc) -> None:
         self.close()
+
+    # --- settings (e.g. the ESTV public key the page remembers) ---------------------------
+
+    def get_setting(self, key: str) -> str | None:
+        row = self.conn.execute("SELECT value FROM settings WHERE key = ?", (key,)).fetchone()
+        return row["value"] if row else None
+
+    def set_setting(self, key: str, value: str) -> None:
+        self.conn.execute(
+            "INSERT INTO settings(key, value) VALUES (?, ?) "
+            "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+            (key, value),
+        )
+        self.conn.commit()
 
     # --- queries ---------------------------------------------------------------------------
 
