@@ -96,7 +96,20 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   German pages for the pilot: `docs/de/ANLEITUNG.md` (step by step) and
   `docs/de/WAS-AENDERT-SICH-MIT-3.0.md` (dates, new mandatory elements, transitional values,
   online-form limits, header question), all statements cited from the Wegleitung / XSD.
-- 184 tests: `.venv/Scripts/python -m pytest`.
+- Week 5 review fixes: 80001 against the MessageRefId year, 98006 per the ESTV formula, one
+  50005 per character, no traceback for non-schema files; guide: both key locations, install from
+  the repository, weekly deletion of test messages.
+- Week 6 (in progress): browser validator `web/index.html` (Pyodide 0.27.7 from jsdelivr,
+  micropip installs xmlschema, xsdata==24.12 - 26.x needs typing-extensions>=4.12 while the
+  Pyodide pydantic pins 4.11 -, openpyxl, and the aeoi wheel next to the page; file never leaves
+  the browser, no analytics, no server side); `tools/build_web.py` copies the wheel;
+  `tools/web_smoke.mjs` runs the same Python headlessly in Node (validate 4 s, workbook 1 s);
+  `tools/web_browser_test.mjs` drives the real page with Playwright. Packaging: `python -m
+  build` gives a 188 KB wheel with XSDs and JSON data, sdist trimmed of docs/sources; twine check
+  passes; the wheel installs and runs in a clean venv. GitHub readiness: `.github/workflows/ci.yml`
+  (tests on Linux/Windows, 3.11-3.13, ruff, build + twine + clean install, web smoke, DCO check on
+  pull requests), `pages.yml` (publishes web/ to GitHub Pages), CHANGELOG.md, CONTRIBUTING.md (DCO).
+- 187 tests: `.venv/Scripts/python -m pytest`.
 
 ## Verified facts to keep
 
@@ -143,8 +156,9 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    outcome format (question 4) decides whether `aeoi estv status` can be fed automatically.
 4. Week 5: validate + German pages done; open: README/CLI polish, packaging for PyPI (needs
    the token), a German summary for associations.
-5. Week 6: PyPI (`aeoi`, name free as of 2026-09-16), GitHub, Pyodide browser validator (lxml +
-   rule engine only, no analytics, no server logs).
+5. Week 6: browser validator, packages and CI done locally; waiting on the owner for the PyPI
+   token (upload 0.0.1) and the GitHub repository (push, enable Pages, replace the placeholder
+   links in README/pyproject/docs/de/ANLEITUNG.md and web/index.html).
 
 ## Waiting on the owner
 
