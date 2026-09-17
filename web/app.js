@@ -10,22 +10,28 @@ const status = document.getElementById("status");
 const out = document.getElementById("out");
 let py = null;
 
+// texts come from i18n.js (t, LANG); the key is kept in data-i18n so a language switch re-renders
+function setStatus(key, extra) {
+  status.dataset.i18n = key;
+  status.textContent = t(key) + (extra || "");
+}
+
 async function boot() {
   try {
     py = await loadPyodide();
-    status.textContent = "Bibliotheken werden geladen …";
+    setStatus("libs");
     await py.loadPackage(PYODIDE_PACKAGES);
     const micropip = py.pyimport("micropip");
     await micropip.install(PYPI_PACKAGES);
     await micropip.install(new URL(WHEEL, location.href).href);
     document.getElementById("ver").textContent = py.runPython("import aeoi; aeoi.__version__");
-    status.textContent = "Bereit. Ab jetzt findet keine Netzanfrage mehr statt.";
+    setStatus("ready");
     status.className = "ok";
     document.getElementById("xml").disabled = false;
     document.getElementById("xlsx").disabled = false;
     console.info("aeoi:ready"); // signal for the browser test (no page evaluation under the CSP)
   } catch (e) {
-    status.textContent = "Die Laufzeit konnte nicht geladen werden: " + e;
+    setStatus("boot_error", String(e));
     status.className = "err";
   }
 }
@@ -67,14 +73,17 @@ for (const [id, fn] of [["xml", validateXml], ["xlsx", checkWorkbook]]) {
   document.getElementById(id).addEventListener("change", async (ev) => {
     const file = ev.target.files[0];
     if (!file) return;
-    out.textContent = "Prüfung läuft …";
+    out.dataset.i18n = "running";
+    out.textContent = t("running");
     out.className = "";
     try {
       const text = await fn(file);
+      delete out.dataset.i18n; // the report is English and must survive a language switch
       out.textContent = text;
       out.className = text.startsWith("OK") ? "ok" : "err";
     } catch (e) {
-      out.textContent = "Fehler bei der Prüfung: " + e;
+      delete out.dataset.i18n;
+      out.textContent = t("check_error") + e;
       out.className = "err";
     }
     ev.target.value = "";

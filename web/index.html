@@ -18,47 +18,52 @@
   .ok { color: var(--ok); font-weight: 600; } .err { color: var(--err); font-weight: 600; }
   .muted { color: var(--muted); font-size: 0.9rem; }
   #status { margin: 12px 0; }
+  .lang { margin-top: 16px; text-align: right; }
 </style>
 </head>
 <body>
-<h1>aeoi - CRS-Datei prüfen, ohne etwas zu installieren</h1>
-<p>Prüft eine CRS-XML-Datei (Schema 2.0 oder 3.0) oder eine ausgefüllte aeoi-Excel-Vorlage nach dem
+<label class="lang muted">Sprache / Langue / Lingua
+  <select id="lang"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
+</label>
+<h1 data-i18n="h1">aeoi - CRS-Datei prüfen, ohne etwas zu installieren</h1>
+<p data-i18n="intro">Prüft eine CRS-XML-Datei (Schema 2.0 oder 3.0) oder eine ausgefüllte aeoi-Excel-Vorlage nach dem
 OECD-Schema und nach den Regeln der Technischen Wegleitung AIA der ESTV (59 von 65; die übrigen -
 Transport, Entschlüsselung, Virenscan, Registrierung des Instituts - prüft nur das Portal).
 Zeichensatz, Partnerstaaten des Meldejahrs, IBAN/ISIN-Prüfsummen und die Querbezüge der
 3.0-Elemente sind dabei.</p>
-<p class="muted"><strong>Datenschutz:</strong> Ihre Datei verlässt den Browser nicht; die Prüfung läuft in
+<p class="muted" data-i18n="privacy_html"><strong>Datenschutz:</strong> Ihre Datei verlässt den Browser nicht; die Prüfung läuft in
 Ihrem Browser. Diese Seite ist statisch, ohne Analytics und ohne eigene Serverkomponente. Beim Laden
 werden nur <code>cdn.jsdelivr.net</code> (Pyodide), <code>pypi.org</code> und
 <code>files.pythonhosted.org</code> (Bibliotheken) angefragt; der Host der Seite sieht den
 Seitenaufruf wie jede Website. Nach der Dateiauswahl findet keine Netzanfrage mehr statt - eine
 Content-Security-Policy der Seite lässt den Browser keine andere Adresse kontaktieren.</p>
 
-<div id="status" class="muted">Laufzeit wird geladen … (einmalig etwa 20-40 MB, danach aus dem Browser-Cache)</div>
+<div id="status" class="muted" data-i18n="loading">Laufzeit wird geladen … (einmalig etwa 20-40 MB, danach aus dem Browser-Cache)</div>
 
 <fieldset>
-  <legend>Optionen</legend>
-  <label>Schema-Version für Excel-Vorlagen:
-    <select id="version"><option value="3.0">3.0 (ab 16.01.2027)</option><option value="2.0">2.0 (bis 14.12.2026)</option></select>
+  <legend data-i18n="options">Optionen</legend>
+  <label><span data-i18n="version_label">Schema-Version für Excel-Vorlagen:</span>
+    <select id="version"><option value="3.0" data-i18n="v3">3.0 (ab 16.01.2027)</option><option value="2.0" data-i18n="v2">2.0 (bis 14.12.2026)</option></select>
   </label>
-  <label>XML-Datei ist eine
-    <select id="mode"><option value="auto">… aus dem Dateinamen erkennen (Test… = Testmeldung)</option><option value="test">Testmeldung</option><option value="prod">produktive Meldung</option></select>
+  <label><span data-i18n="mode_label">XML-Datei ist eine</span>
+    <select id="mode"><option value="auto" data-i18n="mode_auto">… aus dem Dateinamen erkennen (Test… = Testmeldung)</option><option value="test" data-i18n="mode_test">Testmeldung</option><option value="prod" data-i18n="mode_prod">produktive Meldung</option></select>
   </label>
 </fieldset>
 
 <fieldset>
-  <legend>Datei wählen</legend>
-  <label>CRS-XML-Datei: <input type="file" id="xml" accept=".xml,.XML,text/xml,application/xml" disabled></label>
-  <label>aeoi-Excel-Vorlage: <input type="file" id="xlsx" accept=".xlsx,.XLSX,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled></label>
+  <legend data-i18n="choose">Datei wählen</legend>
+  <label><span data-i18n="xml_label">CRS-XML-Datei:</span> <input type="file" id="xml" accept=".xml,.XML,text/xml,application/xml" disabled></label>
+  <label><span data-i18n="xlsx_label">aeoi-Excel-Vorlage:</span> <input type="file" id="xlsx" accept=".xlsx,.XLSX,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled></label>
 </fieldset>
 
-<pre id="out">Noch keine Datei geprüft.</pre>
-<p class="muted">Quelle und Regeln: <a id="repo" href="https://github.com/OWNER/aeoi">Repository aeoi</a> (Apache-2.0).
-Version <span id="ver">-</span>. Technische Wegleitung AIA der ESTV, September 2026.</p>
+<pre id="out" data-i18n="none_yet">Noch keine Datei geprüft.</pre>
+<p class="muted"><span data-i18n="source">Quelle und Regeln:</span> <a id="repo" href="https://github.com/OWNER/aeoi" data-i18n="repo">Repository aeoi</a> (Apache-2.0).
+<span data-i18n="version">Version</span> <span id="ver">-</span>. <span data-i18n="guidance">Technische Wegleitung AIA der ESTV, September 2026. Die Prüfmeldungen erscheinen auf Englisch, mit dem Fehlercode der ESTV.</span></p>
 
 <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"
         integrity="sha384-90so5tCKvl0xs9agU29IMKlAVzhfzFX7QO//YxQkRhJG58bBZrFN+2ZTRB026X5X"
         crossorigin="anonymous"></script>
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

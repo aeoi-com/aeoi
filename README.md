@@ -32,7 +32,9 @@ Status: pre-alpha, week 2. What exists today:
 - **Validator for any file** (`aeoi crs validate report.xml`): schema, header and DocSpec rules,
   character set, content rules - for XML produced by this or another tool, 2.0 and 3.0.
 - **German user pages** for reporting FIs and fiduciaries: `docs/de/ANLEITUNG.md`,
-  `docs/de/WAS-AENDERT-SICH-MIT-3.0.md` and the one-page `docs/de/KURZFASSUNG.md` for associations.
+  `docs/de/WAS-AENDERT-SICH-MIT-3.0.md` and the one-page `docs/de/KURZFASSUNG.md` for associations,
+  the latter also in Italian (`docs/it/RIASSUNTO.md`) and French (`docs/fr/RESUME.md`), quoting
+  the official editions of the ESTV guidance in those languages.
 
 Not yet: the pilot's first test upload (needs a registered FI), CARF.
 

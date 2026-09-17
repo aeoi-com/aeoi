@@ -77,6 +77,15 @@ try {
   const wb = await upload("xlsx", join(fixtures, "EXAMPLE.XLSX"));
   check("workbook (.XLSX) -> OK: " + wb.split("\n")[0], wb.startsWith("OK"));
 
+  // language switch: page texts change, the English report and the ready status survive
+  for (const [lang, h1, ready] of [["it", "aeoi - Verificare", "Pronto."], ["fr", "aeoi - Vérifier", "Prêt."], ["de", "aeoi - CRS-Datei", "Bereit."]]) {
+    await page.locator("#lang").selectOption(lang);
+    const heading = await page.locator("h1").textContent();
+    const st = await page.locator("#status").textContent();
+    const rep = await page.locator("#out").textContent();
+    check(`language ${lang}: heading, status and kept report`, heading.startsWith(h1) && st.startsWith(ready) && rep === wb);
+  }
+
   const after = requests.slice(bootRequests);
   check(`no network request after the file selection (${after.length} after boot)`, after.length === 0);
   check("no non-GET request at all", requests.every((r) => r.method === "GET"));

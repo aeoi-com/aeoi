@@ -29,7 +29,8 @@ die CRS-XML-Datei erstellt und sie **vor** dem Hochladen so prüft, wie es das P
 - Auswertung der Rückmeldung des Portals: jeder Code wird erklärt.
 
 Wer nichts installieren will, prüft eine bestehende XML-Datei oder eine ausgefüllte Vorlage auf
-einer Webseite direkt im Browser. Die Datei verlässt den Browser dabei nicht.
+einer Webseite direkt im Browser, auf Deutsch, Französisch oder Italienisch. Die Datei verlässt
+den Browser dabei nicht.
 
 ## Was aeoi nicht ist
 

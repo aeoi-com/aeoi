@@ -25,7 +25,8 @@ First working version, CRS for the Swiss ESTV portal.
 - Outcome parser for OECD CRS Status Message 2.0 and pasted portal text.
 - `aeoi crs validate FILE.xml` for files from any tool (2.0 and 3.0).
 - Browser validator (`web/`, Pyodide, no server side, no analytics; Content-Security-Policy
-  and SRI on the page, verified in a real browser: no request after the file selection).
+  and SRI on the page, verified in a real browser: no request after the file selection); page
+  texts in German, French and Italian (`web/i18n.js`), check results in English.
 - German pages for reporting FIs: `docs/de/ANLEITUNG.md`, `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 - CLI: `aeoi crs template | check | build | correct | validate | registry`,
   `aeoi estv package | inspect | status`.

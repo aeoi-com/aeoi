@@ -1,6 +1,6 @@
 # Pinned sources
 
-Manifest: `docs/sources/manifest.json` (regenerated 2026-09-16). File names encode the version the document declares; the hash pins the exact bytes. `python tools/pin_sources.py --fetch` downloads what is missing and checks every hash.
+Manifest: `docs/sources/manifest.json` (regenerated 2026-09-17). File names encode the version the document declares; the hash pins the exact bytes. `python tools/pin_sources.py --fetch` downloads what is missing and checks every hash.
 
 | File | Bytes | SHA-256 | Committed | URL |
 |---|---|---|---|---|
@@ -17,6 +17,8 @@ Manifest: `docs/sources/manifest.json` (regenerated 2026-09-16). File names enco
 | `docs/sources/oecd/generic-status-message-xml-schema-v2.0.zip` | 8953 | `b9f81ad8fa6847b8039f472c53f55afff2d929a83e618fb3271571452f443b23` | yes | https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/generic-status-message-xml-schema-v2.0.zip |
 | `docs/sources/estv/estv-technische-wegleitung-aia-2026-09.pdf` | 1664518 | `ab5eb730f6477d84d9262e8c2d50ea7cd1a2d5a64319a3553899783dfd8ad34d` | no | https://www.estv.admin.ch/dam/de/sd-web/nawtcd6uyf89/int-aia-technische-wegleitung-de.pdf |
 | `docs/sources/estv/estv-wegleitung-aia-2026-01-15.pdf` | 4063364 | `d13f3c1de784bafcd6abe1a0ed94e9566c9e1bef6538ed1216cca1cfd43cb502` | no | https://www.estv.admin.ch/dam/de/sd-web/hEtJr9vx6Ej-/20260115_Wegleitung_D_Publikation_Clean.pdf |
+| `docs/sources/estv/estv-technische-wegleitung-aia-2026-09-fr.pdf` | 1585787 | `f3265074d702a6aef1c6c19d3bc740dc54acb516feea534e8b56a364affae4dd` | no | https://www.estv.admin.ch/dam/fr/sd-web/nawtcd6uyf89/int-aia-technische-wegleitung-fr.pdf |
+| `docs/sources/estv/estv-technische-wegleitung-aia-2026-09-it.pdf` | 1726177 | `b4f546e1d4bb0025c54ac529cb69326b170b559c7c52616099f9b34f95d5f9c6` | no | https://www.estv.admin.ch/dam/it/sd-web/nawtcd6uyf89/int-aia-technische-wegleitung-it.pdf |
 
 ## What is what
 
@@ -53,6 +55,8 @@ form the OECD requests:
 - OECD (2020), Generic Status Message XML Schema (Version 2.0), https://www.oecd.org/content/dam/oecd/en/topics/policy-issues/tax-transparency-and-international-co-operation/generic-status-message-xml-schema-v2.0.zip
 - ESTV (2026), Technische Wegleitung - Standard fuer den automatischen Informationsaustausch ueber Finanzkonten, Bern, September 2026
 - ESTV (2026), Wegleitung - Standard fuer den automatischen Informationsaustausch ueber Finanzkonten, Bern, 15.01.2026
+- AFC (2026), Directive technique - Norme d'échange automatique de renseignements relatifs aux comptes financiers, Berne, septembre 2026 (édition française de la Technische Wegleitung)
+- AFC (2026), Direttiva tecnica - Standard per lo scambio automatico di informazioni relative a conti finanziari, Berna, settembre 2026 (edizione italiana della Technische Wegleitung)
 
 Swiss federal documents: official acts, decisions and reports of authorities are not protected by
 copyright (URG Art. 5); a Wegleitung is probably covered but not certainly, hence not redistributed.

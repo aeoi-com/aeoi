@@ -10,7 +10,10 @@ Each item names the source that raised it. Answers go back into the rule engine 
    Wegleitung example. Working assumption: the Wegleitung example is a leftover and the portal
    validates against the OECD 3.0 schema (`crs:v3`). The generator emits `crs:v3` only; the
    validator accepts both and reports the mismatch. To be settled by the first 3.0 test upload in
-   the week of 16.01.2027.
+   the week of 16.01.2027. Supporting the leftover reading: the French edition of the same
+   Wegleitung shows `version="3.0"` with `crs:v2` like the German one, while the Italian
+   edition (same date) still shows `version="2.0"` in that very example (5.3.1) - the header
+   snippet was evidently edited by hand per language, not generated from a validated file.
 
 2. **Gap between 14.12.2026 and 16.01.2027.** Wegleitung 5.3.1: "Bis zum 14.12.2026 wird nur die
    Version 2.0 unterstützt. Ab dem 16.1.2027 wird nur noch die Version 3.0 unterstützt." What the
