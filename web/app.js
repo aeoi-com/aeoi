@@ -135,6 +135,14 @@ def sample_xlsx():
     console.error(e);
   }
 }
+(function siteNav() {
+  const burger = document.querySelector(".burger");
+  const menu = document.querySelector(".mobile-nav");
+  if (!burger || !menu) return;
+  burger.addEventListener("click", () => burger.setAttribute("aria-expanded", String(menu.classList.toggle("open"))));
+})();
+if (location.hash.includes("demo")) $("samples").classList.remove("hidden"); // built-in samples: demos and tests only
+
 function unlock() {
   const drop = $("drop");
   drop.classList.remove("locked");

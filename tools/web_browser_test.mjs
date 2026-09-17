@@ -75,7 +75,7 @@ try {
   const ready = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
   const swReady = page.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:sw ready", timeout: 240000 });
   // #nofsa: the registry uses the download/upload fallback (native file pickers cannot be automated)
-  await page.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
+  await page.goto(`http://127.0.0.1:${port}/app.html#nofsa,demo`);
   await ready;
   console.log("runtime ready; version", await page.locator("#ver").textContent());
   const bootRequests = requests.length;
@@ -206,13 +206,47 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check("no CSP violation reported by the browser", cspViolations.length === 0);
   if (cspViolations.length) console.log(cspViolations.slice(0, 3).join("\n"));
 
+  // ---- the marketing pages: home, pricing, contact; language switch; phone navigation ----
+  const site = await context.newPage();
+  const siteHosts = new Set();
+  const siteErrors = [];
+  site.on("request", (r) => { const u = new URL(r.url()); if (!["blob:", "data:"].includes(u.protocol)) siteHosts.add(u.host); });
+  site.on("pageerror", (e) => siteErrors.push(e.message));
+  site.on("console", (m) => { if (/Content Security Policy|Refused to/.test(m.text())) siteErrors.push(m.text()); });
+  await site.goto(`http://127.0.0.1:${port}/index.html`);
+  await site.waitForTimeout(600);
+  check("home: hero headline in German", (await site.locator(".hero-h1").textContent()).trim().startsWith("CRS-Meldungen"));
+  const days = await site.locator("[data-until]").first().textContent();
+  check("home: live countdown to 16.01.2027 shows a number (" + days + ")", /^\d+$/.test(days.trim()));
+  check("home: five steps, six features, three plans", (await site.locator(".step-card").count()) === 5 && (await site.locator(".feature").count()) === 6 && (await site.locator(".plan-card").count()) === 3);
+  await site.locator("#lang").selectOption("it");
+  check("home: Italian after the language switch", (await site.locator(".hero-h1").textContent()).trim().startsWith("Comunicazioni") && (await site.locator(".site-nav a").first().textContent()) === "Funzioni");
+  await site.locator("#lang").selectOption("de");
+  await site.goto(`http://127.0.0.1:${port}/preise.html`);
+  check("pricing page: three plans, FAQ", (await site.locator(".plan-card").count()) === 3 && (await site.locator(".faq details").count()) === 4);
+  await site.goto(`http://127.0.0.1:${port}/kontakt.html`);
+  check("contact page: form without a server (mailto)", (await site.locator("#contact-form").getAttribute("data-to")) === "kontakt@meldbar.ch");
+  for (const p of ["ueber-uns.html", "impressum.html", "datenschutz.html"]) {
+    const r = await site.goto(`http://127.0.0.1:${port}/${p}`);
+    check(`${p} answers 200 with the footer address`, r.status() === 200 && (await site.locator(".foot-bottom").textContent()).includes("Salvatorstrasse 8, 8050 Zürich"));
+  }
+  check("marketing pages: own origin only, no page error", siteHosts.size === 1 && siteHosts.has(`127.0.0.1:${port}`) && siteErrors.length === 0);
+  if (siteErrors.length) console.log(siteErrors.slice(0, 3).join("\n"));
+  await site.close();
+  const phoneCtx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const phone = await phoneCtx.newPage();
+  await phone.goto(`http://127.0.0.1:${port}/index.html`);
+  await phone.locator(".burger").click();
+  check("phone: burger opens the navigation", await phone.locator(".mobile-nav.open").isVisible() && (await phone.locator(".mobile-nav a").count()) >= 5);
+  await phoneCtx.close();
+
   // offline: the service worker precached the app during the first visit
   await swReady;
   await page.close();
   await context.setOffline(true);
   const page2 = await context.newPage();
   const ready2 = page2.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
-  await page2.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
+  await page2.goto(`http://127.0.0.1:${port}/app.html#nofsa,demo`);
   await ready2;
   const done2 = page2.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:result"), timeout: 120000 });
   await page2.locator("#sample-ok").click();
@@ -228,7 +262,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   try {
     const page3 = await context.newPage();
     const newVersion = page3.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:sw new-version", timeout: 120000 });
-    await page3.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
+    await page3.goto(`http://127.0.0.1:${port}/app.html#nofsa,demo`);
     await newVersion;
     check("update banner after a new service worker took over", await page3.locator("#update").isVisible());
     await page3.close();

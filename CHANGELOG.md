@@ -34,6 +34,10 @@ First working version, CRS for the Swiss ESTV portal.
   (`aeoi.crs.workflow`; registry `settings` table); runtime, packages and wheels vendored on
   the page's own origin, service worker for offline use, installable (web app manifest), CSP
   `'self'` only.
+- Website meldbar.ch: home page with scroll effects (live countdown to 16.01.2027 and 30.06.2027,
+  feature cards, scroll-driven horizontal steps, privacy diagram, pricing teaser), pages for
+  pricing, about, contact (mailto, no server), imprint and privacy policy, in de/fr/it; the app
+  moved to `app.html`, built-in samples only with `#demo`; palette aligned to the logo.
 - Message catalogue (`aeoi.messages`, `messages.json`): every check, input, registry and workflow
   message is a `Msg` - an English string that renders in German on request; reports take
   `lang`, the CLI `--lang de`, the page shows German messages.

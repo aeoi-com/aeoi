@@ -2,11 +2,11 @@
   "name": "meldbar - CRS-Meldungen prüfen und erstellen",
   "short_name": "meldbar",
   "description": "CRS-Dateien prüfen, erstellen und verschlüsseln - im Browser, ohne Server.",
-  "start_url": "./",
+  "start_url": "./app.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f6f8",
-  "theme_color": "#0b6e6b",
+  "theme_color": "#1c4f9e",
   "lang": "de",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },

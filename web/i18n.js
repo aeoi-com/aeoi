@@ -6,7 +6,7 @@
 
 const I18N = {
   de: {
-    title: "aeoi - CRS-Datei prüfen",
+    title: "meldbar - CRS-Datei prüfen",
     tagline: "CRS-Prüfung im Browser",
     h1: "CRS-Datei prüfen, ohne etwas zu installieren",
     lead: "Schema 2.0 oder 3.0, die Regeln der Technischen Wegleitung AIA der ESTV, Zeichensatz, Partnerstaaten, IBAN/ISIN - geprüft in Ihrem Browser. Die Datei verlässt ihn nicht.",
@@ -62,10 +62,11 @@ const I18N = {
     english_note: "Prüfmeldungen auf Deutsch, mit dem Fehlercode der ESTV; Feldpfade wie im Schema",
     theme: "Farbschema: {mode}", theme_auto: "automatisch", theme_light: "hell", theme_dark: "dunkel",
     report_name: "aeoi-pruefbericht",
+    nav_home: "Startseite", nav_features: "Funktionen", nav_how: "So funktioniert es", nav_pricing: "Preise", nav_about: "Über uns", nav_contact: "Kontakt", nav_menu: "Menü", foot_imprint: "Impressum", foot_privacy: "Datenschutz", foot_rights: "© 2026 meldbar. Alle Rechte vorbehalten.",
     update_text: "Neue Version verfügbar - bitte einmal neu laden.", update_btn: "Neu laden",
   },
   fr: {
-    title: "aeoi - Vérifier un fichier CRS",
+    title: "meldbar - Vérifier un fichier CRS",
     tagline: "Vérification CRS dans le navigateur",
     h1: "Vérifier un fichier CRS, sans rien installer",
     lead: "Schéma 2.0 ou 3.0, les règles de la Directive technique EAR de l'AFC, jeu de caractères, États partenaires, IBAN/ISIN - vérifiés dans votre navigateur. Le fichier ne le quitte pas.",
@@ -121,10 +122,11 @@ const I18N = {
     english_note: "Messages de vérification en anglais (allemand disponible), avec le code d'erreur de l'AFC",
     theme: "Thème : {mode}", theme_auto: "automatique", theme_light: "clair", theme_dark: "sombre",
     report_name: "aeoi-rapport",
+    nav_home: "Accueil", nav_features: "Fonctions", nav_how: "Comment ça marche", nav_pricing: "Tarifs", nav_about: "À propos", nav_contact: "Contact", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protection des données", foot_rights: "© 2026 meldbar. Tous droits réservés.",
     update_text: "Nouvelle version disponible - rechargez la page une fois.", update_btn: "Recharger",
   },
   it: {
-    title: "aeoi - Verificare un file CRS",
+    title: "meldbar - Verificare un file CRS",
     tagline: "Verifica CRS nel browser",
     h1: "Verificare un file CRS, senza installare nulla",
     lead: "Schema 2.0 o 3.0, le regole della Direttiva tecnica SAI dell'AFC, set di caratteri, Stati partner, IBAN/ISIN - verificati nel suo browser. Il file non lo lascia.",
@@ -180,6 +182,7 @@ const I18N = {
     english_note: "Messaggi di verifica in inglese (disponibili in tedesco), con il codice di errore dell'AFC",
     theme: "Tema: {mode}", theme_auto: "automatico", theme_light: "chiaro", theme_dark: "scuro",
     report_name: "aeoi-rapporto",
+    nav_home: "Pagina iniziale", nav_features: "Funzioni", nav_how: "Come funziona", nav_pricing: "Prezzi", nav_about: "Chi siamo", nav_contact: "Contatto", nav_menu: "Menu", foot_imprint: "Impressum", foot_privacy: "Protezione dei dati", foot_rights: "© 2026 meldbar. Tutti i diritti riservati.",
     update_text: "Nuova versione disponibile - ricaricare la pagina una volta.", update_btn: "Ricaricare",
   },
 };

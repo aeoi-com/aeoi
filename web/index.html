@@ -3,211 +3,264 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="no-referrer">
 <meta name="color-scheme" content="light dark">
-<title>meldbar - CRS-Datei prüfen</title>
+<meta name="description" content="CRS-Meldungen für das AIA-Portal der ESTV prüfen, erstellen und verschlüsseln - im Browser, ohne Installation, ohne dass Kontodaten den Rechner verlassen.">
+<title>meldbar - CRS-Meldungen an die ESTV, ohne Installation</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0b6e6b">
+<meta name="theme-color" content="#1c4f9e">
 <link rel="icon" href="logo-mark.svg" type="image/svg+xml">
 </head>
-<body>
+<body data-page="home">
 <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
-
-<div class="wrap">
-  <div class="update hidden" id="update" role="status">
-    <span data-i18n="update_text">Neue Version verfügbar - bitte einmal neu laden.</span>
-    <button class="btn primary" id="update-reload" type="button"><span data-i18n="update_btn">Neu laden</span></button>
-  </div>
-  <header class="topbar">
-    <div class="brand">
-      <span class="mark" aria-hidden="true"><svg viewBox="0 0 64 64"><g transform="translate(0.00,0.00) scale(1.0000)"><path d="M30.00,5.00 L59.00,5.00 Q63.00,5.00 60.60,8.20 L53.40,18.80 Q51.00,22.00 47.00,22.00 L18.00,22.00 Q14.00,22.00 16.40,18.80 L23.60,8.20 Q26.00,5.00 30.00,5.00 Z" fill="#1c4f9e"/><path d="M25.00,21.00 L54.00,21.00 Q58.00,21.00 55.60,24.20 L48.40,34.80 Q46.00,38.00 42.00,38.00 L13.00,38.00 Q9.00,38.00 11.40,34.80 L18.60,24.20 Q21.00,21.00 25.00,21.00 Z" fill="#2b86c9"/><path d="M20.00,37.00 L49.00,37.00 Q53.00,37.00 50.60,40.20 L43.40,50.80 Q41.00,54.00 37.00,54.00 L8.00,54.00 Q4.00,54.00 6.40,50.80 L13.60,40.20 Q16.00,37.00 20.00,37.00 Z" fill="#13a89e"/></g></svg></span>
-      <span class="name">meldbar</span>
-      <span class="tag" data-i18n="tagline">CRS-Prüfung im Browser</span>
-    </div>
-    <div class="controls">
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 5h29q4 0 1.6 3.2l-7.2 10.6Q51 22 47 22H18q-4 0-1.6-3.2l7.2-10.6Q26 5 30 5Z" fill="#1c4f9e"/><path d="M25 21h29q4 0 1.6 3.2l-7.2 10.6Q46 38 42 38H13q-4 0-1.6-3.2l7.2-10.6Q21 21 25 21Z" fill="#2b86c9"/><path d="M20 37h29q4 0 1.6 3.2l-7.2 10.6Q41 54 37 54H8q-4 0-1.6-3.2l7.2-10.6Q16 37 20 37Z" fill="#13a89e"/></svg><span>meldbar</span></a>
+    <nav class="site-nav" aria-label="Hauptnavigation"><a href="index.html#funktionen" data-i18n="nav_features">Funktionen</a><a href="index.html#ablauf" data-i18n="nav_how">So funktioniert es</a><a href="preise.html" data-i18n="nav_pricing">Preise</a><a href="ueber-uns.html" data-i18n="nav_about">Über uns</a><a href="kontakt.html" data-i18n="nav_contact">Kontakt</a></nav>
+    <div class="header-actions">
       <label class="sr-only" for="lang">Sprache / Langue / Lingua</label>
-      <select id="lang" class="pill"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
-      <button id="theme" class="icon-btn" type="button" aria-label="Theme">
-        <svg id="theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-        <svg id="theme-moon" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      </button>
+      <select id="lang" class="pill lang"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
+      <button class="icon-btn theme-btn" type="button" aria-label="Theme"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="moon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="btn primary" href="app.html" data-i18n="nav_app">App öffnen</a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav"><span class="sr-only" data-i18n="nav_menu">Menü</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
-  </header>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Navigation"><a href="index.html#funktionen" data-i18n="nav_features">Funktionen</a><a href="index.html#ablauf" data-i18n="nav_how">So funktioniert es</a><a href="preise.html" data-i18n="nav_pricing">Preise</a><a href="ueber-uns.html" data-i18n="nav_about">Über uns</a><a href="kontakt.html" data-i18n="nav_contact">Kontakt</a><a class="btn primary" href="app.html" data-i18n="nav_app">App öffnen</a></nav>
+</header>
+<main>
 
-  <section class="hero">
-    <h1 data-i18n="h1">CRS-Datei prüfen, ohne etwas zu installieren</h1>
-    <p data-i18n="lead">Schema 2.0 oder 3.0, die Regeln der Technischen Wegleitung AIA der ESTV, Zeichensatz, Partnerstaaten, IBAN/ISIN - geprüft in Ihrem Browser. Die Datei verlässt ihn nicht.</p>
-    <div class="badges">
-      <span class="badge"><i class="dot"></i><span data-i18n="badge_rules">59 von 65 ESTV-Regeln</span></span>
-      <span class="badge"><i class="dot"></i><span data-i18n="badge_local">Keine Datei verlässt den Browser</span></span>
-      <span class="badge"><i class="dot"></i><span data-i18n="badge_open">Open Source, Apache-2.0</span></span>
-    </div>
-  </section>
-
-  <section class="card boot" id="boot">
-    <h2 data-i18n="boot_title">Prüfumgebung</h2>
-    <div class="steps" id="steps">
-      <div class="step" data-step="1"><span class="n">1</span><span data-i18n="step1">Laufzeit</span></div>
-      <div class="step" data-step="2"><span class="n">2</span><span data-i18n="step2">Bibliotheken</span></div>
-      <div class="step" data-step="3"><span class="n">3</span><span data-i18n="step3">Prüfregeln</span></div>
-      <div class="step" data-step="4"><span class="n">4</span><span data-i18n="step4">Bereit</span></div>
-    </div>
-    <div class="bar" id="bar"><i></i></div>
-    <div id="status" class="muted" data-i18n="loading">Laufzeit wird geladen … (einmalig etwa 20-40 MB, danach aus dem Browser-Cache)</div>
-  </section>
-
-  <section class="card" id="registry">
-    <h2 data-i18n="reg_title">Register</h2>
-    <p class="small muted" data-i18n="reg_intro">Das Register ist das Gedächtnis des Instituts.</p>
-    <div class="regbar">
-      <div id="reg-status" class="regstatus" data-i18n="reg_none">Kein Register geöffnet.</div>
-      <div class="actions">
-        <button class="btn primary" id="reg-open" type="button" disabled><span data-i18n="reg_open_btn">Register öffnen</span></button>
-        <button class="btn" id="reg-new" type="button" disabled><span data-i18n="reg_new_btn">Neues Register anlegen</span></button>
-        <button class="btn hidden" id="reg-reopen" type="button"></button>
-        <button class="btn hidden" id="reg-download" type="button"><span data-i18n="reg_download_btn">Register speichern</span></button>
-        <input type="file" id="reg-file" class="hidden" accept=".sqlite,.db,application/vnd.sqlite3,application/x-sqlite3">
+<section class="hero-section">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-kicker"><i class="pulse"></i><span data-i18n="hero_kicker">Ab 16. Januar 2027 nur noch CRS-Schema 3.0</span></span>
+      <h1 class="hero-h1" data-i18n="hero_h1">CRS-Meldungen. Geprüft, verschlüsselt, bereit zum Hochladen.</h1>
+      <p class="hero-lead" data-i18n="hero_lead">meldbar macht aus Ihrer Excel-Tabelle die fertige AIA-Meldung für das Portal der ESTV - und prüft sie vorher wie das Portal. Im Browser, ohne Installation. Ihre Kontodaten verlassen Ihren Rechner nicht.</p>
+      <div class="hero-actions">
+        <a class="btn primary lg" href="app.html" data-i18n="hero_cta">Jetzt Datei prüfen</a>
+        <a class="btn lg ghost" href="#ablauf" data-i18n="hero_cta2">So funktioniert es</a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust1">59 von 65 ESTV-Regeln</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust2">Keine Datei verlässt den Browser</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust3">Deutsch · Français · Italiano</span></span>
       </div>
     </div>
-    <p class="small muted" id="reg-note"></p>
-    <div id="reg-list" class="reglist"></div>
-  </section>
+    <div class="illu" aria-hidden="true">
+      <svg viewBox="8 62 516 304">
+        <path class="flow" d="M150 128 C 230 128, 230 208, 300 208"/>
+        <path class="flow" d="M150 300 C 230 300, 230 208, 300 208"/>
+        <path class="flow" d="M410 208 C 440 208, 440 208, 470 208"/>
+        <g class="float1">
+          <rect class="card-f" x="20" y="76" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="102" data-i18n="ill_excel">Excel</text>
+          <rect class="row y" x="36" y="116" width="98" height="8" rx="4"/><rect class="row" x="36" y="132" width="98" height="8" rx="4"/><rect class="row" x="36" y="148" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float2">
+          <rect class="card-f" x="20" y="248" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="274" data-i18n="ill_check">Prüfung</text>
+          <rect class="row g" x="36" y="288" width="98" height="8" rx="4"/><rect class="row g" x="36" y="304" width="98" height="8" rx="4"/><rect class="row g" x="36" y="320" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float3">
+          <rect class="card-f" x="300" y="156" width="110" height="104" rx="12"/>
+          <text class="lbl" x="316" y="182" data-i18n="ill_xml">CRS-XML</text>
+          <text class="sub" x="316" y="200">&lt;crs:CRS_OECD&gt;</text>
+          <rect class="row" x="316" y="212" width="78" height="8" rx="4"/><rect class="row" x="316" y="228" width="60" height="8" rx="4"/>
+        </g>
+        <g class="float1">
+          <rect class="lock" x="470" y="176" width="48" height="64" rx="12"/>
+          <rect x="484" y="204" width="20" height="16" rx="3" fill="#fff"/>
+          <path d="M487 204v-6a7 7 0 0 1 14 0v6" fill="none" stroke="#fff" stroke-width="3"/>
+        </g>
+        <circle cx="150" cy="128" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 128l5 5 9-10"/>
+        <circle cx="150" cy="300" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 300l5 5 9-10"/>
+      </svg>
+    </div>
+  </div>
+</section>
 
-  <section class="card" id="input">
-    <h2 data-i18n="input_title">Datei prüfen</h2>
-    <div class="drop locked" id="drop">
-      <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
-      <strong data-i18n="drop_title">Datei hierher ziehen oder klicken</strong>
-      <div class="hint" data-i18n="drop_hint">CRS-XML (.xml) oder ausgefüllte aeoi-Excel-Vorlage (.xlsx) - Schema 2.0 oder 3.0 wird erkannt</div>
-      <input type="file" id="file" accept=".xml,.XML,.xlsx,.XLSX,text/xml,application/xml,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled>
+<section class="section tight" id="frist">
+  <div class="wrap">
+    <div class="deadline reveal">
+      <span class="kicker" data-i18n="deadline_kicker">Was seit dem 1. Januar gilt</span>
+      <h2 class="h2" data-i18n="deadline_h2">Der revidierte CRS ist in Kraft - und das Portal wechselt das Schema.</h2>
+      <p data-i18n="deadline_p">Seit dem 1. Januar 2026 gilt in der Schweiz der revidierte gemeinsame Meldestandard. Die ESTV nimmt bis zum 14. Dezember 2026 nur das Schema 2.0 an, ab dem 16. Januar 2027 nur noch das Schema 3.0. Die Meldungen für das Jahr 2026 - Frist 30. Juni 2027 - sind die ersten, die im neuen Format erstellt werden müssen.</p>
+      <div class="countdown">
+        <div class="cd"><div class="n" data-until="2027-01-16">-</div><div class="l" data-i18n="cd_switch">Tage bis zum Schemawechsel (16.01.2027)</div></div>
+        <div class="cd"><div class="n" data-until="2027-06-30">-</div><div class="l" data-i18n="cd_deadline">Tage bis zur Frist (30.06.2027)</div></div>
+      </div>
+      <p class="src" data-i18n="deadline_src">Quelle: Technische Wegleitung AIA der ESTV, September 2026, Ziffer 5.3.1; Art. 15 Abs. 1 AIAG.</p>
     </div>
-    <div class="options">
-      <label><span data-i18n="version_label">Schema-Version für Excel-Vorlagen</span>
-        <select id="version" class="pill"><option value="3.0" data-i18n="v3">3.0 (ab 16.01.2027)</option><option value="2.0" data-i18n="v2">2.0 (bis 14.12.2026)</option></select>
-      </label>
-      <label><span data-i18n="mode_label">XML-Datei ist eine</span>
-        <select id="mode" class="pill"><option value="auto" data-i18n="mode_auto">automatisch (Dateiname Test… = Testmeldung)</option><option value="test" data-i18n="mode_test">Testmeldung</option><option value="prod" data-i18n="mode_prod">produktive Meldung</option></select>
-      </label>
-    </div>
-    <div class="samples">
-      <span class="small muted" data-i18n="samples_label">Ohne eigene Datei ausprobieren:</span>
-      <button class="btn" id="sample-ok" type="button" disabled><span data-i18n="sample_ok">Beispiel (gültig)</span></button>
-      <button class="btn" id="sample-bad" type="button" disabled><span data-i18n="sample_bad">Beispiel (mit Fehlern)</span></button>
-      <button class="btn" id="sample-xlsx" type="button" disabled><span data-i18n="sample_xlsx">Beispiel-Vorlage (Excel)</span></button>
-      <button class="btn" id="template-download" type="button" disabled><span data-i18n="template_btn">Leere Vorlage herunterladen</span></button>
-    </div>
-    <div class="busy hidden" id="busy"><div class="spinner"></div><span data-i18n="running">Prüfung läuft …</span></div>
-  </section>
+  </div>
+</section>
 
-  <section class="results hidden" id="results">
-    <div class="card verdict" id="verdict">
-      <div class="sigil" id="sigil"></div>
+<section class="section" id="funktionen">
+  <div class="wrap">
+    <span class="kicker reveal" data-i18n="features_kicker">Funktionen</span>
+    <h2 class="h2 reveal" data-i18n="features_h2">Alles, was zwischen Ihrer Tabelle und dem Portal liegt.</h2>
+    <div class="features">
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3 data-i18n="f1_t">Prüfen wie das Portal</h3>
+        <p data-i18n="f1_p">OECD-Schema 2.0 und 3.0, 59 von 65 Regeln der Technischen Wegleitung, Zeichensatz, Partnerstaaten des Berichtsjahrs, IBAN/ISIN - jeder Befund mit ESTV-Code, Stelle und Abhilfe, auf Deutsch.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M18 15l3 3-3 3"/></svg></div>
+        <h3 data-i18n="f2_t">Excel rein, XML raus</h3>
+        <p data-i18n="f2_p">Eine Vorlage mit vier Blättern, Drop-down-Listen und Hinweisen. Ein Klick erstellt die CRS-XML-Datei mit allen Kennungen.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3 data-i18n="f3_t">Verschlüsselt für die ESTV</h3>
+        <p data-i18n="f3_p">Das Paket entsteht genau nach Ziffer 3.3.1 der Wegleitung - AES-256, öffentlicher Schlüssel der ESTV, richtiger Dateiname für Test und Produktion.</p>
+      </div>
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+        <h3 data-i18n="f4_t">Korrekturen ohne Kopfzerbrechen</h3>
+        <p data-i18n="f4_p">Das Register merkt sich, was gesendet wurde. Im nächsten Jahr dieselbe Tabelle anpassen: geänderte Konten werden Korrekturen, gestrichene Storni, neue eine Neumeldung.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H8l-4 4z"/><path d="M9 10h6"/></svg></div>
+        <h3 data-i18n="f5_t">Ergebnis des Portals verstehen</h3>
+        <p data-i18n="f5_p">Validierungsbestätigung einfügen - jeder Code wird erklärt, das Register weiss, ob die Meldung angenommen wurde.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="f6_t">Ihre Daten bleiben bei Ihnen</h3>
+        <p data-i18n="f6_p">Kein Server, keine Analytics, keine Cookies. Die Prüfung läuft in Ihrem Browser; eine Sicherheitsrichtlinie verbietet jede andere Verbindung. Nach dem ersten Besuch auch offline.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat-b reveal"><div class="n" data-count="59">0</div><div class="l" data-i18n="stat1_l">ESTV-Regeln geprüft, bevor das Portal sie sieht</div></div>
+      <div class="stat-b reveal d1"><div class="n" data-count="0">0</div><div class="l" data-i18n="stat2_l">Server, die Ihre Kontodaten sehen</div></div>
+      <div class="stat-b reveal d2"><div class="n" data-count="3">0</div><div class="l" data-i18n="stat3_l">Sprachen: Deutsch, Französisch, Italienisch</div></div>
+      <div class="stat-b reveal d3"><div class="n" data-count="2">0</div><div class="l" data-i18n="stat4_l">Schemata: 2.0 bis 14.12.2026, 3.0 ab 16.01.2027</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ablauf">
+  <div class="how-wrap">
+    <div class="how-sticky">
+      <div class="wrap">
+        <span class="kicker reveal" data-i18n="how_kicker">So funktioniert es</span>
+        <h2 class="h2 reveal" data-i18n="how_h2">Fünf Schritte. Kein Handbuch nötig.</h2>
+        <p class="how-hint" data-i18n="how_hint">Weiterscrollen - die Schritte laufen nach rechts.</p>
+        <div class="how-track">
+          <div class="step-card"><div class="n">1</div><h3 data-i18n="s1_t">Vorlage herunterladen</h3><p data-i18n="s1_p">Die Excel-Vorlage aus der App: ein Blatt für das Institut, eines für die Konten, eines für beherrschende Personen, eines für Zahlungen.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="58" y="14" width="30" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="26" width="104" height="5" rx="2.5" fill="var(--border)"/><rect x="12" y="36" width="104" height="5" rx="2.5" fill="var(--border)"/><path d="M150 28l30 0M172 18l10 10-10 10" fill="none" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="step-card"><div class="n">2</div><h3 data-i18n="s2_t">Ausfüllen</h3><p data-i18n="s2_p">In Ihrem Excel, wie gewohnt. Gelbe Spalten sind Pflicht, Listen zeigen die erlaubten Codes, jede Spalte erklärt sich per Kommentar.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="60" height="6" rx="3" fill="var(--warn)"/><rect x="80" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="128" y="14" width="40" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="28" width="60" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="80" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="128" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="12" y="39" width="60" height="5" rx="2.5" fill="var(--border)"/><rect x="80" y="39" width="40" height="5" rx="2.5" fill="var(--border)"/></svg></div></div><div class="step-card"><div class="n">3</div><h3 data-i18n="s3_t">Prüfen</h3><p data-i18n="s3_p">Datei in die App ziehen. Sekunden später: grün, oder eine Liste mit Befunden - Konto, Feld, ESTV-Code, was zu tun ist.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--ok-soft)" stroke="var(--ok)"/><circle cx="26" cy="28" r="10" fill="var(--ok)"/><path d="M20 28l4 4 8-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="46" y="20" width="90" height="6" rx="3" fill="var(--ok)"/><rect x="46" y="32" width="60" height="5" rx="2.5" fill="color-mix(in srgb, var(--ok) 50%, transparent)"/></svg></div></div><div class="step-card"><div class="n">4</div><h3 data-i18n="s4_t">Erstellen und verschlüsseln</h3><p data-i18n="s4_p">Register öffnen, Schlüssel der ESTV einmal wählen, «Erstellen». Das Paket ist bereit für das AIA-Portal.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="30" y="8" width="60" height="40" rx="5" fill="var(--surface-2)" stroke="var(--border-strong)"/><text x="60" y="33" text-anchor="middle" font-size="11" font-weight="600" fill="var(--muted)" font-family="Inter,system-ui">XML</text><path d="M96 28h22" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round"/><rect x="124" y="8" width="52" height="40" rx="5" fill="var(--accent)"/><rect x="141" y="24" width="18" height="14" rx="3" fill="#fff"/><path d="M144 24v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#fff" stroke-width="2.5"/></svg></div></div><div class="step-card"><div class="n">5</div><h3 data-i18n="s5_t">Hochladen und Ergebnis erfassen</h3><p data-i18n="s5_p">Im Portal hochladen wie bisher. Die Bestätigung in die App einfügen - damit sind die Korrekturen des nächsten Jahres vorbereitet.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><path d="M64 40V16M52 26l12-12 12 12" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="162" cy="28" r="16" fill="var(--ok-soft)" stroke="var(--ok)"/><path d="M154 28l6 6 10-11" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </div>
+        <div class="how-progress"><i></i></div>
+        <p style="margin-top:22px"><a class="btn primary" href="app.html" data-i18n="how_cta">Mit einer Datei ausprobieren</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="datenschutz">
+  <div class="wrap privacy-grid">
+    <div>
+      <span class="kicker reveal" data-i18n="privacy_kicker">Datenschutz</span>
+      <h2 class="h2 reveal" data-i18n="privacy_h2">Ihre Kontodaten verlassen Ihren Rechner nicht. Technisch garantiert, nicht nur versprochen.</h2>
+      <p class="lead reveal d1" data-i18n="privacy_p">meldbar ist eine statische Webseite ohne Serverkomponente. Die gesamte Prüfung läuft in Ihrem Browser. Eine Content-Security-Policy verbietet dem Browser, nach dem Laden irgendeine andere Adresse zu kontaktieren.</p>
+      <div class="checks reveal d2">
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv1">Keine Analytics, keine Cookies, keine Konten</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv2">Quellcode offen (Apache-2.0), jede Regel nachlesbar</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv3">Funktioniert nach dem ersten Besuch auch offline</span></div>
+      </div>
+    </div>
+    <div class="diagram reveal d2" aria-hidden="true">
+      <svg viewBox="0 0 520 300">
+        <rect class="box" x="20" y="40" width="240" height="220" rx="16"/>
+        <text class="t" x="40" y="70" data-i18n="diag_browser">Ihr Browser</text>
+        <rect class="file" x="60" y="100" width="150" height="110" rx="10"/>
+        <text class="t" x="78" y="130" data-i18n="diag_file">Ihre Datei</text>
+        <rect x="78" y="146" width="112" height="8" rx="4" fill="var(--accent)" opacity="0.5"/><rect x="78" y="162" width="90" height="8" rx="4" fill="var(--accent)" opacity="0.35"/><rect x="78" y="178" width="100" height="8" rx="4" fill="var(--accent)" opacity="0.35"/>
+        <g class="glow"><path class="shield" d="M228 96l16 6v12c0 10-7 16-16 18-9-2-16-8-16-18v-12z"/><path d="M222 114l4 4 8-8" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <path class="link" d="M262 150 H 380"/>
+        <path class="cross" d="M312 136l20 28M332 136l-20 28"/>
+        <text class="s" x="322" y="180" text-anchor="middle" data-i18n="diag_no">keine Verbindung</text>
+        <rect class="box" x="384" y="110" width="116" height="80" rx="14"/>
+        <text class="t" x="442" y="155" text-anchor="middle" data-i18n="diag_internet">Internet</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="preise">
+  <div class="wrap center">
+    <span class="kicker reveal" data-i18n="pricing_kicker">Preise</span>
+    <h2 class="h2 reveal" data-i18n="pricing_h2">Kostenlos für alle. Abonnement für die, die Unterstützung wollen.</h2>
+    <p class="lead reveal d1" data-i18n="pricing_p">Pro Organisation, nicht pro Benutzer. Meldende Institute unbegrenzt.</p>
+    <div class="plans" style="text-align:left">
+      <div class="plan-card reveal"><h3 data-i18n="pr_free">Basis</h3><div class="price" data-i18n="pr_free_price">0 CHF</div><div class="per" data-i18n="pr_free_per">für immer</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_1">Web-App mit allen Prüfungen</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_2">Excel-Vorlage, XML-Erstellung, Verschlüsselung</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_3">Register für Korrekturen und Storni</span></li></ul>
+        <a class="btn" href="app.html" data-i18n="pr_free_btn">App öffnen</a></div>
+      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Empfohlen</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">ab 900 CHF</div><div class="per" data-i18n="pr_pro_per">pro Jahr und Organisation</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_1">Alles aus Basis</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_2">Support mit Vorrang in der Meldesaison</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_3">Garantierte Aktualisierung bei neuen Regeln</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_4">Durchsicht der ersten Meldung</span></li></ul>
+        <a class="btn primary" href="kontakt.html" data-i18n="pr_pro_btn">Angebot anfragen</a></div>
+      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Softwarehäuser</h3><div class="price" data-i18n="pr_lib_price">2'500 CHF</div><div class="per" data-i18n="pr_lib_per">pro Jahr</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_1">Python-Bibliothek in Ihrem Produkt</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_2">Technischer Support bei der Integration</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_3">Frühzeitige Information zu Änderungen</span></li></ul>
+        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Kontakt aufnehmen</a></div>
+    </div>
+    <p style="margin-top:20px"><a href="preise.html" data-i18n="pricing_all">Alle Preise und Leistungen</a></p>
+  </div>
+</section>
+
+<section class="section tight">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2 class="h2" data-i18n="cta_h2">Bereit für das Schema 3.0?</h2>
+      <p data-i18n="cta_p">Öffnen Sie die App und prüfen Sie Ihre erste Datei. Ohne Konto, ohne Installation.</p>
+      <a class="btn primary lg" href="app.html" data-i18n="cta_btn">App öffnen</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
       <div>
-        <h2 id="verdict-title"></h2>
-        <div class="sub" id="verdict-sub"></div>
-        <div class="file" id="verdict-file"></div>
+        <div class="foot-brand"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 5h29q4 0 1.6 3.2l-7.2 10.6Q51 22 47 22H18q-4 0-1.6-3.2l7.2-10.6Q26 5 30 5Z" fill="#1c4f9e"/><path d="M25 21h29q4 0 1.6 3.2l-7.2 10.6Q46 38 42 38H13q-4 0-1.6-3.2l7.2-10.6Q21 21 25 21Z" fill="#2b86c9"/><path d="M20 37h29q4 0 1.6 3.2l-7.2 10.6Q41 54 37 54H8q-4 0-1.6-3.2l7.2-10.6Q16 37 20 37Z" fill="#13a89e"/></svg><span>meldbar</span></div>
+        <p data-i18n="foot_note">Ihre Daten bleiben in Ihrem Browser. Keine Analytics, keine Cookies, kein Server.</p>
+        <p data-i18n="foot_address">meldbar · Salvatorstrasse 8 · 8050 Zürich · Schweiz</p>
+      </div>
+      <div>
+        <h4 data-i18n="foot_product">Produkt</h4>
+        <ul>
+          <li><a href="app.html" data-i18n="foot_app">Web-App</a></li>
+          <li><a href="preise.html" data-i18n="foot_pricing">Preise</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/docs/de/ANLEITUNG.md" data-i18n="foot_docs">Anleitung</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/CHANGELOG.md" data-i18n="foot_changes">Änderungen</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_company">Unternehmen</h4>
+        <ul>
+          <li><a href="ueber-uns.html" data-i18n="foot_about">Über uns</a></li>
+          <li><a href="kontakt.html" data-i18n="foot_contact">Kontakt</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi" data-i18n="foot_source">Quellcode (GitHub)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_legal">Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.html" data-i18n="foot_imprint">Impressum</a></li>
+          <li><a href="datenschutz.html" data-i18n="foot_privacy">Datenschutz</a></li>
+        </ul>
       </div>
     </div>
-    <div class="stats" id="stats"></div>
-    <div class="actions">
-      <button class="btn primary" id="download" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 19h16"/></svg><span data-i18n="download">Bericht herunterladen</span></button>
-      <button class="btn" id="copy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><span data-i18n="copy">Bericht kopieren</span></button>
-      <button class="btn" id="again" type="button"><span data-i18n="again">Weitere Datei prüfen</span></button>
+    <div class="foot-bottom">
+      <span data-i18n="foot_rights">© 2026 meldbar. Alle Rechte vorbehalten.</span>
+      <span>Salvatorstrasse 8, 8050 Zürich</span>
     </div>
-
-    <div class="grid two" style="margin-top:16px" id="overview">
-      <div class="card">
-        <h2 data-i18n="ov_title">Inhalt der Meldung</h2>
-        <dl class="kv" id="ov-kv"></dl>
-        <div class="ring" id="ov-ring" style="margin-top:14px"></div>
-      </div>
-      <div class="card">
-        <h2 data-i18n="ov_countries">Ansässigkeit der Kontoinhaber</h2>
-        <div class="chart bars" id="ov-bars"></div>
-        <p class="small muted" id="ov-note" data-i18n="ov_note">Anzahl Konten je Ansässigkeitsstaat des Kontoinhabers; ein Konto kann in mehreren Staaten zählen.</p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:16px" id="findings-card">
-      <h2 data-i18n="findings_title">Befunde</h2>
-      <div class="filters" id="filters"></div>
-      <div class="findings" id="findings"></div>
-      <p class="small muted" id="no-findings" data-i18n="no_findings">Keine Befunde. Die Datei besteht alle Prüfungen, die vor dem Portal möglich sind.</p>
-    </div>
-    <pre id="out" class="hidden" aria-hidden="true"></pre>
-
-    <div class="card hidden" style="margin-top:16px" id="build-card">
-      <h2 data-i18n="build_title">Meldung erstellen und verschlüsseln</h2>
-      <p class="small muted" data-i18n="build_intro"></p>
-      <div class="plan" id="plan"></div>
-      <div class="options">
-        <label><span data-i18n="build_mode_label">Diese Meldung ist eine</span>
-          <select id="build-mode" class="pill"><option value="test" data-i18n="build_test">Testmeldung</option><option value="prod" data-i18n="build_prod">produktive Meldung</option></select>
-        </label>
-        <label><span data-i18n="cancel_label">Konten stornieren</span> <input id="cancel-keys" class="pill text" type="text" placeholder="A2, A7"></label>
-      </div>
-      <div class="keyrow">
-        <span><strong data-i18n="key_label">Öffentlicher Schlüssel der ESTV</strong>: <span id="key-status" data-i18n="key_none"></span></span>
-        <label class="btn"><span data-i18n="key_choose">Schlüsseldatei wählen</span><input type="file" id="key-file" class="hidden" accept=".pem,.cer,.crt,.pub,.txt"></label>
-      </div>
-      <div class="actions">
-        <button class="btn primary" id="build" type="button"><span data-i18n="build_btn">Erstellen</span></button>
-      </div>
-      <div id="build-msg" class="small"></div>
-      <div id="build-out" class="builtlist"></div>
-    </div>
-  </section>
-
-  <section class="card hidden" id="outcome-card">
-    <h2 data-i18n="outcome_title">Ergebnis des Portals</h2>
-    <p class="small muted" data-i18n="outcome_intro"></p>
-    <div class="options">
-      <label><span data-i18n="outcome_select">Meldung</span> <select id="outcome-ref" class="pill"></select></label>
-      <label class="btn"><span data-i18n="outcome_file_label">… oder Status-Message-Datei</span><input type="file" id="outcome-file" class="hidden" accept=".xml,.XML,text/xml,application/xml"></label>
-    </div>
-    <label class="block"><span data-i18n="outcome_text_label">Text aus dem Portal</span>
-      <textarea id="outcome-text" rows="5" spellcheck="false"></textarea>
-    </label>
-    <div class="actions">
-      <button class="btn primary" id="outcome-record" type="button"><span data-i18n="outcome_btn">Ergebnis erfassen</span></button>
-    </div>
-    <div id="outcome-msg" class="small"></div>
-    <div id="outcome-out" class="findings"></div>
-  </section>
-
-  <section class="how">
-    <h2 data-i18n="how_title">So funktioniert es</h2>
-    <div class="grid three">
-      <div class="card"><div class="num">1</div><h3 data-i18n="how1_t">Laden</h3><p class="small muted" data-i18n="how1">Der Browser lädt einmalig eine Python-Laufzeit (Pyodide) und das Prüfpaket. Danach kommt alles aus dem Cache.</p></div>
-      <div class="card"><div class="num">2</div><h3 data-i18n="how2_t">Prüfen</h3><p class="small muted" data-i18n="how2">Die Datei wird im Speicher des Browsers gelesen: OECD-Schema, Header- und DocSpec-Regeln, Zeichensatz, Partnerstaaten des Berichtsjahrs, IBAN/ISIN, 3.0-Querbezüge.</p></div>
-      <div class="card"><div class="num">3</div><h3 data-i18n="how3_t">Beheben</h3><p class="small muted" data-i18n="how3">Jeder Befund nennt den ESTV-Code, die Stelle und was zu tun ist. Nur Transport, Entschlüsselung, Virenscan und Registrierung prüft allein das Portal.</p></div>
-    </div>
-    <details class="plain">
-      <summary data-i18n="how_flow_title">Der ganze Ablauf</summary>
-      <p data-i18n="how_flow"></p>
-    </details>
-    <details class="plain">
-      <summary data-i18n="privacy_title">Datenschutz im Detail</summary>
-      <p data-i18n="privacy_html"><strong>Ihre Datei verlässt den Browser nicht.</strong> Diese Seite ist statisch, ohne Analytics und ohne eigene Serverkomponente. Beim Laden wird nur diese Seite angefragt - Laufzeit, Bibliotheken und Prüfpaket liegen auf demselben Server, und der Host sieht den Seitenaufruf wie bei jeder Website. Nach dem ersten Besuch funktioniert die Seite auch offline. Nach der Dateiauswahl findet keine Netzanfrage statt - eine Content-Security-Policy der Seite lässt den Browser keine andere Adresse kontaktieren. Sprache, Farbschema und der Zugriff auf Ihr Register merkt sich der Browser lokal.</p>
-    </details>
-  </section>
-
-  <footer>
-    <div class="row">
-      <span><span data-i18n="source">Quelle und Regeln:</span> <a id="repo" href="https://github.com/aeoi-com/aeoi" data-i18n="repo">Repository aeoi</a> (Apache-2.0)</span>
-      <span><span data-i18n="version">Version</span> <span id="ver">-</span></span>
-      <span data-i18n="guidance">Technische Wegleitung AIA der ESTV, September 2026</span>
-      <span data-i18n="english_note">Prüfmeldungen auf Deutsch, mit dem Fehlercode der ESTV; Feldpfade wie im Schema</span>
-    </div>
-  </footer>
-</div>
-
-<script src="pyodide/pyodide.js"></script>
-<script src="i18n.js"></script>
-<script src="i18n-flow.js"></script>
-<script src="app.js"></script>
-<script src="flow.js"></script>
+  </div>
+</footer>
+<script src="site-i18n.js"></script>
+<script src="site.js"></script>
 </body>
 </html>

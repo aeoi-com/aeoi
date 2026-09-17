@@ -218,6 +218,16 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    2 Eingabeprobleme, 0 Fehler»); the portal status «Fehler» (Benutzeranleitung: unknown problem,
    upload again) is parsed as `Outcome.portal_error`, not a verdict: the message goes to
    `submitted` (open) with the note «Status «Fehler»: … noch einmal hochladen».
+   Website (17.09.2026, evening): `tools/render_site.py` renders index/preise/ueber-uns/kontakt/
+   impressum/datenschutz from shared fragments; `web/site.css` + `web/site.js` (language, theme,
+   burger, reveal, counters, countdowns, scroll-driven horizontal steps, mailto contact form);
+   `web/site-i18n.js` holds the de/fr/it copy. App at `app.html` (manifest start_url), shared
+   header, samples hidden unless `#demo`. Content decisions to confirm with the owner: the Pro
+   tier contents (support with priority in May-June, guaranteed rule updates, review of the first
+   message, 1-hour onboarding) and the software-house licence contents are proposals; the About
+   page claims only what is true (Zurich, built from the primary sources, small team) - no
+   invented credentials, customers or numbers; contact address kontakt@meldbar.ch must exist;
+   the imprint names "meldbar" without a legal-entity form. Browser test: 43 checks.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it and the
    fr/it columns of `messages.json`.
