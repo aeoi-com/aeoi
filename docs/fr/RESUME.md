@@ -33,9 +33,11 @@ partir d'un tableau Excel et le vérifie **avant** le téléchargement, comme le
   bonnes références (chiffre 6), y compris lors du passage de la 2.0 à la 3.0 ;
 - lecture de la réponse du portail : chaque code est expliqué.
 
-Qui ne veut rien installer vérifie un fichier XML existant ou un modèle rempli sur une page web,
-directement dans le navigateur, en français, italien ou allemand. Le fichier ne quitte pas le
-navigateur.
+Qui ne veut rien installer fait tout le flux sur une page web, directement dans le navigateur, en
+français, italien ou allemand : télécharger le modèle, vérifier le modèle rempli, créer et
+chiffrer la déclaration, saisir le résultat du portail, corriger l'année suivante. Le fichier ne
+quitte pas le navigateur ; après la première visite, la page fonctionne aussi hors ligne. Le
+téléchargement sur le portail EAR reste à l'institution.
 
 ## Ce qu'aeoi n'est pas
 

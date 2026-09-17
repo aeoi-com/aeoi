@@ -8,6 +8,17 @@ verlassen ihn.
 Voraussetzungen: Python 3.11 oder neuer, Zugang zum AIA-Portal der ESTV als registriertes
 meldendes Finanzinstitut (für Testmeldungen und den öffentlichen Schlüssel der ESTV).
 
+## 0. Ohne Installation: die Webseite
+
+Der ganze Ablauf dieser Anleitung geht auch ohne Python, auf der Webseite
+<https://aeoi-com.github.io/aeoi/> (Deutsch, Französisch, Italienisch): Vorlage herunterladen,
+ausgefüllte Vorlage prüfen, Register anlegen (die Datei `institut.sqlite` liegt bei Ihnen, ein
+Workbook = ein Register), öffentlichen Schlüssel der ESTV einmal wählen, Meldung erstellen und
+verschlüsseln, Paket im Portal hochladen, Ergebnis erfassen. Die Seite kontaktiert keinen
+anderen Server, funktioniert nach dem ersten Besuch offline und lässt sich im Browser als App
+installieren. Die Abschnitte 2 bis 6 gelten sinngemäss; die Befehle unten sind der Weg mit der
+Kommandozeile.
+
 ## 1. Installation
 
 Bis das Paket auf PyPI veröffentlicht ist, installieren Sie aus dem Repository:

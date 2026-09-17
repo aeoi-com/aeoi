@@ -28,9 +28,11 @@ die CRS-XML-Datei erstellt und sie **vor** dem Hochladen so prüft, wie es das P
   richtigen Verweisen erstellt werden (Ziffer 6), auch über den Wechsel von 2.0 auf 3.0 hinweg;
 - Auswertung der Rückmeldung des Portals: jeder Code wird erklärt.
 
-Wer nichts installieren will, prüft eine bestehende XML-Datei oder eine ausgefüllte Vorlage auf
-einer Webseite direkt im Browser, auf Deutsch, Französisch oder Italienisch. Die Datei verlässt
-den Browser dabei nicht.
+Wer nichts installieren will, macht den ganzen Ablauf auf einer Webseite direkt im Browser, auf
+Deutsch, Französisch oder Italienisch: Vorlage herunterladen, ausgefüllte Vorlage prüfen, Meldung
+erstellen und verschlüsseln, Ergebnis des Portals erfassen, im nächsten Jahr korrigieren. Die
+Datei verlässt den Browser dabei nicht; nach dem ersten Besuch funktioniert die Seite auch offline.
+Das Hochladen ins AIA-Portal bleibt beim Institut.
 
 ## Was aeoi nicht ist
 

@@ -31,9 +31,11 @@ da una tabella Excel e lo verifica **prima** del caricamento, come fa il portale
   riferimenti giusti (numero 6), anche attraverso il passaggio dalla 2.0 alla 3.0;
 - lettura della risposta del portale: ogni codice viene spiegato.
 
-Chi non vuole installare nulla verifica un file XML esistente o un modello compilato su una
-pagina web, direttamente nel browser, in italiano, francese o tedesco. Il file non lascia il
-browser.
+Chi non vuole installare nulla fa tutto il flusso su una pagina web, direttamente nel browser, in
+italiano, francese o tedesco: scaricare il modello, verificare il modello compilato, creare e
+cifrare la comunicazione, registrare l'esito del portale, correggere l'anno dopo. Il file non
+lascia il browser; dopo la prima visita la pagina funziona anche offline. Il caricamento nel
+portale SAI resta all'istituto.
 
 ## Cosa aeoi non è
 
