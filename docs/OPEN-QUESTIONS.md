@@ -44,6 +44,12 @@ Each item names the source that raised it. Answers go back into the rule engine 
 
 ## Closed
 
+- Portal status «Fehler» (Benutzeranleitung): «Der Status «Fehler» erscheint, falls ein
+  unbekanntes Problem die Verarbeitung verhinderte. In diesem Fall muss die Datei noch einmal
+  hochgeladen werden.» Not a rejection: `status.parse_text` sets `portal_error`, the registry
+  keeps the message open (`submitted`), the page says so. The portal's verdict words are
+  «Akzeptiert» / «Abgelehnt»; the catalogue uses them.
+
 - **`EquityInterestType` vs `EntityInterestType`** — closed. The body of the Wegleitung (5.3.8 and
   rule 60019) says `EquityInterestType`, matching the XSD; `EntityInterestType` appears only in the
   change log. Typo, not a doubt.

@@ -48,15 +48,20 @@ class ValidationReport:
 
     def render(self, lang: str = "en") -> str:
         """Plain-text report; ``lang`` renders the catalogue messages (en, de)."""
-        head = (
-            f"{'OK' if self.ok else 'NOT OK'}: CRS {self.version or '?'}, "
-            f"{len(self.problems)} problem(s), {len(self.infos)} note(s)"
+        verdict = Msg("verdict_ok" if self.ok else "verdict_not_ok")
+        head = Msg(
+            "report_head_xml",
+            verdict=verdict,
+            version=self.version or "?",
+            problems=Msg("n_problems", n=len(self.problems)),
+            notes=Msg("n_notes", n=len(self.infos)),
         )
-        lines = [head]
+        lines = [head.text(lang)]
+        error, note = Msg("label_error").text(lang), Msg("label_note").text(lang)
         for p in self.problems:
-            lines.append(f"  error  {p.where}: {msg_text(p.message, lang)} [{p.rule}]")
+            lines.append(f"  {error:<6} {p.where}: {msg_text(p.message, lang)} [{p.rule}]")
         for p in self.infos:
-            lines.append(f"  note   {p.where}: {msg_text(p.message, lang)}")
+            lines.append(f"  {note:<6} {p.where}: {msg_text(p.message, lang)}")
         return "\n".join(lines)
 
 

@@ -39,7 +39,7 @@ aeoi crs template --out meldung-2026.xlsx
 Die Datei hat vier Blätter:
 
 - **ReportingFI**: Ihr Institut - ESTV-ID (`SendingCompanyIN`), UID (leer lassen, wenn das
-  Institut keine hat), Name, Adresse, Meldejahr. Bei einem Trustee-Documented Trust: den Namen
+  Institut keine hat), Name, Adresse, Berichtsjahr. Bei einem Trustee-Documented Trust: den Namen
   des Trusts eintragen und `trustee_documented_trust = true` setzen; das Präfix «TDT=» wird beim
   Erstellen angefügt.
 - **Accounts**: eine Zeile pro meldepflichtiges Konto. `holder_type` ist `individual`
@@ -146,4 +146,4 @@ Support des Werkzeugs genügen der Fehlercode, die DocRefId und die MessageRefId
 
 - 14.12.2026: letzter Tag für Dateien nach Schema 2.0.
 - 16.01.2027: erster Tag für Dateien nach Schema 3.0.
-- 30.06.2027: Einreichungsfrist für das Meldejahr 2026 (Erinnerung der ESTV am 1. Juni).
+- 30.06.2027: Einreichungsfrist für das Berichtsjahr 2026 (Erinnerung der ESTV am 1. Juni).

@@ -11,7 +11,7 @@ im neuen OECD-Schema CRS 3.0 erstellt werden müssen. Das Portal der ESTV nimmt 
 14.12.2026 nur die Version 2.0» und «ab dem 16.1.2027 nur noch die Version 3.0» an (Technische
 Wegleitung AIA, September 2026, Ziffer 5.3.1). Das Schema 3.0 verlangt pro Konto neue
 Pflichtangaben (Selbstauskunft, Sorgfaltsverfahren, Kontotyp, Typ der beherrschenden Personen);
-eine Datei im alten Aufbau wird ab Januar abgewiesen. Wer die Meldungen bisher im Online-Formular
+eine Datei im alten Aufbau wird ab Januar abgelehnt. Wer die Meldungen bisher im Online-Formular
 oder mit einem eigenen Skript erstellt hat, muss den Ablauf anpassen.
 
 ## Was aeoi ist
@@ -19,7 +19,7 @@ oder mit einem eigenen Skript erstellt hat, muss den Ablauf anpassen.
 `aeoi` ist ein offenes Werkzeug (Apache-2.0, Quellcode einsehbar), das aus einer Excel-Tabelle
 die CRS-XML-Datei erstellt und sie **vor** dem Hochladen so prüft, wie es das Portal tut:
 
-- OECD-Schema 2.0 und 3.0, Zeichensatz, Partnerstaaten des Meldejahrs, IBAN/ISIN-Prüfsummen;
+- OECD-Schema 2.0 und 3.0, Zeichensatz, Partnerstaaten des Berichtsjahrs, IBAN/ISIN-Prüfsummen;
 - 59 der 65 Regeln der Technischen Wegleitung, mit dem Fehlercode und dem Wortlaut der ESTV. Die
   übrigen sechs (Transport, Entschlüsselung, Virenscan, Registrierung des Instituts) kann nur
   das Portal prüfen;

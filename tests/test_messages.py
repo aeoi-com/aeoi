@@ -43,8 +43,11 @@ def test_every_msg_id_in_the_code_exists():
         "st_accepted",
         "st_rejected",
         "st_discarded",
+        "label_input",
+        "label_info",
+        "label_error",
     }  # built dynamically
-    used.discard("st_")  # the prefix of the dynamic status ids
+    used -= {"st_", "label_"}  # the prefixes of the dynamic ids
     missing = sorted(used - set(messages.catalogue()))
     assert not missing, missing
     unused = sorted(set(messages.catalogue()) - used)
@@ -85,7 +88,8 @@ def test_reports_render_in_german(tmp_path):
     assert "die USA sind kein AIA-Partnerstaat" in de
     en = rep.render()
     assert "at position 9: excluded by Anhang 7.2 (U+0023) [50005]" in en
-    assert de.split("\n")[0] == en.split("\n")[0]  # the headline is language-neutral
+    assert de.startswith("NICHT OK: CRS 3.0, 2 Probleme, 0 Hinweise")
+    assert en.startswith("NOT OK: CRS 3.0, 2 problem(s), 0 note(s)")
     for p in (
         rep.problems + rep.infos
     ):  # every message the engine produced renders without leftovers
@@ -101,6 +105,9 @@ def test_reports_render_in_german(tmp_path):
     wb.save(book)
     report = check.check_workbook(book, "3.0")
     assert "Accounts row 2, column balance: keine Zahl" in report.render("de")
+    assert report.headline("de").startswith(
+        "NICHT OK: 1 Konto, Berichtsjahr 2026, CRS 3.0, 2 Eingabeprobleme, 0 Fehler"
+    )
     assert "Accounts row 2, column balance: not a number" in report.render()
 
 

@@ -327,6 +327,11 @@ def record_outcome(
         raise WorkflowError(Msg("wf_no_msgref"))
     if reg.message(ref) is None:
         raise WorkflowError(Msg("wf_not_in_registry", ref=ref))
+    if outcome.portal_error:  # not a verdict: the message stays open, the file goes up again
+        reg.set_status(ref, "submitted", source=outcome.source)
+        view = outcome_view(outcome, lang)
+        view.update(message_ref_id=ref, status="submitted", note=Msg("wf_portal_error").text(lang))
+        return view
     if outcome.accepted is None:
         raise WorkflowError(Msg("wf_outcome_unknown"))
     new_status = submit.record_outcome(reg, ref, outcome, source=outcome.source)

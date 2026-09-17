@@ -346,7 +346,7 @@ $("outcome-record").addEventListener("click", async () => {
   try {
     const v = JSON.parse(pyCall("record", $("outcome-text").value, $("outcome-ref").value, LANG));
     if (v.error) { msg($("outcome-msg"), t("error_prefix") + v.error, false); console.info("aeoi:outcome error"); return; }
-    msg($("outcome-msg"), v.accepted ? t("outcome_accepted", { ref: shortRef(v.message_ref_id) }) : t("outcome_rejected"), v.accepted);
+    msg($("outcome-msg"), v.status === "submitted" ? t("outcome_portal_error") : v.accepted ? t("outcome_accepted", { ref: shortRef(v.message_ref_id) }) : t("outcome_rejected"), !!v.accepted);
     for (const f of v.findings) {
       const card = el("article", { class: "finding error" }, el("div", { class: "head" }, el("span", { class: "code", text: f.code }), el("span", { class: "title", text: f.title })));
       if (f.doc_ref_ids.length) { const loc = el("div", { class: "loc" }); for (const d of f.doc_ref_ids) loc.append(el("span", { class: "path", text: d })); card.append(loc); }

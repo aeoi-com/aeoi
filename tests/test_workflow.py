@@ -136,3 +136,20 @@ def test_record_outcome_from_text_and_xml(reg):
     assert view["findings"][0]["title"] == "Carattere non ammesso"
     assert view["findings"][0]["should_have_been_caught"] is True
     assert workflow.registry_view(reg)["counts"] == {"rejected": 1}
+
+
+def test_portal_status_fehler_is_not_a_verdict(reg):
+    """Benutzeranleitung: «Der Status «Fehler» erscheint, falls ein unbekanntes Problem die
+    Verarbeitung verhinderte. In diesem Fall muss die Datei noch einmal hochgeladen werden.»"""
+    outs = workflow.build(sample_message(), "3.0", reg, test=True)
+    ref = outs[0].result.message_ref_id
+    outcome = workflow.parse_outcome("Meldungsübersicht\nStatus: «Fehler»\n")
+    assert outcome.portal_error and outcome.accepted is None and not outcome.findings
+    view = workflow.record_outcome(reg, "Status: Fehler", message_ref_id=ref, lang="de")
+    assert view["status"] == "submitted" and view["accepted"] is None
+    assert view["note"] == "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen"
+    assert workflow.registry_view(reg)["counts"] == {"submitted": 1}
+    # the message stays open: it can still be accepted afterwards, and "Fehlerbericht" is a rejection
+    assert not workflow.parse_outcome("Fehlerbericht: 50005").portal_error
+    _accept(reg, ref)
+    assert workflow.registry_view(reg)["counts"] == {"accepted": 1}

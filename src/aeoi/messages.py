@@ -27,6 +27,9 @@ def catalogue() -> dict[str, dict[str, str]]:
 def render(msg_id: str, lang: str, params: dict[str, Any]) -> str:
     entry = catalogue()[msg_id]
     template = entry.get(lang) or entry["en"]
+    if "|" in template and "n" in params:  # "singular|plural", chosen by the count n
+        singular, plural = template.split("|", 1)
+        template = singular if params["n"] == 1 else plural
     values = {k: _value(v, lang) for k, v in params.items()}
     return template.format_map(values)
 

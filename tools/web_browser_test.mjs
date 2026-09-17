@@ -97,7 +97,7 @@ try {
   check("valid XML -> OK: " + good.split("\n")[0], good.startsWith("OK"));
   check("verdict card in the OK state", (await page.locator("#verdict").getAttribute("class")).includes("ok") && (await page.locator("#verdict-title").textContent()).length > 0);
   const bad = await upload(join(fixtures, "Test-bad.xml"));
-  check("broken XML -> NOT OK with 50005", bad.startsWith("NOT OK") && bad.includes("[50005]"));
+  check("broken XML -> NICHT OK with 50005 (German headline)", bad.startsWith("NICHT OK") && bad.includes("[50005]"));
   const firstTitle = await page.locator(".finding.error .title").first().textContent();
   const firstFix = await page.locator(".finding.error .fix").first().textContent();
   const firstMsg = await page.locator(".finding.error .msg").first().textContent();
@@ -124,7 +124,7 @@ try {
     const st = await page.locator("#status").textContent();
     const rep = await resultText();
     const noFindings = await page.locator("#no-findings").textContent();
-    check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep.split("\n")[0] === okSample.split("\n")[0] && noFindings.startsWith(none));
+    check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep.startsWith("OK") && noFindings.startsWith(none));
   }
 
   // ---- the reporting flow: registry file (fallback: download after every change), key,

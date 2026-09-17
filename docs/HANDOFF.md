@@ -211,6 +211,13 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    validate.py, ids.py (format checks and character reasons), flat.py (InputProblem), the
    RegistryError / WorkflowError texts; `render(lang)` on both reports, `--lang de` on the CLI,
    the page renders in its language (German today; fr/it fall back to English until translated).
+   Review 17.09 (evening): portal terms - «abgelehnt» (not «abgewiesen», the portal's own status
+   word), «Berichtsjahr» for the MessageRefId year and «Meldezeitraum» for ReportingPeriod,
+   «nicht dokumentiertes Konto», «Ansässigkeitsstaat»; headlines and labels of both reports are
+   catalogue entries with singular|plural forms («NICHT OK: 1 Konto, Berichtsjahr 2026, CRS 3.0,
+   2 Eingabeprobleme, 0 Fehler»); the portal status «Fehler» (Benutzeranleitung: unknown problem,
+   upload again) is parsed as `Outcome.portal_error`, not a verdict: the message goes to
+   `submitted` (open) with the note «Status «Fehler»: … noch einmal hochladen».
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it and the
    fr/it columns of `messages.json`.

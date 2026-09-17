@@ -8,7 +8,7 @@ from pathlib import Path
 
 from aeoi.crs import flat, model
 from aeoi.crs.model import Message, Version
-from aeoi.messages import text
+from aeoi.messages import Msg, text
 
 
 @dataclass
@@ -27,24 +27,32 @@ class WorkbookReport:
         return self.message is not None and not self.input_problems and not self.errors
 
     def lines(self, lang: str = "en") -> list[str]:
-        out = [f"input  | {p.location}: {text(p.message, lang)}" for p in self.input_problems]
+        label = {k: Msg(f"label_{k}").text(lang) for k in ("input", "info", "error")}
+        out = [
+            f"{label['input']:<6} | {p.location}: {text(p.message, lang)}"
+            for p in self.input_problems
+        ]
         for p in self.problems:
-            level = "info " if p.rule == "info" else "error"
+            level = label["info"] if p.rule == "info" else label["error"]
             rule = f" [{p.rule}]" if p.rule else ""
-            out.append(f"{level}  | {p.where}: {text(p.message, lang)}{rule}")
+            out.append(f"{level:<6} | {p.where}: {text(p.message, lang)}{rule}")
         return out
 
-    def headline(self) -> str:
+    def headline(self, lang: str = "en") -> str:
         if self.message is None:
-            return "NOT OK: the workbook could not be read"
-        return (
-            f"{'OK' if self.ok else 'NOT OK'}: {len(self.message.accounts)} account(s), "
-            f"reporting year {self.message.reporting_year}, CRS {self.version}, "
-            f"{len(self.input_problems)} input problem(s), {len(self.errors)} error(s)"
-        )
+            return Msg("report_head_unreadable").text(lang)
+        return Msg(
+            "report_head_workbook",
+            verdict=Msg("verdict_ok" if self.ok else "verdict_not_ok"),
+            accounts=Msg("n_accounts", n=len(self.message.accounts)),
+            year=self.message.reporting_year,
+            version=self.version,
+            inputs=Msg("n_inputs", n=len(self.input_problems)),
+            errors=Msg("n_errors", n=len(self.errors)),
+        ).text(lang)
 
     def render(self, lang: str = "en") -> str:
-        return "\n".join([self.headline(), *self.lines(lang)])
+        return "\n".join([self.headline(lang), *self.lines(lang)])
 
 
 def check_workbook(

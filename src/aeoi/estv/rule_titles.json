@@ -97,11 +97,11 @@
     "fix": {"de": "Element PoolReport entfernen.", "fr": "Supprimez l'élément PoolReport.", "it": "Rimuovere l'elemento PoolReport.", "en": "Remove the PoolReport element."}
   },
   "60011": {
-    "title": {"de": "Ansässigkeitsland passt nicht zum Empfängerland", "fr": "Pays de résidence sans rapport avec le pays destinataire", "it": "Paese di residenza non coerente con il Paese destinatario", "en": "Residence country does not match the receiving country"},
+    "title": {"de": "Ansässigkeitsstaat passt nicht zum Empfängerstaat", "fr": "Pays de résidence sans rapport avec le pays destinataire", "it": "Paese di residenza non coerente con il Paese destinatario", "en": "Residence country does not match the receiving country"},
     "fix": {"de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gelten 98200-98202.", "fr": "Règle OCDE entre autorités ; pour l'AFC, ce sont 98200-98202 qui s'appliquent.", "it": "Regola OCSE tra autorità; per l'AFC valgono 98200-98202.", "en": "OECD rule between authorities; for the ESTV, 98200-98202 apply."}
   },
   "60012": {
-    "title": {"de": "Ansässigkeitsland (Rechtsträger/beherrschende Person) passt nicht", "fr": "Pays de résidence (entité/personne détenant le contrôle) sans rapport", "it": "Paese di residenza (ente/persona che esercita il controllo) non coerente", "en": "Residence country (entity/controlling person) does not match"},
+    "title": {"de": "Ansässigkeitsstaat (Rechtsträger/beherrschende Person) passt nicht", "fr": "Pays de résidence (entité/personne détenant le contrôle) sans rapport", "it": "Paese di residenza (ente/persona che esercita il controllo) non coerente", "en": "Residence country (entity/controlling person) does not match"},
     "fix": {"de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gilt 98201.", "fr": "Règle OCDE entre autorités ; pour l'AFC, c'est 98201 qui s'applique.", "it": "Regola OCSE tra autorità; per l'AFC vale 98201.", "en": "OECD rule between authorities; for the ESTV, 98201 applies."}
   },
   "60013": {
@@ -254,7 +254,7 @@
   },
   "98200": {
     "title": {"de": "Kontoinhaber ohne Ansässigkeit in einem Partnerstaat", "fr": "Titulaire sans résidence dans un État partenaire", "it": "Titolare senza residenza in uno Stato partner", "en": "Account holder not resident in a partner jurisdiction"},
-    "fix": {"de": "Mindestens ein Ansässigkeitsland muss für das Berichtsjahr Partnerstaat der Schweiz sein; sonst ist das Konto nicht meldepflichtig.", "fr": "Au moins un pays de résidence doit être un État partenaire de la Suisse pour l'année ; sinon le compte n'est pas à déclarer.", "it": "Almeno un Paese di residenza deve essere Stato partner della Svizzera per l'anno; altrimenti il conto non va comunicato.", "en": "At least one residence country must be a Swiss partner jurisdiction for the year; otherwise the account is not reportable."}
+    "fix": {"de": "Mindestens ein Ansässigkeitsstaat muss für das Berichtsjahr Partnerstaat der Schweiz sein; sonst ist das Konto nicht meldepflichtig.", "fr": "Au moins un pays de résidence doit être un État partenaire de la Suisse pour l'année ; sinon le compte n'est pas à déclarer.", "it": "Almeno un Paese di residenza deve essere Stato partner della Svizzera per l'anno; altrimenti il conto non va comunicato.", "en": "At least one residence country must be a Swiss partner jurisdiction for the year; otherwise the account is not reportable."}
   },
   "98201": {
     "title": {"de": "Rechtsträger ohne Ansässigkeit in einem Partnerstaat", "fr": "Entité sans résidence dans un État partenaire", "it": "Ente senza residenza in uno Stato partner", "en": "Entity not resident in a partner jurisdiction"},
@@ -262,10 +262,10 @@
   },
   "98202": {
     "title": {"de": "Beherrschende Person ohne Ansässigkeit in einem Partnerstaat", "fr": "Personne détenant le contrôle sans résidence dans un État partenaire", "it": "Persona che esercita il controllo senza residenza in uno Stato partner", "en": "Controlling person not resident in a partner jurisdiction"},
-    "fix": {"de": "Ansässigkeitsländer der beherrschenden Person prüfen.", "fr": "Vérifiez les pays de résidence de la personne détenant le contrôle.", "it": "Verificare i Paesi di residenza della persona che esercita il controllo.", "en": "Check the controlling person's residence countries."}
+    "fix": {"de": "Ansässigkeitsstaaten der beherrschenden Person prüfen.", "fr": "Vérifiez les pays de résidence de la personne détenant le contrôle.", "it": "Verificare i Paesi di residenza della persona che esercita il controllo.", "en": "Check the controlling person's residence countries."}
   },
   "98203": {
-    "title": {"de": "Undokumentiertes Konto: nur natürliche Person mit CH", "fr": "Compte non documenté : seulement une personne physique avec CH", "it": "Conto non documentato: solo persona fisica con CH", "en": "Undocumented account: only an individual with CH"},
+    "title": {"de": "Nicht dokumentiertes Konto: nur natürliche Person mit CH", "fr": "Compte non documenté : seulement une personne physique avec CH", "it": "Conto non documentato: solo persona fisica con CH", "en": "Undocumented account: only an individual with CH"},
     "fix": {"de": "Bei UndocumentedAccount: Inhaber natürliche Person, ResCountryCode nur CH.", "fr": "Pour UndocumentedAccount : titulaire personne physique, ResCountryCode CH seulement.", "it": "Per UndocumentedAccount: titolare persona fisica, ResCountryCode solo CH.", "en": "For UndocumentedAccount: individual holder, ResCountryCode CH only."}
   },
   "98204": {

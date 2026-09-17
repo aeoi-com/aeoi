@@ -58,7 +58,7 @@
   },
   "res_country_required": {
     "en": "at least one ResCountryCode is mandatory",
-    "de": "mindestens ein Ansässigkeitsland (ResCountryCode) ist Pflicht"
+    "de": "mindestens ein Ansässigkeitsstaat (ResCountryCode) ist Pflicht"
   },
   "tin_empty": {
     "en": "a TIN, when present, must not be empty",
@@ -138,7 +138,7 @@
   },
   "undocumented_res_ch": {
     "en": "undocumented account: the only ResCountryCode must be CH",
-    "de": "undokumentiertes Konto: das einzige Ansässigkeitsland muss CH sein"
+    "de": "nicht dokumentiertes Konto: der einzige Ansässigkeitsstaat muss CH sein"
   },
   "cp_required_crs101": {
     "en": "CRS101 holder: at least one ControllingPerson is required",
@@ -150,7 +150,7 @@
   },
   "undocumented_individual": {
     "en": "undocumented accounts must have an individual holder",
-    "de": "undokumentierte Konten müssen eine natürliche Person als Inhaber haben"
+    "de": "nicht dokumentierte Konten müssen eine natürliche Person als Inhaber haben"
   },
   "cp_type_required_30": {
     "en": "3.0: at least one CtrlgPersonType is mandatory",
@@ -210,7 +210,7 @@
   },
   "reporting_year_range": {
     "en": "reporting year must be 2017..current year",
-    "de": "das Meldejahr muss zwischen 2017 und dem laufenden Jahr liegen"
+    "de": "das Berichtsjahr muss zwischen 2017 und dem laufenden Jahr liegen"
   },
   "crs702_needs_registry": {
     "en": "CRS702 (corrections) needs the submission registry: use 'aeoi crs correct' with the registry of the earlier messages (Wegleitung Ziffer 6)",
@@ -446,7 +446,7 @@
   },
   "reg_last_dead": {
     "en": "account {key}: the last message was {status}; send the record again in a new message (80002)",
-    "de": "Konto {key}: die letzte Meldung wurde {status}; den Datensatz in einer Neumeldung erneut senden (80002)"
+    "de": "Konto {key}: die letzte Meldung ist {status}; den Datensatz in einer Neumeldung erneut senden (80002)"
   },
   "reg_no_valid_record": {
     "en": "account {key}: no valid record to correct (80002)",
@@ -538,10 +538,70 @@
   },
   "st_rejected": {
     "en": "rejected",
-    "de": "abgewiesen"
+    "de": "abgelehnt"
   },
   "st_discarded": {
     "en": "discarded",
     "de": "verworfen"
+  },
+  "report_head_xml": {
+    "en": "{verdict}: CRS {version}, {problems}, {notes}",
+    "de": "{verdict}: CRS {version}, {problems}, {notes}"
+  },
+  "report_head_workbook": {
+    "en": "{verdict}: {accounts}, reporting year {year}, CRS {version}, {inputs}, {errors}",
+    "de": "{verdict}: {accounts}, Berichtsjahr {year}, CRS {version}, {inputs}, {errors}"
+  },
+  "report_head_unreadable": {
+    "en": "NOT OK: the workbook could not be read",
+    "de": "NICHT OK: die Vorlage konnte nicht gelesen werden"
+  },
+  "verdict_ok": {
+    "en": "OK",
+    "de": "OK"
+  },
+  "verdict_not_ok": {
+    "en": "NOT OK",
+    "de": "NICHT OK"
+  },
+  "label_error": {
+    "en": "error",
+    "de": "Fehler"
+  },
+  "label_note": {
+    "en": "note",
+    "de": "Hinweis"
+  },
+  "label_input": {
+    "en": "input",
+    "de": "Eingabe"
+  },
+  "label_info": {
+    "en": "info",
+    "de": "Hinweis"
+  },
+  "wf_portal_error": {
+    "en": "portal status \"Fehler\": unknown problem at the portal; upload the file again",
+    "de": "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen"
+  },
+  "n_problems": {
+    "en": "{n} problem(s)",
+    "de": "{n} Problem|{n} Probleme"
+  },
+  "n_notes": {
+    "en": "{n} note(s)",
+    "de": "{n} Hinweis|{n} Hinweise"
+  },
+  "n_accounts": {
+    "en": "{n} account(s)",
+    "de": "{n} Konto|{n} Konten"
+  },
+  "n_inputs": {
+    "en": "{n} input problem(s)",
+    "de": "{n} Eingabeproblem|{n} Eingabeprobleme"
+  },
+  "n_errors": {
+    "en": "{n} error(s)",
+    "de": "{n} Fehler"
   }
 }

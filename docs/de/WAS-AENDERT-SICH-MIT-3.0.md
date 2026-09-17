@@ -89,7 +89,7 @@ ersten Testmeldung nach dem 16. Januar 2027.
   Vorlage Spalten mit Auswahllisten; fehlen sie beim Erstellen einer 3.0-Datei, nennt die Prüfung
   jede betroffene Zeile.
 - Vor dem Verschlüsseln werden die Datei gegen das OECD-Schema und gegen 59 der 65 Prüfregeln
-  der Technischen Wegleitung geprüft (Partnerstaaten des Meldejahrs, IBAN/ISIN-Prüfsummen,
+  der Technischen Wegleitung geprüft (Partnerstaaten des Berichtsjahrs, IBAN/ISIN-Prüfsummen,
   Zeichensatz, Querbezüge der neuen Elemente).
 - Ein lokales Register merkt sich alle gesendeten Kennungen. Korrekturen und Stornierungen
   werden daraus aufgebaut - auch für Datensätze, die noch unter 2.0 gemeldet wurden.

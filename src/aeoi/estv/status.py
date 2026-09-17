@@ -54,12 +54,18 @@ class Finding:
         return f"{head}{refs}{fields}{details}"
 
 
+PORTAL_ERROR_RE = re.compile(r"status\W{0,4}fehler\b|^\W*fehler\W*$", re.IGNORECASE)
+
+
 @dataclass
 class Outcome:
     accepted: bool | None  # None when the input does not say
     original_message_ref_id: str | None
     findings: list[Finding] = field(default_factory=list)
     source: str = ""  # "status-message-xml" or "text"
+    portal_error: bool = (
+        False  # portal status «Fehler»: no verdict, the file must be uploaded again
+    )
 
     @property
     def codes(self) -> list[str]:
@@ -115,11 +121,19 @@ def parse_text(text: str) -> Outcome:
     findings: list[Finding] = []
     accepted: bool | None = None
     original = None
+    portal_error = False
     for line in text.splitlines():
         line = line.strip()
         if not line:
             continue
         low = line.lower()
+        if PORTAL_ERROR_RE.search(
+            line
+        ):  # Benutzeranleitung: «Der Status «Fehler» erscheint, falls ein
+            portal_error = (
+                True  # unbekanntes Problem die Verarbeitung verhinderte ... noch einmal hochladen»
+            )
+            continue
         if any(
             k in low for k in ("akzeptiert", "accepted", "erfolgreich", "validierungsbestätigung")
         ):
@@ -141,7 +155,9 @@ def parse_text(text: str) -> Outcome:
             findings.append(Finding(code, kind, doc_ref_ids=refs, details=detail))
     if accepted is None and findings:
         accepted = False
-    return Outcome(accepted, original, findings, source="text")
+    return Outcome(
+        accepted, original, findings, source="text", portal_error=portal_error and accepted is None
+    )
 
 
 def render(outcome: Outcome) -> str:
