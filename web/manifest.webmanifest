@@ -1,0 +1,15 @@
+{
+  "name": "aeoi - CRS-Meldungen prüfen und erstellen",
+  "short_name": "aeoi",
+  "description": "CRS-Dateien prüfen, erstellen und verschlüsseln - im Browser, ohne Server.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#0b6e6b",
+  "lang": "de",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

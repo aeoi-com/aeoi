@@ -99,7 +99,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 - Week 5 review fixes: 80001 against the MessageRefId year, 98006 per the ESTV formula, one
   50005 per character, no traceback for non-schema files; guide: both key locations, install from
   the repository, weekly deletion of test messages.
-- Week 6: browser validator `web/index.html` (Pyodide 0.27.7 from jsdelivr,
+- Week 6: browser validator `web/index.html` (Pyodide 0.27.7 - first from jsdelivr, since
+  17.09.2026 vendored on the page's own origin, see below -,
   micropip installs xmlschema, xsdata==24.12 - 26.x needs typing-extensions>=4.12 while the
   Pyodide pydantic pins 4.11 -, openpyxl, and the aeoi wheel next to the page; file never leaves
   the browser, no analytics, no server side); `tools/build_web.py` copies the wheel;
@@ -188,6 +189,17 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    (new registry, key, build, package + XML download, outcome accepted, changed workbook ->
    correction with a deletion, reopen the saved registry) and an outside-the-browser verification
    (inspect_package, decrypt with the test key, validate, DocTypeIndics, registry statuses).
+   Same origin only (17.09.2026, review condition 2): `tools/build_web.py` now vendors the
+   Pyodide core + the dependency closure of lxml/pydantic/micropip/cryptography/sqlite3 computed
+   from the official `pyodide-lock.json` (13 packages, pruned lock written next to them, sha256
+   checked against the lock) into `web/pyodide/`, and the pure-Python wheels (xmlschema,
+   elementpath, xsdata==24.12, openpyxl, et_xmlfile; `pip download --no-deps`, installed with
+   `deps=False`) into `web/wheels/`; downloads cached in `.local/vendor-cache`; all of it
+   git-ignored and rebuilt by CI/Pages. `web/sw.js` (from `tools/sw.template.js`) precaches
+   every file (~23 MB) so the page boots offline; `manifest.webmanifest` + SVG icons make it
+   installable. CSP is now `'self'` only (`script-src 'self' 'wasm-unsafe-eval'`,
+   `connect-src 'self'`); privacy text «nur diese Seite». Browser test: 31 checks - hosts seen
+   during boot = the page's origin only, and a second page boots offline from the service worker.
    The technical messages stay English. Not translated on purpose until
    the pilot confirms the German content: the two long German guides and the ~200 program
    messages (would need a message catalogue keyed by rule code first).

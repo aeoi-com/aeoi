@@ -1,14 +1,15 @@
 // Real-browser test of web/index.html with Playwright (Chromium): serves web/ over HTTP, waits
 // for the runtime, uploads a valid file, a broken file and a workbook (upper-case .XLSX), and
 // asserts the privacy promise: after the file selection no network request at all, never a
-// non-GET request, only the listed hosts during the boot, no CSP violation.
+// non-GET request, only the page's own origin during the boot, no CSP violation; then a second
+// page goes offline and boots from the service worker cache.
 //
 //   cd .local/pyodide-test && npm install playwright@1.49.1 && cd ../..
 //   python -m build && python tools/build_web.py
 //   PW_CHANNEL=chrome node tools/web_browser_test.mjs      # installed Chrome or msedge
 //   (or: PLAYWRIGHT_BROWSERS_PATH=... npx playwright install chromium, then without PW_CHANNEL)
 //
-// Needs network access for cdn.jsdelivr.net, pypi.org and files.pythonhosted.org.
+// No network access needed: tools/build_web.py vendored the runtime and the wheels into web/.
 
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
@@ -58,7 +59,8 @@ const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: proces
 try {
   // The page's CSP forbids eval, so no page.evaluate / waitForFunction: the page signals
   // readiness and results through console.info (CDP events, outside the CSP).
-  const page = await browser.newPage();
+  const context = await browser.newContext(); // explicit: it must survive the first page's close
+  const page = await context.newPage();
   const requests = [];
   const cspViolations = [];
   page.on("request", (req) => {
@@ -71,6 +73,7 @@ try {
   });
   page.on("pageerror", (err) => cspViolations.push("pageerror: " + err.message));
   const ready = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
+  const swReady = page.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:sw ready", timeout: 240000 });
   // #nofsa: the registry uses the download/upload fallback (native file pickers cannot be automated)
   await page.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
   await ready;
@@ -198,10 +201,23 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check(`no network request after the file selection (${after.length} after boot)`, after.length === 0);
   check("no non-GET request at all", requests.every((r) => r.method === "GET"));
   const hosts = [...new Set(requests.map((r) => r.host))].sort();
-  const allowed = new Set([`127.0.0.1:${port}`, "cdn.jsdelivr.net", "pypi.org", "files.pythonhosted.org"]);
-  check("only the listed hosts during boot: " + hosts.join(", "), hosts.every((h) => allowed.has(h)));
+  check("only the page's own origin, ever: " + hosts.join(", "), hosts.length === 1 && hosts[0] === `127.0.0.1:${port}`);
   check("no CSP violation reported by the browser", cspViolations.length === 0);
   if (cspViolations.length) console.log(cspViolations.slice(0, 3).join("\n"));
+
+  // offline: the service worker precached the app during the first visit
+  await swReady;
+  await page.close();
+  await context.setOffline(true);
+  const page2 = await context.newPage();
+  const ready2 = page2.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
+  await page2.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
+  await ready2;
+  const done2 = page2.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:result"), timeout: 120000 });
+  await page2.locator("#sample-ok").click();
+  await done2;
+  check("offline: boots from the service worker cache and checks a file", (await page2.locator("#out").textContent()).startsWith("OK"));
+  await context.setOffline(false);
 } finally {
   await browser.close();
   server.kill();

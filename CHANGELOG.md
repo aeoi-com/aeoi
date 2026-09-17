@@ -31,7 +31,9 @@ First working version, CRS for the Swiss ESTV portal.
   (`aeoi.crs.overview`), built-in samples, report download, light/dark theme; the full
   reporting flow in the page: registry file (File System Access API or download fallback),
   template download, build + encrypt with the remembered ESTV key, portal outcome
-  (`aeoi.crs.workflow`; registry `settings` table).
+  (`aeoi.crs.workflow`; registry `settings` table); runtime, packages and wheels vendored on
+  the page's own origin, service worker for offline use, installable (web app manifest), CSP
+  `'self'` only.
 - German pages for reporting FIs: `docs/de/ANLEITUNG.md`, `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 - CLI: `aeoi crs template | check | build | correct | validate | registry`,
   `aeoi estv package | inspect | status`.

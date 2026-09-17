@@ -86,6 +86,10 @@ rendered as a verdict card, an overview of the message (holders, residence count
 and one card per finding with a title and a remedy in German, French or Italian
 (`src/aeoi/estv/rule_titles.json`), the technical message and the official ESTV wording behind
 a disclosure. Built-in samples, report download, light/dark theme, self-hosted Inter font.
+Everything the page needs - the Pyodide runtime, the packages, the wheels, the fonts - is served
+from the page's own origin (`tools/build_web.py` vendors it; nothing else is ever contacted), a
+service worker keeps it available offline after the first visit, and the page can be installed
+as an app from the browser.
 
 The page also runs the whole reporting flow without an installation: download the empty
 template, check the filled workbook, open or create the **registry file** (the state - on Chrome
@@ -95,7 +99,7 @@ message(s) the registry implies (new records, corrections, deletions - `aeoi.crs
 download the encrypted package for the AIA portal, and record the portal's answer. Productive
 messages need an open registry; test messages do not.
 The file never leaves the browser; the page has no analytics and no server side. Build it with
-`python -m build && python tools/build_web.py`; `node tools/web_smoke.mjs` runs the same code
+`python -m build && python tools/build_web.py` (downloads the runtime once into `.local/vendor-cache`); `node tools/web_smoke.mjs` runs the same code
 headlessly (see the script header for the one-time Pyodide setup);
 `PW_CHANNEL=chrome node tools/web_browser_test.mjs` drives the real page in an installed Chrome
 or Edge with the page's Content-Security-Policy enforced and asserts that no request leaves the

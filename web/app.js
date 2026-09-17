@@ -4,7 +4,7 @@
 
 const WHEEL = "aeoi-0.0.1-py3-none-any.whl";
 const PYODIDE_PACKAGES = ["lxml", "pydantic", "micropip", "cryptography", "sqlite3"]; // sqlite3: the registry
-const PYPI_PACKAGES = ["xmlschema", "xsdata==24.12", "openpyxl"]; // xsdata 26 needs typing-extensions>=4.12, Pyodide ships 4.11
+const WHEELS = ["wheels/xmlschema-4.3.2-py3-none-any.whl", "wheels/elementpath-5.1.4-py3-none-any.whl", "wheels/xsdata-24.12-py3-none-any.whl", "wheels/openpyxl-3.1.5-py2.py3-none-any.whl", "wheels/et_xmlfile-2.0.0-py3-none-any.whl"]; // vendored pure-Python wheels, filled in by tools/build_web.py (installed with deps=False)
 const LOCALES = { de: "de-CH", fr: "fr-CH", it: "it-CH" };
 
 const $ = (id) => document.getElementById(id);
@@ -80,13 +80,13 @@ async function boot() {
   const t0 = performance.now();
   try {
     step(1);
-    py = await loadPyodide();
+    py = await loadPyodide({ indexURL: new URL("pyodide/", location.href).href }); // same origin, nothing else
     step(2); setStatus("libs");
     await py.loadPackage(PYODIDE_PACKAGES);
     const micropip = py.pyimport("micropip");
-    await micropip.install(PYPI_PACKAGES);
+    await micropip.install(WHEELS.map((w) => new URL(w, location.href).href), { deps: false });
     step(3); setStatus("rules");
-    await micropip.install(new URL(WHEEL, location.href).href);
+    await micropip.install(new URL(WHEEL, location.href).href, { deps: false });
     py.runPython(`
 import json, re
 import aeoi
@@ -406,3 +406,12 @@ function finding(p) {
 }
 
 boot();
+
+// Offline after the first visit: the service worker precaches every file of the app. Only on a
+// secure context (https or localhost); it never contacts another host.
+if ("serviceWorker" in navigator && (location.protocol === "https:" || ["localhost", "127.0.0.1"].includes(location.hostname))) {
+  navigator.serviceWorker.register("sw.js").then((r) => {
+    navigator.serviceWorker.ready.then(() => console.info("aeoi:sw ready"));
+    r.addEventListener("updatefound", () => console.info("aeoi:sw update"));
+  }).catch((e) => console.warn("service worker not registered:", e));
+}

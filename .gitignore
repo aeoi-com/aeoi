@@ -17,3 +17,7 @@ CRS_KEY
 .local/
 docs/sources/estv/*.pdf
 web/*.whl
+web/pyodide/
+web/wheels/
+web/sw.js
+web/vendor.json
