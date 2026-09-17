@@ -1,0 +1,547 @@
+{
+  "_comment": "Check messages by id: en (what the CLI and the tests see) and de (what the page shows to a German-speaking user). Placeholders are str.format fields; a placeholder may be a nested message rendered in the same language. Terminology follows the ESTV Technische Wegleitung AIA and the OECD element names, which stay untranslated.",
+  "code_missing": {
+    "en": "missing; one of {options}",
+    "de": "fehlt; einer der Werte {options}"
+  },
+  "code_invalid": {
+    "en": "{value} is not one of {options}",
+    "de": "{value} ist keiner der Werte {options}"
+  },
+  "country_missing": {
+    "en": "missing ISO 3166-1 alpha-2 country code",
+    "de": "Ländercode (ISO 3166-1, zwei Buchstaben) fehlt"
+  },
+  "country_invalid": {
+    "en": "{value} is not a two-letter ISO country code",
+    "de": "{value} ist kein zweibuchstabiger ISO-Ländercode"
+  },
+  "charset": {
+    "en": "{text} at position {position}: {reason}",
+    "de": "{text} an Position {position}: {reason}"
+  },
+  "char_not_latin1": {
+    "en": "not in ISO 8859-1",
+    "de": "nicht in ISO 8859-1 enthalten"
+  },
+  "char_excluded": {
+    "en": "excluded by Anhang 7.2 (U+{code})",
+    "de": "durch Anhang 7.2 ausgeschlossen (U+{code})"
+  },
+  "char_control": {
+    "en": "control character (U+{code})",
+    "de": "Steuerzeichen (U+{code})"
+  },
+  "char_sequence": {
+    "en": "forbidden sequence (Anhang 7.2)",
+    "de": "verbotene Zeichenfolge (Anhang 7.2)"
+  },
+  "address_city": {
+    "en": "City is mandatory (AddressFix must be used)",
+    "de": "Ort (City) ist Pflicht - AddressFix muss verwendet werden"
+  },
+  "address_free_empty": {
+    "en": "AddressFree, when present, must not be empty",
+    "de": "AddressFree darf, wenn vorhanden, nicht leer sein"
+  },
+  "person_first_name": {
+    "en": "FirstName is mandatory; use NFN if unknown",
+    "de": "Vorname (FirstName) ist Pflicht; NFN eintragen, wenn unbekannt"
+  },
+  "person_last_name": {
+    "en": "LastName is mandatory",
+    "de": "Nachname (LastName) ist Pflicht"
+  },
+  "name_type_201": {
+    "en": "nameType OECD201 is not allowed",
+    "de": "Namenstyp OECD201 ist nicht erlaubt"
+  },
+  "res_country_required": {
+    "en": "at least one ResCountryCode is mandatory",
+    "de": "mindestens ein Ansässigkeitsland (ResCountryCode) ist Pflicht"
+  },
+  "tin_empty": {
+    "en": "a TIN, when present, must not be empty",
+    "de": "eine TIN darf, wenn vorhanden, nicht leer sein"
+  },
+  "birth_date": {
+    "en": "must be after 1900-01-01 and before today",
+    "de": "muss nach dem 01.01.1900 und vor heute liegen"
+  },
+  "org_name": {
+    "en": "organisation Name is mandatory",
+    "de": "Name des Rechtsträgers ist Pflicht"
+  },
+  "in_empty": {
+    "en": "an IN, when present, must not be empty",
+    "de": "eine IN darf, wenn vorhanden, nicht leer sein"
+  },
+  "partner_list_missing": {
+    "en": "no partner-state list for {year}",
+    "de": "keine Partnerstaaten-Liste für {year}"
+  },
+  "partner_none_person": {
+    "en": "none of {countries} was a Swiss AEOI partner state in {year} (SIF list, Stand {stand}){us}; the account is not reportable under the CRS for this year",
+    "de": "keines der Länder {countries} war {year} ein AIA-Partnerstaat der Schweiz (Liste SIF, Stand {stand}){us}; das Konto ist für dieses Jahr nicht CRS-meldepflichtig"
+  },
+  "partner_none_org": {
+    "en": "none of {countries} was a partner state in {year} and no controlling person resides in one{us}; nothing to report for this account",
+    "de": "keines der Länder {countries} war {year} ein Partnerstaat, und keine beherrschende Person ist in einem ansässig{us}; für dieses Konto ist nichts zu melden"
+  },
+  "partner_none_cp": {
+    "en": "none of {countries} was a partner state in {year}; controlling persons outside partner states must not be sent{us}{hint}",
+    "de": "keines der Länder {countries} war {year} ein Partnerstaat; beherrschende Personen ausserhalb der Partnerstaaten dürfen nicht gemeldet werden{us}{hint}"
+  },
+  "partner_cp_hint": {
+    "en": "; remove this row: if no controlling person remains and the entity itself is a reportable person, declare it as CRS102 or CRS103 without controlling persons, otherwise the account is not reportable",
+    "de": "; diese Zeile entfernen: bleibt keine beherrschende Person übrig und ist der Rechtsträger selbst meldepflichtig, ihn als CRS102 oder CRS103 ohne beherrschende Personen melden, sonst ist das Konto nicht meldepflichtig"
+  },
+  "us_hint": {
+    "en": " (US is not an AEOI partner state: US persons fall under FATCA, not the CRS)",
+    "de": " (die USA sind kein AIA-Partnerstaat: US-Personen fallen unter FATCA, nicht unter den CRS)"
+  },
+  "account_number_normalised": {
+    "en": "will be written as {normalised} (spaces/hyphens removed, upper case): the ESTV checks the raw format",
+    "de": "wird als {normalised} geschrieben (ohne Leerzeichen/Bindestriche, Grossbuchstaben): die ESTV prüft das Rohformat"
+  },
+  "iban_invalid": {
+    "en": "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)",
+    "de": "AcctNumberType OECD601 verlangt eine gültige IBAN (Format und Prüfsumme mod 97)"
+  },
+  "isin_invalid": {
+    "en": "AcctNumberType OECD603 requires a valid ISIN (12 characters, Luhn checksum)",
+    "de": "AcctNumberType OECD603 verlangt eine gültige ISIN (12 Zeichen, Luhn-Prüfziffer)"
+  },
+  "account_number_missing": {
+    "en": "mandatory; use NANUM when there is no number",
+    "de": "Pflicht; NANUM eintragen, wenn es keine Kontonummer gibt"
+  },
+  "balance_negative": {
+    "en": "AccountBalance must not be negative",
+    "de": "der Kontosaldo (AccountBalance) darf nicht negativ sein"
+  },
+  "balance_closed": {
+    "en": "closed accounts must report a balance of 0",
+    "de": "geschlossene Konten müssen den Saldo 0 melden"
+  },
+  "currency_invalid": {
+    "en": "ISO 4217 currency code required",
+    "de": "Währungscode nach ISO 4217 erforderlich"
+  },
+  "holder_exactly_one": {
+    "en": "exactly one of individual / organisation holder is required",
+    "de": "genau ein Kontoinhaber ist erforderlich: natürliche Person oder Rechtsträger"
+  },
+  "cp_not_allowed_individual": {
+    "en": "no ControllingPerson allowed for an individual holder",
+    "de": "bei einer natürlichen Person als Inhaber sind keine beherrschenden Personen erlaubt"
+  },
+  "undocumented_res_ch": {
+    "en": "undocumented account: the only ResCountryCode must be CH",
+    "de": "undokumentiertes Konto: das einzige Ansässigkeitsland muss CH sein"
+  },
+  "cp_required_crs101": {
+    "en": "CRS101 holder: at least one ControllingPerson is required",
+    "de": "Inhaber CRS101: mindestens eine beherrschende Person ist erforderlich"
+  },
+  "cp_not_allowed_type": {
+    "en": "no ControllingPerson allowed for AcctHolderType {aht}",
+    "de": "bei AcctHolderType {aht} sind keine beherrschenden Personen erlaubt"
+  },
+  "undocumented_individual": {
+    "en": "undocumented accounts must have an individual holder",
+    "de": "undokumentierte Konten müssen eine natürliche Person als Inhaber haben"
+  },
+  "cp_type_required_30": {
+    "en": "3.0: at least one CtrlgPersonType is mandatory",
+    "de": "3.0: mindestens ein CtrlgPersonType ist Pflicht"
+  },
+  "cp_type_only_first_20": {
+    "en": "2.0 allows one CtrlgPersonType; only the first is written",
+    "de": "2.0 erlaubt einen CtrlgPersonType; nur der erste wird geschrieben"
+  },
+  "joint_number_range": {
+    "en": "JointAccount.Number must be 1-200",
+    "de": "JointAccount.Number muss zwischen 1 und 200 liegen"
+  },
+  "account_type_depository": {
+    "en": "{ant} accounts must be depository (CRS1101)",
+    "de": "Konten mit {ant} müssen Einlagenkonten sein (CRS1101)"
+  },
+  "account_type_equity": {
+    "en": "EquityInterestType given: AccountType must be CRS1104",
+    "de": "EquityInterestType angegeben: AccountType muss CRS1104 sein"
+  },
+  "account_number_type_605": {
+    "en": "CRS1103 accounts must use AcctNumberType OECD605",
+    "de": "Konten CRS1103 müssen AcctNumberType OECD605 verwenden"
+  },
+  "payment_depository_interest": {
+    "en": "depository account (CRS1101): only interest (CRS502)",
+    "de": "Einlagenkonto (CRS1101): nur Zinsen (CRS502)"
+  },
+  "payment_503_504": {
+    "en": "{at} accounts: only CRS503 or CRS504 payments",
+    "de": "Konten {at}: nur Zahlungen CRS503 oder CRS504"
+  },
+  "ignored_in_20": {
+    "en": "ignored in 2.0 (element does not exist)",
+    "de": "in 2.0 ignoriert (Element existiert nicht)"
+  },
+  "estv_id_missing": {
+    "en": "SendingCompanyIN must be the ESTV-ID of the FI",
+    "de": "SendingCompanyIN muss die ESTV-ID des Instituts sein"
+  },
+  "estv_id_format": {
+    "en": "does not look like the ESTV-ID example (052.0000.0000); the portal compares it with the registered value",
+    "de": "entspricht nicht dem Beispielformat der ESTV-ID (052.0000.0000); das Portal vergleicht mit dem registrierten Wert"
+  },
+  "uid_invalid": {
+    "en": "IN, when given, must be the UID (CHE-nnn.nnn.nnn)",
+    "de": "IN muss, wenn angegeben, die UID sein (CHE-nnn.nnn.nnn)"
+  },
+  "fi_name_missing": {
+    "en": "Name is mandatory",
+    "de": "Name ist Pflicht"
+  },
+  "tdt_prefix": {
+    "en": "starts with TDT= but trustee_documented_trust is not set: write the trust's name and set the flag, the prefix is added at build time",
+    "de": "beginnt mit TDT=, aber trustee_documented_trust ist nicht gesetzt: den Namen des Trusts eintragen und das Kennzeichen setzen, das Präfix wird beim Erstellen angefügt"
+  },
+  "reporting_year_range": {
+    "en": "reporting year must be 2017..current year",
+    "de": "das Meldejahr muss zwischen 2017 und dem laufenden Jahr liegen"
+  },
+  "crs702_needs_registry": {
+    "en": "CRS702 (corrections) needs the submission registry: use 'aeoi crs correct' with the registry of the earlier messages (Wegleitung Ziffer 6)",
+    "de": "CRS702 (Korrekturen) braucht das Register der gesendeten Meldungen: 'aeoi crs correct' mit dem Register verwenden (Wegleitung Ziffer 6)"
+  },
+  "correction_needs_crs702": {
+    "en": "a correction message must carry CRS702",
+    "de": "eine Korrekturmeldung muss CRS702 tragen"
+  },
+  "nil_with_accounts": {
+    "en": "a nil report (CRS703) must not contain accounts",
+    "de": "eine Nullmeldung (CRS703) darf keine Konten enthalten"
+  },
+  "accounts_required": {
+    "en": "at least one account is required unless CRS703",
+    "de": "mindestens ein Konto ist erforderlich, ausser bei CRS703"
+  },
+  "key_not_unique": {
+    "en": "account key is not unique",
+    "de": "der Kontoschlüssel ist nicht eindeutig"
+  },
+  "doc_ref_id_duplicate_rows": {
+    "en": "DocRefId used on more than one row",
+    "de": "DocRefId auf mehr als einer Zeile verwendet"
+  },
+  "joint_rows": {
+    "en": "{n} rows share this account number: for a joint account set joint_account_number (number of joint holders) to the same value on every row; otherwise use distinct account numbers",
+    "de": "{n} Zeilen teilen diese Kontonummer: bei einem Gemeinschaftskonto joint_account_number (Anzahl Mitinhaber) auf jeder Zeile gleich setzen; sonst verschiedene Kontonummern verwenden"
+  },
+  "file_too_large": {
+    "en": "{size} bytes, above the 100 MB limit; split the message",
+    "de": "{size} Bytes, über der Grenze von 100 MB; die Meldung aufteilen"
+  },
+  "not_well_formed": {
+    "en": "not well-formed XML: {error}",
+    "de": "kein wohlgeformtes XML: {error}"
+  },
+  "unknown_namespace": {
+    "en": "unknown root namespace {namespace}",
+    "de": "unbekannter Namensraum des Wurzelelements {namespace}"
+  },
+  "header_v2_ns_v3": {
+    "en": "namespace urn:oecd:ties:crs:v2 with version=\"3.0\": this is the header shown in the Wegleitung 5.3.1, but the OECD 3.0 schema declares urn:oecd:ties:crs:v3; the file matches neither schema (open question 1)",
+    "de": "Namensraum urn:oecd:ties:crs:v2 mit version=\"3.0\": so zeigt es die Wegleitung 5.3.1, das OECD-Schema 3.0 deklariert aber urn:oecd:ties:crs:v3; die Datei passt zu keinem der beiden Schemata (offene Frage 1)"
+  },
+  "version_mismatch": {
+    "en": "version attribute {attr} does not match the namespace of schema {version}",
+    "de": "das Attribut version={attr} passt nicht zum Namensraum des Schemas {version}"
+  },
+  "signed_xml": {
+    "en": "the XML is signed; the ESTV rejects signed files",
+    "de": "das XML ist signiert; die ESTV weist signierte Dateien ab"
+  },
+  "xsd_error": {
+    "en": "{error}",
+    "de": "Schemaverstoss: {error}"
+  },
+  "content_skipped_schema": {
+    "en": "content checks skipped: the file does not follow the schema (see the 50007 errors)",
+    "de": "Inhaltsprüfungen übersprungen: die Datei folgt dem Schema nicht (siehe die Fehler 50007)"
+  },
+  "content_skipped_model": {
+    "en": "content checks skipped: the file could not be read into the model",
+    "de": "Inhaltsprüfungen übersprungen: die Datei konnte nicht eingelesen werden"
+  },
+  "must_be_ch": {
+    "en": "must be CH",
+    "de": "muss CH sein"
+  },
+  "must_be_crs": {
+    "en": "must be CRS",
+    "de": "muss CRS sein"
+  },
+  "must_not_be_used": {
+    "en": "must not be used",
+    "de": "darf nicht verwendet werden"
+  },
+  "must_not_be_present": {
+    "en": "must not be present",
+    "de": "darf nicht vorhanden sein"
+  },
+  "period_outside": {
+    "en": "{period} is outside 1.1.{year} - 31.12.{year1} (MessageRefId year {year})",
+    "de": "{period} liegt ausserhalb von 1.1.{year} - 31.12.{year1} (Berichtsjahr der MessageRefId: {year})"
+  },
+  "period_year_after": {
+    "en": "{period} is in the year after the MessageRefId year {year}; allowed by 98006, unusual for a Swiss FI",
+    "de": "{period} liegt im Jahr nach dem Berichtsjahr {year} der MessageRefId; nach 98006 erlaubt, für ein Schweizer Institut unüblich"
+  },
+  "period_not_dec31": {
+    "en": "not 31 December; unusual for a Swiss FI",
+    "de": "nicht der 31. Dezember; für ein Schweizer Institut unüblich"
+  },
+  "crs_bodies": {
+    "en": "{n} CrsBody elements; exactly one",
+    "de": "{n} CrsBody-Elemente; genau eines erlaubt"
+  },
+  "reporting_groups": {
+    "en": "{n} groups; exactly one",
+    "de": "{n} ReportingGroups; genau eine erlaubt"
+  },
+  "fi_res_country": {
+    "en": "must be exactly CH",
+    "de": "muss genau CH sein"
+  },
+  "fi_name_type_201": {
+    "en": "OECD201 is not allowed",
+    "de": "OECD201 ist nicht erlaubt"
+  },
+  "fi_indic": {
+    "en": "{indic}: the ReportingFI is never corrected or deleted",
+    "de": "{indic}: das ReportingFI wird nie korrigiert oder storniert"
+  },
+  "doc_ref_used_twice": {
+    "en": "used twice in this file",
+    "de": "in dieser Datei zweimal verwendet"
+  },
+  "test_indic_in_test_file": {
+    "en": "{indic} in a test file (name starts with Test)",
+    "de": "{indic} in einer Testdatei (Name beginnt mit Test)"
+  },
+  "prod_indic_in_prod_file": {
+    "en": "{indic} in a productive file",
+    "de": "{indic} in einer produktiven Datei"
+  },
+  "resend_not_allowed_ar": {
+    "en": "Resend Data is not allowed for AccountReports",
+    "de": "Resend Data ist für AccountReports nicht erlaubt"
+  },
+  "corr_ref_required": {
+    "en": "required for corrections and deletions",
+    "de": "bei Korrekturen und Stornierungen erforderlich"
+  },
+  "corr_ref_not_allowed_new": {
+    "en": "not allowed on a new record",
+    "de": "bei einem neuen Datensatz nicht erlaubt"
+  },
+  "corrected_twice": {
+    "en": "the same record corrected twice in one file",
+    "de": "derselbe Datensatz in einer Datei zweimal korrigiert"
+  },
+  "corrections_in_crs701": {
+    "en": "corrections in a CRS701 message",
+    "de": "Korrekturen in einer CRS701-Meldung"
+  },
+  "new_in_crs702": {
+    "en": "new records in a CRS702 message",
+    "de": "neue Datensätze in einer CRS702-Meldung"
+  },
+  "transitional_present": {
+    "en": "transitional 'not reported' values present (open question 3)",
+    "de": "Übergangswerte «nicht gemeldet» vorhanden (offene Frage 3)"
+  },
+  "msgref_too_long": {
+    "en": "MessageRefId longer than {max} characters (50008)",
+    "de": "MessageRefId länger als {max} Zeichen (50008)"
+  },
+  "msgref_format": {
+    "en": "MessageRefId must match CH<year>CH<unique id> (50008)",
+    "de": "MessageRefId muss dem Muster CH<Jahr>CH<eindeutige Kennung> folgen (50008)"
+  },
+  "msgref_charset": {
+    "en": "MessageRefId contains characters outside Anhang 7.2 (50008)",
+    "de": "MessageRefId enthält Zeichen ausserhalb von Anhang 7.2 (50008)"
+  },
+  "docref_format": {
+    "en": "DocRefId must be CH<year>CH + 1-42 letters, digits, '-', '_' or '.' (80001)",
+    "de": "DocRefId muss CH<Jahr>CH + 1-42 Buchstaben, Ziffern, '-', '_' oder '.' sein (80001)"
+  },
+  "docref_year": {
+    "en": "DocRefId year {year} differs from MessageRefId year {message_year} (80001)",
+    "de": "Jahr {year} der DocRefId weicht vom Jahr {message_year} der MessageRefId ab (80001)"
+  },
+  "input_not_date": {
+    "en": "not a date (use YYYY-MM-DD)",
+    "de": "kein Datum (Format JJJJ-MM-TT verwenden)"
+  },
+  "input_sheet_missing": {
+    "en": "sheet is missing",
+    "de": "Blatt fehlt"
+  },
+  "input_unknown_field": {
+    "en": "unknown field",
+    "de": "unbekanntes Feld"
+  },
+  "input_year": {
+    "en": "must be a year",
+    "de": "muss ein Jahr sein"
+  },
+  "input_bool": {
+    "en": "must be true or false",
+    "de": "muss true oder false sein"
+  },
+  "input_missing_account_key": {
+    "en": "missing account key",
+    "de": "Kontoschlüssel fehlt"
+  },
+  "input_not_number": {
+    "en": "not a number",
+    "de": "keine Zahl"
+  },
+  "input_missing_key": {
+    "en": "missing key",
+    "de": "Schlüssel fehlt"
+  },
+  "input_holder_type": {
+    "en": "must be individual or organisation",
+    "de": "muss individual oder organisation sein"
+  },
+  "input_no_account": {
+    "en": "no account with key {key}",
+    "de": "kein Konto mit dem Schlüssel {key}"
+  },
+  "reg_msgref_used": {
+    "en": "MessageRefId {ref} was already used (50009)",
+    "de": "MessageRefId {ref} wurde bereits verwendet (50009)"
+  },
+  "reg_docref_used": {
+    "en": "DocRefId {ref} was already used (80000)",
+    "de": "DocRefId {ref} wurde bereits verwendet (80000)"
+  },
+  "reg_nothing_sent": {
+    "en": "account {key}: nothing sent for {year} - new accounts go into a new message (CRS701), not a correction (80002)",
+    "de": "Konto {key}: für {year} wurde nichts gesendet - neue Konten gehören in eine Neumeldung (CRS701), nicht in eine Korrektur (80002)"
+  },
+  "reg_not_accepted_first": {
+    "en": "account {key}: message {ref} is {status}, not accepted; record the portal result first (80002)",
+    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; zuerst das Ergebnis des Portals erfassen (80002)"
+  },
+  "reg_deleted": {
+    "en": "account {key} was deleted ({ref}); a deleted record cannot be corrected - send it again as a new record (98103, 6.4.7)",
+    "de": "Konto {key} wurde storniert ({ref}); ein stornierter Datensatz kann nicht korrigiert werden - als neuen Datensatz erneut senden (98103, 6.4.7)"
+  },
+  "reg_last_dead": {
+    "en": "account {key}: the last message was {status}; send the record again in a new message (80002)",
+    "de": "Konto {key}: die letzte Meldung wurde {status}; den Datensatz in einer Neumeldung erneut senden (80002)"
+  },
+  "reg_no_valid_record": {
+    "en": "account {key}: no valid record to correct (80002)",
+    "de": "Konto {key}: kein gültiger Datensatz zum Korrigieren (80002)"
+  },
+  "reg_not_accepted": {
+    "en": "account {key}: message {ref} is {status}, not accepted; record the portal result before correcting (80002)",
+    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; vor der Korrektur das Ergebnis des Portals erfassen (80002)"
+  },
+  "reg_unknown_status": {
+    "en": "unknown status {status}",
+    "de": "unbekannter Status {status}"
+  },
+  "reg_unknown_msgref": {
+    "en": "unknown MessageRefId {ref}",
+    "de": "unbekannte MessageRefId {ref}"
+  },
+  "submit_problems": {
+    "en": "message has {n} problem(s): {text}",
+    "de": "die Meldung hat {n} Problem(e): {text}"
+  },
+  "submit_xsd": {
+    "en": "built XML is not valid against the OECD schema: {errors}",
+    "de": "das erstellte XML ist gegen das OECD-Schema nicht gültig: {errors}"
+  },
+  "submit_nil_refused": {
+    "en": "nil report refused: valid records exist for {year}; delete them first (98009)",
+    "de": "Nullmeldung verweigert: für {year} bestehen gültige Datensätze; zuerst stornieren (98009)"
+  },
+  "submit_already_valid": {
+    "en": "account {key} already has a valid record for {year}: use a correction (OECD2) or a deletion (OECD3), not a new record (6.1)",
+    "de": "Konto {key} hat für {year} bereits einen gültigen Datensatz: Korrektur (OECD2) oder Storno (OECD3) verwenden, keinen neuen Datensatz (6.1)"
+  },
+  "submit_no_stored": {
+    "en": "account {key}: no stored content to build the deletion from",
+    "de": "Konto {key}: kein gespeicherter Inhalt, aus dem das Storno erstellt werden könnte"
+  },
+  "submit_corrected_twice": {
+    "en": "the same record would be corrected twice in one message (80011)",
+    "de": "derselbe Datensatz würde in einer Meldung zweimal korrigiert (80011)"
+  },
+  "submit_outcome_unknown": {
+    "en": "the outcome does not say whether the message was accepted",
+    "de": "das Ergebnis sagt nicht, ob die Meldung angenommen wurde"
+  },
+  "wf_need_registry": {
+    "en": "productive messages need an open registry: it keeps the identifiers and makes next year's corrections possible",
+    "de": "produktive Meldungen brauchen ein geöffnetes Register: es bewahrt die Kennungen und macht die Korrekturen im nächsten Jahr möglich"
+  },
+  "wf_no_registry_plan": {
+    "en": "no registry open: productive messages need the registry",
+    "de": "kein Register geöffnet: produktive Meldungen brauchen das Register"
+  },
+  "wf_nothing_to_send": {
+    "en": "nothing to send: every account is unchanged since the accepted message",
+    "de": "nichts zu senden: alle Konten sind seit der angenommenen Meldung unverändert"
+  },
+  "wf_workbook_errors": {
+    "en": "the workbook has errors; fix them first (see the check result)",
+    "de": "die Vorlage hat Fehler; zuerst beheben (siehe Prüfergebnis)"
+  },
+  "wf_no_msgref": {
+    "en": "the outcome does not name the MessageRefId; choose the message",
+    "de": "das Ergebnis nennt keine MessageRefId; die Meldung auswählen"
+  },
+  "wf_not_in_registry": {
+    "en": "message {ref} is not in this registry",
+    "de": "Meldung {ref} ist nicht in diesem Register"
+  },
+  "wf_outcome_unknown": {
+    "en": "the text does not say whether the message was accepted; paste the whole validation confirmation from the portal",
+    "de": "der Text sagt nicht, ob die Meldung angenommen wurde; die ganze Validierungsbestätigung aus dem Portal einfügen"
+  },
+  "wf_blocked": {
+    "en": "{problems}",
+    "de": "{problems}"
+  },
+  "st_built": {
+    "en": "built",
+    "de": "erstellt, Ergebnis offen"
+  },
+  "st_submitted": {
+    "en": "submitted",
+    "de": "hochgeladen, Ergebnis offen"
+  },
+  "st_accepted": {
+    "en": "accepted",
+    "de": "angenommen"
+  },
+  "st_rejected": {
+    "en": "rejected",
+    "de": "abgewiesen"
+  },
+  "st_discarded": {
+    "en": "discarded",
+    "de": "verworfen"
+  }
+}

@@ -25,6 +25,8 @@ import re
 import uuid
 from dataclasses import dataclass
 
+from aeoi.messages import Msg
+
 MESSAGE_REF_ID_RE = re.compile(r"^CH(?P<year>[0-9]{4})CH(?P<unique>.{1,162})$", re.DOTALL)
 MESSAGE_REF_ID_MAX_LEN = 170
 DOC_REF_ID_RE = re.compile(r"^CH(?P<year>[0-9]{4})CH(?P<unique>[0-9A-Za-z._-]{1,42})$")
@@ -70,14 +72,14 @@ class IdCheck:
 def check_message_ref_id(value: str) -> IdCheck:
     problems: list[str] = []
     if len(value) > MESSAGE_REF_ID_MAX_LEN:
-        problems.append(f"MessageRefId longer than {MESSAGE_REF_ID_MAX_LEN} characters (50008)")
+        problems.append(Msg("msgref_too_long", max=MESSAGE_REF_ID_MAX_LEN))
     m = MESSAGE_REF_ID_RE.match(value)
     if not m:
-        problems.append("MessageRefId must match CH<year>CH<unique id> (50008)")
+        problems.append(Msg("msgref_format"))
         return IdCheck(False, None, tuple(problems))
     bad = invalid_characters(m.group("unique"))
     if bad:
-        problems.append("MessageRefId contains characters outside Anhang 7.2 (50008)")
+        problems.append(Msg("msgref_charset"))
     return IdCheck(not problems, int(m.group("year")), tuple(problems))
 
 
@@ -85,15 +87,11 @@ def check_doc_ref_id(value: str, *, message_year: int | None = None) -> IdCheck:
     problems: list[str] = []
     m = DOC_REF_ID_RE.match(value)
     if not m:
-        problems.append(
-            "DocRefId must be CH<year>CH + 1-42 letters, digits, '-', '_' or '.' (80001)"
-        )
+        problems.append(Msg("docref_format"))
         return IdCheck(False, None, tuple(problems))
     year = int(m.group("year"))
     if message_year is not None and year != message_year:
-        problems.append(
-            f"DocRefId year {year} differs from MessageRefId year {message_year} (80001)"
-        )
+        problems.append(Msg("docref_year", year=year, message_year=message_year))
     return IdCheck(not problems, year, tuple(problems))
 
 
@@ -110,15 +108,15 @@ def invalid_characters(text: str) -> list[CharProblem]:
     for i, ch in enumerate(text):
         code = ord(ch)
         if code > 0xFF:
-            problems.append(CharProblem(i, ch, "not in ISO 8859-1"))
+            problems.append(CharProblem(i, ch, Msg("char_not_latin1")))
         elif ch in EXCLUDED_CHARS:
-            problems.append(CharProblem(i, ch, f"excluded by Anhang 7.2 (U+{code:04X})"))
+            problems.append(CharProblem(i, ch, Msg("char_excluded", code=f"{code:04X}")))
         elif (code < 0x20 and ch not in ALLOWED_CONTROL_CHARS) or 0x7F <= code <= 0x9F:
-            problems.append(CharProblem(i, ch, f"control character (U+{code:04X})"))
+            problems.append(CharProblem(i, ch, Msg("char_control", code=f"{code:04X}")))
     for seq in FORBIDDEN_SEQUENCES:
         start = 0
         while (pos := text.find(seq, start)) != -1:
-            problems.append(CharProblem(pos, seq, "forbidden sequence (Anhang 7.2)"))
+            problems.append(CharProblem(pos, seq, Msg("char_sequence")))
             start = pos + 1
     problems.sort(key=lambda p: p.position)
     return problems

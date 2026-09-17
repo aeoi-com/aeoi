@@ -20,6 +20,7 @@ from aeoi.crs import check, submit
 from aeoi.crs.build import BuildResult
 from aeoi.crs.model import Message, Version
 from aeoi.estv import ids, packaging, status, titles
+from aeoi.messages import Msg, text
 from aeoi.registry import Registry, RegistryError, content_hash
 
 PUBLIC_KEY_SETTING = "estv_public_key_pem"
@@ -117,7 +118,7 @@ class Intent:
             out.append("new")
         return out
 
-    def as_dict(self) -> dict[str, Any]:
+    def as_dict(self, lang: str = "en") -> dict[str, Any]:
         return {
             "year": self.year,
             "version": self.version,
@@ -127,7 +128,7 @@ class Intent:
             "unchanged": self.unchanged,
             "deletions": self.deletions,
             "blocked": self.blocked,
-            "problems": self.problems,
+            "problems": [text(p, lang) for p in self.problems],
             "messages": self.messages,
             "nil": self.nil,
         }
@@ -147,7 +148,7 @@ def plan(
     if reg is None:
         intent.new_keys = [a.key for a in msg.accounts]
         if not test:
-            intent.problems.append("no registry open: productive messages need the registry")
+            intent.problems.append(Msg("wf_no_registry_plan"))
         return intent
     for acc in msg.accounts:
         try:  # correction_target knows every reason a record cannot be corrected (6.x, 80002)
@@ -157,7 +158,7 @@ def plan(
                 intent.new_keys.append(acc.key)  # never sent, or deleted: a new record
             else:
                 intent.blocked.append(acc.key)
-                intent.problems.append(str(exc))
+                intent.problems.append(exc.args[0])
             continue
         intent.existing_keys.append(acc.key)
         if acc.key in cancel:
@@ -174,7 +175,7 @@ def plan(
             intent.deletions.append(key)
         except RegistryError as exc:
             intent.blocked.append(key)
-            intent.problems.append(str(exc))
+            intent.problems.append(exc.args[0])
     return intent
 
 
@@ -225,12 +226,9 @@ def build(
     message meant for the user."""
     intent = plan(msg, version, reg, test=test, cancel=cancel)
     if intent.blocked:
-        raise WorkflowError("; ".join(intent.problems))
+        raise WorkflowError(Msg("wf_blocked", problems=intent.problems))
     if reg is None and not test:
-        raise WorkflowError(
-            "productive messages need an open registry: it keeps the identifiers and makes "
-            "next year's corrections possible"
-        )
+        raise WorkflowError(Msg("wf_need_registry"))
     pem = public_key_pem(reg, public_key)
     key = packaging.load_public_key(pem) if pem else None
     outputs: list[Built] = []
@@ -265,9 +263,7 @@ def build(
             result = submit.build_new(new_msg, version, reg, test=test, now=now)
         finish("new", result)
     if not outputs:
-        raise WorkflowError(
-            "nothing to send: every account is unchanged since the accepted message"
-        )
+        raise WorkflowError(Msg("wf_nothing_to_send"))
     return outputs
 
 
@@ -284,7 +280,7 @@ def build_from_workbook(
     """Check the workbook first; build only when it is clean."""
     report = check.check_workbook(path, version)
     if not report.ok or report.message is None:
-        raise WorkflowError("the workbook has errors; fix them first (see the check result)")
+        raise WorkflowError(Msg("wf_workbook_errors"))
     return report, build(
         report.message, version, reg, test=test, cancel=cancel, public_key=public_key, now=now
     )
@@ -328,14 +324,11 @@ def record_outcome(
     outcome = parse_outcome(text_or_xml)
     ref = outcome.original_message_ref_id or message_ref_id
     if not ref:
-        raise WorkflowError("the outcome does not name the MessageRefId; choose the message")
+        raise WorkflowError(Msg("wf_no_msgref"))
     if reg.message(ref) is None:
-        raise WorkflowError(f"message {ref} is not in this registry")
+        raise WorkflowError(Msg("wf_not_in_registry", ref=ref))
     if outcome.accepted is None:
-        raise WorkflowError(
-            "the text does not say whether the message was accepted; paste the whole "
-            "validation confirmation from the portal"
-        )
+        raise WorkflowError(Msg("wf_outcome_unknown"))
     new_status = submit.record_outcome(reg, ref, outcome, source=outcome.source)
     view = outcome_view(outcome, lang)
     view.update(message_ref_id=ref, status=new_status)

@@ -51,7 +51,7 @@ def _cmd_crs_check(args: argparse.Namespace) -> int:
     from aeoi.crs.check import check_workbook
 
     report = check_workbook(args.input, args.version)
-    print(report.render())
+    print(report.render(args.lang))
     return 0 if report.ok else 1
 
 
@@ -171,7 +171,7 @@ def _cmd_crs_validate(args: argparse.Namespace) -> int:
 
     test = None if args.test is None else args.test
     rep = validate.validate_file(args.file, test=test)
-    print(rep.render())
+    print(rep.render(args.lang))
     return 0 if rep.ok else 1
 
 
@@ -257,6 +257,7 @@ def build_parser() -> argparse.ArgumentParser:
     c = crs_sub.add_parser("check", help="read the input and report every problem")
     c.add_argument("--input", required=True, help=".xlsx workbook or folder of <Sheet>.csv files")
     c.add_argument("--version", default="3.0", choices=["2.0", "3.0"], help="CRS schema version")
+    c.add_argument("--lang", default="en", choices=["en", "de"], help="language of the messages")
     c.set_defaults(func=_cmd_crs_check)
 
     b = crs_sub.add_parser("build", help="read, check and write the CRS XML (optionally packaged)")
@@ -286,6 +287,7 @@ def build_parser() -> argparse.ArgumentParser:
     g2.add_argument("--test", dest="test", action="store_true", default=None,
                     help="treat as a test file (default: from the file name)")  # fmt: skip
     g2.add_argument("--prod", dest="test", action="store_false")
+    va.add_argument("--lang", default="en", choices=["en", "de"], help="language of the messages")
     va.set_defaults(func=_cmd_crs_validate)
 
     rg = crs_sub.add_parser("registry", help="list the messages of a registry")

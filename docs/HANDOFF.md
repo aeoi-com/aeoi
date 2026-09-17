@@ -203,9 +203,17 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    installable. CSP is now `'self'` only (`script-src 'self' 'wasm-unsafe-eval'`,
    `connect-src 'self'`); privacy text «nur diese Seite». Browser test: 31 checks - hosts seen
    during boot = the page's origin only, and a second page boots offline from the service worker.
-   The technical messages stay English. Not translated on purpose until
-   the pilot confirms the German content: the two long German guides and the ~200 program
-   messages (would need a message catalogue keyed by rule code first).
+   Messages in German (17.09.2026): `aeoi.messages.Msg` is a `str` subclass (English
+   rendering, so every caller and test keeps working) that remembers its catalogue id and
+   parameters and renders another language with `.text(lang)`; nested messages and lists of
+   messages render recursively; `messages.json` has 136 entries (en + de, placeholders checked
+   equal by a test, unused/missing ids checked against the code). Converted: model.py,
+   validate.py, ids.py (format checks and character reasons), flat.py (InputProblem), the
+   RegistryError / WorkflowError texts; `render(lang)` on both reports, `--lang de` on the CLI,
+   the page renders in its language (German today; fr/it fall back to English until translated).
+   Not translated on purpose until
+   the pilot confirms the German content: the two long German guides in fr/it and the
+   fr/it columns of `messages.json`.
 5. Week 6: browser validator, packages and CI done locally; waiting on the owner for the PyPI
    token (upload 0.0.1) and the GitHub repository (push, enable Pages, replace the placeholder
    links in README/pyproject/docs/de/ANLEITUNG.md and web/index.html).

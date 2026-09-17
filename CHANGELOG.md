@@ -34,6 +34,9 @@ First working version, CRS for the Swiss ESTV portal.
   (`aeoi.crs.workflow`; registry `settings` table); runtime, packages and wheels vendored on
   the page's own origin, service worker for offline use, installable (web app manifest), CSP
   `'self'` only.
+- Message catalogue (`aeoi.messages`, `messages.json`): every check, input, registry and workflow
+  message is a `Msg` - an English string that renders in German on request; reports take
+  `lang`, the CLI `--lang de`, the page shows German messages.
 - German pages for reporting FIs: `docs/de/ANLEITUNG.md`, `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 - CLI: `aeoi crs template | check | build | correct | validate | registry`,
   `aeoi estv package | inspect | status`.

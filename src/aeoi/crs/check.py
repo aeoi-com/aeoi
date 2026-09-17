@@ -8,6 +8,7 @@ from pathlib import Path
 
 from aeoi.crs import flat, model
 from aeoi.crs.model import Message, Version
+from aeoi.messages import text
 
 
 @dataclass
@@ -25,12 +26,12 @@ class WorkbookReport:
     def ok(self) -> bool:
         return self.message is not None and not self.input_problems and not self.errors
 
-    def lines(self) -> list[str]:
-        out = [f"input  | {p}" for p in self.input_problems]
+    def lines(self, lang: str = "en") -> list[str]:
+        out = [f"input  | {p.location}: {text(p.message, lang)}" for p in self.input_problems]
         for p in self.problems:
             level = "info " if p.rule == "info" else "error"
             rule = f" [{p.rule}]" if p.rule else ""
-            out.append(f"{level}  | {p.where}: {p.message}{rule}")
+            out.append(f"{level}  | {p.where}: {text(p.message, lang)}{rule}")
         return out
 
     def headline(self) -> str:
@@ -42,8 +43,8 @@ class WorkbookReport:
             f"{len(self.input_problems)} input problem(s), {len(self.errors)} error(s)"
         )
 
-    def render(self) -> str:
-        return "\n".join([self.headline(), *self.lines()])
+    def render(self, lang: str = "en") -> str:
+        return "\n".join([self.headline(), *self.lines(lang)])
 
 
 def check_workbook(

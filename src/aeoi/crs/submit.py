@@ -28,6 +28,7 @@ from aeoi.crs import model, xsd
 from aeoi.crs.build import BuildResult, FiPlan, RecordPlan
 from aeoi.crs.model import Account, Message, Version
 from aeoi.estv import ids, status
+from aeoi.messages import Msg
 from aeoi.registry import Registry, RegistryError, content_hash
 
 TRANSITIONAL = {
@@ -69,7 +70,7 @@ def _check(msg: Message, version: Version, *, correction: bool) -> None:
     errors = [p for p in report.problems if p.rule != "info"]
     if errors:
         text = "; ".join(f"{p.where}: {p.message} [{p.rule}]" for p in errors)
-        raise RegistryError(f"message has {len(errors)} problem(s): {text}")
+        raise RegistryError(Msg("submit_problems", n=len(errors), text=text))
 
 
 def _fi_plan(reg: Registry, *, year: int, test: bool) -> FiPlan:
@@ -85,7 +86,7 @@ def _finish(
 ) -> BuildResult:  # fmt: skip
     errors = xsd.validate(result.xml, version)
     if errors:
-        raise RegistryError("built XML is not valid against the OECD schema: " + "; ".join(errors))
+        raise RegistryError(Msg("submit_xsd", errors="; ".join(errors)))
     if out_path is not None:
         Path(out_path).write_text(result.xml, encoding="utf-8")
     by_key = {a.key: a for a in msg.accounts}
@@ -121,9 +122,7 @@ def build_new(
     _check(msg, version, correction=False)
     year = msg.reporting_year
     if msg.message_type_indic == "CRS703" and reg.has_valid_records(year=year, test=test):
-        raise RegistryError(
-            f"nil report refused: valid records exist for {year}; delete them first (98009)"
-        )
+        raise RegistryError(Msg("submit_nil_refused", year=year))
     if msg.message_ref_id:
         reg.assert_message_ref_id_unused(msg.message_ref_id)
     records = []
@@ -131,10 +130,7 @@ def build_new(
         ref = acc.doc_ref_id or ids.doc_ref_id(year)
         reg.assert_doc_ref_id_unused(ref)
         if reg.chain_head(acc.key, year=year, test=test) is not None:
-            raise RegistryError(
-                f"account {acc.key!r} already has a valid record for {year}: use a correction "
-                "(OECD2) or a deletion (OECD3), not a new record (6.1)"
-            )
+            raise RegistryError(Msg("submit_already_valid", key=repr(acc.key), year=year))
         records.append(RecordPlan(acc.key, ref, "OECD1"))
     result = builder.build(
         msg, version, test=test, now=now, records=records,
@@ -148,7 +144,7 @@ def _deletion_account(reg: Registry, key: str, head, version: Version) -> Accoun
     what guarantees the same ResCountryCodes (98204) whatever the workbook row says now."""
     stored = reg.stored_account(head.doc_ref_id)
     if stored is None:
-        raise RegistryError(f"account {key!r}: no stored content to build the deletion from")
+        raise RegistryError(Msg("submit_no_stored", key=repr(key)))
     stored.key = key
     stored.doc_ref_id = None
     return upgrade_for_version(stored, from_version=head.version, to_version=version)
@@ -185,7 +181,7 @@ def plan_correction(
         plan.accounts.append(_deletion_account(reg, key, head, version))
     targets = [p.corr_doc_ref_id for p in plan.records]
     if len(targets) != len(set(targets)):
-        raise RegistryError("the same record would be corrected twice in one message (80011)")
+        raise RegistryError(Msg("submit_corrected_twice"))
     return plan
 
 
@@ -222,7 +218,7 @@ def record_outcome(
 ) -> str:
     """Apply a parsed portal outcome to the registry; returns the new status."""
     if outcome.accepted is None:
-        raise RegistryError("the outcome does not say whether the message was accepted")
+        raise RegistryError(Msg("submit_outcome_unknown"))
     new_status = "accepted" if outcome.accepted else "rejected"
     findings = [
         (f.doc_ref_ids[0] if f.doc_ref_ids else None, f.code, f.details) for f in outcome.findings

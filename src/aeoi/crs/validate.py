@@ -19,6 +19,8 @@ from lxml import etree
 from aeoi.crs import model, read_xml, xsd
 from aeoi.crs.model import Version
 from aeoi.estv import ids, packaging
+from aeoi.messages import Msg
+from aeoi.messages import text as msg_text
 
 WEGLEITUNG_3_0_HEADER_NS = "urn:oecd:ties:crs:v2"
 NEW_INDICS = {"OECD1", "OECD11"}
@@ -44,16 +46,17 @@ class ValidationReport:
     def info(self, where: str, message: str) -> None:
         self.infos.append(model.Problem(where, message, "info"))
 
-    def render(self) -> str:
+    def render(self, lang: str = "en") -> str:
+        """Plain-text report; ``lang`` renders the catalogue messages (en, de)."""
         head = (
             f"{'OK' if self.ok else 'NOT OK'}: CRS {self.version or '?'}, "
             f"{len(self.problems)} problem(s), {len(self.infos)} note(s)"
         )
         lines = [head]
         for p in self.problems:
-            lines.append(f"  error  {p.where}: {p.message} [{p.rule}]")
+            lines.append(f"  error  {p.where}: {msg_text(p.message, lang)} [{p.rule}]")
         for p in self.infos:
-            lines.append(f"  note   {p.where}: {p.message}")
+            lines.append(f"  note   {p.where}: {msg_text(p.message, lang)}")
         return "\n".join(lines)
 
 
@@ -77,57 +80,55 @@ def validate_file(
 
     # --- file level ---------------------------------------------------------------------------
     if len(data) > packaging.MAX_XML_BYTES:
-        rep.add("file", f"{len(data)} bytes, above the 100 MB limit; split the message", "4.1.1")
+        rep.add("file", Msg("file_too_large", size=len(data)), "4.1.1")
     try:
         root = etree.fromstring(data)
     except etree.XMLSyntaxError as exc:
-        rep.add("file", f"not well-formed XML: {exc}", "50007")
+        rep.add("file", Msg("not_well_formed", error=str(exc)), "50007")
         return rep
     version, version_attr = read_xml.detect_version(data)
     rep.version = version
     if version is None:
-        rep.add("CRS_OECD", f"unknown root namespace {etree.QName(root).namespace!r}", "50007")
+        rep.add(
+            "CRS_OECD",
+            Msg("unknown_namespace", namespace=repr(etree.QName(root).namespace)),
+            "50007",
+        )
         return rep
     if version == "2.0" and version_attr == "3.0":
-        rep.add("CRS_OECD", "namespace urn:oecd:ties:crs:v2 with version=\"3.0\": this is the "
-                "header shown in the Wegleitung 5.3.1, but the OECD 3.0 schema declares "
-                "urn:oecd:ties:crs:v3; the file matches neither schema (open question 1)",
-                "98000")  # fmt: skip
+        rep.add("CRS_OECD", Msg("header_v2_ns_v3"), "98000")
         return rep
     if version_attr != version:
-        rep.add("CRS_OECD/@version",
-                f"version attribute {version_attr!r} does not match the namespace of schema "
-                f"{version}", "98000")  # fmt: skip
+        rep.add(
+            "CRS_OECD/@version",
+            Msg("version_mismatch", attr=repr(version_attr), version=version),
+            "98000",
+        )
     if root.find(".//{http://www.w3.org/2000/09/xmldsig#}Signature") is not None:
-        rep.add("file", "the XML is signed; the ESTV rejects signed files", "50007")
+        rep.add("file", Msg("signed_xml"), "50007")
     for e in xsd.validate(data, version):
-        rep.add("xsd", e, "50007")
+        rep.add("xsd", Msg("xsd_error", error=e), "50007")
     for el, text in _text_nodes(root):
         bad = ids.invalid_characters(text)
         if bad:
             rep.add(root.getroottree().getpath(el),
-                    f"{bad[0].text!r} at position {bad[0].position}: {bad[0].reason}", "50005")  # fmt: skip
+                    Msg("charset", text=repr(bad[0].text), position=bad[0].position, reason=bad[0].reason), "50005")  # fmt: skip
 
     # --- header and DocSpecs (readable without the domain model) ---------------------------------
     try:
         parsed = read_xml.parse(data)
     except Exception:  # noqa: BLE001 - a file outside the schema cannot be mapped
-        rep.info(
-            "file",
-            "content checks skipped: the file does not follow the schema (see the 50007 errors)"
-            if not rep.ok
-            else "content checks skipped: the file could not be read into the model",
-        )
+        rep.info("file", Msg("content_skipped_schema" if not rep.ok else "content_skipped_model"))
         return rep
     rep.message = parsed.message
     if parsed.transmitting_country != "CH":
-        rep.add("MessageSpec/TransmittingCountry", "must be CH", "98002")
+        rep.add("MessageSpec/TransmittingCountry", Msg("must_be_ch"), "98002")
     if parsed.receiving_country != "CH":
-        rep.add("MessageSpec/ReceivingCountry", "must be CH", "50012")
+        rep.add("MessageSpec/ReceivingCountry", Msg("must_be_ch"), "50012")
     if parsed.message_type != "CRS":
-        rep.add("MessageSpec/MessageType", "must be CRS", "50007")
+        rep.add("MessageSpec/MessageType", Msg("must_be_crs"), "50007")
     if parsed.corr_message_ref_id:
-        rep.add("MessageSpec/CorrMessageRefId", "must not be used", "80007")
+        rep.add("MessageSpec/CorrMessageRefId", Msg("must_not_be_used"), "80007")
     ref = parsed.message.message_ref_id or ""
     check = ids.check_message_ref_id(ref)
     for p in check.problems:
@@ -137,41 +138,42 @@ def validate_file(
     if check.ok and not (ref_year <= period_year <= ref_year + 1):
         rep.add(
             "MessageSpec/ReportingPeriod",
-            f"{parsed.reporting_period} is outside 1.1.{ref_year} - 31.12.{ref_year + 1} "
-            f"(MessageRefId year {ref_year})",
+            Msg(
+                "period_outside", period=parsed.reporting_period, year=ref_year, year1=ref_year + 1
+            ),
             "98006",
         )
     elif check.ok and period_year != ref_year:
         rep.info(
             "MessageSpec/ReportingPeriod",
-            f"{parsed.reporting_period} is in the year after the MessageRefId year {ref_year}; "
-            "allowed by 98006, unusual for a Swiss FI",
+            Msg("period_year_after", period=parsed.reporting_period, year=ref_year),
         )
     if not parsed.reporting_period.endswith("-12-31"):
-        rep.info("MessageSpec/ReportingPeriod", "not 31 December; unusual for a Swiss FI")
+        rep.info("MessageSpec/ReportingPeriod", Msg("period_not_dec31"))
     if parsed.crs_bodies != 1:
-        rep.add("CrsBody", f"{parsed.crs_bodies} CrsBody elements; exactly one", "98100")
+        rep.add("CrsBody", Msg("crs_bodies", n=parsed.crs_bodies), "98100")
     if parsed.reporting_groups != 1:
-        rep.add("ReportingGroup", f"{parsed.reporting_groups} groups; exactly one", "60007")
+        rep.add("ReportingGroup", Msg("reporting_groups", n=parsed.reporting_groups), "60007")
     if parsed.has_sponsor:
-        rep.add("ReportingGroup/Sponsor", "must not be used", "60008")
+        rep.add("ReportingGroup/Sponsor", Msg("must_not_be_used"), "60008")
     if parsed.has_intermediary:
-        rep.add("ReportingGroup/Intermediary", "must not be used", "60009")
+        rep.add("ReportingGroup/Intermediary", Msg("must_not_be_used"), "60009")
     if parsed.has_pool_report:
-        rep.add("ReportingGroup/PoolReport", "must not be used", "60010")
+        rep.add("ReportingGroup/PoolReport", Msg("must_not_be_used"), "60010")
     if parsed.fi_res_country_codes != ["CH"]:
-        rep.add("ReportingFI/ResCountryCode", "must be exactly CH", "60013")
+        rep.add("ReportingFI/ResCountryCode", Msg("fi_res_country"), "60013")
     if parsed.fi_name_type == "OECD201":
-        rep.add("ReportingFI/Name/@nameType", "OECD201 is not allowed", "60004")
+        rep.add("ReportingFI/Name/@nameType", Msg("fi_name_type_201"), "60004")
 
     fi = parsed.reporting_fi_spec
     if fi.doc_type_indic not in FI_INDICS:
-        rep.add("ReportingFI/DocSpec/DocTypeIndic",
-                f"{fi.doc_type_indic}: the ReportingFI is never corrected or deleted", "98101")  # fmt: skip
+        rep.add(
+            "ReportingFI/DocSpec/DocTypeIndic", Msg("fi_indic", indic=fi.doc_type_indic), "98101"
+        )
     if fi.corr_doc_ref_id:
-        rep.add("ReportingFI/DocSpec/CorrDocRefId", "must not be present", "80004")
+        rep.add("ReportingFI/DocSpec/CorrDocRefId", Msg("must_not_be_present"), "80004")
     if fi.corr_message_ref_id:
-        rep.add("ReportingFI/DocSpec/CorrMessageRefId", "must not be present", "80006")
+        rep.add("ReportingFI/DocSpec/CorrMessageRefId", Msg("must_not_be_present"), "80006")
     specs = [fi, *parsed.account_specs]
     seen: set[str] = set()
     corr_seen: set[str] = set()
@@ -182,37 +184,39 @@ def validate_file(
         for p in c.problems:
             rep.add(f"{where}/DocRefId", p, "80001")
         if sp.doc_ref_id in seen and sp.doc_type_indic not in ("OECD0", "OECD10"):
-            rep.add(f"{where}/DocRefId", "used twice in this file", "80000")
+            rep.add(f"{where}/DocRefId", Msg("doc_ref_used_twice"), "80000")
         seen.add(sp.doc_ref_id)
         is_test = sp.doc_type_indic in TEST_INDICS
         if test and not is_test:
-            rep.add(f"{where}/DocTypeIndic",
-                    f"{sp.doc_type_indic} in a test file (name starts with Test)", "50011")  # fmt: skip
+            rep.add(
+                f"{where}/DocTypeIndic",
+                Msg("test_indic_in_test_file", indic=sp.doc_type_indic),
+                "50011",
+            )
         if not test and is_test:
-            rep.add(f"{where}/DocTypeIndic",
-                    f"{sp.doc_type_indic} in a productive file", "50010")  # fmt: skip
+            rep.add(
+                f"{where}/DocTypeIndic",
+                Msg("prod_indic_in_prod_file", indic=sp.doc_type_indic),
+                "50010",
+            )
         if i == 0:
             continue
         if sp.corr_message_ref_id:
-            rep.add(f"{where}/CorrMessageRefId", "must not be present", "80006")
+            rep.add(f"{where}/CorrMessageRefId", Msg("must_not_be_present"), "80006")
         if sp.doc_type_indic in ("OECD0", "OECD10"):
-            rep.add(
-                f"{where}/DocTypeIndic", "Resend Data is not allowed for AccountReports", "80008"
-            )
+            rep.add(f"{where}/DocTypeIndic", Msg("resend_not_allowed_ar"), "80008")
         if sp.doc_type_indic in CORR_INDICS and not sp.corr_doc_ref_id:
-            rep.add(f"{where}/CorrDocRefId", "required for corrections and deletions", "80005")
+            rep.add(f"{where}/CorrDocRefId", Msg("corr_ref_required"), "80005")
         if sp.doc_type_indic in NEW_INDICS and sp.corr_doc_ref_id:
-            rep.add(f"{where}/CorrDocRefId", "not allowed on a new record", "80005")
+            rep.add(f"{where}/CorrDocRefId", Msg("corr_ref_not_allowed_new"), "80005")
         if sp.corr_doc_ref_id:
             if sp.corr_doc_ref_id in corr_seen:
-                rep.add(
-                    f"{where}/CorrDocRefId", "the same record corrected twice in one file", "80011"
-                )
+                rep.add(f"{where}/CorrDocRefId", Msg("corrected_twice"), "80011")
             corr_seen.add(sp.corr_doc_ref_id)
         if indic == "CRS701" and sp.doc_type_indic in CORR_INDICS:
-            rep.add(f"{where}/DocTypeIndic", "corrections in a CRS701 message", "80010")
+            rep.add(f"{where}/DocTypeIndic", Msg("corrections_in_crs701"), "80010")
         if indic == "CRS702" and sp.doc_type_indic in NEW_INDICS:
-            rep.add(f"{where}/DocTypeIndic", "new records in a CRS702 message", "80010")
+            rep.add(f"{where}/DocTypeIndic", Msg("new_in_crs702"), "80010")
 
     # --- content rules through the domain model ----------------------------------------------------
     content = model.check_message(
@@ -228,5 +232,5 @@ def validate_file(
     if version == "3.0" and re.search(
         r"CRS(800|900|1000|1100|1200)\b", data.decode("utf-8", "ignore")
     ):
-        rep.info("file", "transitional 'not reported' values present (open question 3)")
+        rep.info("file", Msg("transitional_present"))
     return rep

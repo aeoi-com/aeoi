@@ -31,6 +31,7 @@ from pathlib import Path
 from typing import Self
 
 from aeoi.crs.model import Account
+from aeoi.messages import Msg
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS messages (
@@ -283,11 +284,11 @@ class Registry:
 
     def assert_message_ref_id_unused(self, message_ref_id: str) -> None:
         if self.message(message_ref_id):
-            raise RegistryError(f"MessageRefId {message_ref_id} was already used (50009)")
+            raise RegistryError(Msg("reg_msgref_used", ref=message_ref_id))
 
     def assert_doc_ref_id_unused(self, doc_ref_id: str) -> None:
         if self.record(doc_ref_id):
-            raise RegistryError(f"DocRefId {doc_ref_id} was already used (80000)")
+            raise RegistryError(Msg("reg_docref_used", ref=doc_ref_id))
 
     def correction_target(self, account_key: str, *, year: int, test: bool) -> RecordRow:
         """The DocRefId a correction or deletion of this account must reference."""
@@ -302,31 +303,36 @@ class Registry:
                 (account_key, year, int(test)),
             ).fetchall()
             if not rows:
-                raise RegistryError(
-                    f"account {account_key!r}: nothing sent for {year} - new accounts go into a "
-                    "new message (CRS701), not a correction (80002)"
-                )
+                raise RegistryError(Msg("reg_nothing_sent", key=repr(account_key), year=year))
             last = self._row(rows[0])
             if last.message_status in ("built", "submitted"):
                 raise RegistryError(
-                    f"account {account_key!r}: message {last.message_ref_id} is "
-                    f"{last.message_status}, not accepted; record the portal result first (80002)"
+                    Msg(
+                        "reg_not_accepted_first",
+                        key=repr(account_key),
+                        ref=last.message_ref_id,
+                        status=Msg("st_" + last.message_status),
+                    )
                 )
             if last.doc_type_indic == "OECD3":
-                raise RegistryError(
-                    f"account {account_key!r} was deleted ({last.doc_ref_id}); a deleted record "
-                    "cannot be corrected - send it again as a new record (98103, 6.4.7)"
-                )
+                raise RegistryError(Msg("reg_deleted", key=repr(account_key), ref=last.doc_ref_id))
             if last.message_status in DEAD_STATUSES:
                 raise RegistryError(
-                    f"account {account_key!r}: the last message was {last.message_status}; send "
-                    "the record again in a new message (80002)"
+                    Msg(
+                        "reg_last_dead",
+                        key=repr(account_key),
+                        status=Msg("st_" + last.message_status),
+                    )
                 )
-            raise RegistryError(f"account {account_key!r}: no valid record to correct (80002)")
+            raise RegistryError(Msg("reg_no_valid_record", key=repr(account_key)))
         if head.message_status != "accepted":
             raise RegistryError(
-                f"account {account_key!r}: message {head.message_ref_id} is {head.message_status}, "
-                "not accepted; record the portal result before correcting (80002)"
+                Msg(
+                    "reg_not_accepted",
+                    key=repr(account_key),
+                    ref=head.message_ref_id,
+                    status=Msg("st_" + head.message_status),
+                )
             )
         return head
 
@@ -393,10 +399,10 @@ class Registry:
         """Record the portal outcome (or 'discarded' for a message never uploaded). A rejected or
         discarded correction message frees its targets again."""
         if status not in VALID_STATUSES:
-            raise RegistryError(f"unknown status {status!r}")
+            raise RegistryError(Msg("reg_unknown_status", status=repr(status)))
         msg = self.message(message_ref_id)
         if msg is None:
-            raise RegistryError(f"unknown MessageRefId {message_ref_id}")
+            raise RegistryError(Msg("reg_unknown_msgref", ref=message_ref_id))
         now = _now()
         with self.conn:
             self.conn.execute(

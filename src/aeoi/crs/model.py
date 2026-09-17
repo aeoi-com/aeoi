@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from aeoi.crs import checksums, codes
 from aeoi.estv import ids, partners
+from aeoi.messages import Msg
 
 Version = Literal["2.0", "3.0"]
 COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
@@ -157,22 +158,22 @@ def _check_code(rep: Report, where: str, value: str | None, table: dict, *, requ
                 rule: str = "", allow_transitional: bool = False) -> None:  # fmt: skip
     if value is None or value == "":
         if required:
-            rep.add(where, f"missing; one of {', '.join(table)}", rule)
+            rep.add(where, Msg("code_missing", options=", ".join(table)), rule)
         return
     if value in table:
         return
     if allow_transitional and value in codes.TRANSITIONAL:
         return
-    rep.add(where, f"{value!r} is not one of {', '.join(table)}", rule)
+    rep.add(where, Msg("code_invalid", value=repr(value), options=", ".join(table)), rule)
 
 
 def _check_country(rep: Report, where: str, value: str | None, *, required: bool) -> None:
     if not value:
         if required:
-            rep.add(where, "missing ISO 3166-1 alpha-2 country code", "XSD")
+            rep.add(where, Msg("country_missing"), "XSD")
         return
     if not COUNTRY_RE.match(value):
-        rep.add(where, f"{value!r} is not a two-letter ISO country code", "XSD")
+        rep.add(where, Msg("country_invalid", value=repr(value)), "XSD")
 
 
 def _check_text(rep: Report, where: str, value: str | None) -> None:
@@ -182,7 +183,11 @@ def _check_text(rep: Report, where: str, value: str | None) -> None:
     problems = ids.invalid_characters(value)
     if problems:
         first = problems[0]
-        rep.add(where, f"{first.text!r} at position {first.position}: {first.reason}", "50005")
+        rep.add(
+            where,
+            Msg("charset", text=repr(first.text), position=first.position, reason=first.reason),
+            "50005",
+        )
 
 
 def _check_address(rep: Report, where: str, a: Address) -> None:
@@ -201,54 +206,54 @@ def _check_address(rep: Report, where: str, a: Address) -> None:
     ):
         _check_text(rep, f"{where}.{name}", getattr(a, name))  # fmt: skip
     if not a.city:
-        rep.add(f"{where}.city", "City is mandatory (AddressFix must be used)", "98104")
+        rep.add(f"{where}.city", Msg("address_city"), "98104")
     if a.address_free is not None and not a.address_free:
-        rep.add(f"{where}.address_free", "AddressFree, when present, must not be empty", "98104")
+        rep.add(f"{where}.address_free", Msg("address_free_empty"), "98104")
     _check_code(rep, f"{where}.legal_address_type", a.legal_address_type, codes.LEGAL_ADDRESS_TYPE,
                 required=False)  # fmt: skip
 
 
 def _check_person(rep: Report, where: str, p: Person, *, today: dt.date) -> None:
     if not p.first_name:
-        rep.add(f"{where}.first_name", "FirstName is mandatory; use NFN if unknown", "50007")
+        rep.add(f"{where}.first_name", Msg("person_first_name"), "50007")
     if not p.last_name:
-        rep.add(f"{where}.last_name", "LastName is mandatory", "50007")
+        rep.add(f"{where}.last_name", Msg("person_last_name"), "50007")
     for name in ("first_name", "last_name", "middle_name", "birth_city"):
         _check_text(rep, f"{where}.{name}", getattr(p, name))
     if p.name_type == "OECD201":
-        rep.add(f"{where}.name_type", "nameType OECD201 is not allowed", "60004")
+        rep.add(f"{where}.name_type", Msg("name_type_201"), "60004")
     else:
         _check_code(rep, f"{where}.name_type", p.name_type, codes.NAME_TYPE, required=False)
     if not p.residence_countries:
-        rep.add(f"{where}.residence_countries", "at least one ResCountryCode is mandatory", "XSD")
+        rep.add(f"{where}.residence_countries", Msg("res_country_required"), "XSD")
     for i, c in enumerate(p.residence_countries):
         _check_country(rep, f"{where}.residence_countries[{i}]", c, required=True)
     for i, t in enumerate(p.tins):
         if not t.value:
-            rep.add(f"{where}.tins[{i}]", "a TIN, when present, must not be empty", "XSD")
+            rep.add(f"{where}.tins[{i}]", Msg("tin_empty"), "XSD")
         _check_text(rep, f"{where}.tins[{i}]", t.value)
         _check_country(rep, f"{where}.tins[{i}].issued_by", t.issued_by, required=False)
     if p.birth_date is not None and not (dt.date(1900, 1, 1) < p.birth_date < today):
-        rep.add(f"{where}.birth_date", "must be after 1900-01-01 and before today", "60014")
+        rep.add(f"{where}.birth_date", Msg("birth_date"), "60014")
     _check_country(rep, f"{where}.birth_country", p.birth_country, required=False)
     _check_address(rep, f"{where}.address", p.address)
 
 
 def _check_organisation(rep: Report, where: str, o: Organisation) -> None:
     if not o.name:
-        rep.add(f"{where}.name", "organisation Name is mandatory", "XSD")
+        rep.add(f"{where}.name", Msg("org_name"), "XSD")
     _check_text(rep, f"{where}.name", o.name)
     if o.name_type == "OECD201":
-        rep.add(f"{where}.name_type", "nameType OECD201 is not allowed", "60004")
+        rep.add(f"{where}.name_type", Msg("name_type_201"), "60004")
     _check_code(rep, f"{where}.acct_holder_type", o.acct_holder_type, codes.ACCT_HOLDER_TYPE,
                 required=True, rule="XSD")  # fmt: skip
     if not o.residence_countries:
-        rep.add(f"{where}.residence_countries", "at least one ResCountryCode is mandatory", "XSD")
+        rep.add(f"{where}.residence_countries", Msg("res_country_required"), "XSD")
     for i, c in enumerate(o.residence_countries):
         _check_country(rep, f"{where}.residence_countries[{i}]", c, required=True)
     for i, t in enumerate(o.ins):
         if not t.value:
-            rep.add(f"{where}.ins[{i}]", "an IN, when present, must not be empty", "XSD")
+            rep.add(f"{where}.ins[{i}]", Msg("in_empty"), "XSD")
         _check_text(rep, f"{where}.ins[{i}]", t.value)
     _check_address(rep, f"{where}.address", o.address)
 
@@ -266,7 +271,7 @@ def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
     """
     active = partners.partner_codes(year)
     if not active:
-        rep.add(f"{w}.residence_countries", f"no partner-state list for {year}", "info")
+        rep.add(f"{w}.residence_countries", Msg("partner_list_missing", year=year), "info")
         return
     person = acc.holder_person
     if (
@@ -276,10 +281,13 @@ def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
     ):
         rep.add(
             f"{w}.holder.residence_countries",
-            f"none of {person.residence_countries} was a Swiss AEOI partner state in {year} "
-            f"(SIF list, Stand {partners.source()['source_stand']})"
-            + _us_hint(person.residence_countries)
-            + "; the account is not reportable under the CRS for this year",
+            Msg(
+                "partner_none_person",
+                countries=person.residence_countries,
+                year=year,
+                stand=partners.source()["source_stand"],
+                us=_us_hint(person.residence_countries),
+            ),
             "98200",
         )
     org = acc.holder_organisation
@@ -290,34 +298,35 @@ def _check_partner_states(rep: Report, w: str, acc: Account, year: int) -> None:
         if not cp_ok:
             rep.add(
                 f"{w}.holder.residence_countries",
-                f"none of {org.residence_countries} was a partner state in {year} and no "
-                "controlling person resides in one"
-                + _us_hint(org.residence_countries)
-                + "; nothing to report for this account",
+                Msg(
+                    "partner_none_org",
+                    countries=org.residence_countries,
+                    year=year,
+                    us=_us_hint(org.residence_countries),
+                ),
                 "98201",
             )
     for i, cp in enumerate(acc.controlling_persons):
         if not _partner_hits(cp.person.residence_countries, year):
-            hint = ""
+            hint: str = ""
             if org is not None and org.acct_holder_type == "CRS101":
-                hint = (
-                    "; remove this row: if no controlling person remains and the entity itself is "
-                    "a reportable person, declare it as CRS102 or CRS103 without controlling "
-                    "persons, otherwise the account is not reportable"
-                )
+                hint = Msg("partner_cp_hint")
             rep.add(
                 f"{w}.controlling_persons[{i}].residence_countries",
-                f"none of {cp.person.residence_countries} was a partner state in {year}; "
-                "controlling persons outside partner states must not be sent"
-                + _us_hint(cp.person.residence_countries)
-                + hint,
+                Msg(
+                    "partner_none_cp",
+                    countries=cp.person.residence_countries,
+                    year=year,
+                    us=_us_hint(cp.person.residence_countries),
+                    hint=hint,
+                ),
                 "98202",
             )
 
 
 def _us_hint(countries: list[str]) -> str:
     if "US" in countries:
-        return " (US is not an AEOI partner state: US persons fall under FATCA, not the CRS)"
+        return Msg("us_hint")
     return ""
 
 
@@ -327,14 +336,11 @@ def _check_account_number(rep: Report, w: str, acc: Account) -> None:
         normalised = checksums.normalise(acc.account_number)
         if normalised != acc.account_number:
             rep.add(f"{w}.account_number",
-                    f"will be written as {normalised!r} (spaces/hyphens removed, upper case): the "
-                    "ESTV checks the raw format", "info")  # fmt: skip
+                    Msg("account_number_normalised", normalised=repr(normalised)), "info")  # fmt: skip
     if acc.account_number_type == "OECD601" and not checksums.is_valid_iban(acc.account_number):
-        rep.add(f"{w}.account_number",
-                "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)", "60000")  # fmt: skip
+        rep.add(f"{w}.account_number", Msg("iban_invalid"), "60000")
     if acc.account_number_type == "OECD603" and not checksums.is_valid_isin(acc.account_number):
-        rep.add(f"{w}.account_number",
-                "AcctNumberType OECD603 requires a valid ISIN (12 characters, Luhn checksum)", "60001")  # fmt: skip
+        rep.add(f"{w}.account_number", Msg("isin_invalid"), "60001")
 
 
 def check_account(
@@ -345,54 +351,47 @@ def check_account(
     if year is not None:
         _check_partner_states(rep, w, acc, year)
     if not acc.account_number:
-        rep.add(f"{w}.account_number", "mandatory; use NANUM when there is no number", "50007")
+        rep.add(f"{w}.account_number", Msg("account_number_missing"), "50007")
     _check_text(rep, f"{w}.account_number", acc.account_number)
     _check_text(rep, f"{w}.doc_ref_id", acc.doc_ref_id)
     _check_code(rep, f"{w}.account_number_type", acc.account_number_type, codes.ACCT_NUMBER_TYPE,
                 required=False)  # fmt: skip
     if acc.balance < 0:
-        rep.add(f"{w}.balance", "AccountBalance must not be negative", "60002")
+        rep.add(f"{w}.balance", Msg("balance_negative"), "60002")
     if acc.closed and acc.balance != 0:
-        rep.add(f"{w}.balance", "closed accounts must report a balance of 0", "60003")
+        rep.add(f"{w}.balance", Msg("balance_closed"), "60003")
     if not CURRENCY_RE.match(acc.currency or ""):
-        rep.add(f"{w}.currency", "ISO 4217 currency code required", "XSD")
+        rep.add(f"{w}.currency", Msg("currency_invalid"), "XSD")
 
     # holder
     if (acc.holder_person is None) == (acc.holder_organisation is None):
-        rep.add(f"{w}.holder", "exactly one of individual / organisation holder is required", "XSD")
+        rep.add(f"{w}.holder", Msg("holder_exactly_one"), "XSD")
     if acc.holder_person is not None:
         _check_person(rep, f"{w}.holder", acc.holder_person, today=today)
         if acc.controlling_persons:
-            rep.add(f"{w}.controlling_persons",
-                    "no ControllingPerson allowed for an individual holder", "60005")  # fmt: skip
+            rep.add(f"{w}.controlling_persons", Msg("cp_not_allowed_individual"), "60005")
         if acc.undocumented and acc.holder_person.residence_countries != ["CH"]:
-            rep.add(f"{w}.holder.residence_countries",
-                    "undocumented account: the only ResCountryCode must be CH", "98203")  # fmt: skip
+            rep.add(f"{w}.holder.residence_countries", Msg("undocumented_res_ch"), "98203")
     if acc.holder_organisation is not None:
         _check_organisation(rep, f"{w}.holder", acc.holder_organisation)
         aht = acc.holder_organisation.acct_holder_type
         if aht == "CRS101" and not acc.controlling_persons:
-            rep.add(f"{w}.controlling_persons",
-                    "CRS101 holder: at least one ControllingPerson is required", "60006")  # fmt: skip
+            rep.add(f"{w}.controlling_persons", Msg("cp_required_crs101"), "60006")
         if aht in ("CRS102", "CRS103") and acc.controlling_persons:
-            rep.add(f"{w}.controlling_persons",
-                    f"no ControllingPerson allowed for AcctHolderType {aht}", "60005")  # fmt: skip
+            rep.add(f"{w}.controlling_persons", Msg("cp_not_allowed_type", aht=aht), "60005")
         if acc.undocumented:
-            rep.add(f"{w}.undocumented",
-                    "undocumented accounts must have an individual holder", "98203")  # fmt: skip
+            rep.add(f"{w}.undocumented", Msg("undocumented_individual"), "98203")
 
     for i, cp in enumerate(acc.controlling_persons):
         cw = f"{w}.controlling_persons[{i}]"
         _check_person(rep, cw, cp.person, today=today)
         if version == "3.0":
             if not cp.ctrlg_person_types:
-                rep.add(f"{cw}.ctrlg_person_types",
-                        "3.0: at least one CtrlgPersonType is mandatory", "3.0")  # fmt: skip
+                rep.add(f"{cw}.ctrlg_person_types", Msg("cp_type_required_30"), "3.0")
             _check_code(rep, f"{cw}.self_cert", cp.self_cert, codes.SELF_CERT_CP, required=True,
                         rule="3.0", allow_transitional=True)  # fmt: skip
         elif len(cp.ctrlg_person_types) > 1:
-            rep.add(f"{cw}.ctrlg_person_types",
-                    "2.0 allows one CtrlgPersonType; only the first is written", "info")  # fmt: skip
+            rep.add(f"{cw}.ctrlg_person_types", Msg("cp_type_only_first_20"), "info")
         for j, t in enumerate(cp.ctrlg_person_types):
             _check_code(rep, f"{cw}.ctrlg_person_types[{j}]", t, codes.CTRLG_PERSON_TYPE,
                         required=True, allow_transitional=(version == "3.0"))  # fmt: skip
@@ -402,7 +401,7 @@ def check_account(
         _check_code(rep, f"{pw}.payment_type", p.payment_type, codes.PAYMENT_TYPE, required=True,
                     rule="XSD")  # fmt: skip
         if not CURRENCY_RE.match(p.currency or ""):
-            rep.add(f"{pw}.currency", "ISO 4217 currency code required", "XSD")
+            rep.add(f"{pw}.currency", Msg("currency_invalid"), "XSD")
 
     # 3.0-only elements
     if version == "3.0":
@@ -416,30 +415,28 @@ def check_account(
             _check_code(rep, f"{w}.equity_interest_types[{j}]", e, codes.EQUITY_INTEREST_TYPE,
                         required=True, rule="XSD")  # fmt: skip
         if acc.joint_account_number is not None and not 1 <= acc.joint_account_number <= 200:
-            rep.add(f"{w}.joint_account_number", "JointAccount.Number must be 1-200", "XSD")
+            rep.add(f"{w}.joint_account_number", Msg("joint_number_range"), "XSD")
         # ESTV cross-field rules 60017-60023 (prose of 60018 wins over its formula)
         ant, at = acc.account_number_type, acc.account_type
         if ant in ("OECD606", "OECD601") and at not in (None, "CRS1101", "CRS1100"):
             rule = "60017" if ant == "OECD606" else "60018"
-            rep.add(f"{w}.account_type", f"{ant} accounts must be depository (CRS1101)", rule)
+            rep.add(f"{w}.account_type", Msg("account_type_depository", ant=ant), rule)
         if acc.equity_interest_types and at not in (None, "CRS1104", "CRS1100"):
-            rep.add(f"{w}.account_type",
-                    "EquityInterestType given: AccountType must be CRS1104", "60019")  # fmt: skip
+            rep.add(f"{w}.account_type", Msg("account_type_equity"), "60019")
         if at == "CRS1103" and ant not in (None, "OECD605"):
-            rep.add(f"{w}.account_number_type",
-                    "CRS1103 accounts must use AcctNumberType OECD605", "60020")  # fmt: skip
+            rep.add(f"{w}.account_number_type", Msg("account_number_type_605"), "60020")
         for i, p in enumerate(acc.payments):
             if at == "CRS1101" and p.payment_type != "CRS502":
-                rep.add(f"{w}.payments[{i}].payment_type",
-                        "depository account (CRS1101): only interest (CRS502)", "60021")  # fmt: skip
+                rep.add(
+                    f"{w}.payments[{i}].payment_type", Msg("payment_depository_interest"), "60021"
+                )
             if at in ("CRS1104", "CRS1103") and p.payment_type not in ("CRS503", "CRS504"):
                 rule = "60022" if at == "CRS1104" else "60023"
-                rep.add(f"{w}.payments[{i}].payment_type",
-                        f"{at} accounts: only CRS503 or CRS504 payments", rule)  # fmt: skip
+                rep.add(f"{w}.payments[{i}].payment_type", Msg("payment_503_504", at=at), rule)
     else:
         for name in ("self_cert", "dd_procedure", "account_type"):
             if getattr(acc, name):
-                rep.add(f"{w}.{name}", "ignored in 2.0 (element does not exist)", "info")
+                rep.add(f"{w}.{name}", Msg("ignored_in_20"), "info")
 
 
 def check_message(
@@ -457,43 +454,36 @@ def check_message(
     rep = Report()
     fi = msg.reporting_fi
     if not fi.estv_id:
-        rep.add("ReportingFI.estv_id", "SendingCompanyIN must be the ESTV-ID of the FI", "98001")
+        rep.add("ReportingFI.estv_id", Msg("estv_id_missing"), "98001")
     elif not ESTV_ID_RE.match(fi.estv_id):
-        rep.add("ReportingFI.estv_id",
-                "does not look like the ESTV-ID example (052.0000.0000); the portal compares it "
-                "with the registered value", "info")  # fmt: skip
+        rep.add("ReportingFI.estv_id", Msg("estv_id_format"), "info")
     _check_text(rep, "ReportingFI.estv_id", fi.estv_id)
     if fi.uid and not UID_RE.match(fi.uid):
-        rep.add("ReportingFI.uid", "IN, when given, must be the UID (CHE-nnn.nnn.nnn)", "70015")
+        rep.add("ReportingFI.uid", Msg("uid_invalid"), "70015")
     if not fi.name:
-        rep.add("ReportingFI.name", "Name is mandatory", "XSD")
+        rep.add("ReportingFI.name", Msg("fi_name_missing"), "XSD")
     elif fi.name.upper().startswith(TDT_PREFIX) and not fi.trustee_documented_trust:
-        rep.add("ReportingFI.name",
-                "starts with TDT= but trustee_documented_trust is not set: write the trust's name "
-                "and set the flag, the prefix is added at build time", "5.3.4")  # fmt: skip
+        rep.add("ReportingFI.name", Msg("tdt_prefix"), "5.3.4")
     _check_text(rep, "ReportingFI.name", fi.name)
     _check_address(rep, "ReportingFI.address", fi.address)
     if not 2017 <= msg.reporting_year <= today.year:
-        rep.add("ReportingFI.reporting_year", "reporting year must be 2017..current year", "98007")
+        rep.add("ReportingFI.reporting_year", Msg("reporting_year_range"), "98007")
     _check_code(rep, "Message.message_type_indic", msg.message_type_indic, codes.MESSAGE_TYPE_INDIC,
                 required=True, rule="98004")  # fmt: skip
     if msg.message_type_indic == "CRS702" and not correction:
-        rep.add("Message.message_type_indic",
-                "CRS702 (corrections) needs the submission registry: use 'aeoi crs correct' with "
-                "the registry of the earlier messages (Wegleitung Ziffer 6)", "80010")  # fmt: skip
+        rep.add("Message.message_type_indic", Msg("crs702_needs_registry"), "80010")
     if correction and msg.message_type_indic != "CRS702":
-        rep.add("Message.message_type_indic",
-                "a correction message must carry CRS702", "80010")  # fmt: skip
+        rep.add("Message.message_type_indic", Msg("correction_needs_crs702"), "80010")
     if msg.message_type_indic == "CRS703" and msg.accounts:
-        rep.add("Message.accounts", "a nil report (CRS703) must not contain accounts", "98005")
+        rep.add("Message.accounts", Msg("nil_with_accounts"), "98005")
     if msg.message_type_indic != "CRS703" and not msg.accounts:
-        rep.add("Message.accounts", "at least one account is required unless CRS703", "60015")
+        rep.add("Message.accounts", Msg("accounts_required"), "60015")
     keys = [a.key for a in msg.accounts]
     for k in sorted({k for k in keys if keys.count(k) > 1}):
-        rep.add(f"Accounts[key={k}]", "account key is not unique", "input")
+        rep.add(f"Accounts[key={k}]", Msg("key_not_unique"), "input")
     refs = [a.doc_ref_id for a in msg.accounts if a.doc_ref_id]
     for r in sorted({r for r in refs if refs.count(r) > 1}):
-        rep.add(f"Accounts[doc_ref_id={r}]", "DocRefId used on more than one row", "80000")
+        rep.add(f"Accounts[doc_ref_id={r}]", Msg("doc_ref_id_duplicate_rows"), "80000")
     for acc in msg.accounts:
         check_account(rep, acc, version, today=today, year=msg.reporting_year)
     _check_joint_accounts(rep, msg, version)
@@ -514,7 +504,4 @@ def _check_joint_accounts(rep: Report, msg: Message, version: Version) -> None:
             continue
         numbers = {a.joint_account_number for a in rows}
         if None in numbers or len(numbers) > 1:
-            rep.add(f"Accounts[account_number={number}]",
-                    f"{len(rows)} rows share this account number: for a joint account set "
-                    "joint_account_number (number of joint holders) to the same value on every "
-                    "row; otherwise use distinct account numbers", "aeoi")  # fmt: skip
+            rep.add(f"Accounts[account_number={number}]", Msg("joint_rows", n=len(rows)), "aeoi")

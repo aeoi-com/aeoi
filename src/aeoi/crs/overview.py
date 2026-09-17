@@ -11,6 +11,7 @@ from typing import Any
 
 from aeoi.crs import check, model, validate
 from aeoi.estv import status, titles
+from aeoi.messages import text
 
 _XPATH_ACCOUNT = re.compile(r"AccountReport\[(\d+)\]")
 _KEY_ACCOUNT = re.compile(r"Accounts\[key=([^\]]+)\]")
@@ -46,7 +47,7 @@ def problem_dict(p: model.Problem, lang: str, severity: str = "error") -> dict[s
         "severity": severity,
         "rule": p.rule,
         "where": p.where,
-        "message": p.message,
+        "message": text(p.message, lang),
         "title": titles.rule_title(rule, lang),
         "fix": titles.rule_fix(rule, lang),
         "official": (entry or {}).get("text_de", ""),
@@ -121,8 +122,8 @@ def report_dict(
             {
                 "severity": "input",
                 "rule": "input",
-                "where": str(p).split(": ", 1)[0],
-                "message": p.message,
+                "where": p.location,
+                "message": text(p.message, lang),
                 "title": titles.rule_title("input", lang),
                 "fix": titles.rule_fix("input", lang),
                 "official": "",
@@ -145,8 +146,8 @@ def report_dict(
         "kind": kind,
         "ok": report.ok,
         "version": version,
-        "headline": report.render().split("\n", 1)[0],
-        "text": report.render(),
+        "headline": report.render(lang).split("\n", 1)[0],
+        "text": report.render(lang),
         "counts": {"error": counts["error"], "input": counts["input"], "info": counts["info"]},
         "problems": problems,
         "overview": message_overview(message) if message is not None else None,

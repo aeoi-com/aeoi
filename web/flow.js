@@ -17,8 +17,15 @@ document.addEventListener("aeoi:booted", () => {
   py.runPython(`
 import json, os
 from aeoi.crs import template, workflow
-from aeoi.registry import Registry
+from aeoi.messages import text as msg_text
+from aeoi.registry import Registry, RegistryError
 reg = None
+
+def _error(exc, lang):
+    """User-facing error in the page language; other exceptions keep their English text."""
+    if isinstance(exc, (workflow.WorkflowError, RegistryError)) and exc.args:
+        return json.dumps({"error": msg_text(exc.args[0], lang)})
+    return json.dumps({"error": str(exc)})
 
 def registry_open(fresh):
     global reg
@@ -42,17 +49,20 @@ def registry_flush():
 def remember_key(pem):
     return workflow.remember_public_key(reg, pem)
 
-def plan_workbook(path, version, test, cancel):
+def plan_workbook(path, version, test, cancel, lang):
     report = check_workbook(path, version)
     if not report.ok or report.message is None:
         return json.dumps({"ok": False})
     keys = [k.strip() for k in cancel.split(",") if k.strip()]
     intent = workflow.plan(report.message, version, reg, test=test, cancel=keys)
-    return json.dumps({"ok": True, **intent.as_dict()})
+    return json.dumps({"ok": True, **intent.as_dict(lang)})
 
-def build_workbook(path, version, test, cancel, pem):
+def build_workbook(path, version, test, cancel, pem, lang):
     keys = [k.strip() for k in cancel.split(",") if k.strip()]
-    _report, outs = workflow.build_from_workbook(path, version, reg, test=test, cancel=keys, public_key=pem or None)
+    try:
+        _report, outs = workflow.build_from_workbook(path, version, reg, test=test, cancel=keys, public_key=pem or None)
+    except (workflow.WorkflowError, RegistryError, ValueError) as exc:
+        return _error(exc, lang)
     views = []
     for i, o in enumerate(outs):
         d = o.as_dict()
@@ -62,10 +72,13 @@ def build_workbook(path, version, test, cancel, pem):
             d["package_path"] = f"/tmp/out-{i}.zip"
             open(d["package_path"], "wb").write(o.package)
         views.append(d)
-    return json.dumps(views)
+    return json.dumps({"built": views})
 
 def record(text, ref, lang):
-    return json.dumps(workflow.record_outcome(reg, text, message_ref_id=ref or None, lang=lang))
+    try:
+        return json.dumps(workflow.record_outcome(reg, text, message_ref_id=ref or None, lang=lang))
+    except (workflow.WorkflowError, RegistryError, ValueError) as exc:
+        return _error(exc, lang)
 
 def discard_message(ref):
     from aeoi.crs import submit
@@ -247,13 +260,13 @@ function refreshPlan() {
   const plan = $("plan"); plan.replaceChildren();
   if (!last || last.kind !== "workbook") return;
   const test = $("build-mode").value === "test";
-  const p = JSON.parse(pyCall("plan_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value));
+  const p = JSON.parse(pyCall("plan_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, LANG));
   if (!p.ok) return;
   const tags = [["new", p.new.length, "plan_new"], ["changed", p.changed.length, "plan_changed"], ["unchanged", p.unchanged.length, "plan_unchanged"], ["deleted", p.deletions.length, "plan_deleted"], ["blocked", p.blocked.length, "plan_blocked"]];
   for (const [cls, n, key] of tags) if (n) plan.append(el("span", { class: "tag " + cls, text: t(key, { n }) }));
   if (p.nil) plan.append(el("span", { class: "tag", text: t("plan_nil") }));
   let sum = "";
-  if (p.blocked.length) sum = p.problems.every((x) => x.includes("record the portal result")) ? t("plan_pending") : p.problems.join(" · ");
+  if (p.blocked.length) sum = p.problems.every((x) => x.includes("(80002)") && /not accepted|nicht angenommen/.test(x)) ? t("plan_pending") : p.problems.join(" · ");
   else if (!test && !reg.open) sum = t("build_need_registry");
   else if (p.messages.length === 2) sum = t("plan_messages_both");
   else if (p.messages[0] === "correction") sum = t("plan_messages_correction");
@@ -285,7 +298,9 @@ $("build").addEventListener("click", async () => {
   const test = $("build-mode").value === "test";
   const outNode = $("build-out"); outNode.replaceChildren();
   try {
-    const views = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || ""));
+    const res = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || "", LANG));
+    if (res.error) { msg($("build-msg"), t("error_prefix") + res.error, false); console.info("aeoi:built error"); return; }
+    const views = res.built;
     for (const v of views) {
       const card = el("div", { class: "built" });
       card.append(el("div", { class: "head" }, el("span", { text: (v.kind === "correction" ? t("kind_correction") : t("kind_new")) + (test ? " · " + t("kind_test") : "") }), el("span", { class: "muted", text: t("built_records", { n: v.records }) })));
@@ -330,6 +345,7 @@ $("outcome-record").addEventListener("click", async () => {
   const out = $("outcome-out"); out.replaceChildren();
   try {
     const v = JSON.parse(pyCall("record", $("outcome-text").value, $("outcome-ref").value, LANG));
+    if (v.error) { msg($("outcome-msg"), t("error_prefix") + v.error, false); console.info("aeoi:outcome error"); return; }
     msg($("outcome-msg"), v.accepted ? t("outcome_accepted", { ref: shortRef(v.message_ref_id) }) : t("outcome_rejected"), v.accepted);
     for (const f of v.findings) {
       const card = el("article", { class: "finding error" }, el("div", { class: "head" }, el("span", { class: "code", text: f.code }), el("span", { class: "title", text: f.title })));

@@ -38,6 +38,7 @@ from aeoi.crs.model import (
     ReportingFI,
     Tin,
 )
+from aeoi.messages import Msg
 
 SEP = ";"
 TRUE = {"true", "1", "yes", "y", "ja", "oui", "si", "sì", "wahr", "x"}
@@ -150,13 +151,17 @@ class InputProblem:
     column: str | None
     message: str
 
-    def __str__(self) -> str:
+    @property
+    def location(self) -> str:
         loc = self.sheet
         if self.row is not None:
             loc += f" row {self.row}"
         if self.column:
             loc += f", column {self.column}"
-        return f"{loc}: {self.message}"
+        return loc
+
+    def __str__(self) -> str:
+        return f"{self.location}: {self.message}"
 
 
 @dataclass
@@ -248,7 +253,7 @@ def _address(row: dict[str, Any]) -> dict[str, Any]:
 def _person(row: dict[str, Any], problems: list[InputProblem], sheet: str, rownum: int) -> dict:
     birth = _date(row.get("birth_date"))
     if birth == "invalid":
-        problems.append(InputProblem(sheet, rownum, "birth_date", "not a date (use YYYY-MM-DD)"))
+        problems.append(InputProblem(sheet, rownum, "birth_date", Msg("input_not_date")))
         birth = None
     return {
         "first_name": _text(row.get("first_name")),
@@ -324,27 +329,25 @@ def read(path: str | Path) -> ReadResult:
     sheets = _rows_from_csv_dir(path) if path.is_dir() else _rows_from_xlsx(path)
     for name in ("ReportingFI", "Accounts"):
         if name not in sheets:
-            problems.append(InputProblem(name, None, None, "sheet is missing"))
+            problems.append(InputProblem(name, None, None, Msg("input_sheet_missing")))
     if problems:
         return ReadResult(None, problems)
 
     fi_values = {r["field"]: r["value"] for r in sheets["ReportingFI"]}
     unknown = set(fi_values) - {c.name for c in REPORTING_FI_FIELDS}
     for u in sorted(unknown):
-        problems.append(InputProblem("ReportingFI", None, u, "unknown field"))
+        problems.append(InputProblem("ReportingFI", None, u, Msg("input_unknown_field")))
     year = _text(fi_values.get("reporting_year"))
     try:
         reporting_year = int(year)
     except ValueError:
-        problems.append(InputProblem("ReportingFI", None, "reporting_year", "must be a year"))
+        problems.append(InputProblem("ReportingFI", None, "reporting_year", Msg("input_year")))
         reporting_year = 0
     try:
         tdt = _bool(fi_values.get("trustee_documented_trust"))
         if tdt is None:
             problems.append(
-                InputProblem(
-                    "ReportingFI", None, "trustee_documented_trust", "must be true or false"
-                )
+                InputProblem("ReportingFI", None, "trustee_documented_trust", Msg("input_bool"))
             )
         fi = ReportingFI(
             estv_id=_text(fi_values.get("estv_id")),
@@ -365,7 +368,9 @@ def read(path: str | Path) -> ReadResult:
         key = _text(r.get("key"))
         if not key:
             problems.append(
-                InputProblem("ControllingPersons", r["_row"], "key", "missing account key")
+                InputProblem(
+                    "ControllingPersons", r["_row"], "key", Msg("input_missing_account_key")
+                )
             )
             continue
         try:
@@ -389,10 +394,12 @@ def read(path: str | Path) -> ReadResult:
         key = _text(r.get("key"))
         amount = _decimal(r.get("amount"))
         if not key:
-            problems.append(InputProblem("Payments", r["_row"], "key", "missing account key"))
+            problems.append(
+                InputProblem("Payments", r["_row"], "key", Msg("input_missing_account_key"))
+            )
             continue
         if amount is None:
-            problems.append(InputProblem("Payments", r["_row"], "amount", "not a number"))
+            problems.append(InputProblem("Payments", r["_row"], "amount", Msg("input_not_number")))
             continue
         pays.setdefault(key, []).append(
             Payment(
@@ -408,7 +415,7 @@ def read(path: str | Path) -> ReadResult:
         rownum = r["_row"]
         key = _text(r.get("key"))
         if not key:
-            problems.append(InputProblem("Accounts", rownum, "key", "missing key"))
+            problems.append(InputProblem("Accounts", rownum, "key", Msg("input_missing_key")))
             continue
         seen_keys.add(key)
         holder_type = _text(r.get("holder_type")).lower()
@@ -426,20 +433,18 @@ def read(path: str | Path) -> ReadResult:
             }
         else:
             problems.append(
-                InputProblem(
-                    "Accounts", rownum, "holder_type", "must be individual or organisation"
-                )
+                InputProblem("Accounts", rownum, "holder_type", Msg("input_holder_type"))
             )
             continue
         balance = _decimal(r.get("balance"))
         row_ok = balance is not None
         if balance is None:
-            problems.append(InputProblem("Accounts", rownum, "balance", "not a number"))
+            problems.append(InputProblem("Accounts", rownum, "balance", Msg("input_not_number")))
         flags = {}
         for name in ("undocumented", "closed", "dormant"):
             b = _bool(r.get(name))
             if b is None:
-                problems.append(InputProblem("Accounts", rownum, name, "must be true or false"))
+                problems.append(InputProblem("Accounts", rownum, name, Msg("input_bool")))
                 b = False
             flags[name] = b
         if not row_ok:
@@ -477,10 +482,12 @@ def read(path: str | Path) -> ReadResult:
 
     for key in cps:
         problems.append(
-            InputProblem("ControllingPersons", None, "key", f"no account with key {key!r}")
+            InputProblem("ControllingPersons", None, "key", Msg("input_no_account", key=repr(key)))
         )
     for key in pays:
-        problems.append(InputProblem("Payments", None, "key", f"no account with key {key!r}"))
+        problems.append(
+            InputProblem("Payments", None, "key", Msg("input_no_account", key=repr(key)))
+        )
 
     msg = Message(
         reporting_fi=fi,

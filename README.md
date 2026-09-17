@@ -31,6 +31,9 @@ Status: pre-alpha, week 2. What exists today:
   every code explained from the catalogue.
 - **Validator for any file** (`aeoi crs validate report.xml`): schema, header and DocSpec rules,
   character set, content rules - for XML produced by this or another tool, 2.0 and 3.0.
+- **Messages in German** (`--lang de` on `check` and `validate`, automatic on the page): every
+  check message is a catalogue entry (`src/aeoi/messages.json`, en + de, same placeholders,
+  tested for completeness); English stays the reference the tests read.
 - **German user pages** for reporting FIs and fiduciaries: `docs/de/ANLEITUNG.md`,
   `docs/de/WAS-AENDERT-SICH-MIT-3.0.md` and the one-page `docs/de/KURZFASSUNG.md` for associations,
   the latter also in Italian (`docs/it/RIASSUNTO.md`) and French (`docs/fr/RESUME.md`), quoting

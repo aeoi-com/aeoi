@@ -100,7 +100,8 @@ try {
   check("broken XML -> NOT OK with 50005", bad.startsWith("NOT OK") && bad.includes("[50005]"));
   const firstTitle = await page.locator(".finding.error .title").first().textContent();
   const firstFix = await page.locator(".finding.error .fix").first().textContent();
-  check("finding card with German title and remedy", firstTitle === "Unzulässiges Zeichen" && firstFix.includes("#"));
+  const firstMsg = await page.locator(".finding.error .msg").first().textContent();
+  check("finding card with German title, remedy and German message", firstTitle === "Unzulässiges Zeichen" && firstFix.includes("#") && firstMsg.includes("an Position 9: durch Anhang 7.2 ausgeschlossen"));
   const wb = await upload(join(fixtures, "EXAMPLE.XLSX"));
   check("workbook (.XLSX) -> OK: " + wb.split("\n")[0], wb.startsWith("OK"));
   check("overview rendered (residence bars, holder ring)", (await page.locator("#ov-bars .row").count()) >= 2 && (await page.locator("#ov-ring circle.seg").count()) >= 1);
@@ -123,7 +124,7 @@ try {
     const st = await page.locator("#status").textContent();
     const rep = await resultText();
     const noFindings = await page.locator("#no-findings").textContent();
-    check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep === okSample && noFindings.startsWith(none));
+    check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep.split("\n")[0] === okSample.split("\n")[0] && noFindings.startsWith(none));
   }
 
   // ---- the reporting flow: registry file (fallback: download after every change), key,
