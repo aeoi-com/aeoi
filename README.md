@@ -78,6 +78,8 @@ workbook, back it up, never send it.
 
 ## Browser validator
 
+Online at https://aeoi-com.github.io/aeoi/ once GitHub Pages is enabled.
+
 `web/index.html` is a static page that runs the validator in the browser with Pyodide: drop a
 CRS XML file or a filled workbook and get the same checks as `aeoi crs validate` / `aeoi crs check`,
 rendered as a verdict card, an overview of the message (holders, residence countries, balances)

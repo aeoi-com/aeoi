@@ -34,8 +34,10 @@ dependencies = [
 dev = ["pytest>=8", "ruff>=0.5", "xsdata[cli]>=24.0", "pycountry>=24.0"]
 
 [project.urls]
-Homepage = "https://github.com/"
-Changelog = "https://github.com/"
+Homepage = "https://github.com/aeoi-com/aeoi"
+Repository = "https://github.com/aeoi-com/aeoi"
+Changelog = "https://github.com/aeoi-com/aeoi/blob/main/CHANGELOG.md"
+"Browser validator" = "https://aeoi-com.github.io/aeoi/"
 
 [project.scripts]
 aeoi = "aeoi.cli:main"

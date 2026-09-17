@@ -13,7 +13,7 @@ meldendes Finanzinstitut (für Testmeldungen und den öffentlichen Schlüssel de
 Bis das Paket auf PyPI veröffentlicht ist, installieren Sie aus dem Repository:
 
 ```bash
-pip install "aeoi @ git+https://<repository-url>"
+pip install "aeoi @ git+https://github.com/aeoi-com/aeoi"
 aeoi --version
 ```
 
