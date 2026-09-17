@@ -104,7 +104,7 @@ def test_nothing_changed_builds_nothing(reg):
 def test_deletion_6_4_5_and_readding_6_4_7(reg):
     first = submit.build_new(sample_message(), "3.0", reg)
     _accept(reg, first.message_ref_id)
-    result, plan = submit.build_correction(sample_message(), "3.0", reg, cancel=["A2"])
+    result, _plan = submit.build_correction(sample_message(), "3.0", reg, cancel=["A2"])
     specs = _doc_specs(result.xml)
     assert len(specs) == 2 and specs[1][0] == "OECD3" and specs[1][2] == first.doc_ref_ids["A2"]
     # the deletion carries the ResCountryCodes of the deleted record (98204)
@@ -130,7 +130,7 @@ def test_deletion_without_the_row_uses_stored_content(reg):
     _accept(reg, first.message_ref_id)
     only_a1 = sample_message()
     only_a1.accounts = [only_a1.accounts[0]]
-    result, plan = submit.build_correction(only_a1, "3.0", reg, cancel=["A2"])
+    result, _plan = submit.build_correction(only_a1, "3.0", reg, cancel=["A2"])
     specs = _doc_specs(result.xml)
     assert [s[0] for s in specs[1:]] == ["OECD3"]
     assert "Holding Trust Ltd" in result.xml

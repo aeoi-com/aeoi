@@ -34,7 +34,7 @@ Status: pre-alpha, week 2. What exists today:
 - **German user pages** for reporting FIs and fiduciaries: `docs/de/ANLEITUNG.md` and
   `docs/de/WAS-AENDERT-SICH-MIT-3.0.md`.
 
-Not yet: the browser validator, the pilot's first test upload (needs a registered FI), CARF.
+Not yet: the pilot's first test upload (needs a registered FI), CARF.
 
 ## Why
 
@@ -80,8 +80,11 @@ workbook, back it up, never send it.
 CRS XML file or a filled workbook, get the same report as `aeoi crs validate` / `aeoi crs check`.
 The file never leaves the browser; the page has no analytics and no server side. Build it with
 `python -m build && python tools/build_web.py`; `node tools/web_smoke.mjs` runs the same code
-headlessly (see the script header for the one-time Pyodide setup). CI publishes it to GitHub
-Pages once Pages is enabled for the repository.
+headlessly (see the script header for the one-time Pyodide setup);
+`PW_CHANNEL=chrome node tools/web_browser_test.mjs` drives the real page in an installed Chrome
+or Edge with the page's Content-Security-Policy enforced and asserts that no request leaves the
+browser after the file selection. CI publishes the page to GitHub Pages once Pages is enabled
+for the repository.
 
 ## Sources
 
@@ -91,7 +94,7 @@ Open questions for the pilot institution are in [docs/OPEN-QUESTIONS.md](docs/OP
 ## Data protection
 
 The toolkit runs on the reporting institution's machine. No account-holder data leaves it; the
-browser validator (planned) runs client-side with no analytics and no server-side logs.
+browser validator runs client-side with no analytics and no server-side logs.
 
 ## Licence
 

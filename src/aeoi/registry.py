@@ -28,6 +28,7 @@ import json
 import sqlite3
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Self
 
 from aeoi.crs.model import Account
 
@@ -161,7 +162,7 @@ class Registry:
     def close(self) -> None:
         self.conn.close()
 
-    def __enter__(self) -> Registry:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *exc) -> None:

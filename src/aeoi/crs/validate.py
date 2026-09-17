@@ -44,8 +44,11 @@ class ValidationReport:
         self.infos.append(model.Problem(where, message, "info"))
 
     def render(self) -> str:
-        lines = [f"{'OK' if self.ok else 'NOT OK'}: CRS {self.version or '?'}, "
-                 f"{len(self.problems)} problem(s), {len(self.infos)} note(s)"]  # fmt: skip
+        head = (
+            f"{'OK' if self.ok else 'NOT OK'}: CRS {self.version or '?'}, "
+            f"{len(self.problems)} problem(s), {len(self.infos)} note(s)"
+        )
+        lines = [head]
         for p in self.problems:
             lines.append(f"  error  {p.where}: {p.message} [{p.rule}]")
         for p in self.infos:

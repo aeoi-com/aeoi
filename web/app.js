@@ -23,6 +23,7 @@ async function boot() {
     status.className = "ok";
     document.getElementById("xml").disabled = false;
     document.getElementById("xlsx").disabled = false;
+    console.info("aeoi:ready"); // signal for the browser test (no page evaluation under the CSP)
   } catch (e) {
     status.textContent = "Die Laufzeit konnte nicht geladen werden: " + e;
     status.className = "err";
@@ -77,6 +78,7 @@ for (const [id, fn] of [["xml", validateXml], ["xlsx", checkWorkbook]]) {
       out.className = "err";
     }
     ev.target.value = "";
+    console.info("aeoi:result " + out.textContent.split("\n")[0]);
   });
 }
 boot();

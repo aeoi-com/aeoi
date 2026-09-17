@@ -3,9 +3,10 @@
 // asserts the privacy promise: after the file selection no network request at all, never a
 // non-GET request, only the listed hosts during the boot, no CSP violation.
 //
-//   cd .local/pyodide-test && npm install playwright@1.49.1
-//   PLAYWRIGHT_BROWSERS_PATH=$PWD/browsers npx playwright install chromium
-//   cd ../.. && python -m build && python tools/build_web.py && node tools/web_browser_test.mjs
+//   cd .local/pyodide-test && npm install playwright@1.49.1 && cd ../..
+//   python -m build && python tools/build_web.py
+//   PW_CHANNEL=chrome node tools/web_browser_test.mjs      # installed Chrome or msedge
+//   (or: PLAYWRIGHT_BROWSERS_PATH=... npx playwright install chromium, then without PW_CHANNEL)
 //
 // Needs network access for cdn.jsdelivr.net, pypi.org and files.pythonhosted.org.
 
@@ -43,8 +44,12 @@ function check(name, cond) {
   console.log(`${cond ? "ok  " : "FAIL"} ${name}`);
 }
 
-const browser = await chromium.launch();
+// PW_CHANNEL=chrome|msedge drives a browser already installed on the machine (no download);
+// unset, Playwright uses its own Chromium from PLAYWRIGHT_BROWSERS_PATH.
+const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
 try {
+  // The page's CSP forbids eval, so no page.evaluate / waitForFunction: the page signals
+  // readiness and results through console.info (CDP events, outside the CSP).
   const page = await browser.newPage();
   const requests = [];
   const cspViolations = [];
@@ -52,15 +57,18 @@ try {
   page.on("console", (msg) => {
     if (/Content Security Policy|Refused to/.test(msg.text())) cspViolations.push(msg.text());
   });
+  page.on("pageerror", (err) => cspViolations.push("pageerror: " + err.message));
+  const ready = page.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:ready", timeout: 240000 });
   await page.goto(`http://127.0.0.1:${port}/index.html`);
-  await page.waitForFunction(() => document.getElementById("status").textContent.startsWith("Bereit"), null, { timeout: 240000 });
-  console.log("runtime ready; version", await page.textContent("#ver"));
+  await ready;
+  console.log("runtime ready; version", await page.locator("#ver").textContent());
   const bootRequests = requests.length;
 
   async function upload(id, file) {
-    await page.setInputFiles(`#${id}`, file);
-    await page.waitForFunction(() => !document.getElementById("out").textContent.startsWith("Prüfung läuft"), null, { timeout: 120000 });
-    return await page.textContent("#out");
+    const done = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:result"), timeout: 120000 });
+    await page.locator(`#${id}`).setInputFiles(file);
+    await done;
+    return await page.locator("#out").textContent();
   }
   const good = await upload("xml", join(fixtures, "Test-report.xml"));
   check("valid XML -> OK: " + good.split("\n")[0], good.startsWith("OK"));
