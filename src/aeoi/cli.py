@@ -23,24 +23,15 @@ from aeoi.estv import packaging
 
 
 def _load_message(path: str, version: str):
-    """Read the flat input and check it; print problems; return the message or None."""
-    from aeoi.crs import flat, model
+    """Read and check the flat input; print every problem; return the message or None."""
+    from aeoi.crs.check import check_workbook
 
-    result = flat.read(Path(path))
-    for p in result.problems:
-        print(f"input  | {p}", file=sys.stderr)
-    if result.message is None:
+    report = check_workbook(path, version)
+    for line in report.lines():
+        print(line, file=sys.stderr)
+    if not report.ok:
         return None, 1
-    report = model.check_message(result.message, version)
-    errors = 0
-    for p in report.problems:
-        level = "info " if p.rule == "info" else "error"
-        rule = f" [{p.rule}]" if p.rule else ""
-        print(f"{level}  | {p.where}: {p.message}{rule}", file=sys.stderr)
-        errors += p.rule != "info"
-    if result.problems or errors:
-        return None, 1
-    return result.message, 0
+    return report.message, 0
 
 
 def _cmd_crs_template(args: argparse.Namespace) -> int:
@@ -57,12 +48,11 @@ def _cmd_crs_template(args: argparse.Namespace) -> int:
 
 
 def _cmd_crs_check(args: argparse.Namespace) -> int:
-    msg, rc = _load_message(args.input, args.version)
-    if msg is not None:
-        print(
-            f"ok: {len(msg.accounts)} account(s), reporting year {msg.reporting_year}, CRS {args.version}"
-        )
-    return rc
+    from aeoi.crs.check import check_workbook
+
+    report = check_workbook(args.input, args.version)
+    print(report.render())
+    return 0 if report.ok else 1
 
 
 def _package(result, args, summary: dict) -> int:

@@ -28,7 +28,7 @@ await micropip.install("emfs:/tmp/" + wheelName);
 
 const report = py.runPython(`
 import time
-from aeoi.crs import build, flat, model, template, validate
+from aeoi.crs import build, template, validate
 from aeoi.crs.example import sample_message
 out = []
 t0 = time.time()
@@ -42,12 +42,12 @@ rep = validate.validate_file("/tmp/Test-bad.xml")
 out.append(f"validate bad: {[p.rule for p in rep.problems]}")
 t0 = time.time()
 template.write_message(sample_message(), "/tmp/example.xlsx")
-r = flat.read("/tmp/example.xlsx")
-errors = [p for p in model.check_message(r.message, "3.0").problems if p.rule != "info"]
-out.append(f"workbook: {len(r.problems)} input problems, {len(errors)} errors ({time.time()-t0:.1f}s)")
+from aeoi.crs.check import check_workbook
+wb = check_workbook("/tmp/example.xlsx", "3.0")
+out.append(f"workbook: {'OK' if wb.ok else 'NOT OK'} {len(wb.input_problems)} input problems, {len(wb.errors)} errors ({time.time()-t0:.1f}s)")
 "\\n".join(out)
 `);
 console.log(report);
-const ok = report.includes("validate 3.0: OK") && report.includes("['50005']") && report.includes("0 input problems, 0 errors");
+const ok = report.includes("validate 3.0: OK") && report.includes("['50005']") && report.includes("workbook: OK 0 input problems, 0 errors");
 console.log(ok ? "WEB SMOKE OK" : "WEB SMOKE FAILED");
 process.exit(ok ? 0 : 1);

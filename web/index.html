@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>aeoi - CRS-Datei prüfen</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'wasm-unsafe-eval'; connect-src 'self' https://cdn.jsdelivr.net https://pypi.org https://files.pythonhosted.org; style-src 'self' 'unsafe-inline'; img-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
+<title>aeoi - CRS-Datei prüfen</title>
 <style>
   :root { color-scheme: light dark; --fg: #1a1a1a; --bg: #ffffff; --muted: #666; --ok: #1b7f3b; --err: #b3261e; --box: #f3f4f6; }
   @media (prefers-color-scheme: dark) { :root { --fg: #eee; --bg: #121212; --muted: #aaa; --box: #1e1e1e; } }
@@ -16,21 +17,22 @@
   pre { background: var(--box); padding: 12px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; font-size: 0.9rem; }
   .ok { color: var(--ok); font-weight: 600; } .err { color: var(--err); font-weight: 600; }
   .muted { color: var(--muted); font-size: 0.9rem; }
-  button { font: inherit; padding: 6px 14px; border-radius: 6px; border: 1px solid var(--muted); background: var(--box); color: var(--fg); cursor: pointer; }
-  button:disabled { opacity: 0.5; cursor: default; }
   #status { margin: 12px 0; }
 </style>
 </head>
 <body>
 <h1>aeoi - CRS-Datei prüfen, ohne etwas zu installieren</h1>
-<p>Prüft eine CRS-XML-Datei (Schema 2.0 oder 3.0) oder eine ausgefüllte aeoi-Excel-Vorlage so, wie es
-das AIA-Portal der ESTV tun wird: OECD-Schema, Regeln der Technischen Wegleitung (Zeichensatz,
-Partnerstaaten des Meldejahrs, IBAN/ISIN, Querbezüge der 3.0-Elemente) - alles im Browser.</p>
-<p class="muted"><strong>Datenschutz:</strong> Ihre Datei verlässt den Browser nicht. Diese Seite ist statisch,
-hat keine Analytics, kein Tracking und keine eigene Serverkomponente, die etwas protokollieren könnte.
-Beim Laden holt sie nur die Python-Laufzeit (Pyodide) und die Bibliotheken von den CDN
-<code>cdn.jsdelivr.net</code> und <code>pypi.org</code>; dabei werden keine Inhalte Ihrer Datei übertragen.
-Die Prüfung beginnt erst, wenn Sie eine Datei wählen.</p>
+<p>Prüft eine CRS-XML-Datei (Schema 2.0 oder 3.0) oder eine ausgefüllte aeoi-Excel-Vorlage nach dem
+OECD-Schema und nach den Regeln der Technischen Wegleitung AIA der ESTV (59 von 65; die übrigen -
+Transport, Entschlüsselung, Virenscan, Registrierung des Instituts - prüft nur das Portal).
+Zeichensatz, Partnerstaaten des Meldejahrs, IBAN/ISIN-Prüfsummen und die Querbezüge der
+3.0-Elemente sind dabei.</p>
+<p class="muted"><strong>Datenschutz:</strong> Ihre Datei verlässt den Browser nicht; die Prüfung läuft in
+Ihrem Browser. Diese Seite ist statisch, ohne Analytics und ohne eigene Serverkomponente. Beim Laden
+werden nur <code>cdn.jsdelivr.net</code> (Pyodide), <code>pypi.org</code> und
+<code>files.pythonhosted.org</code> (Bibliotheken) angefragt; der Host der Seite sieht den
+Seitenaufruf wie jede Website. Nach der Dateiauswahl findet keine Netzanfrage mehr statt - eine
+Content-Security-Policy der Seite lässt den Browser keine andere Adresse kontaktieren.</p>
 
 <div id="status" class="muted">Laufzeit wird geladen … (einmalig etwa 20-40 MB, danach aus dem Browser-Cache)</div>
 
@@ -46,93 +48,17 @@ Die Prüfung beginnt erst, wenn Sie eine Datei wählen.</p>
 
 <fieldset>
   <legend>Datei wählen</legend>
-  <label>CRS-XML-Datei: <input type="file" id="xml" accept=".xml" disabled></label>
-  <label>aeoi-Excel-Vorlage: <input type="file" id="xlsx" accept=".xlsx" disabled></label>
+  <label>CRS-XML-Datei: <input type="file" id="xml" accept=".xml,.XML,text/xml,application/xml" disabled></label>
+  <label>aeoi-Excel-Vorlage: <input type="file" id="xlsx" accept=".xlsx,.XLSX,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" disabled></label>
 </fieldset>
 
 <pre id="out">Noch keine Datei geprüft.</pre>
-<p class="muted">Quelle und Regeln: <a href="https://github.com/">Repository aeoi</a> (Apache-2.0). Version <span id="ver">-</span>.
-Die Wegleitung: Technische Wegleitung AIA der ESTV, September 2026.</p>
+<p class="muted">Quelle und Regeln: <a id="repo" href="https://github.com/OWNER/aeoi">Repository aeoi</a> (Apache-2.0).
+Version <span id="ver">-</span>. Technische Wegleitung AIA der ESTV, September 2026.</p>
 
-<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
-<script>
-const WHEEL = "aeoi-0.0.1-py3-none-any.whl";
-const status = document.getElementById("status");
-const out = document.getElementById("out");
-let py;
-
-async function boot() {
-  try {
-    py = await loadPyodide();
-    status.textContent = "Bibliotheken werden geladen …";
-    await py.loadPackage(["lxml", "pydantic", "micropip", "cryptography"]);
-    const micropip = py.pyimport("micropip");
-    await micropip.install(["xmlschema", "xsdata==24.12", "openpyxl"]);
-    await micropip.install(new URL(WHEEL, location.href).href);
-    document.getElementById("ver").textContent = py.runPython("import aeoi; aeoi.__version__");
-    status.textContent = "Bereit. Die Prüfung läuft vollständig in Ihrem Browser.";
-    status.className = "ok";
-    document.getElementById("xml").disabled = false;
-    document.getElementById("xlsx").disabled = false;
-  } catch (e) {
-    status.textContent = "Die Laufzeit konnte nicht geladen werden: " + e;
-    status.className = "err";
-  }
-}
-
-async function validateXml(file) {
-  const mode = document.getElementById("mode").value;
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  py.FS.writeFile("/tmp/" + file.name, bytes);
-  py.globals.set("path", "/tmp/" + file.name);
-  py.globals.set("mode", mode);
-  return py.runPython(`
-from aeoi.crs import validate
-test = None if mode == "auto" else (mode == "test")
-validate.validate_file(path, test=test).render()
-`);
-}
-
-async function checkWorkbook(file) {
-  const version = document.getElementById("version").value;
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  py.FS.writeFile("/tmp/" + file.name, bytes);
-  py.globals.set("path", "/tmp/" + file.name);
-  py.globals.set("version", version);
-  return py.runPython(`
-from aeoi.crs import flat, model
-r = flat.read(path)
-lines = [f"input  | {p}" for p in r.problems]
-if r.message is not None:
-    rep = model.check_message(r.message, version)
-    errors = [p for p in rep.problems if p.rule != "info"]
-    for p in rep.problems:
-        level = "info " if p.rule == "info" else "error"
-        lines.append(f"{level}  | {p.where}: {p.message} [{p.rule}]")
-    head = ("OK" if not errors and not r.problems else "NOT OK") + f": {len(r.message.accounts)} account(s), reporting year {r.message.reporting_year}, CRS {version}, {len(errors)} error(s)"
-else:
-    head = "NOT OK: the workbook could not be read"
-"\\n".join([head, *lines])
-`);
-}
-
-for (const [id, fn] of [["xml", validateXml], ["xlsx", checkWorkbook]]) {
-  document.getElementById(id).addEventListener("change", async (ev) => {
-    const file = ev.target.files[0];
-    if (!file) return;
-    out.textContent = "Prüfung läuft …";
-    try {
-      const text = await fn(file);
-      out.textContent = text;
-      out.className = text.startsWith("OK") ? "ok" : "err";
-    } catch (e) {
-      out.textContent = "Fehler bei der Prüfung: " + e;
-      out.className = "err";
-    }
-    ev.target.value = "";
-  });
-}
-boot();
-</script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"
+        integrity="sha384-90so5tCKvl0xs9agU29IMKlAVzhfzFX7QO//YxQkRhJG58bBZrFN+2ZTRB026X5X"
+        crossorigin="anonymous"></script>
+<script src="app.js"></script>
 </body>
 </html>

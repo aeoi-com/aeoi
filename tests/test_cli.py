@@ -57,7 +57,7 @@ def test_cli_reports_problems_and_fails(tmp_path, capsys):
     ws.cell(row=2, column=header.index("self_cert") + 1).value = None
     wb.save(xlsx)
     assert cli.main(["crs", "check", "--input", str(xlsx), "--version", "3.0"]) == 1
-    err = capsys.readouterr().err
-    assert "Accounts[key=A1].self_cert" in err and "[3.0]" in err
+    out = capsys.readouterr().out
+    assert "Accounts[key=A1].self_cert" in out and "[3.0]" in out
     # the same file is fine for 2.0
     assert cli.main(["crs", "check", "--input", str(xlsx), "--version", "2.0"]) == 0

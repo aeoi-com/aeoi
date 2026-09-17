@@ -26,14 +26,14 @@ def main() -> int:
     for old in WEB.glob("aeoi-*.whl"):
         old.unlink()
     shutil.copy(wheel, WEB / wheel.name)
-    page = WEB / "index.html"
+    page = WEB / "app.js"
     text = page.read_text(encoding="utf-8")
     text, n = re.subn(r'const WHEEL = "aeoi-[^"]+\.whl";', f'const WHEEL = "{wheel.name}";', text)
     if n != 1:
-        print("WHEEL constant not found in web/index.html")
+        print("WHEEL constant not found in web/app.js")
         return 1
     page.write_text(text, encoding="utf-8")
-    print(f"web/ ready: index.html + {wheel.name}")
+    print(f"web/ ready: index.html + app.js + {wheel.name}")
     return 0
 
 
