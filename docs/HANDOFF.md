@@ -186,6 +186,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
 
 ## Waiting on the owner
 
-- PyPI account + API token to register the name.
+- PyPI account with 2FA; publishing goes through Trusted Publishing (`.github/workflows/release.yml`,
+  pending publisher on PyPI: owner/aeoi, workflow release.yml, environment pypi), so no token is
+  handed over; `git tag v0.0.1 && git push origin v0.0.1` releases.
 - Pilot fiduciary: name, `ESTV-PublicKey.pem`, test-channel access.
 - GitHub org/user and whether the repo is public from day one.
