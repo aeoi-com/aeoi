@@ -228,6 +228,7 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    page claims only what is true (Zurich, built from the primary sources, small team) - no
    invented credentials, customers or numbers; contact address kontakt@meldbar.ch must exist;
    the imprint names "meldbar" without a legal-entity form. Browser test: 43 checks.
+   Dark mode removed on the owner's request (light only; no theme toggle, no `aeoi-theme` key).
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it and the
    fr/it columns of `messages.json`.

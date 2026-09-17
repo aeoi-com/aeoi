@@ -43,27 +43,6 @@ function regionName(code) {
   try { return new Intl.DisplayNames([LOCALES[LANG] || "de-CH"], { type: "region" }).of(code) || code; } catch (e) { return code; }
 }
 
-// ---------- theme ----------
-function applyTheme(mode, store) {
-  if (mode === "auto") document.documentElement.removeAttribute("data-theme");
-  else document.documentElement.setAttribute("data-theme", mode);
-  const dark = mode === "dark" || (mode === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
-  $("theme-sun").classList.toggle("hidden", dark);
-  $("theme-moon").classList.toggle("hidden", !dark);
-  $("theme").dataset.mode = mode;
-  $("theme").setAttribute("aria-label", t("theme", { mode: t("theme_" + mode) }));
-  if (store) try { localStorage.setItem("aeoi-theme", mode); } catch (e) { /* ignore */ }
-}
-(function initTheme() {
-  let mode = "auto";
-  try { mode = localStorage.getItem("aeoi-theme") || "auto"; } catch (e) { /* ignore */ }
-  applyTheme(mode, false);
-  $("theme").addEventListener("click", () => {
-    const next = { auto: "light", light: "dark", dark: "auto" }[$("theme").dataset.mode] || "auto";
-    applyTheme(next, true);
-  });
-})();
-
 // ---------- boot ----------
 function setStatus(key, extra) {
   status.dataset.i18n = key; // the key is kept so a language switch re-renders the text
@@ -222,7 +201,6 @@ $("copy").addEventListener("click", async () => {
   setTimeout(() => { label.textContent = t("copy"); }, 1500);
 });
 document.addEventListener("aeoi:language", () => {
-  applyTheme($("theme").dataset.mode || "auto", false);
   if (!last || !py) return;
   const json = py.globals.get("rerender")(LANG);
   if (json) { last.data = JSON.parse(json); render(false); }

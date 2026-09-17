@@ -14,7 +14,6 @@ const I18N_SITE = {
     foot_address: "meldbar · Salvatorstrasse 8 · 8050 Zürich · Schweiz",
     foot_rights: "© 2026 meldbar. Alle Rechte vorbehalten.",
     foot_note: "Ihre Daten bleiben in Ihrem Browser. Keine Analytics, keine Cookies, kein Server.",
-    theme: "Farbschema: {mode}", theme_auto: "automatisch", theme_light: "hell", theme_dark: "dunkel",
 
     // home
     home_title: "meldbar - CRS-Meldungen an die ESTV, ohne Installation",
@@ -124,7 +123,7 @@ const I18N_SITE = {
     dp_h1: "Datenschutzerklärung",
     dp_p1: "Diese Website wird ohne Server betrieben, der Daten verarbeitet: Sie besteht aus statischen Dateien, die Ihr Browser lädt und ausführt. Die Prüfung, Erstellung und Verschlüsselung von Meldungen findet vollständig in Ihrem Browser statt. Dateien, die Sie auswählen, werden weder hochgeladen noch übertragen.",
     dp_h_hosting: "Hosting", dp_hosting: "Die Dateien werden über GitHub Pages ausgeliefert (GitHub, Inc., USA). Beim Abruf einer Seite kann der Hosting-Anbieter technische Zugriffsdaten wie IP-Adresse, Zeitpunkt und aufgerufene Datei protokollieren, wie bei jeder Website. meldbar selbst hat keinen Zugriff auf diese Daten und führt keine eigenen Protokolle.",
-    dp_h_cookies: "Cookies und Analytics", dp_cookies: "Es werden keine Cookies gesetzt und keine Analyse- oder Tracking-Dienste eingesetzt. Im lokalen Speicher Ihres Browsers werden nur Ihre Sprache, das Farbschema und - auf Chrome und Edge - der Verweis auf Ihre Registerdatei abgelegt. Diese Angaben verlassen Ihren Browser nicht.",
+    dp_h_cookies: "Cookies und Analytics", dp_cookies: "Es werden keine Cookies gesetzt und keine Analyse- oder Tracking-Dienste eingesetzt. Im lokalen Speicher Ihres Browsers werden nur Ihre Sprache und - auf Chrome und Edge - der Verweis auf Ihre Registerdatei abgelegt. Diese Angaben verlassen Ihren Browser nicht.",
     dp_h_registry: "Registerdatei", dp_registry: "Das Register (institut.sqlite) enthält die Kennungen der gesendeten Meldungen und den Inhalt der gemeldeten Konten, damit Korrekturen möglich sind. Es liegt ausschliesslich bei Ihnen; sichern Sie es wie Ihre anderen Meldedaten.",
     dp_h_contact: "Kontakt", dp_contact: "Wenn Sie uns eine E-Mail schreiben, verarbeiten wir Ihre Angaben nur zur Beantwortung. Auskunft und Löschung: über die Adresse im Impressum.",
     dp_h_law: "Rechtsgrundlage", dp_law: "Schweizer Datenschutzgesetz (DSG). Stand: September 2026.",
@@ -140,7 +139,6 @@ const I18N_SITE = {
     foot_address: "meldbar · Salvatorstrasse 8 · 8050 Zurich · Suisse",
     foot_rights: "© 2026 meldbar. Tous droits réservés.",
     foot_note: "Vos données restent dans votre navigateur. Pas d'analytique, pas de cookies, pas de serveur.",
-    theme: "Thème : {mode}", theme_auto: "automatique", theme_light: "clair", theme_dark: "sombre",
 
     home_title: "meldbar - Déclarations CRS à l'AFC, sans installation",
     hero_kicker: "Dès le 16 janvier 2027, seul le schéma CRS 3.0",
@@ -245,7 +243,7 @@ const I18N_SITE = {
     dp_h1: "Déclaration de protection des données",
     dp_p1: "Ce site fonctionne sans serveur traitant des données : il se compose de fichiers statiques que votre navigateur charge et exécute. La vérification, la création et le chiffrement des déclarations ont lieu entièrement dans votre navigateur. Les fichiers que vous choisissez ne sont ni téléchargés ni transmis.",
     dp_h_hosting: "Hébergement", dp_hosting: "Les fichiers sont servis par GitHub Pages (GitHub, Inc., USA). Lors de l'accès à une page, l'hébergeur peut journaliser des données techniques comme l'adresse IP, l'heure et le fichier demandé, comme pour tout site. meldbar n'a pas accès à ces données et ne tient aucun journal propre.",
-    dp_h_cookies: "Cookies et analytique", dp_cookies: "Aucun cookie n'est posé et aucun service d'analyse ou de suivi n'est utilisé. Le stockage local de votre navigateur ne contient que votre langue, le thème et - sur Chrome et Edge - la référence à votre fichier de registre. Ces données ne quittent pas votre navigateur.",
+    dp_h_cookies: "Cookies et analytique", dp_cookies: "Aucun cookie n'est posé et aucun service d'analyse ou de suivi n'est utilisé. Le stockage local de votre navigateur ne contient que votre langue et - sur Chrome et Edge - la référence à votre fichier de registre. Ces données ne quittent pas votre navigateur.",
     dp_h_registry: "Fichier de registre", dp_registry: "Le registre (institut.sqlite) contient les identifiants des déclarations envoyées et le contenu des comptes déclarés, pour permettre les corrections. Il se trouve exclusivement chez vous ; sauvegardez-le comme vos autres données de déclaration.",
     dp_h_contact: "Contact", dp_contact: "Si vous nous écrivez un e-mail, nous traitons vos indications uniquement pour répondre. Renseignement et suppression : via l'adresse de l'impressum.",
     dp_h_law: "Base légale", dp_law: "Loi fédérale suisse sur la protection des données (LPD). État : septembre 2026.",
@@ -261,7 +259,6 @@ const I18N_SITE = {
     foot_address: "meldbar · Salvatorstrasse 8 · 8050 Zurigo · Svizzera",
     foot_rights: "© 2026 meldbar. Tutti i diritti riservati.",
     foot_note: "I suoi dati restano nel suo browser. Niente analytics, niente cookie, nessun server.",
-    theme: "Tema: {mode}", theme_auto: "automatico", theme_light: "chiaro", theme_dark: "scuro",
 
     home_title: "meldbar - Comunicazioni CRS all'AFC, senza installazione",
     hero_kicker: "Dal 16 gennaio 2027 solo lo schema CRS 3.0",
@@ -366,7 +363,7 @@ const I18N_SITE = {
     dp_h1: "Informativa sulla protezione dei dati",
     dp_p1: "Questo sito funziona senza un server che elabora dati: è composto da file statici che il suo browser carica ed esegue. Verifica, creazione e cifratura delle comunicazioni avvengono interamente nel suo browser. I file che sceglie non vengono né caricati né trasmessi.",
     dp_h_hosting: "Hosting", dp_hosting: "I file sono serviti da GitHub Pages (GitHub, Inc., USA). All'apertura di una pagina il fornitore di hosting può registrare dati tecnici di accesso come indirizzo IP, ora e file richiesto, come per qualsiasi sito. meldbar non ha accesso a questi dati e non tiene registri propri.",
-    dp_h_cookies: "Cookie e analytics", dp_cookies: "Non vengono impostati cookie e non si usano servizi di analisi o tracciamento. Nella memoria locale del suo browser restano solo la lingua, il tema e - su Chrome ed Edge - il riferimento al suo file di registro. Questi dati non lasciano il suo browser.",
+    dp_h_cookies: "Cookie e analytics", dp_cookies: "Non vengono impostati cookie e non si usano servizi di analisi o tracciamento. Nella memoria locale del suo browser restano solo la lingua e - su Chrome ed Edge - il riferimento al suo file di registro. Questi dati non lasciano il suo browser.",
     dp_h_registry: "File di registro", dp_registry: "Il registro (institut.sqlite) contiene gli identificativi delle comunicazioni inviate e il contenuto dei conti comunicati, per rendere possibili le correzioni. Si trova esclusivamente presso di lei; lo salvi come gli altri dati di comunicazione.",
     dp_h_contact: "Contatto", dp_contact: "Se ci scrive un'e-mail, trattiamo le sue indicazioni solo per rispondere. Informazioni e cancellazione: tramite l'indirizzo nell'impressum.",
     dp_h_law: "Base legale", dp_law: "Legge federale svizzera sulla protezione dei dati (LPD). Stato: settembre 2026.",

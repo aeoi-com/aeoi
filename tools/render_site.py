@@ -24,8 +24,6 @@ MARK = (
     '<path d="M20 37h29q4 0 1.6 3.2l-7.2 10.6Q41 54 37 54H8q-4 0-1.6-3.2l7.2-10.6Q16 37 20 37Z" fill="#13a89e"/></svg>'
 )
 CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
-SUN = '<svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'
-MOON = '<svg class="moon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
 
 NAV = [
     ("index.html#funktionen", "nav_features", "Funktionen"),
@@ -49,7 +47,6 @@ def header(page: str) -> str:
     <div class="header-actions">
       <label class="sr-only" for="lang">Sprache / Langue / Lingua</label>
       <select id="lang" class="pill lang"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
-      <button class="icon-btn theme-btn" type="button" aria-label="Theme">{SUN}{MOON}</button>
       <a class="btn primary" href="app.html" data-i18n="nav_app">App öffnen</a>
       <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav"><span class="sr-only" data-i18n="nav_menu">Menü</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
@@ -107,7 +104,7 @@ def page(name: str, title: str, body: str, *, desc: str) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="{CSP}">
 <meta name="referrer" content="no-referrer">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <meta name="description" content="{desc}">
 <title>{title}</title>
 <link rel="stylesheet" href="styles.css">

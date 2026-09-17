@@ -19,7 +19,7 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, Consolas, monospace;
   --bg: #f4f6f8;
@@ -47,56 +47,6 @@
   --radius: 14px;
   --radius-sm: 9px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b1016;
-    --bg-2: #0f161e;
-    --surface: #131b24;
-    --surface-2: #18222d;
-    --text: #e7ecf2;
-    --muted: #98a4b3;
-    --border: #243040;
-    --border-strong: #33425a;
-    --accent: #6fb0ff;
-    --accent-2: #2fd4c7;
-    --accent-soft: #16294a;
-    --navy: #dbe7ff;
-    --ok: #4ade80;
-    --ok-soft: #10301f;
-    --err: #ff8a80;
-    --err-soft: #3b1512;
-    --warn: #fbbf24;
-    --warn-soft: #3a2607;
-    --info: #8ab4ff;
-    --info-soft: #14233f;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
-    --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0b1016;
-  --bg-2: #0f161e;
-  --surface: #131b24;
-  --surface-2: #18222d;
-  --text: #e7ecf2;
-  --muted: #98a4b3;
-  --border: #243040;
-  --border-strong: #33425a;
-  --accent: #6fb0ff;
-  --accent-2: #2fd4c7;
-  --accent-soft: #16294a;
-  --navy: #dbe7ff;
-  --ok: #4ade80;
-  --ok-soft: #10301f;
-  --err: #ff8a80;
-  --err-soft: #3b1512;
-  --warn: #fbbf24;
-  --warn-soft: #3a2607;
-  --info: #8ab4ff;
-  --info-soft: #14233f;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
-  --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
 }
 
 * { box-sizing: border-box; }
@@ -142,8 +92,6 @@ button { font: inherit; color: inherit; }
   from { transform: translate3d(0, 0, 0) scale(1); }
   to { transform: translate3d(8vw, 6vh, 0) scale(1.15); }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .aurora span { opacity: 0.22; } }
-:root[data-theme="dark"] .aurora span { opacity: 0.22; }
 
 /* ---------- update banner ---------- */
 .update { position: sticky; top: 8px; z-index: 5; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 8px 0 0; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--accent); color: #fff; box-shadow: var(--shadow-lg); font-weight: 500; }

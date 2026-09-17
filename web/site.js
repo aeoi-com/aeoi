@@ -1,5 +1,5 @@
-// meldbar marketing pages: language, theme, navigation, scroll effects. No network, no storage
-// beyond the language and theme preference (localStorage, shared with the app).
+// meldbar marketing pages: language, navigation, scroll effects. No network, no storage beyond
+// the language preference (localStorage, shared with the app).
 "use strict";
 
 const SITE_LOCALES = { de: "de-CH", fr: "fr-CH", it: "it-CH" };
@@ -31,29 +31,7 @@ function initialLanguage() {
 }
 for (const sel of document.querySelectorAll("select.lang")) sel.addEventListener("change", (e) => applyLanguage(e.target.value));
 
-// theme: auto / light / dark, shared with the app
-function applyTheme(mode, store) {
-  if (mode === "auto") document.documentElement.removeAttribute("data-theme");
-  else document.documentElement.setAttribute("data-theme", mode);
-  const dark = mode === "dark" || (mode === "auto" && matchMedia("(prefers-color-scheme: dark)").matches);
-  for (const b of document.querySelectorAll(".theme-btn")) {
-    b.dataset.mode = mode;
-    b.querySelector(".sun").classList.toggle("hidden", dark);
-    b.querySelector(".moon").classList.toggle("hidden", !dark);
-    b.setAttribute("aria-label", t("theme", { mode: t("theme_" + mode) }));
-  }
-  if (store) try { localStorage.setItem("aeoi-theme", mode); } catch (e) { /* ignore */ }
-}
-(function initTheme() {
-  let mode = "auto";
-  try { mode = localStorage.getItem("aeoi-theme") || "auto"; } catch (e) { /* ignore */ }
-  applyLanguage(initialLanguage());
-  applyTheme(mode, false);
-  for (const b of document.querySelectorAll(".theme-btn")) {
-    b.addEventListener("click", () => applyTheme({ auto: "light", light: "dark", dark: "auto" }[b.dataset.mode] || "auto", true));
-  }
-  document.addEventListener("site:language", () => applyTheme(document.querySelector(".theme-btn")?.dataset.mode || "auto", false));
-})();
+applyLanguage(initialLanguage());
 
 // mobile navigation
 (function nav() {
