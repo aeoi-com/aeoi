@@ -62,6 +62,7 @@ const I18N = {
     english_note: "Technische Meldungen auf Englisch, mit dem Fehlercode der ESTV",
     theme: "Farbschema: {mode}", theme_auto: "automatisch", theme_light: "hell", theme_dark: "dunkel",
     report_name: "aeoi-pruefbericht",
+    update_text: "Neue Version verfügbar - bitte einmal neu laden.", update_btn: "Neu laden",
   },
   fr: {
     title: "aeoi - Vérifier un fichier CRS",
@@ -120,6 +121,7 @@ const I18N = {
     english_note: "Messages techniques en anglais, avec le code d'erreur de l'AFC",
     theme: "Thème : {mode}", theme_auto: "automatique", theme_light: "clair", theme_dark: "sombre",
     report_name: "aeoi-rapport",
+    update_text: "Nouvelle version disponible - rechargez la page une fois.", update_btn: "Recharger",
   },
   it: {
     title: "aeoi - Verificare un file CRS",
@@ -178,6 +180,7 @@ const I18N = {
     english_note: "Messaggi tecnici in inglese, con il codice di errore dell'AFC",
     theme: "Tema: {mode}", theme_auto: "automatico", theme_light: "chiaro", theme_dark: "scuro",
     report_name: "aeoi-rapporto",
+    update_text: "Nuova versione disponibile - ricaricare la pagina una volta.", update_btn: "Ricaricare",
   },
 };
 

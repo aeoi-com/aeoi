@@ -410,8 +410,17 @@ boot();
 // Offline after the first visit: the service worker precaches every file of the app. Only on a
 // secure context (https or localhost); it never contacts another host.
 if ("serviceWorker" in navigator && (location.protocol === "https:" || ["localhost", "127.0.0.1"].includes(location.hostname))) {
+  const hadController = !!navigator.serviceWorker.controller; // false on the very first visit
   navigator.serviceWorker.register("sw.js").then((r) => {
     navigator.serviceWorker.ready.then(() => console.info("aeoi:sw ready"));
     r.addEventListener("updatefound", () => console.info("aeoi:sw update"));
   }).catch((e) => console.warn("service worker not registered:", e));
+  // A new version took over (skipWaiting + claim) while this page is open: its files may no
+  // longer match the ones this page loaded (e.g. the wheel name), so ask for one reload.
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController) return;
+    $("update").classList.remove("hidden");
+    console.info("aeoi:sw new-version");
+  });
+  $("update-reload").addEventListener("click", () => location.reload());
 }

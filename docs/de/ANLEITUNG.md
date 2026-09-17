@@ -16,8 +16,8 @@ ausgefüllte Vorlage prüfen, Register anlegen (die Datei `institut.sqlite` lieg
 Workbook = ein Register), öffentlichen Schlüssel der ESTV einmal wählen, Meldung erstellen und
 verschlüsseln, Paket im Portal hochladen, Ergebnis erfassen. Die Seite kontaktiert keinen
 anderen Server, funktioniert nach dem ersten Besuch offline und lässt sich im Browser als App
-installieren. Die Abschnitte 2 bis 6 gelten sinngemäss; die Befehle unten sind der Weg mit der
-Kommandozeile.
+installieren. Nach einem Update der Seite einmal neu laden (die Seite zeigt dann einen Hinweis).
+Die Abschnitte 2 bis 6 gelten sinngemäss; die Befehle unten sind der Weg mit der Kommandozeile.
 
 ## 1. Installation
 

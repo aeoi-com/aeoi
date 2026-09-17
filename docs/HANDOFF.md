@@ -25,10 +25,13 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   11-50: 1'500, more: 2'400, support included; library licence for software houses 2'500 CHF/yr.
 - The pilot reporting FI is a prerequisite (portal access, `ESTV-PublicKey.pem`, test uploads).
   The pilot sends validation results (DocRefId + codes), never the file.
-- Gates: mid-Dec 2026 developer signals in OR (pypistats without mirrors, issues from strangers,
-  files validated in the browser, requests via associations); mid-Mar 2027 three pilots with real
-  files validated on the ESTV test channel; 31 May 2027 three paid licences or one library
-  licence; hard close 30 June 2027.
+- Gates: mid-Dec 2026 developer signals in OR, **measurable ones only** (the page has no
+  analytics by design, so "files validated in the browser" is not a signal): pypistats downloads
+  without mirrors (after the 0.0.1 release), stars and issues from strangers, repository
+  Insights → Traffic (unique visitors and cloners over 14 days, noted every week in
+  `docs/TRAFFIC.md` because GitHub keeps no history), requests through associations - thresholds
+  in `docs/TRAFFIC.md`; mid-Mar 2027 three pilots with real files validated on the ESTV test
+  channel; 31 May 2027 three paid licences or one library licence; hard close 30 June 2027.
 - Week-6 pilot test uses a **2.0** payload (transport pipeline only); first **3.0** test in the week
   of 16.01.2027.
 

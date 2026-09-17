@@ -15,7 +15,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scratch = process.env.PYODIDE_DIR || join(root, ".local", "pyodide-test");
@@ -218,6 +218,22 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   await done2;
   check("offline: boots from the service worker cache and checks a file", (await page2.locator("#out").textContent()).startsWith("OK"));
   await context.setOffline(false);
+  await page2.close();
+
+  // a deploy while the app is in use: a new sw.js takes over and the page asks for one reload
+  const swPath = join(root, "web", "sw.js");
+  const swOriginal = readFileSync(swPath, "utf-8");
+  writeFileSync(swPath, swOriginal.replace(/const CACHE = "aeoi-[^"]+";/, 'const CACHE = "aeoi-test-update";'));
+  try {
+    const page3 = await context.newPage();
+    const newVersion = page3.waitForEvent("console", { predicate: (m) => m.text() === "aeoi:sw new-version", timeout: 120000 });
+    await page3.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
+    await newVersion;
+    check("update banner after a new service worker took over", await page3.locator("#update").isVisible());
+    await page3.close();
+  } finally {
+    writeFileSync(swPath, swOriginal);
+  }
 } finally {
   await browser.close();
   server.kill();

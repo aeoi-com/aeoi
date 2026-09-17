@@ -122,7 +122,7 @@ def vendor_wheels() -> list[str]:
     out.mkdir(parents=True)
     published = []
     for spec in PYPI_WHEELS:
-        name = re.split(r"[=<>!~]", spec, 1)[0].lower().replace("-", "_")
+        name = re.split(r"[=<>!~]", spec, maxsplit=1)[0].lower().replace("-", "_")
         have = sorted(cache.glob(f"{name}-*.whl"))
         if not have or "==" in spec and not any(spec.split("==")[1] in w.name for w in have):
             log(f"  pip download {spec}")
