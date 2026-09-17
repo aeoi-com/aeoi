@@ -32,9 +32,16 @@ aeoi --version
 
 ## 2. Vorlage ausfüllen
 
+Die leere Vorlage gibt es fertig zum Herunterladen, auf Deutsch, Französisch und Italienisch:
+<https://meldbar.ch/vorlage/meldbar-vorlage-de.xlsx> (`-fr`, `-it`). Dieselbe Datei erzeugt die App
+(«Vorlage herunterladen», in der gewählten Sprache) oder die Kommandozeile:
+
 ```bash
-aeoi crs template --out meldung-2026.xlsx
+aeoi crs template --out meldung-2026.xlsx --lang de
 ```
+
+Spaltenkommentare, das Blatt ReadMe und das Blatt Codes sind in der gewählten Sprache; die technischen
+Spalten- und Blattnamen bleiben englisch, weil das Programm sie liest.
 
 Die Datei hat vier Blätter:
 

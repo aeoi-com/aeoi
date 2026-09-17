@@ -179,12 +179,32 @@ def write_service_worker(assets: list[str]) -> None:
     log(f"sw.js: cache aeoi-{version}, {len(assets) + 1} entries, {total / 1e6:.1f} MB")
 
 
+TEMPLATE_LANGS = ("de", "fr", "it", "en")
+
+
+def write_templates() -> list[str]:
+    """The empty Excel template in every language as a static download (web/vorlage/), so the
+    home page and the pilot letter can link it without loading the runtime first."""
+    from aeoi.crs import template
+
+    out = WEB / "vorlage"
+    out.mkdir(exist_ok=True)
+    files = []
+    for lang in TEMPLATE_LANGS:
+        name = f"vorlage/meldbar-vorlage-{lang}.xlsx"
+        template.write_template(WEB / name, lang=lang)
+        files.append(name)
+    log(f"templates: {', '.join(files)}")
+    return files
+
+
 def main() -> int:
     aeoi_wheel = copy_aeoi_wheel()
     pyodide_files = vendor_pyodide()
     wheels = vendor_wheels()
+    templates = write_templates()
     patch_app(aeoi_wheel, wheels)
-    write_service_worker([*STATIC, aeoi_wheel, *pyodide_files, *wheels])
+    write_service_worker([*STATIC, *templates, aeoi_wheel, *pyodide_files, *wheels])
     log(f"web/ ready: one origin, no external host ({aeoi_wheel})")
     return 0
 

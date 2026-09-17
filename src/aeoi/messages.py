@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any, Self
 
 CATALOGUE = Path(__file__).with_name("messages.json")
-LANGUAGES = ("en", "de")
+LANGUAGES = ("en", "de", "fr", "it")
 
 
 @lru_cache(maxsize=1)

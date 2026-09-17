@@ -179,9 +179,12 @@ STEPS_DATA = [
         "Im Portal hochladen wie bisher. Die Bestätigung in die App einfügen - damit sind die Korrekturen des nächsten Jahres vorbereitet.",
     ),
 ]
+STEP_LINK = {  # step 1: the static template, served in the language of the page (site.js sets href)
+    1: '<p class="step-link"><a href="vorlage/meldbar-vorlage-de.xlsx" data-vorlage download data-i18n="s1_dl">Excel-Vorlage herunterladen</a></p>',
+}
 STEPS = "".join(
     f'<div class="step-card"><div class="n">{i}</div><h3 data-i18n="s{i}_t">{title}</h3>'
-    f'<p data-i18n="s{i}_p">{text}</p><div class="art">{STEP_ART[i]}</div></div>'
+    f'<p data-i18n="s{i}_p">{text}</p>{STEP_LINK.get(i, "")}<div class="art">{STEP_ART[i]}</div></div>'
     for i, title, text in STEPS_DATA
 )
 

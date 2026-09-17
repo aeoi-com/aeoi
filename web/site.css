@@ -118,6 +118,9 @@
 .step-card h3 { margin: 0 0 8px; font-size: 1.15rem; }
 .step-card p { margin: 0; color: var(--muted); }
 .step-card .art { margin-top: auto; padding-top: 18px; }
+.step-card .step-link { margin-top: 10px; }
+.step-card .step-link a { color: var(--accent); font-weight: 600; text-decoration: none; }
+.step-card .step-link a:hover { text-decoration: underline; }
 .step-card .art svg { width: 100%; height: 56px; }
 .how-progress { height: 4px; border-radius: 999px; background: var(--border); margin-top: 20px; overflow: hidden; }
 .how-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: 999px; }

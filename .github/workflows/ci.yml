@@ -59,7 +59,7 @@ jobs:
           node-version: "22"
       - run: mkdir -p .local/pyodide-test && cd .local/pyodide-test && npm install --silent pyodide@0.27.7
       - run: node tools/web_smoke.mjs
-      - run: python tools/build_web.py
+      - run: python -m pip install dist/*.whl && python tools/build_web.py
       - uses: actions/upload-artifact@v4
         with:
           name: web

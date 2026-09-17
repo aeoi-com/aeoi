@@ -20,4 +20,5 @@ web/*.whl
 web/pyodide/
 web/wheels/
 web/sw.js
+web/vorlage/
 web/vendor.json

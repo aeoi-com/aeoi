@@ -3,11 +3,17 @@
 The template has the four data sheets with header comments and drop-down validations for every
 coded column, a ``Codes`` sheet with every allowed value and its meaning, and a ``ReadMe`` sheet.
 ``write_message`` fills a workbook from a :class:`Message` (used for the example and for tests).
+
+Every text of the template (column comments, ReadMe, Codes sheet) exists in German, French and
+Italian: ``template_i18n.json`` is keyed by the English source string, :func:`tr` looks it up and
+falls back to English. Sheet and column names stay technical (the parser reads them).
 """
 
 from __future__ import annotations
 
 import datetime as dt
+import json
+from functools import lru_cache
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -19,6 +25,23 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from aeoi.crs import codes
 from aeoi.crs.flat import SHEETS, Column
 from aeoi.crs.model import Account, Address, Message, Person, Tin
+
+I18N = Path(__file__).with_name("template_i18n.json")
+LANGUAGES = ("en", "de", "fr", "it")
+
+
+@lru_cache(maxsize=1)
+def translations() -> dict[str, dict[str, str]]:
+    data = json.loads(I18N.read_text(encoding="utf-8"))
+    return {k: v for k, v in data.items() if not k.startswith("_")}
+
+
+def tr(text: str, lang: str) -> str:
+    """The template text in ``lang``; English (the source string) when there is no translation."""
+    if lang == "en":
+        return text
+    return translations().get(text, {}).get(lang) or text
+
 
 HEADER_FILL = PatternFill("solid", fgColor="DDEBF7")
 REQUIRED_FILL = PatternFill("solid", fgColor="FFF2CC")
@@ -35,40 +58,61 @@ def _fill(required: bool | str) -> PatternFill:
 
 MAX_ROWS = 5000
 
-README = """aeoi - CRS reporting template
-
-One workbook = one reporting financial institution = one CRS message to the ESTV.
-
-Sheets
-- ReportingFI: one value per row (field / value).
-- Accounts: one row per reportable account; the holder's data is on the same row.
-  holder_type decides which columns count: 'individual' uses first_name ... nationalities,
-  'organisation' uses org_name, org_name_type, acct_holder_type, org_ins.
-- ControllingPersons: one row per controlling person of an organisation holder with
-  acct_holder_type CRS101; 'key' is the account's key.
-- Payments: one row per payment of the year; 'key' is the account's key.
-
-Conventions
-- Several values in one cell: separate with ';' (e.g. CH;DE).
-- TINs / INs: value@CC (CC = issuing country), several separated by ';'.
-- true/false columns accept true/false, 1/0, yes/no, ja/nein, oui/non.
-- Dates: YYYY-MM-DD or an Excel date. Amounts: numbers, dot as decimal separator.
-- Yellow headers are mandatory; orange headers are mandatory for one holder_type only
-  (first_name/last_name for 'individual', org_name/acct_holder_type for 'organisation').
-  Columns marked 3.0 are mandatory for CRS schema 3.0 (ESTV: only 3.0 from 16.01.2027),
-  ignored for 2.0.
-- Joint accounts: one row per reportable holder, same account_number, the FULL balance on
-  each row; for 3.0 put the number of joint holders in joint_account_number on every row.
-- Trustee-documented trusts: put the trust's name in ReportingFI.name and set
-  trustee_documented_trust = true; the 'TDT=' prefix required by the ESTV is added at build time.
-- Corrections (CRS702): keep this workbook, fix the rows, and run 'aeoi crs correct' with the
-  registry of the earlier messages; changed rows become corrections, --cancel KEY deletes a
-  record, unchanged rows are left out, new rows go into a new 'aeoi crs build' message.
-- Allowed characters: ISO 8859-1 without ! " # $ < > ^ ~ and the symbols listed by the ESTV
-  (Anhang 7.2); never the sequences --  /*  &#
-
-Every code used in a drop-down is explained on the 'Codes' sheet.
-"""
+TITLE = "meldbar - CRS reporting template"
+SUMMARY = "One workbook = one reporting financial institution = one CRS message to the ESTV."
+CLOSING = "Every code used in a drop-down is explained on the 'Codes' sheet."
+SECTIONS: list[tuple[str, list[str]]] = [
+    (
+        "Sheets",
+        [
+            "ReportingFI: one value per row (field / value).",
+            (
+                "Accounts: one row per reportable account; the holder's data is on the same row. "
+                "holder_type decides which columns count: 'individual' uses first_name ... "
+                "nationalities, 'organisation' uses org_name, org_name_type, acct_holder_type, org_ins."
+            ),
+            (
+                "ControllingPersons: one row per controlling person of an organisation holder with "
+                "acct_holder_type CRS101; 'key' is the account's key."
+            ),
+            "Payments: one row per payment of the year; 'key' is the account's key.",
+        ],
+    ),
+    (
+        "Conventions",
+        [
+            "Several values in one cell: separate with ';' (e.g. CH;DE).",
+            "TINs / INs: value@CC (CC = issuing country), several separated by ';'.",
+            "true/false columns accept true/false, 1/0, yes/no, ja/nein, oui/non.",
+            "Dates: YYYY-MM-DD or an Excel date. Amounts: numbers, dot as decimal separator.",
+            (
+                "Yellow headers are mandatory; orange headers are mandatory for one holder_type only "
+                "(first_name/last_name for 'individual', org_name/acct_holder_type for 'organisation'). "
+                "Columns marked 3.0 are mandatory for CRS schema 3.0 (ESTV: only 3.0 from 16.01.2027), "
+                "ignored for 2.0."
+            ),
+            (
+                "Joint accounts: one row per reportable holder, same account_number, the FULL balance on "
+                "each row; for 3.0 put the number of joint holders in joint_account_number on every row."
+            ),
+            (
+                "Trustee-documented trusts: put the trust's name in ReportingFI.name and set "
+                "trustee_documented_trust = true; the 'TDT=' prefix required by the ESTV is added at "
+                "build time."
+            ),
+            (
+                "Corrections (CRS702): keep this workbook, fix the rows, and run 'aeoi crs correct' with "
+                "the registry of the earlier messages; changed rows become corrections, --cancel KEY "
+                "deletes a record, unchanged rows are left out, new rows go into a new 'aeoi crs build' "
+                "message."
+            ),
+            (
+                'Allowed characters: ISO 8859-1 without ! " # $ < > ^ ~ and the symbols listed by the '
+                "ESTV (Anhang 7.2); never the sequences --  /*  &#"
+            ),
+        ],
+    ),
+]
 
 
 def _add_validation(ws, col_idx: int, values: list[str]) -> None:
@@ -82,14 +126,15 @@ def _add_validation(ws, col_idx: int, values: list[str]) -> None:
     dv.add(f"{letter}2:{letter}{MAX_ROWS}")
 
 
-def _write_table(ws, columns: list[Column]) -> None:
+def _write_table(ws, columns: list[Column], lang: str) -> None:
     for i, col in enumerate(columns, start=1):
         cell = ws.cell(row=1, column=i, value=col.name)
         cell.font = Font(bold=True)
         cell.fill = _fill(col.required)
-        note = col.description
+        note = tr(col.description, lang)
         if isinstance(col.required, str):
-            note += f" - mandatory when holder_type = {col.required}"
+            rule = tr("mandatory when holder_type = {value}", lang)
+            note += " - " + rule.format(value=col.required)
         cell.comment = Comment(note, "aeoi")
         ws.column_dimensions[get_column_letter(i)].width = max(14, min(32, len(col.name) + 4))
         if col.codes and col.kind != "multi":
@@ -99,8 +144,8 @@ def _write_table(ws, columns: list[Column]) -> None:
     ws.freeze_panes = "A2"
 
 
-def _write_reporting_fi(ws, columns: list[Column]) -> None:
-    ws["A1"], ws["B1"], ws["C1"] = "field", "value", "description"
+def _write_reporting_fi(ws, columns: list[Column], lang: str) -> None:
+    ws["A1"], ws["B1"], ws["C1"] = (tr(h, lang) for h in ("field", "value", "description"))
     for c in ("A1", "B1", "C1"):
         ws[c].font = Font(bold=True)
         ws[c].fill = HEADER_FILL
@@ -108,7 +153,7 @@ def _write_reporting_fi(ws, columns: list[Column]) -> None:
         ws.cell(row=i, column=1, value=col.name).fill = (
             REQUIRED_FILL if col.required else HEADER_FILL
         )
-        ws.cell(row=i, column=3, value=col.description)
+        ws.cell(row=i, column=3, value=tr(col.description, lang))
         if col.codes:
             dv = DataValidation(
                 type="list", formula1='"' + ",".join(col.codes) + '"', allow_blank=True
@@ -120,8 +165,8 @@ def _write_reporting_fi(ws, columns: list[Column]) -> None:
     ws.column_dimensions["C"].width = 80
 
 
-def _write_codes(ws) -> None:
-    ws.append(["code list", "code", "meaning"])
+def _write_codes(ws, lang: str) -> None:
+    ws.append([tr(h, lang) for h in ("code list", "code", "meaning")])
     for c in ws[1]:
         c.font = Font(bold=True)
     tables = {
@@ -141,7 +186,7 @@ def _write_codes(ws) -> None:
     }
     for title, table in tables.items():
         for code, meaning in table.items():
-            ws.append([title, code, meaning])
+            ws.append([tr(title, lang), code, tr(meaning, lang)])
     ws.column_dimensions["A"].width = 44
     ws.column_dimensions["B"].width = 12
     ws.column_dimensions["C"].width = 100
@@ -163,54 +208,45 @@ STEPS = [
 ]
 
 
-def _write_readme(ws) -> None:
-    """ReadMe as structured rows: title, steps, then the conventions, one paragraph per row."""
+def _write_readme(ws, lang: str) -> None:
+    """ReadMe as structured rows: title, summary, the five steps, then one paragraph per row."""
     title = Font(bold=True, size=14)
     heading = Font(bold=True, size=11)
     wrap = Alignment(wrap_text=True, vertical="top")
     ws.column_dimensions["A"].width = 118
-    ws["A1"] = "aeoi - CRS reporting template"
+    ws["A1"] = tr(TITLE, lang)
     ws["A1"].font = title
-    ws["A2"] = "One workbook = one reporting financial institution = one CRS message to the ESTV."
+    ws["A2"] = tr(SUMMARY, lang)
     row = 4
-    ws.cell(row=row, column=1, value="Five steps").font = heading
+    ws.cell(row=row, column=1, value=tr("Five steps", lang)).font = heading
     for step in STEPS:
         row += 1
-        ws.cell(row=row, column=1, value=step).alignment = wrap
+        ws.cell(row=row, column=1, value=tr(step, lang)).alignment = wrap
+    for name, paragraphs in SECTIONS:
+        row += 2
+        ws.cell(row=row, column=1, value=tr(name, lang)).font = heading
+        for paragraph in paragraphs:
+            row += 1
+            ws.cell(row=row, column=1, value=tr(paragraph, lang)).alignment = wrap
     row += 2
-    for line in README.splitlines()[4:]:  # after the title and the one-line summary
-        if not line.strip():
-            continue
-        if not line.startswith(("-", " ")):
-            row += 1
-            cell = ws.cell(row=row, column=1, value=line.strip())
-            if line.rstrip().endswith("."):  # closing sentence, not a heading
-                cell.alignment = wrap
-            else:
-                cell.font = heading
-            continue
-        if line.startswith("- "):
-            row += 1
-            ws.cell(row=row, column=1, value=line[2:].strip()).alignment = wrap
-        else:  # continuation of the previous bullet
-            cell = ws.cell(row=row, column=1)
-            cell.value = f"{cell.value} {line.strip()}"
+    ws.cell(row=row, column=1, value=tr(CLOSING, lang)).alignment = wrap
     ws.sheet_view.showGridLines = False
 
 
-def new_workbook() -> Workbook:
+def new_workbook(lang: str = "en") -> Workbook:
+    """An empty template; ``lang`` (en/de/fr/it) selects the language of comments and ReadMe."""
     wb = Workbook()
     ws = wb.active
     ws.title = "ReadMe"
-    _write_readme(ws)
+    _write_readme(ws, lang)
     for name, columns in SHEETS.items():
         sheet = wb.create_sheet(name)
         if name == "ReportingFI":
-            _write_reporting_fi(sheet, columns)
+            _write_reporting_fi(sheet, columns, lang)
         else:
-            _write_table(sheet, columns)
+            _write_table(sheet, columns, lang)
             sheet.auto_filter.ref = f"A1:{get_column_letter(len(columns))}{MAX_ROWS}"
-    _write_codes(wb.create_sheet("Codes"))
+    _write_codes(wb.create_sheet("Codes"), lang)
     return wb
 
 
@@ -304,9 +340,9 @@ def _append(ws, columns: list[Column], cells: dict[str, object]) -> None:
     ws.append(row)
 
 
-def write_message(msg: Message, path: str | Path) -> None:
+def write_message(msg: Message, path: str | Path, lang: str = "en") -> None:
     """Write a message into a fresh template workbook (example data, round-trip tests)."""
-    wb = new_workbook()
+    wb = new_workbook(lang)
     fi = msg.reporting_fi
     values = {
         "estv_id": fi.estv_id,
@@ -349,5 +385,5 @@ def write_message(msg: Message, path: str | Path) -> None:
     wb.save(path)
 
 
-def write_template(path: str | Path) -> None:
-    new_workbook().save(path)
+def write_template(path: str | Path, lang: str = "en") -> None:
+    new_workbook(lang).save(path)

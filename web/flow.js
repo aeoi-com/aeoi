@@ -85,8 +85,8 @@ def discard_message(ref):
     submit.discard(reg, ref)
     return json.dumps(workflow.registry_view(reg))
 
-def template_path():
-    template.write_template("/tmp/template.xlsx")
+def template_path(lang):
+    template.write_template("/tmp/template.xlsx", lang=lang)
     return "/tmp/template.xlsx"
 `);
   for (const id of ["reg-open", "reg-new", "template-download"]) $(id).disabled = false;
@@ -243,7 +243,7 @@ async function discardMessage(ref) {
 }
 
 // ---------- template ----------
-$("template-download").addEventListener("click", () => download(py.FS.readFile(pyCall("template_path")), "aeoi-vorlage.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+$("template-download").addEventListener("click", () => download(py.FS.readFile(pyCall("template_path", LANG)), `meldbar-vorlage-${LANG}.xlsx`, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
 
 // ---------- build & encrypt ----------
 let pendingKeyPem = null; // chosen this session but no registry to remember it in

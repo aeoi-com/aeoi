@@ -40,9 +40,9 @@ def _cmd_crs_template(args: argparse.Namespace) -> int:
     if args.example:
         from aeoi.crs.example import sample_message
 
-        template.write_message(sample_message(), args.out)
+        template.write_message(sample_message(), args.out, lang=args.lang)
     else:
-        template.write_template(args.out)
+        template.write_template(args.out, lang=args.lang)
     print(f"wrote {args.out}")
     return 0
 
@@ -252,12 +252,20 @@ def build_parser() -> argparse.ArgumentParser:
     t = crs_sub.add_parser("template", help="write the Excel input template")
     t.add_argument("--out", required=True, help="path of the .xlsx to write")
     t.add_argument("--example", action="store_true", help="fill it with invented example data")
+    t.add_argument(
+        "--lang",
+        default="en",
+        choices=["en", "de", "fr", "it"],
+        help="language of the column comments, ReadMe and Codes sheet",
+    )
     t.set_defaults(func=_cmd_crs_template)
 
     c = crs_sub.add_parser("check", help="read the input and report every problem")
     c.add_argument("--input", required=True, help=".xlsx workbook or folder of <Sheet>.csv files")
     c.add_argument("--version", default="3.0", choices=["2.0", "3.0"], help="CRS schema version")
-    c.add_argument("--lang", default="en", choices=["en", "de"], help="language of the messages")
+    c.add_argument(
+        "--lang", default="en", choices=["en", "de", "fr", "it"], help="language of the messages"
+    )
     c.set_defaults(func=_cmd_crs_check)
 
     b = crs_sub.add_parser("build", help="read, check and write the CRS XML (optionally packaged)")
@@ -287,7 +295,9 @@ def build_parser() -> argparse.ArgumentParser:
     g2.add_argument("--test", dest="test", action="store_true", default=None,
                     help="treat as a test file (default: from the file name)")  # fmt: skip
     g2.add_argument("--prod", dest="test", action="store_false")
-    va.add_argument("--lang", default="en", choices=["en", "de"], help="language of the messages")
+    va.add_argument(
+        "--lang", default="en", choices=["en", "de", "fr", "it"], help="language of the messages"
+    )
     va.set_defaults(func=_cmd_crs_validate)
 
     rg = crs_sub.add_parser("registry", help="list the messages of a registry")

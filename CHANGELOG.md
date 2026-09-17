@@ -4,6 +4,13 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Excel template in German, French and Italian (column comments, ReadMe, Codes sheet):
+  `aeoi crs template --lang de|fr|it`, the app generates it in the page language, and
+  `tools/build_web.py` publishes the four empty templates as static downloads (`web/vorlage/`),
+  linked from the home page.
+- Check and workflow messages rendered in French and Italian (catalogue complete in four
+  languages); `--lang fr|it` on `check` and `validate`.
+
 ## 0.0.1 - 2026-09-17
 
 First working version, CRS for the Swiss ESTV portal.

@@ -21,6 +21,7 @@ function applyLanguage(lang) {
     else el.textContent = t(key);
   }
   for (const sel of document.querySelectorAll("select.lang")) sel.value = LANG;
+  for (const a of document.querySelectorAll("[data-vorlage]")) a.setAttribute("href", `vorlage/meldbar-vorlage-${LANG}.xlsx`);
   try { localStorage.setItem("aeoi-lang", LANG); } catch (e) { /* ignore */ }
   document.dispatchEvent(new CustomEvent("site:language"));
 }

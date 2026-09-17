@@ -76,7 +76,7 @@ def test_report_dict_for_xml(tmp_path):
     assert p["rule"] == "50005" and p["title"] == "Carattere non ammesso"
     assert p["scope"] == "fi" and p["field"] == "Name" and p["official"].startswith("Datenelemente")
     assert "#" in p["fix"] and p["origin"] == "estv"
-    assert d["text"].startswith("NOT OK") and d["headline"] == d["text"].split("\n")[0]
+    assert d["text"].startswith("NON OK") and d["headline"] == d["text"].split("\n")[0]
 
 
 def test_report_dict_for_workbook(tmp_path):
@@ -84,4 +84,4 @@ def test_report_dict_for_workbook(tmp_path):
     template.write_message(sample_message(), path)
     d = overview.report_dict(check.check_workbook(path, "3.0"), "fr")
     assert d["kind"] == "workbook" and d["ok"] and d["overview"]["accounts"] == 2
-    assert d["headline"].startswith("OK: 2 account(s)")
+    assert d["headline"].startswith("OK : 2 comptes")

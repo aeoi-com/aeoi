@@ -117,6 +117,14 @@ try {
   const okSample = await click("sample-ok");
   check("valid sample -> OK", okSample.startsWith("OK"));
 
+  // the Excel template generated in the browser, in the language of the page (German by default)
+  const tplDl = page.waitForEvent("download", { timeout: 60000 });
+  await page.locator("#template-download").click();
+  const tpl = await tplDl;
+  const tplPath = join(fixtures, tpl.suggestedFilename());
+  await tpl.saveAs(tplPath);
+  check("template downloaded in German: " + tpl.suggestedFilename(), tpl.suggestedFilename() === "meldbar-vorlage-de.xlsx" && readFileSync(tplPath).length > 10000);
+
   // language switch: page texts and finding titles change, the English report and the ready status survive
   for (const [lang, h1, ready, none] of [["it", "Verificare", "Pronto.", "Nessun rilievo"], ["fr", "Vérifier", "Prêt.", "Aucune constatation"], ["de", "CRS-Datei", "Bereit.", "Keine Befunde"]]) {
     await page.locator("#lang").selectOption(lang);
@@ -219,8 +227,12 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   const days = await site.locator("[data-until]").first().textContent();
   check("home: live countdown to 16.01.2027 shows a number (" + days + ")", /^\d+$/.test(days.trim()));
   check("home: five steps, six features, three plans", (await site.locator(".step-card").count()) === 5 && (await site.locator(".feature").count()) === 6 && (await site.locator(".plan-card").count()) === 3);
+  const tplLink = site.locator("[data-vorlage]").first();
+  const tplStatus = (await site.request.get(`http://127.0.0.1:${port}/` + (await tplLink.getAttribute("href")))).status();
+  check("home: static template link answers 200 (" + (await tplLink.getAttribute("href")) + ")", tplStatus === 200);
   await site.locator("#lang").selectOption("it");
   check("home: Italian after the language switch", (await site.locator(".hero-h1").textContent()).trim().startsWith("Comunicazioni") && (await site.locator(".site-nav a").first().textContent()) === "Funzioni");
+  check("home: template link follows the language", (await tplLink.getAttribute("href")) === "vorlage/meldbar-vorlage-it.xlsx");
   await site.locator("#lang").selectOption("de");
   await site.goto(`http://127.0.0.1:${port}/preise.html`);
   check("pricing page: three plans, FAQ", (await site.locator(".plan-card").count()) === 3 && (await site.locator(".faq details").count()) === 4);

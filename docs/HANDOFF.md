@@ -211,6 +211,8 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    validate.py, ids.py (format checks and character reasons), flat.py (InputProblem), the
    RegistryError / WorkflowError texts; `render(lang)` on both reports, `--lang de` on the CLI,
    the page renders in its language (German today; fr/it fall back to English until translated).
+   17.09 (night): fr/it columns of `messages.json` filled for all 151 ids (catalogue test covers four
+   languages); `--lang fr|it` on check/validate.
    Review 17.09 (evening): portal terms - «abgelehnt» (not «abgewiesen», the portal's own status
    word), «Berichtsjahr» for the MessageRefId year and «Meldezeitraum» for ReportingPeriod,
    «nicht dokumentiertes Konto», «Ansässigkeitsstaat»; headlines and labels of both reports are
@@ -230,8 +232,14 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    the imprint names "meldbar" without a legal-entity form. Browser test: 43 checks.
    Dark mode removed on the owner's request (light only; no theme toggle, no `aeoi-theme` key).
    Not translated on purpose until
-   the pilot confirms the German content: the two long German guides in fr/it and the
-   fr/it columns of `messages.json`.
+   the pilot confirms the German content: the two long German guides in fr/it.
+   Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English
+   source string (column comments, ReadMe paragraphs, Codes sheet, headers) in de/fr/it;
+   `template.tr()`, `write_template(path, lang=)`, `aeoi crs template --lang`, the app generates
+   the template in the page language (`meldbar-vorlage-<lang>.xlsx`), and `tools/build_web.py`
+   writes the four empty templates to `web/vorlage/` (git-ignored, precached, linked from the
+   home page step 1 via `[data-vorlage]` whose href follows the language). Both workflows now
+   `pip install dist/*.whl` before `build_web.py` (it imports the package).
 5. Week 6: browser validator, packages and CI done locally; waiting on the owner for the PyPI
    token (upload 0.0.1) and the GitHub repository (push, enable Pages, replace the placeholder
    links in README/pyproject/docs/de/ANLEITUNG.md and web/index.html).

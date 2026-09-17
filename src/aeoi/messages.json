@@ -2,606 +2,908 @@
   "_comment": "Check messages by id: en (what the CLI and the tests see) and de (what the page shows to a German-speaking user). Placeholders are str.format fields; a placeholder may be a nested message rendered in the same language. Terminology follows the ESTV Technische Wegleitung AIA and the OECD element names, which stay untranslated.",
   "code_missing": {
     "en": "missing; one of {options}",
-    "de": "fehlt; einer der Werte {options}"
+    "de": "fehlt; einer der Werte {options}",
+    "fr": "manquant ; l'une des valeurs {options}",
+    "it": "manca; uno dei valori {options}"
   },
   "code_invalid": {
     "en": "{value} is not one of {options}",
-    "de": "{value} ist keiner der Werte {options}"
+    "de": "{value} ist keiner der Werte {options}",
+    "fr": "{value} n'est pas l'une des valeurs {options}",
+    "it": "{value} non è uno dei valori {options}"
   },
   "country_missing": {
     "en": "missing ISO 3166-1 alpha-2 country code",
-    "de": "Ländercode (ISO 3166-1, zwei Buchstaben) fehlt"
+    "de": "Ländercode (ISO 3166-1, zwei Buchstaben) fehlt",
+    "fr": "code pays (ISO 3166-1, deux lettres) manquant",
+    "it": "codice Paese (ISO 3166-1, due lettere) mancante"
   },
   "country_invalid": {
     "en": "{value} is not a two-letter ISO country code",
-    "de": "{value} ist kein zweibuchstabiger ISO-Ländercode"
+    "de": "{value} ist kein zweibuchstabiger ISO-Ländercode",
+    "fr": "{value} n'est pas un code pays ISO à deux lettres",
+    "it": "{value} non è un codice Paese ISO di due lettere"
   },
   "charset": {
     "en": "{text} at position {position}: {reason}",
-    "de": "{text} an Position {position}: {reason}"
+    "de": "{text} an Position {position}: {reason}",
+    "fr": "{text} à la position {position} : {reason}",
+    "it": "{text} alla posizione {position}: {reason}"
   },
   "char_not_latin1": {
     "en": "not in ISO 8859-1",
-    "de": "nicht in ISO 8859-1 enthalten"
+    "de": "nicht in ISO 8859-1 enthalten",
+    "fr": "absent d'ISO 8859-1",
+    "it": "non contenuto in ISO 8859-1"
   },
   "char_excluded": {
     "en": "excluded by Anhang 7.2 (U+{code})",
-    "de": "durch Anhang 7.2 ausgeschlossen (U+{code})"
+    "de": "durch Anhang 7.2 ausgeschlossen (U+{code})",
+    "fr": "exclu par l'annexe 7.2 (U+{code})",
+    "it": "escluso dall'allegato 7.2 (U+{code})"
   },
   "char_control": {
     "en": "control character (U+{code})",
-    "de": "Steuerzeichen (U+{code})"
+    "de": "Steuerzeichen (U+{code})",
+    "fr": "caractère de contrôle (U+{code})",
+    "it": "carattere di controllo (U+{code})"
   },
   "char_sequence": {
     "en": "forbidden sequence (Anhang 7.2)",
-    "de": "verbotene Zeichenfolge (Anhang 7.2)"
+    "de": "verbotene Zeichenfolge (Anhang 7.2)",
+    "fr": "séquence interdite (annexe 7.2)",
+    "it": "sequenza vietata (allegato 7.2)"
   },
   "address_city": {
     "en": "City is mandatory (AddressFix must be used)",
-    "de": "Ort (City) ist Pflicht - AddressFix muss verwendet werden"
+    "de": "Ort (City) ist Pflicht - AddressFix muss verwendet werden",
+    "fr": "la localité (City) est obligatoire - AddressFix doit être utilisé",
+    "it": "la località (City) è obbligatoria - AddressFix deve essere usato"
   },
   "address_free_empty": {
     "en": "AddressFree, when present, must not be empty",
-    "de": "AddressFree darf, wenn vorhanden, nicht leer sein"
+    "de": "AddressFree darf, wenn vorhanden, nicht leer sein",
+    "fr": "AddressFree, s'il est présent, ne doit pas être vide",
+    "it": "AddressFree, se presente, non deve essere vuoto"
   },
   "person_first_name": {
     "en": "FirstName is mandatory; use NFN if unknown",
-    "de": "Vorname (FirstName) ist Pflicht; NFN eintragen, wenn unbekannt"
+    "de": "Vorname (FirstName) ist Pflicht; NFN eintragen, wenn unbekannt",
+    "fr": "le prénom (FirstName) est obligatoire ; indiquer NFN s'il est inconnu",
+    "it": "il nome (FirstName) è obbligatorio; indicare NFN se sconosciuto"
   },
   "person_last_name": {
     "en": "LastName is mandatory",
-    "de": "Nachname (LastName) ist Pflicht"
+    "de": "Nachname (LastName) ist Pflicht",
+    "fr": "le nom de famille (LastName) est obligatoire",
+    "it": "il cognome (LastName) è obbligatorio"
   },
   "name_type_201": {
     "en": "nameType OECD201 is not allowed",
-    "de": "Namenstyp OECD201 ist nicht erlaubt"
+    "de": "Namenstyp OECD201 ist nicht erlaubt",
+    "fr": "le type de nom OECD201 n'est pas admis",
+    "it": "il tipo di nome OECD201 non è ammesso"
   },
   "res_country_required": {
     "en": "at least one ResCountryCode is mandatory",
-    "de": "mindestens ein Ansässigkeitsstaat (ResCountryCode) ist Pflicht"
+    "de": "mindestens ein Ansässigkeitsstaat (ResCountryCode) ist Pflicht",
+    "fr": "au moins un État de résidence (ResCountryCode) est obligatoire",
+    "it": "almeno uno Stato di residenza (ResCountryCode) è obbligatorio"
   },
   "tin_empty": {
     "en": "a TIN, when present, must not be empty",
-    "de": "eine TIN darf, wenn vorhanden, nicht leer sein"
+    "de": "eine TIN darf, wenn vorhanden, nicht leer sein",
+    "fr": "un TIN, s'il est présent, ne doit pas être vide",
+    "it": "un TIN, se presente, non deve essere vuoto"
   },
   "birth_date": {
     "en": "must be after 1900-01-01 and before today",
-    "de": "muss nach dem 01.01.1900 und vor heute liegen"
+    "de": "muss nach dem 01.01.1900 und vor heute liegen",
+    "fr": "doit être postérieure au 01.01.1900 et antérieure à aujourd'hui",
+    "it": "deve essere posteriore al 01.01.1900 e anteriore a oggi"
   },
   "org_name": {
     "en": "organisation Name is mandatory",
-    "de": "Name des Rechtsträgers ist Pflicht"
+    "de": "Name des Rechtsträgers ist Pflicht",
+    "fr": "le nom de l'entité est obligatoire",
+    "it": "il nome dell'ente è obbligatorio"
   },
   "in_empty": {
     "en": "an IN, when present, must not be empty",
-    "de": "eine IN darf, wenn vorhanden, nicht leer sein"
+    "de": "eine IN darf, wenn vorhanden, nicht leer sein",
+    "fr": "un IN, s'il est présent, ne doit pas être vide",
+    "it": "un IN, se presente, non deve essere vuoto"
   },
   "partner_list_missing": {
     "en": "no partner-state list for {year}",
-    "de": "keine Partnerstaaten-Liste für {year}"
+    "de": "keine Partnerstaaten-Liste für {year}",
+    "fr": "pas de liste des États partenaires pour {year}",
+    "it": "nessun elenco degli Stati partner per {year}"
   },
   "partner_none_person": {
     "en": "none of {countries} was a Swiss AEOI partner state in {year} (SIF list, Stand {stand}){us}; the account is not reportable under the CRS for this year",
-    "de": "keines der Länder {countries} war {year} ein AIA-Partnerstaat der Schweiz (Liste SIF, Stand {stand}){us}; das Konto ist für dieses Jahr nicht CRS-meldepflichtig"
+    "de": "keines der Länder {countries} war {year} ein AIA-Partnerstaat der Schweiz (Liste SIF, Stand {stand}){us}; das Konto ist für dieses Jahr nicht CRS-meldepflichtig",
+    "fr": "aucun des pays {countries} n'était un État partenaire EAR de la Suisse en {year} (liste SIF, état au {stand}){us} ; le compte n'est pas déclarable selon le CRS pour cette année",
+    "it": "nessuno dei Paesi {countries} era uno Stato partner SAI della Svizzera nel {year} (elenco SIF, stato al {stand}){us}; il conto non è oggetto di comunicazione CRS per quest'anno"
   },
   "partner_none_org": {
     "en": "none of {countries} was a partner state in {year} and no controlling person resides in one{us}; nothing to report for this account",
-    "de": "keines der Länder {countries} war {year} ein Partnerstaat, und keine beherrschende Person ist in einem ansässig{us}; für dieses Konto ist nichts zu melden"
+    "de": "keines der Länder {countries} war {year} ein Partnerstaat, und keine beherrschende Person ist in einem ansässig{us}; für dieses Konto ist nichts zu melden",
+    "fr": "aucun des pays {countries} n'était un État partenaire en {year} et aucune personne détenant le contrôle n'y réside{us} ; rien à déclarer pour ce compte",
+    "it": "nessuno dei Paesi {countries} era uno Stato partner nel {year} e nessuna persona che esercita il controllo vi risiede{us}; nulla da comunicare per questo conto"
   },
   "partner_none_cp": {
     "en": "none of {countries} was a partner state in {year}; controlling persons outside partner states must not be sent{us}{hint}",
-    "de": "keines der Länder {countries} war {year} ein Partnerstaat; beherrschende Personen ausserhalb der Partnerstaaten dürfen nicht gemeldet werden{us}{hint}"
+    "de": "keines der Länder {countries} war {year} ein Partnerstaat; beherrschende Personen ausserhalb der Partnerstaaten dürfen nicht gemeldet werden{us}{hint}",
+    "fr": "aucun des pays {countries} n'était un État partenaire en {year} ; les personnes détenant le contrôle hors des États partenaires ne doivent pas être déclarées{us}{hint}",
+    "it": "nessuno dei Paesi {countries} era uno Stato partner nel {year}; le persone che esercitano il controllo fuori dagli Stati partner non devono essere comunicate{us}{hint}"
   },
   "partner_cp_hint": {
     "en": "; remove this row: if no controlling person remains and the entity itself is a reportable person, declare it as CRS102 or CRS103 without controlling persons, otherwise the account is not reportable",
-    "de": "; diese Zeile entfernen: bleibt keine beherrschende Person übrig und ist der Rechtsträger selbst meldepflichtig, ihn als CRS102 oder CRS103 ohne beherrschende Personen melden, sonst ist das Konto nicht meldepflichtig"
+    "de": "; diese Zeile entfernen: bleibt keine beherrschende Person übrig und ist der Rechtsträger selbst meldepflichtig, ihn als CRS102 oder CRS103 ohne beherrschende Personen melden, sonst ist das Konto nicht meldepflichtig",
+    "fr": " ; supprimer cette ligne : s'il ne reste aucune personne détenant le contrôle et que l'entité est elle-même déclarable, la déclarer comme CRS102 ou CRS103 sans personnes détenant le contrôle, sinon le compte n'est pas déclarable",
+    "it": "; eliminare questa riga: se non resta alcuna persona che esercita il controllo e l'ente è esso stesso oggetto di comunicazione, comunicarlo come CRS102 o CRS103 senza persone che esercitano il controllo, altrimenti il conto non è oggetto di comunicazione"
   },
   "us_hint": {
     "en": " (US is not an AEOI partner state: US persons fall under FATCA, not the CRS)",
-    "de": " (die USA sind kein AIA-Partnerstaat: US-Personen fallen unter FATCA, nicht unter den CRS)"
+    "de": " (die USA sind kein AIA-Partnerstaat: US-Personen fallen unter FATCA, nicht unter den CRS)",
+    "fr": " (les États-Unis ne sont pas un État partenaire EAR : les personnes américaines relèvent de FATCA, pas du CRS)",
+    "it": " (gli Stati Uniti non sono uno Stato partner SAI: le persone statunitensi rientrano in FATCA, non nel CRS)"
   },
   "account_number_normalised": {
     "en": "will be written as {normalised} (spaces/hyphens removed, upper case): the ESTV checks the raw format",
-    "de": "wird als {normalised} geschrieben (ohne Leerzeichen/Bindestriche, Grossbuchstaben): die ESTV prüft das Rohformat"
+    "de": "wird als {normalised} geschrieben (ohne Leerzeichen/Bindestriche, Grossbuchstaben): die ESTV prüft das Rohformat",
+    "fr": "sera écrit {normalised} (sans espaces ni traits d'union, en majuscules) : l'AFC vérifie le format brut",
+    "it": "sarà scritto come {normalised} (senza spazi né trattini, in maiuscolo): l'AFC verifica il formato grezzo"
   },
   "iban_invalid": {
     "en": "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)",
-    "de": "AcctNumberType OECD601 verlangt eine gültige IBAN (Format und Prüfsumme mod 97)"
+    "de": "AcctNumberType OECD601 verlangt eine gültige IBAN (Format und Prüfsumme mod 97)",
+    "fr": "AcctNumberType OECD601 exige un IBAN valable (format et somme de contrôle mod 97)",
+    "it": "AcctNumberType OECD601 richiede un IBAN valido (formato e checksum mod 97)"
   },
   "isin_invalid": {
     "en": "AcctNumberType OECD603 requires a valid ISIN (12 characters, Luhn checksum)",
-    "de": "AcctNumberType OECD603 verlangt eine gültige ISIN (12 Zeichen, Luhn-Prüfziffer)"
+    "de": "AcctNumberType OECD603 verlangt eine gültige ISIN (12 Zeichen, Luhn-Prüfziffer)",
+    "fr": "AcctNumberType OECD603 exige un ISIN valable (12 caractères, chiffre de contrôle Luhn)",
+    "it": "AcctNumberType OECD603 richiede un ISIN valido (12 caratteri, cifra di controllo Luhn)"
   },
   "account_number_missing": {
     "en": "mandatory; use NANUM when there is no number",
-    "de": "Pflicht; NANUM eintragen, wenn es keine Kontonummer gibt"
+    "de": "Pflicht; NANUM eintragen, wenn es keine Kontonummer gibt",
+    "fr": "obligatoire ; indiquer NANUM s'il n'y a pas de numéro de compte",
+    "it": "obbligatorio; indicare NANUM se non esiste un numero di conto"
   },
   "balance_negative": {
     "en": "AccountBalance must not be negative",
-    "de": "der Kontosaldo (AccountBalance) darf nicht negativ sein"
+    "de": "der Kontosaldo (AccountBalance) darf nicht negativ sein",
+    "fr": "le solde du compte (AccountBalance) ne doit pas être négatif",
+    "it": "il saldo del conto (AccountBalance) non può essere negativo"
   },
   "balance_closed": {
     "en": "closed accounts must report a balance of 0",
-    "de": "geschlossene Konten müssen den Saldo 0 melden"
+    "de": "geschlossene Konten müssen den Saldo 0 melden",
+    "fr": "les comptes clôturés doivent déclarer un solde de 0",
+    "it": "i conti chiusi devono comunicare un saldo di 0"
   },
   "currency_invalid": {
     "en": "ISO 4217 currency code required",
-    "de": "Währungscode nach ISO 4217 erforderlich"
+    "de": "Währungscode nach ISO 4217 erforderlich",
+    "fr": "code monnaie ISO 4217 requis",
+    "it": "codice valuta ISO 4217 richiesto"
   },
   "holder_exactly_one": {
     "en": "exactly one of individual / organisation holder is required",
-    "de": "genau ein Kontoinhaber ist erforderlich: natürliche Person oder Rechtsträger"
+    "de": "genau ein Kontoinhaber ist erforderlich: natürliche Person oder Rechtsträger",
+    "fr": "exactement un titulaire est requis : personne physique ou entité",
+    "it": "è richiesto esattamente un titolare: persona fisica o ente"
   },
   "cp_not_allowed_individual": {
     "en": "no ControllingPerson allowed for an individual holder",
-    "de": "bei einer natürlichen Person als Inhaber sind keine beherrschenden Personen erlaubt"
+    "de": "bei einer natürlichen Person als Inhaber sind keine beherrschenden Personen erlaubt",
+    "fr": "aucune personne détenant le contrôle n'est admise pour une personne physique titulaire",
+    "it": "per una persona fisica titolare non sono ammesse persone che esercitano il controllo"
   },
   "undocumented_res_ch": {
     "en": "undocumented account: the only ResCountryCode must be CH",
-    "de": "nicht dokumentiertes Konto: der einzige Ansässigkeitsstaat muss CH sein"
+    "de": "nicht dokumentiertes Konto: der einzige Ansässigkeitsstaat muss CH sein",
+    "fr": "compte non documenté : le seul État de résidence doit être CH",
+    "it": "conto non documentato: l'unico Stato di residenza deve essere CH"
   },
   "cp_required_crs101": {
     "en": "CRS101 holder: at least one ControllingPerson is required",
-    "de": "Inhaber CRS101: mindestens eine beherrschende Person ist erforderlich"
+    "de": "Inhaber CRS101: mindestens eine beherrschende Person ist erforderlich",
+    "fr": "titulaire CRS101 : au moins une personne détenant le contrôle est requise",
+    "it": "titolare CRS101: è richiesta almeno una persona che esercita il controllo"
   },
   "cp_not_allowed_type": {
     "en": "no ControllingPerson allowed for AcctHolderType {aht}",
-    "de": "bei AcctHolderType {aht} sind keine beherrschenden Personen erlaubt"
+    "de": "bei AcctHolderType {aht} sind keine beherrschenden Personen erlaubt",
+    "fr": "aucune personne détenant le contrôle n'est admise pour AcctHolderType {aht}",
+    "it": "per AcctHolderType {aht} non sono ammesse persone che esercitano il controllo"
   },
   "undocumented_individual": {
     "en": "undocumented accounts must have an individual holder",
-    "de": "nicht dokumentierte Konten müssen eine natürliche Person als Inhaber haben"
+    "de": "nicht dokumentierte Konten müssen eine natürliche Person als Inhaber haben",
+    "fr": "les comptes non documentés doivent avoir une personne physique comme titulaire",
+    "it": "i conti non documentati devono avere una persona fisica come titolare"
   },
   "cp_type_required_30": {
     "en": "3.0: at least one CtrlgPersonType is mandatory",
-    "de": "3.0: mindestens ein CtrlgPersonType ist Pflicht"
+    "de": "3.0: mindestens ein CtrlgPersonType ist Pflicht",
+    "fr": "3.0 : au moins un CtrlgPersonType est obligatoire",
+    "it": "3.0: almeno un CtrlgPersonType è obbligatorio"
   },
   "cp_type_only_first_20": {
     "en": "2.0 allows one CtrlgPersonType; only the first is written",
-    "de": "2.0 erlaubt einen CtrlgPersonType; nur der erste wird geschrieben"
+    "de": "2.0 erlaubt einen CtrlgPersonType; nur der erste wird geschrieben",
+    "fr": "2.0 n'admet qu'un CtrlgPersonType ; seul le premier est écrit",
+    "it": "la 2.0 ammette un solo CtrlgPersonType; viene scritto solo il primo"
   },
   "joint_number_range": {
     "en": "JointAccount.Number must be 1-200",
-    "de": "JointAccount.Number muss zwischen 1 und 200 liegen"
+    "de": "JointAccount.Number muss zwischen 1 und 200 liegen",
+    "fr": "JointAccount.Number doit être compris entre 1 et 200",
+    "it": "JointAccount.Number deve essere compreso tra 1 e 200"
   },
   "account_type_depository": {
     "en": "{ant} accounts must be depository (CRS1101)",
-    "de": "Konten mit {ant} müssen Einlagenkonten sein (CRS1101)"
+    "de": "Konten mit {ant} müssen Einlagenkonten sein (CRS1101)",
+    "fr": "les comptes {ant} doivent être des comptes de dépôt (CRS1101)",
+    "it": "i conti {ant} devono essere conti di deposito (CRS1101)"
   },
   "account_type_equity": {
     "en": "EquityInterestType given: AccountType must be CRS1104",
-    "de": "EquityInterestType angegeben: AccountType muss CRS1104 sein"
+    "de": "EquityInterestType angegeben: AccountType muss CRS1104 sein",
+    "fr": "EquityInterestType indiqué : AccountType doit être CRS1104",
+    "it": "EquityInterestType indicato: AccountType deve essere CRS1104"
   },
   "account_number_type_605": {
     "en": "CRS1103 accounts must use AcctNumberType OECD605",
-    "de": "Konten CRS1103 müssen AcctNumberType OECD605 verwenden"
+    "de": "Konten CRS1103 müssen AcctNumberType OECD605 verwenden",
+    "fr": "les comptes CRS1103 doivent utiliser AcctNumberType OECD605",
+    "it": "i conti CRS1103 devono usare AcctNumberType OECD605"
   },
   "payment_depository_interest": {
     "en": "depository account (CRS1101): only interest (CRS502)",
-    "de": "Einlagenkonto (CRS1101): nur Zinsen (CRS502)"
+    "de": "Einlagenkonto (CRS1101): nur Zinsen (CRS502)",
+    "fr": "compte de dépôt (CRS1101) : uniquement des intérêts (CRS502)",
+    "it": "conto di deposito (CRS1101): solo interessi (CRS502)"
   },
   "payment_503_504": {
     "en": "{at} accounts: only CRS503 or CRS504 payments",
-    "de": "Konten {at}: nur Zahlungen CRS503 oder CRS504"
+    "de": "Konten {at}: nur Zahlungen CRS503 oder CRS504",
+    "fr": "comptes {at} : uniquement des paiements CRS503 ou CRS504",
+    "it": "conti {at}: solo pagamenti CRS503 o CRS504"
   },
   "ignored_in_20": {
     "en": "ignored in 2.0 (element does not exist)",
-    "de": "in 2.0 ignoriert (Element existiert nicht)"
+    "de": "in 2.0 ignoriert (Element existiert nicht)",
+    "fr": "ignoré en 2.0 (l'élément n'existe pas)",
+    "it": "ignorato nella 2.0 (l'elemento non esiste)"
   },
   "estv_id_missing": {
     "en": "SendingCompanyIN must be the ESTV-ID of the FI",
-    "de": "SendingCompanyIN muss die ESTV-ID des Instituts sein"
+    "de": "SendingCompanyIN muss die ESTV-ID des Instituts sein",
+    "fr": "SendingCompanyIN doit être l'ID AFC de l'institution",
+    "it": "SendingCompanyIN deve essere l'ID AFC dell'istituto"
   },
   "estv_id_format": {
     "en": "does not look like the ESTV-ID example (052.0000.0000); the portal compares it with the registered value",
-    "de": "entspricht nicht dem Beispielformat der ESTV-ID (052.0000.0000); das Portal vergleicht mit dem registrierten Wert"
+    "de": "entspricht nicht dem Beispielformat der ESTV-ID (052.0000.0000); das Portal vergleicht mit dem registrierten Wert",
+    "fr": "ne correspond pas au format de l'exemple d'ID AFC (052.0000.0000) ; le portail compare avec la valeur enregistrée",
+    "it": "non corrisponde al formato dell'esempio di ID AFC (052.0000.0000); il portale confronta con il valore registrato"
   },
   "uid_invalid": {
     "en": "IN, when given, must be the UID (CHE-nnn.nnn.nnn)",
-    "de": "IN muss, wenn angegeben, die UID sein (CHE-nnn.nnn.nnn)"
+    "de": "IN muss, wenn angegeben, die UID sein (CHE-nnn.nnn.nnn)",
+    "fr": "IN, s'il est indiqué, doit être l'IDE (CHE-nnn.nnn.nnn)",
+    "it": "IN, se indicato, deve essere l'IDI (CHE-nnn.nnn.nnn)"
   },
   "fi_name_missing": {
     "en": "Name is mandatory",
-    "de": "Name ist Pflicht"
+    "de": "Name ist Pflicht",
+    "fr": "le nom est obligatoire",
+    "it": "il nome è obbligatorio"
   },
   "tdt_prefix": {
     "en": "starts with TDT= but trustee_documented_trust is not set: write the trust's name and set the flag, the prefix is added at build time",
-    "de": "beginnt mit TDT=, aber trustee_documented_trust ist nicht gesetzt: den Namen des Trusts eintragen und das Kennzeichen setzen, das Präfix wird beim Erstellen angefügt"
+    "de": "beginnt mit TDT=, aber trustee_documented_trust ist nicht gesetzt: den Namen des Trusts eintragen und das Kennzeichen setzen, das Präfix wird beim Erstellen angefügt",
+    "fr": "commence par TDT= mais trustee_documented_trust n'est pas activé : inscrire le nom du trust et activer l'indicateur, le préfixe est ajouté à la création",
+    "it": "inizia con TDT= ma trustee_documented_trust non è impostato: inserire il nome del trust e impostare l'indicatore, il prefisso viene aggiunto alla creazione"
   },
   "reporting_year_range": {
     "en": "reporting year must be 2017..current year",
-    "de": "das Berichtsjahr muss zwischen 2017 und dem laufenden Jahr liegen"
+    "de": "das Berichtsjahr muss zwischen 2017 und dem laufenden Jahr liegen",
+    "fr": "l'année de référence doit être comprise entre 2017 et l'année en cours",
+    "it": "l'anno di riferimento deve essere compreso tra il 2017 e l'anno corrente"
   },
   "crs702_needs_registry": {
     "en": "CRS702 (corrections) needs the submission registry: use 'aeoi crs correct' with the registry of the earlier messages (Wegleitung Ziffer 6)",
-    "de": "CRS702 (Korrekturen) braucht das Register der gesendeten Meldungen: 'aeoi crs correct' mit dem Register verwenden (Wegleitung Ziffer 6)"
+    "de": "CRS702 (Korrekturen) braucht das Register der gesendeten Meldungen: 'aeoi crs correct' mit dem Register verwenden (Wegleitung Ziffer 6)",
+    "fr": "CRS702 (corrections) exige le registre des déclarations envoyées : utiliser 'aeoi crs correct' avec le registre (directive, chiffre 6)",
+    "it": "CRS702 (correzioni) richiede il registro delle comunicazioni inviate: usare 'aeoi crs correct' con il registro (direttiva, cifra 6)"
   },
   "correction_needs_crs702": {
     "en": "a correction message must carry CRS702",
-    "de": "eine Korrekturmeldung muss CRS702 tragen"
+    "de": "eine Korrekturmeldung muss CRS702 tragen",
+    "fr": "une déclaration de correction doit porter CRS702",
+    "it": "una comunicazione di correzione deve riportare CRS702"
   },
   "nil_with_accounts": {
     "en": "a nil report (CRS703) must not contain accounts",
-    "de": "eine Nullmeldung (CRS703) darf keine Konten enthalten"
+    "de": "eine Nullmeldung (CRS703) darf keine Konten enthalten",
+    "fr": "une déclaration néant (CRS703) ne doit pas contenir de comptes",
+    "it": "una comunicazione nulla (CRS703) non deve contenere conti"
   },
   "accounts_required": {
     "en": "at least one account is required unless CRS703",
-    "de": "mindestens ein Konto ist erforderlich, ausser bei CRS703"
+    "de": "mindestens ein Konto ist erforderlich, ausser bei CRS703",
+    "fr": "au moins un compte est requis, sauf pour CRS703",
+    "it": "è richiesto almeno un conto, salvo per CRS703"
   },
   "key_not_unique": {
     "en": "account key is not unique",
-    "de": "der Kontoschlüssel ist nicht eindeutig"
+    "de": "der Kontoschlüssel ist nicht eindeutig",
+    "fr": "la clé du compte n'est pas unique",
+    "it": "la chiave del conto non è univoca"
   },
   "doc_ref_id_duplicate_rows": {
     "en": "DocRefId used on more than one row",
-    "de": "DocRefId auf mehr als einer Zeile verwendet"
+    "de": "DocRefId auf mehr als einer Zeile verwendet",
+    "fr": "DocRefId utilisée sur plus d'une ligne",
+    "it": "DocRefId usata su più di una riga"
   },
   "joint_rows": {
     "en": "{n} rows share this account number: for a joint account set joint_account_number (number of joint holders) to the same value on every row; otherwise use distinct account numbers",
-    "de": "{n} Zeilen teilen diese Kontonummer: bei einem Gemeinschaftskonto joint_account_number (Anzahl Mitinhaber) auf jeder Zeile gleich setzen; sonst verschiedene Kontonummern verwenden"
+    "de": "{n} Zeilen teilen diese Kontonummer: bei einem Gemeinschaftskonto joint_account_number (Anzahl Mitinhaber) auf jeder Zeile gleich setzen; sonst verschiedene Kontonummern verwenden",
+    "fr": "{n} lignes partagent ce numéro de compte : pour un compte joint, mettre la même valeur de joint_account_number (nombre de cotitulaires) sur chaque ligne ; sinon utiliser des numéros de compte distincts",
+    "it": "{n} righe condividono questo numero di conto: per un conto cointestato impostare lo stesso joint_account_number (numero di cointestatari) su ogni riga; altrimenti usare numeri di conto distinti"
   },
   "file_too_large": {
     "en": "{size} bytes, above the 100 MB limit; split the message",
-    "de": "{size} Bytes, über der Grenze von 100 MB; die Meldung aufteilen"
+    "de": "{size} Bytes, über der Grenze von 100 MB; die Meldung aufteilen",
+    "fr": "{size} octets, au-delà de la limite de 100 Mo ; scinder la déclaration",
+    "it": "{size} byte, oltre il limite di 100 MB; suddividere la comunicazione"
   },
   "not_well_formed": {
     "en": "not well-formed XML: {error}",
-    "de": "kein wohlgeformtes XML: {error}"
+    "de": "kein wohlgeformtes XML: {error}",
+    "fr": "XML mal formé : {error}",
+    "it": "XML non ben formato: {error}"
   },
   "unknown_namespace": {
     "en": "unknown root namespace {namespace}",
-    "de": "unbekannter Namensraum des Wurzelelements {namespace}"
+    "de": "unbekannter Namensraum des Wurzelelements {namespace}",
+    "fr": "espace de noms inconnu de l'élément racine {namespace}",
+    "it": "namespace sconosciuto dell'elemento radice {namespace}"
   },
   "header_v2_ns_v3": {
     "en": "namespace urn:oecd:ties:crs:v2 with version=\"3.0\": this is the header shown in the Wegleitung 5.3.1, but the OECD 3.0 schema declares urn:oecd:ties:crs:v3; the file matches neither schema (open question 1)",
-    "de": "Namensraum urn:oecd:ties:crs:v2 mit version=\"3.0\": so zeigt es die Wegleitung 5.3.1, das OECD-Schema 3.0 deklariert aber urn:oecd:ties:crs:v3; die Datei passt zu keinem der beiden Schemata (offene Frage 1)"
+    "de": "Namensraum urn:oecd:ties:crs:v2 mit version=\"3.0\": so zeigt es die Wegleitung 5.3.1, das OECD-Schema 3.0 deklariert aber urn:oecd:ties:crs:v3; die Datei passt zu keinem der beiden Schemata (offene Frage 1)",
+    "fr": "espace de noms urn:oecd:ties:crs:v2 avec version=\"3.0\" : c'est l'en-tête montré par la directive 5.3.1, mais le schéma OCDE 3.0 déclare urn:oecd:ties:crs:v3 ; le fichier ne correspond à aucun des deux schémas (question ouverte 1)",
+    "it": "namespace urn:oecd:ties:crs:v2 con version=\"3.0\": è l'intestazione mostrata dalla direttiva 5.3.1, ma lo schema OCSE 3.0 dichiara urn:oecd:ties:crs:v3; il file non corrisponde a nessuno dei due schemi (questione aperta 1)"
   },
   "version_mismatch": {
     "en": "version attribute {attr} does not match the namespace of schema {version}",
-    "de": "das Attribut version={attr} passt nicht zum Namensraum des Schemas {version}"
+    "de": "das Attribut version={attr} passt nicht zum Namensraum des Schemas {version}",
+    "fr": "l'attribut version={attr} ne correspond pas à l'espace de noms du schéma {version}",
+    "it": "l'attributo version={attr} non corrisponde al namespace dello schema {version}"
   },
   "signed_xml": {
     "en": "the XML is signed; the ESTV rejects signed files",
-    "de": "das XML ist signiert; die ESTV weist signierte Dateien ab"
+    "de": "das XML ist signiert; die ESTV weist signierte Dateien ab",
+    "fr": "le XML est signé ; l'AFC rejette les fichiers signés",
+    "it": "l'XML è firmato; l'AFC respinge i file firmati"
   },
   "xsd_error": {
     "en": "{error}",
-    "de": "Schemaverstoss: {error}"
+    "de": "Schemaverstoss: {error}",
+    "fr": "violation du schéma : {error}",
+    "it": "violazione dello schema: {error}"
   },
   "content_skipped_schema": {
     "en": "content checks skipped: the file does not follow the schema (see the 50007 errors)",
-    "de": "Inhaltsprüfungen übersprungen: die Datei folgt dem Schema nicht (siehe die Fehler 50007)"
+    "de": "Inhaltsprüfungen übersprungen: die Datei folgt dem Schema nicht (siehe die Fehler 50007)",
+    "fr": "contrôles de contenu ignorés : le fichier ne respecte pas le schéma (voir les erreurs 50007)",
+    "it": "controlli di contenuto saltati: il file non rispetta lo schema (vedi gli errori 50007)"
   },
   "content_skipped_model": {
     "en": "content checks skipped: the file could not be read into the model",
-    "de": "Inhaltsprüfungen übersprungen: die Datei konnte nicht eingelesen werden"
+    "de": "Inhaltsprüfungen übersprungen: die Datei konnte nicht eingelesen werden",
+    "fr": "contrôles de contenu ignorés : le fichier n'a pas pu être lu",
+    "it": "controlli di contenuto saltati: il file non ha potuto essere letto"
   },
   "must_be_ch": {
     "en": "must be CH",
-    "de": "muss CH sein"
+    "de": "muss CH sein",
+    "fr": "doit être CH",
+    "it": "deve essere CH"
   },
   "must_be_crs": {
     "en": "must be CRS",
-    "de": "muss CRS sein"
+    "de": "muss CRS sein",
+    "fr": "doit être CRS",
+    "it": "deve essere CRS"
   },
   "must_not_be_used": {
     "en": "must not be used",
-    "de": "darf nicht verwendet werden"
+    "de": "darf nicht verwendet werden",
+    "fr": "ne doit pas être utilisé",
+    "it": "non deve essere usato"
   },
   "must_not_be_present": {
     "en": "must not be present",
-    "de": "darf nicht vorhanden sein"
+    "de": "darf nicht vorhanden sein",
+    "fr": "ne doit pas être présent",
+    "it": "non deve essere presente"
   },
   "period_outside": {
     "en": "{period} is outside 1.1.{year} - 31.12.{year1} (MessageRefId year {year})",
-    "de": "{period} liegt ausserhalb von 1.1.{year} - 31.12.{year1} (Berichtsjahr der MessageRefId: {year})"
+    "de": "{period} liegt ausserhalb von 1.1.{year} - 31.12.{year1} (Berichtsjahr der MessageRefId: {year})",
+    "fr": "{period} est en dehors de 1.1.{year} - 31.12.{year1} (année de référence de la MessageRefId : {year})",
+    "it": "{period} è al di fuori di 1.1.{year} - 31.12.{year1} (anno di riferimento della MessageRefId: {year})"
   },
   "period_year_after": {
     "en": "{period} is in the year after the MessageRefId year {year}; allowed by 98006, unusual for a Swiss FI",
-    "de": "{period} liegt im Jahr nach dem Berichtsjahr {year} der MessageRefId; nach 98006 erlaubt, für ein Schweizer Institut unüblich"
+    "de": "{period} liegt im Jahr nach dem Berichtsjahr {year} der MessageRefId; nach 98006 erlaubt, für ein Schweizer Institut unüblich",
+    "fr": "{period} se situe dans l'année qui suit l'année de référence {year} de la MessageRefId ; admis par 98006, inhabituel pour une institution suisse",
+    "it": "{period} cade nell'anno successivo all'anno di riferimento {year} della MessageRefId; ammesso da 98006, insolito per un istituto svizzero"
   },
   "period_not_dec31": {
     "en": "not 31 December; unusual for a Swiss FI",
-    "de": "nicht der 31. Dezember; für ein Schweizer Institut unüblich"
+    "de": "nicht der 31. Dezember; für ein Schweizer Institut unüblich",
+    "fr": "pas le 31 décembre ; inhabituel pour une institution suisse",
+    "it": "non è il 31 dicembre; insolito per un istituto svizzero"
   },
   "crs_bodies": {
     "en": "{n} CrsBody elements; exactly one",
-    "de": "{n} CrsBody-Elemente; genau eines erlaubt"
+    "de": "{n} CrsBody-Elemente; genau eines erlaubt",
+    "fr": "{n} éléments CrsBody ; un seul est admis",
+    "it": "{n} elementi CrsBody; ne è ammesso uno solo"
   },
   "reporting_groups": {
     "en": "{n} groups; exactly one",
-    "de": "{n} ReportingGroups; genau eine erlaubt"
+    "de": "{n} ReportingGroups; genau eine erlaubt",
+    "fr": "{n} ReportingGroup ; un seul est admis",
+    "it": "{n} ReportingGroup; ne è ammesso uno solo"
   },
   "fi_res_country": {
     "en": "must be exactly CH",
-    "de": "muss genau CH sein"
+    "de": "muss genau CH sein",
+    "fr": "doit être exactement CH",
+    "it": "deve essere esattamente CH"
   },
   "fi_name_type_201": {
     "en": "OECD201 is not allowed",
-    "de": "OECD201 ist nicht erlaubt"
+    "de": "OECD201 ist nicht erlaubt",
+    "fr": "OECD201 n'est pas admis",
+    "it": "OECD201 non è ammesso"
   },
   "fi_indic": {
     "en": "{indic}: the ReportingFI is never corrected or deleted",
-    "de": "{indic}: das ReportingFI wird nie korrigiert oder storniert"
+    "de": "{indic}: das ReportingFI wird nie korrigiert oder storniert",
+    "fr": "{indic} : le ReportingFI n'est jamais corrigé ni annulé",
+    "it": "{indic}: il ReportingFI non viene mai corretto né stornato"
   },
   "doc_ref_used_twice": {
     "en": "used twice in this file",
-    "de": "in dieser Datei zweimal verwendet"
+    "de": "in dieser Datei zweimal verwendet",
+    "fr": "utilisée deux fois dans ce fichier",
+    "it": "usata due volte in questo file"
   },
   "test_indic_in_test_file": {
     "en": "{indic} in a test file (name starts with Test)",
-    "de": "{indic} in einer Testdatei (Name beginnt mit Test)"
+    "de": "{indic} in einer Testdatei (Name beginnt mit Test)",
+    "fr": "{indic} dans un fichier de test (le nom commence par Test)",
+    "it": "{indic} in un file di test (il nome inizia con Test)"
   },
   "prod_indic_in_prod_file": {
     "en": "{indic} in a productive file",
-    "de": "{indic} in einer produktiven Datei"
+    "de": "{indic} in einer produktiven Datei",
+    "fr": "{indic} dans un fichier productif",
+    "it": "{indic} in un file produttivo"
   },
   "resend_not_allowed_ar": {
     "en": "Resend Data is not allowed for AccountReports",
-    "de": "Resend Data ist für AccountReports nicht erlaubt"
+    "de": "Resend Data ist für AccountReports nicht erlaubt",
+    "fr": "Resend Data n'est pas admis pour les AccountReports",
+    "it": "Resend Data non è ammesso per gli AccountReport"
   },
   "corr_ref_required": {
     "en": "required for corrections and deletions",
-    "de": "bei Korrekturen und Stornierungen erforderlich"
+    "de": "bei Korrekturen und Stornierungen erforderlich",
+    "fr": "requis pour les corrections et les annulations",
+    "it": "richiesto per correzioni e storni"
   },
   "corr_ref_not_allowed_new": {
     "en": "not allowed on a new record",
-    "de": "bei einem neuen Datensatz nicht erlaubt"
+    "de": "bei einem neuen Datensatz nicht erlaubt",
+    "fr": "non admis sur un nouvel enregistrement",
+    "it": "non ammesso su un nuovo record"
   },
   "corrected_twice": {
     "en": "the same record corrected twice in one file",
-    "de": "derselbe Datensatz in einer Datei zweimal korrigiert"
+    "de": "derselbe Datensatz in einer Datei zweimal korrigiert",
+    "fr": "le même enregistrement corrigé deux fois dans un fichier",
+    "it": "lo stesso record corretto due volte in un file"
   },
   "corrections_in_crs701": {
     "en": "corrections in a CRS701 message",
-    "de": "Korrekturen in einer CRS701-Meldung"
+    "de": "Korrekturen in einer CRS701-Meldung",
+    "fr": "corrections dans une déclaration CRS701",
+    "it": "correzioni in una comunicazione CRS701"
   },
   "new_in_crs702": {
     "en": "new records in a CRS702 message",
-    "de": "neue Datensätze in einer CRS702-Meldung"
+    "de": "neue Datensätze in einer CRS702-Meldung",
+    "fr": "nouveaux enregistrements dans une déclaration CRS702",
+    "it": "nuovi record in una comunicazione CRS702"
   },
   "transitional_present": {
     "en": "transitional 'not reported' values present (open question 3)",
-    "de": "Übergangswerte «nicht gemeldet» vorhanden (offene Frage 3)"
+    "de": "Übergangswerte «nicht gemeldet» vorhanden (offene Frage 3)",
+    "fr": "valeurs transitoires « non déclaré » présentes (question ouverte 3)",
+    "it": "valori transitori «non comunicato» presenti (questione aperta 3)"
   },
   "msgref_too_long": {
     "en": "MessageRefId longer than {max} characters (50008)",
-    "de": "MessageRefId länger als {max} Zeichen (50008)"
+    "de": "MessageRefId länger als {max} Zeichen (50008)",
+    "fr": "MessageRefId de plus de {max} caractères (50008)",
+    "it": "MessageRefId più lunga di {max} caratteri (50008)"
   },
   "msgref_format": {
     "en": "MessageRefId must match CH<year>CH<unique id> (50008)",
-    "de": "MessageRefId muss dem Muster CH<Jahr>CH<eindeutige Kennung> folgen (50008)"
+    "de": "MessageRefId muss dem Muster CH<Jahr>CH<eindeutige Kennung> folgen (50008)",
+    "fr": "la MessageRefId doit suivre le modèle CH<année>CH<identifiant unique> (50008)",
+    "it": "la MessageRefId deve seguire il modello CH<anno>CH<identificativo univoco> (50008)"
   },
   "msgref_charset": {
     "en": "MessageRefId contains characters outside Anhang 7.2 (50008)",
-    "de": "MessageRefId enthält Zeichen ausserhalb von Anhang 7.2 (50008)"
+    "de": "MessageRefId enthält Zeichen ausserhalb von Anhang 7.2 (50008)",
+    "fr": "la MessageRefId contient des caractères hors de l'annexe 7.2 (50008)",
+    "it": "la MessageRefId contiene caratteri al di fuori dell'allegato 7.2 (50008)"
   },
   "docref_format": {
     "en": "DocRefId must be CH<year>CH + 1-42 letters, digits, '-', '_' or '.' (80001)",
-    "de": "DocRefId muss CH<Jahr>CH + 1-42 Buchstaben, Ziffern, '-', '_' oder '.' sein (80001)"
+    "de": "DocRefId muss CH<Jahr>CH + 1-42 Buchstaben, Ziffern, '-', '_' oder '.' sein (80001)",
+    "fr": "la DocRefId doit être CH<année>CH + 1 à 42 lettres, chiffres, '-', '_' ou '.' (80001)",
+    "it": "la DocRefId deve essere CH<anno>CH + da 1 a 42 lettere, cifre, '-', '_' o '.' (80001)"
   },
   "docref_year": {
     "en": "DocRefId year {year} differs from MessageRefId year {message_year} (80001)",
-    "de": "Jahr {year} der DocRefId weicht vom Jahr {message_year} der MessageRefId ab (80001)"
+    "de": "Jahr {year} der DocRefId weicht vom Jahr {message_year} der MessageRefId ab (80001)",
+    "fr": "l'année {year} de la DocRefId diffère de l'année {message_year} de la MessageRefId (80001)",
+    "it": "l'anno {year} della DocRefId differisce dall'anno {message_year} della MessageRefId (80001)"
   },
   "input_not_date": {
     "en": "not a date (use YYYY-MM-DD)",
-    "de": "kein Datum (Format JJJJ-MM-TT verwenden)"
+    "de": "kein Datum (Format JJJJ-MM-TT verwenden)",
+    "fr": "pas une date (utiliser le format AAAA-MM-JJ)",
+    "it": "non è una data (usare il formato AAAA-MM-GG)"
   },
   "input_sheet_missing": {
     "en": "sheet is missing",
-    "de": "Blatt fehlt"
+    "de": "Blatt fehlt",
+    "fr": "feuille manquante",
+    "it": "foglio mancante"
   },
   "input_unknown_field": {
     "en": "unknown field",
-    "de": "unbekanntes Feld"
+    "de": "unbekanntes Feld",
+    "fr": "champ inconnu",
+    "it": "campo sconosciuto"
   },
   "input_year": {
     "en": "must be a year",
-    "de": "muss ein Jahr sein"
+    "de": "muss ein Jahr sein",
+    "fr": "doit être une année",
+    "it": "deve essere un anno"
   },
   "input_bool": {
     "en": "must be true or false",
-    "de": "muss true oder false sein"
+    "de": "muss true oder false sein",
+    "fr": "doit être true ou false",
+    "it": "deve essere true o false"
   },
   "input_missing_account_key": {
     "en": "missing account key",
-    "de": "Kontoschlüssel fehlt"
+    "de": "Kontoschlüssel fehlt",
+    "fr": "clé du compte manquante",
+    "it": "chiave del conto mancante"
   },
   "input_not_number": {
     "en": "not a number",
-    "de": "keine Zahl"
+    "de": "keine Zahl",
+    "fr": "pas un nombre",
+    "it": "non è un numero"
   },
   "input_missing_key": {
     "en": "missing key",
-    "de": "Schlüssel fehlt"
+    "de": "Schlüssel fehlt",
+    "fr": "clé manquante",
+    "it": "chiave mancante"
   },
   "input_holder_type": {
     "en": "must be individual or organisation",
-    "de": "muss individual oder organisation sein"
+    "de": "muss individual oder organisation sein",
+    "fr": "doit être individual ou organisation",
+    "it": "deve essere individual o organisation"
   },
   "input_no_account": {
     "en": "no account with key {key}",
-    "de": "kein Konto mit dem Schlüssel {key}"
+    "de": "kein Konto mit dem Schlüssel {key}",
+    "fr": "aucun compte avec la clé {key}",
+    "it": "nessun conto con la chiave {key}"
   },
   "reg_msgref_used": {
     "en": "MessageRefId {ref} was already used (50009)",
-    "de": "MessageRefId {ref} wurde bereits verwendet (50009)"
+    "de": "MessageRefId {ref} wurde bereits verwendet (50009)",
+    "fr": "la MessageRefId {ref} a déjà été utilisée (50009)",
+    "it": "la MessageRefId {ref} è già stata usata (50009)"
   },
   "reg_docref_used": {
     "en": "DocRefId {ref} was already used (80000)",
-    "de": "DocRefId {ref} wurde bereits verwendet (80000)"
+    "de": "DocRefId {ref} wurde bereits verwendet (80000)",
+    "fr": "la DocRefId {ref} a déjà été utilisée (80000)",
+    "it": "la DocRefId {ref} è già stata usata (80000)"
   },
   "reg_nothing_sent": {
     "en": "account {key}: nothing sent for {year} - new accounts go into a new message (CRS701), not a correction (80002)",
-    "de": "Konto {key}: für {year} wurde nichts gesendet - neue Konten gehören in eine Neumeldung (CRS701), nicht in eine Korrektur (80002)"
+    "de": "Konto {key}: für {year} wurde nichts gesendet - neue Konten gehören in eine Neumeldung (CRS701), nicht in eine Korrektur (80002)",
+    "fr": "compte {key} : rien n'a été envoyé pour {year} - les nouveaux comptes vont dans une nouvelle déclaration (CRS701), pas dans une correction (80002)",
+    "it": "conto {key}: per {year} non è stato inviato nulla - i nuovi conti vanno in una nuova comunicazione (CRS701), non in una correzione (80002)"
   },
   "reg_not_accepted_first": {
     "en": "account {key}: message {ref} is {status}, not accepted; record the portal result first (80002)",
-    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; zuerst das Ergebnis des Portals erfassen (80002)"
+    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; zuerst das Ergebnis des Portals erfassen (80002)",
+    "fr": "compte {key} : la déclaration {ref} est {status}, pas acceptée ; saisir d'abord le résultat du portail (80002)",
+    "it": "conto {key}: la comunicazione {ref} è {status}, non accettata; registrare prima l'esito del portale (80002)"
   },
   "reg_deleted": {
     "en": "account {key} was deleted ({ref}); a deleted record cannot be corrected - send it again as a new record (98103, 6.4.7)",
-    "de": "Konto {key} wurde storniert ({ref}); ein stornierter Datensatz kann nicht korrigiert werden - als neuen Datensatz erneut senden (98103, 6.4.7)"
+    "de": "Konto {key} wurde storniert ({ref}); ein stornierter Datensatz kann nicht korrigiert werden - als neuen Datensatz erneut senden (98103, 6.4.7)",
+    "fr": "le compte {key} a été annulé ({ref}) ; un enregistrement annulé ne peut pas être corrigé - le renvoyer comme nouvel enregistrement (98103, 6.4.7)",
+    "it": "il conto {key} è stato stornato ({ref}); un record stornato non può essere corretto - inviarlo di nuovo come nuovo record (98103, 6.4.7)"
   },
   "reg_last_dead": {
     "en": "account {key}: the last message was {status}; send the record again in a new message (80002)",
-    "de": "Konto {key}: die letzte Meldung ist {status}; den Datensatz in einer Neumeldung erneut senden (80002)"
+    "de": "Konto {key}: die letzte Meldung ist {status}; den Datensatz in einer Neumeldung erneut senden (80002)",
+    "fr": "compte {key} : la dernière déclaration a été {status} ; renvoyer l'enregistrement dans une nouvelle déclaration (80002)",
+    "it": "conto {key}: l'ultima comunicazione è stata {status}; inviare di nuovo il record in una nuova comunicazione (80002)"
   },
   "reg_no_valid_record": {
     "en": "account {key}: no valid record to correct (80002)",
-    "de": "Konto {key}: kein gültiger Datensatz zum Korrigieren (80002)"
+    "de": "Konto {key}: kein gültiger Datensatz zum Korrigieren (80002)",
+    "fr": "compte {key} : aucun enregistrement valable à corriger (80002)",
+    "it": "conto {key}: nessun record valido da correggere (80002)"
   },
   "reg_not_accepted": {
     "en": "account {key}: message {ref} is {status}, not accepted; record the portal result before correcting (80002)",
-    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; vor der Korrektur das Ergebnis des Portals erfassen (80002)"
+    "de": "Konto {key}: Meldung {ref} ist {status}, nicht angenommen; vor der Korrektur das Ergebnis des Portals erfassen (80002)",
+    "fr": "compte {key} : la déclaration {ref} est {status}, pas acceptée ; saisir le résultat du portail avant de corriger (80002)",
+    "it": "conto {key}: la comunicazione {ref} è {status}, non accettata; registrare l'esito del portale prima di correggere (80002)"
   },
   "reg_unknown_status": {
     "en": "unknown status {status}",
-    "de": "unbekannter Status {status}"
+    "de": "unbekannter Status {status}",
+    "fr": "statut inconnu {status}",
+    "it": "stato sconosciuto {status}"
   },
   "reg_unknown_msgref": {
     "en": "unknown MessageRefId {ref}",
-    "de": "unbekannte MessageRefId {ref}"
+    "de": "unbekannte MessageRefId {ref}",
+    "fr": "MessageRefId inconnue {ref}",
+    "it": "MessageRefId sconosciuta {ref}"
   },
   "submit_problems": {
     "en": "message has {n} problem(s): {text}",
-    "de": "die Meldung hat {n} Problem(e): {text}"
+    "de": "die Meldung hat {n} Problem(e): {text}",
+    "fr": "la déclaration a {n} problème(s) : {text}",
+    "it": "la comunicazione ha {n} problema/i: {text}"
   },
   "submit_xsd": {
     "en": "built XML is not valid against the OECD schema: {errors}",
-    "de": "das erstellte XML ist gegen das OECD-Schema nicht gültig: {errors}"
+    "de": "das erstellte XML ist gegen das OECD-Schema nicht gültig: {errors}",
+    "fr": "le XML créé n'est pas valable selon le schéma OCDE : {errors}",
+    "it": "l'XML creato non è valido secondo lo schema OCSE: {errors}"
   },
   "submit_nil_refused": {
     "en": "nil report refused: valid records exist for {year}; delete them first (98009)",
-    "de": "Nullmeldung verweigert: für {year} bestehen gültige Datensätze; zuerst stornieren (98009)"
+    "de": "Nullmeldung verweigert: für {year} bestehen gültige Datensätze; zuerst stornieren (98009)",
+    "fr": "déclaration néant refusée : des enregistrements valables existent pour {year} ; les annuler d'abord (98009)",
+    "it": "comunicazione nulla rifiutata: per {year} esistono record validi; stornarli prima (98009)"
   },
   "submit_already_valid": {
     "en": "account {key} already has a valid record for {year}: use a correction (OECD2) or a deletion (OECD3), not a new record (6.1)",
-    "de": "Konto {key} hat für {year} bereits einen gültigen Datensatz: Korrektur (OECD2) oder Storno (OECD3) verwenden, keinen neuen Datensatz (6.1)"
+    "de": "Konto {key} hat für {year} bereits einen gültigen Datensatz: Korrektur (OECD2) oder Storno (OECD3) verwenden, keinen neuen Datensatz (6.1)",
+    "fr": "le compte {key} a déjà un enregistrement valable pour {year} : utiliser une correction (OECD2) ou une annulation (OECD3), pas un nouvel enregistrement (6.1)",
+    "it": "il conto {key} ha già un record valido per {year}: usare una correzione (OECD2) o uno storno (OECD3), non un nuovo record (6.1)"
   },
   "submit_no_stored": {
     "en": "account {key}: no stored content to build the deletion from",
-    "de": "Konto {key}: kein gespeicherter Inhalt, aus dem das Storno erstellt werden könnte"
+    "de": "Konto {key}: kein gespeicherter Inhalt, aus dem das Storno erstellt werden könnte",
+    "fr": "compte {key} : aucun contenu enregistré à partir duquel créer l'annulation",
+    "it": "conto {key}: nessun contenuto salvato da cui creare lo storno"
   },
   "submit_corrected_twice": {
     "en": "the same record would be corrected twice in one message (80011)",
-    "de": "derselbe Datensatz würde in einer Meldung zweimal korrigiert (80011)"
+    "de": "derselbe Datensatz würde in einer Meldung zweimal korrigiert (80011)",
+    "fr": "le même enregistrement serait corrigé deux fois dans une déclaration (80011)",
+    "it": "lo stesso record verrebbe corretto due volte in una comunicazione (80011)"
   },
   "submit_outcome_unknown": {
     "en": "the outcome does not say whether the message was accepted",
-    "de": "das Ergebnis sagt nicht, ob die Meldung angenommen wurde"
+    "de": "das Ergebnis sagt nicht, ob die Meldung angenommen wurde",
+    "fr": "le résultat ne dit pas si la déclaration a été acceptée",
+    "it": "l'esito non dice se la comunicazione è stata accettata"
   },
   "wf_need_registry": {
     "en": "productive messages need an open registry: it keeps the identifiers and makes next year's corrections possible",
-    "de": "produktive Meldungen brauchen ein geöffnetes Register: es bewahrt die Kennungen und macht die Korrekturen im nächsten Jahr möglich"
+    "de": "produktive Meldungen brauchen ein geöffnetes Register: es bewahrt die Kennungen und macht die Korrekturen im nächsten Jahr möglich",
+    "fr": "les déclarations productives exigent un registre ouvert : il conserve les identifiants et rend possibles les corrections de l'année suivante",
+    "it": "le comunicazioni produttive richiedono un registro aperto: conserva gli identificativi e rende possibili le correzioni dell'anno successivo"
   },
   "wf_no_registry_plan": {
     "en": "no registry open: productive messages need the registry",
-    "de": "kein Register geöffnet: produktive Meldungen brauchen das Register"
+    "de": "kein Register geöffnet: produktive Meldungen brauchen das Register",
+    "fr": "aucun registre ouvert : les déclarations productives exigent le registre",
+    "it": "nessun registro aperto: le comunicazioni produttive richiedono il registro"
   },
   "wf_nothing_to_send": {
     "en": "nothing to send: every account is unchanged since the accepted message",
-    "de": "nichts zu senden: alle Konten sind seit der angenommenen Meldung unverändert"
+    "de": "nichts zu senden: alle Konten sind seit der angenommenen Meldung unverändert",
+    "fr": "rien à envoyer : tous les comptes sont inchangés depuis la déclaration acceptée",
+    "it": "nulla da inviare: tutti i conti sono invariati dalla comunicazione accettata"
   },
   "wf_workbook_errors": {
     "en": "the workbook has errors; fix them first (see the check result)",
-    "de": "die Vorlage hat Fehler; zuerst beheben (siehe Prüfergebnis)"
+    "de": "die Vorlage hat Fehler; zuerst beheben (siehe Prüfergebnis)",
+    "fr": "le modèle contient des erreurs ; les corriger d'abord (voir le résultat du contrôle)",
+    "it": "il modello contiene errori; correggerli prima (vedi il risultato del controllo)"
   },
   "wf_no_msgref": {
     "en": "the outcome does not name the MessageRefId; choose the message",
-    "de": "das Ergebnis nennt keine MessageRefId; die Meldung auswählen"
+    "de": "das Ergebnis nennt keine MessageRefId; die Meldung auswählen",
+    "fr": "le résultat n'indique pas de MessageRefId ; choisir la déclaration",
+    "it": "l'esito non indica la MessageRefId; scegliere la comunicazione"
   },
   "wf_not_in_registry": {
     "en": "message {ref} is not in this registry",
-    "de": "Meldung {ref} ist nicht in diesem Register"
+    "de": "Meldung {ref} ist nicht in diesem Register",
+    "fr": "la déclaration {ref} n'est pas dans ce registre",
+    "it": "la comunicazione {ref} non è in questo registro"
   },
   "wf_outcome_unknown": {
     "en": "the text does not say whether the message was accepted; paste the whole validation confirmation from the portal",
-    "de": "der Text sagt nicht, ob die Meldung angenommen wurde; die ganze Validierungsbestätigung aus dem Portal einfügen"
+    "de": "der Text sagt nicht, ob die Meldung angenommen wurde; die ganze Validierungsbestätigung aus dem Portal einfügen",
+    "fr": "le texte ne dit pas si la déclaration a été acceptée ; coller la confirmation de validation complète du portail",
+    "it": "il testo non dice se la comunicazione è stata accettata; incollare l'intera conferma di validazione del portale"
   },
   "wf_blocked": {
     "en": "{problems}",
-    "de": "{problems}"
+    "de": "{problems}",
+    "fr": "{problems}",
+    "it": "{problems}"
   },
   "st_built": {
     "en": "built",
-    "de": "erstellt, Ergebnis offen"
+    "de": "erstellt, Ergebnis offen",
+    "fr": "créée, résultat en attente",
+    "it": "creata, esito in sospeso"
   },
   "st_submitted": {
     "en": "submitted",
-    "de": "hochgeladen, Ergebnis offen"
+    "de": "hochgeladen, Ergebnis offen",
+    "fr": "chargée, résultat en attente",
+    "it": "caricata, esito in sospeso"
   },
   "st_accepted": {
     "en": "accepted",
-    "de": "angenommen"
+    "de": "angenommen",
+    "fr": "acceptée",
+    "it": "accettata"
   },
   "st_rejected": {
     "en": "rejected",
-    "de": "abgelehnt"
+    "de": "abgelehnt",
+    "fr": "rejetée",
+    "it": "respinta"
   },
   "st_discarded": {
     "en": "discarded",
-    "de": "verworfen"
+    "de": "verworfen",
+    "fr": "abandonnée",
+    "it": "scartata"
   },
   "report_head_xml": {
     "en": "{verdict}: CRS {version}, {problems}, {notes}",
-    "de": "{verdict}: CRS {version}, {problems}, {notes}"
+    "de": "{verdict}: CRS {version}, {problems}, {notes}",
+    "fr": "{verdict} : CRS {version}, {problems}, {notes}",
+    "it": "{verdict}: CRS {version}, {problems}, {notes}"
   },
   "report_head_workbook": {
     "en": "{verdict}: {accounts}, reporting year {year}, CRS {version}, {inputs}, {errors}",
-    "de": "{verdict}: {accounts}, Berichtsjahr {year}, CRS {version}, {inputs}, {errors}"
+    "de": "{verdict}: {accounts}, Berichtsjahr {year}, CRS {version}, {inputs}, {errors}",
+    "fr": "{verdict} : {accounts}, année de référence {year}, CRS {version}, {inputs}, {errors}",
+    "it": "{verdict}: {accounts}, anno di riferimento {year}, CRS {version}, {inputs}, {errors}"
   },
   "report_head_unreadable": {
     "en": "NOT OK: the workbook could not be read",
-    "de": "NICHT OK: die Vorlage konnte nicht gelesen werden"
+    "de": "NICHT OK: die Vorlage konnte nicht gelesen werden",
+    "fr": "PAS OK : le modèle n'a pas pu être lu",
+    "it": "NON OK: il modello non ha potuto essere letto"
   },
   "verdict_ok": {
     "en": "OK",
-    "de": "OK"
+    "de": "OK",
+    "fr": "OK",
+    "it": "OK"
   },
   "verdict_not_ok": {
     "en": "NOT OK",
-    "de": "NICHT OK"
+    "de": "NICHT OK",
+    "fr": "PAS OK",
+    "it": "NON OK"
   },
   "label_error": {
     "en": "error",
-    "de": "Fehler"
+    "de": "Fehler",
+    "fr": "erreur",
+    "it": "errore"
   },
   "label_note": {
     "en": "note",
-    "de": "Hinweis"
+    "de": "Hinweis",
+    "fr": "remarque",
+    "it": "nota"
   },
   "label_input": {
     "en": "input",
-    "de": "Eingabe"
+    "de": "Eingabe",
+    "fr": "saisie",
+    "it": "input"
   },
   "label_info": {
     "en": "info",
-    "de": "Hinweis"
+    "de": "Hinweis",
+    "fr": "info",
+    "it": "info"
   },
   "wf_portal_error": {
     "en": "portal status \"Fehler\": unknown problem at the portal; upload the file again",
-    "de": "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen"
+    "de": "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen",
+    "fr": "statut « Fehler » du portail : problème inconnu côté portail ; charger le fichier une nouvelle fois",
+    "it": "stato «Fehler» del portale: problema sconosciuto lato portale; caricare di nuovo il file"
   },
   "n_problems": {
     "en": "{n} problem(s)",
-    "de": "{n} Problem|{n} Probleme"
+    "de": "{n} Problem|{n} Probleme",
+    "fr": "{n} problème|{n} problèmes",
+    "it": "{n} problema|{n} problemi"
   },
   "n_notes": {
     "en": "{n} note(s)",
-    "de": "{n} Hinweis|{n} Hinweise"
+    "de": "{n} Hinweis|{n} Hinweise",
+    "fr": "{n} remarque|{n} remarques",
+    "it": "{n} nota|{n} note"
   },
   "n_accounts": {
     "en": "{n} account(s)",
-    "de": "{n} Konto|{n} Konten"
+    "de": "{n} Konto|{n} Konten",
+    "fr": "{n} compte|{n} comptes",
+    "it": "{n} conto|{n} conti"
   },
   "n_inputs": {
     "en": "{n} input problem(s)",
-    "de": "{n} Eingabeproblem|{n} Eingabeprobleme"
+    "de": "{n} Eingabeproblem|{n} Eingabeprobleme",
+    "fr": "{n} problème de saisie|{n} problèmes de saisie",
+    "it": "{n} problema di input|{n} problemi di input"
   },
   "n_errors": {
     "en": "{n} error(s)",
-    "de": "{n} Fehler"
+    "de": "{n} Fehler",
+    "fr": "{n} erreur|{n} erreurs",
+    "it": "{n} errore|{n} errori"
   }
 }
