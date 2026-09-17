@@ -147,7 +147,10 @@ def test_portal_status_fehler_is_not_a_verdict(reg):
     assert outcome.portal_error and outcome.accepted is None and not outcome.findings
     view = workflow.record_outcome(reg, "Status: Fehler", message_ref_id=ref, lang="de")
     assert view["status"] == "submitted" and view["accepted"] is None
-    assert view["note"] == "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen"
+    assert (
+        view["note"]
+        == "Status «Fehler»: unbekanntes Problem beim Portal; die Datei noch einmal hochladen"
+    )
     assert workflow.registry_view(reg)["counts"] == {"submitted": 1}
     # the message stays open: it can still be accepted afterwards, and "Fehlerbericht" is a rejection
     assert not workflow.parse_outcome("Fehlerbericht: 50005").portal_error
