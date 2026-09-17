@@ -166,7 +166,9 @@ def write_service_worker(assets: list[str]) -> None:
     template = (ROOT / "tools" / "sw.template.js").read_text(encoding="utf-8")
     listing = {a: sha256(WEB / a) for a in assets}
     version = hashlib.sha256(json.dumps(listing, sort_keys=True).encode()).hexdigest()[:12]
-    sw = template.replace("__VERSION__", version).replace("__ASSETS__", json.dumps(["./", *assets], indent=1))
+    sw = template.replace("__VERSION__", version).replace(
+        "__ASSETS__", json.dumps(["./", *assets], indent=1)
+    )
     (WEB / "sw.js").write_text(sw, encoding="utf-8")
     (WEB / "vendor.json").write_text(
         json.dumps({"version": version, "pyodide": PYODIDE_VERSION, "files": listing}, indent=1),
