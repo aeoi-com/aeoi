@@ -215,4 +215,4 @@ function initialLanguage() {
 }
 
 document.getElementById("lang").addEventListener("change", (ev) => applyLanguage(ev.target.value));
-applyLanguage(initialLanguage());
+// applyLanguage(initialLanguage()) is called by app.js once every dictionary file is loaded

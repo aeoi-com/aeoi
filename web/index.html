@@ -52,6 +52,23 @@
     <div id="status" class="muted" data-i18n="loading">Laufzeit wird geladen … (einmalig etwa 20-40 MB, danach aus dem Browser-Cache)</div>
   </section>
 
+  <section class="card" id="registry">
+    <h2 data-i18n="reg_title">Register</h2>
+    <p class="small muted" data-i18n="reg_intro">Das Register ist das Gedächtnis des Instituts.</p>
+    <div class="regbar">
+      <div id="reg-status" class="regstatus" data-i18n="reg_none">Kein Register geöffnet.</div>
+      <div class="actions">
+        <button class="btn primary" id="reg-open" type="button" disabled><span data-i18n="reg_open_btn">Register öffnen</span></button>
+        <button class="btn" id="reg-new" type="button" disabled><span data-i18n="reg_new_btn">Neues Register anlegen</span></button>
+        <button class="btn hidden" id="reg-reopen" type="button"></button>
+        <button class="btn hidden" id="reg-download" type="button"><span data-i18n="reg_download_btn">Register speichern</span></button>
+        <input type="file" id="reg-file" class="hidden" accept=".sqlite,.db,application/vnd.sqlite3,application/x-sqlite3">
+      </div>
+    </div>
+    <p class="small muted" id="reg-note"></p>
+    <div id="reg-list" class="reglist"></div>
+  </section>
+
   <section class="card" id="input">
     <h2 data-i18n="input_title">Datei prüfen</h2>
     <div class="drop locked" id="drop">
@@ -73,6 +90,7 @@
       <button class="btn" id="sample-ok" type="button" disabled><span data-i18n="sample_ok">Beispiel (gültig)</span></button>
       <button class="btn" id="sample-bad" type="button" disabled><span data-i18n="sample_bad">Beispiel (mit Fehlern)</span></button>
       <button class="btn" id="sample-xlsx" type="button" disabled><span data-i18n="sample_xlsx">Beispiel-Vorlage (Excel)</span></button>
+      <button class="btn" id="template-download" type="button" disabled><span data-i18n="template_btn">Leere Vorlage herunterladen</span></button>
     </div>
     <div class="busy hidden" id="busy"><div class="spinner"></div><span data-i18n="running">Prüfung läuft …</span></div>
   </section>
@@ -113,6 +131,44 @@
       <p class="small muted" id="no-findings" data-i18n="no_findings">Keine Befunde. Die Datei besteht alle Prüfungen, die vor dem Portal möglich sind.</p>
     </div>
     <pre id="out" class="hidden" aria-hidden="true"></pre>
+
+    <div class="card hidden" style="margin-top:16px" id="build-card">
+      <h2 data-i18n="build_title">Meldung erstellen und verschlüsseln</h2>
+      <p class="small muted" data-i18n="build_intro"></p>
+      <div class="plan" id="plan"></div>
+      <div class="options">
+        <label><span data-i18n="build_mode_label">Diese Meldung ist eine</span>
+          <select id="build-mode" class="pill"><option value="test" data-i18n="build_test">Testmeldung</option><option value="prod" data-i18n="build_prod">produktive Meldung</option></select>
+        </label>
+        <label><span data-i18n="cancel_label">Konten stornieren</span> <input id="cancel-keys" class="pill text" type="text" placeholder="A2, A7"></label>
+      </div>
+      <div class="keyrow">
+        <span><strong data-i18n="key_label">Öffentlicher Schlüssel der ESTV</strong>: <span id="key-status" data-i18n="key_none"></span></span>
+        <label class="btn"><span data-i18n="key_choose">Schlüsseldatei wählen</span><input type="file" id="key-file" class="hidden" accept=".pem,.cer,.crt,.pub,.txt"></label>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="build" type="button"><span data-i18n="build_btn">Erstellen</span></button>
+      </div>
+      <div id="build-msg" class="small"></div>
+      <div id="build-out" class="builtlist"></div>
+    </div>
+  </section>
+
+  <section class="card hidden" id="outcome-card">
+    <h2 data-i18n="outcome_title">Ergebnis des Portals</h2>
+    <p class="small muted" data-i18n="outcome_intro"></p>
+    <div class="options">
+      <label><span data-i18n="outcome_select">Meldung</span> <select id="outcome-ref" class="pill"></select></label>
+      <label class="btn"><span data-i18n="outcome_file_label">… oder Status-Message-Datei</span><input type="file" id="outcome-file" class="hidden" accept=".xml,.XML,text/xml,application/xml"></label>
+    </div>
+    <label class="block"><span data-i18n="outcome_text_label">Text aus dem Portal</span>
+      <textarea id="outcome-text" rows="5" spellcheck="false"></textarea>
+    </label>
+    <div class="actions">
+      <button class="btn primary" id="outcome-record" type="button"><span data-i18n="outcome_btn">Ergebnis erfassen</span></button>
+    </div>
+    <div id="outcome-msg" class="small"></div>
+    <div id="outcome-out" class="findings"></div>
   </section>
 
   <section class="how">
@@ -122,6 +178,10 @@
       <div class="card"><div class="num">2</div><h3 data-i18n="how2_t">Prüfen</h3><p class="small muted" data-i18n="how2">Die Datei wird im Speicher des Browsers gelesen: OECD-Schema, Header- und DocSpec-Regeln, Zeichensatz, Partnerstaaten des Meldejahrs, IBAN/ISIN, 3.0-Querbezüge.</p></div>
       <div class="card"><div class="num">3</div><h3 data-i18n="how3_t">Beheben</h3><p class="small muted" data-i18n="how3">Jeder Befund nennt den ESTV-Code, die Stelle und was zu tun ist. Nur Transport, Entschlüsselung, Virenscan und Registrierung prüft allein das Portal.</p></div>
     </div>
+    <details class="plain">
+      <summary data-i18n="how_flow_title">Der ganze Ablauf</summary>
+      <p data-i18n="how_flow"></p>
+    </details>
     <details class="plain">
       <summary data-i18n="privacy_title">Datenschutz im Detail</summary>
       <p data-i18n="privacy_html"><strong>Ihre Datei verlässt den Browser nicht.</strong> Diese Seite ist statisch, ohne Analytics und ohne eigene Serverkomponente. Beim Laden werden nur <code>cdn.jsdelivr.net</code> (Pyodide), <code>pypi.org</code> und <code>files.pythonhosted.org</code> (Bibliotheken) angefragt; der Host der Seite sieht den Seitenaufruf wie jede Website. Nach der Dateiauswahl findet keine Netzanfrage mehr statt - eine Content-Security-Policy der Seite lässt den Browser keine andere Adresse kontaktieren. Sprache und Farbschema merkt sich der Browser lokal.</p>
@@ -142,6 +202,8 @@
         integrity="sha384-90so5tCKvl0xs9agU29IMKlAVzhfzFX7QO//YxQkRhJG58bBZrFN+2ZTRB026X5X"
         crossorigin="anonymous"></script>
 <script src="i18n.js"></script>
+<script src="i18n-flow.js"></script>
 <script src="app.js"></script>
+<script src="flow.js"></script>
 </body>
 </html>

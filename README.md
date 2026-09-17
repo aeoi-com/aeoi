@@ -86,6 +86,14 @@ rendered as a verdict card, an overview of the message (holders, residence count
 and one card per finding with a title and a remedy in German, French or Italian
 (`src/aeoi/estv/rule_titles.json`), the technical message and the official ESTV wording behind
 a disclosure. Built-in samples, report download, light/dark theme, self-hosted Inter font.
+
+The page also runs the whole reporting flow without an installation: download the empty
+template, check the filled workbook, open or create the **registry file** (the state - on Chrome
+and Edge it is rewritten in place through the File System Access API, elsewhere it is downloaded
+after every change), choose the ESTV public key once (remembered in the registry), build the
+message(s) the registry implies (new records, corrections, deletions - `aeoi.crs.workflow`),
+download the encrypted package for the AIA portal, and record the portal's answer. Productive
+messages need an open registry; test messages do not.
 The file never leaves the browser; the page has no analytics and no server side. Build it with
 `python -m build && python tools/build_web.py`; `node tools/web_smoke.mjs` runs the same code
 headlessly (see the script header for the one-time Pyodide setup);

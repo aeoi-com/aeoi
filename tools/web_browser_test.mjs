@@ -28,10 +28,18 @@ const fx = fixtures.replace(/\\/g, "/");
 await run(py, ["-c", `
 from aeoi.crs import build, template
 from aeoi.crs.example import sample_message
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 xml = build.build(sample_message(), "3.0", test=True).xml
 open("${fx}/Test-report.xml", "w", encoding="utf-8").write(xml)
 open("${fx}/Test-bad.xml", "w", encoding="utf-8").write(xml.replace("Beispiel AG", "Beispiel # AG"))
 template.write_message(sample_message(), "${fx}/EXAMPLE.XLSX")
+changed = sample_message()
+changed.accounts[0].balance += 1
+template.write_message(changed, "${fx}/EXAMPLE-changed.xlsx")
+key = rsa.generate_private_key(public_exponent=65537, key_size=2048)  # a test pair standing in for the ESTV key
+open("${fx}/test-private.pem", "wb").write(key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+open("${fx}/ESTV-PublicKey.pem", "wb").write(key.public_key().public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo))
 `]);
 
 const port = 8765;
@@ -63,7 +71,8 @@ try {
   });
   page.on("pageerror", (err) => cspViolations.push("pageerror: " + err.message));
   const ready = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:ready"), timeout: 240000 });
-  await page.goto(`http://127.0.0.1:${port}/index.html`);
+  // #nofsa: the registry uses the download/upload fallback (native file pickers cannot be automated)
+  await page.goto(`http://127.0.0.1:${port}/index.html#nofsa`);
   await ready;
   console.log("runtime ready; version", await page.locator("#ver").textContent());
   const bootRequests = requests.length;
@@ -113,6 +122,77 @@ try {
     const noFindings = await page.locator("#no-findings").textContent();
     check(`language ${lang}: heading, status, kept report, translated findings`, heading.startsWith(h1) && st.startsWith(ready) && rep === okSample && noFindings.startsWith(none));
   }
+
+  // ---- the reporting flow: registry file (fallback: download after every change), key,
+  // build + encrypt, portal outcome, correction, reopen the saved registry ----
+  const consoleEvent = (prefix) => page.waitForEvent("console", { predicate: (m) => m.text().startsWith(prefix), timeout: 120000 });
+  async function withDownload(action, name) {
+    const dl = page.waitForEvent("download", { timeout: 60000 });
+    await action();
+    const d = await dl;
+    const path = join(fixtures, name || d.suggestedFilename());
+    await d.saveAs(path);
+    return path;
+  }
+  let regFile = await withDownload(async () => { const s = consoleEvent("aeoi:registry-saved"); await page.locator("#reg-new").click(); await s; }, "institut-0.sqlite");
+  check("new registry created and downloaded", (await page.locator("#reg-status").textContent()).includes("0"));
+  await upload(join(fixtures, "EXAMPLE.XLSX"));
+  check("build card appears for a clean workbook", await page.locator("#build-card").isVisible());
+  check("plan: 2 new accounts", (await page.locator("#plan .tag.new").textContent()).startsWith("2"));
+  regFile = await withDownload(async () => { const s = consoleEvent("aeoi:registry-saved"); await page.locator("#key-file").setInputFiles(join(fixtures, "ESTV-PublicKey.pem")); await s; }, "institut-1.sqlite");
+  check("ESTV key remembered in the registry", (await page.locator("#key-status").textContent()).length > 0 && (await page.locator("#key-status").getAttribute("class")).includes("msg-ok"));
+  const builtMsg = consoleEvent("aeoi:built");
+  regFile = await withDownload(async () => page.locator("#build").click(), "institut-2.sqlite");
+  const builtText = (await builtMsg).text();
+  check("test message built and registered: " + builtText.slice(0, 40), builtText.includes("new:CH2026CH"));
+  const pkgPath = await withDownload(async () => page.locator(".built .btn.primary").first().click());
+  const xmlPath = await withDownload(async () => page.locator(".built .btn:not(.primary)").first().click());
+  check("package and XML downloaded: " + pkgPath.split(/[\\/]/).pop(), /Test-CRS-2026-.*\.zip$/.test(pkgPath) && xmlPath.endsWith(".xml"));
+  check("registry lists the message as built, outcome card visible", (await page.locator("#reg-list .status.built").count()) === 1 && await page.locator("#outcome-card").isVisible());
+  await page.locator("#outcome-text").fill("Validierungsbestätigung: Die Meldung wurde akzeptiert.");
+  const outcomeMsg = consoleEvent("aeoi:outcome");
+  regFile = await withDownload(async () => page.locator("#outcome-record").click(), "institut-3.sqlite");
+  check("outcome recorded as accepted", (await outcomeMsg).text() === "aeoi:outcome accepted" && (await page.locator("#reg-list .status.accepted").count()) === 1);
+  await upload(join(fixtures, "EXAMPLE-changed.xlsx"));
+  check("plan after acceptance: 1 changed, 1 unchanged", (await page.locator("#plan .tag.changed").textContent()).startsWith("1") && (await page.locator("#plan .tag.unchanged").textContent()).startsWith("1"));
+  await page.locator("#cancel-keys").fill("A2");
+  check("plan with a cancelled account: 1 deletion", (await page.locator("#plan .tag.deleted").textContent()).startsWith("1"));
+  const corrMsg = consoleEvent("aeoi:built");
+  regFile = await withDownload(async () => page.locator("#build").click(), "institut-4.sqlite");
+  check("correction built: " + (await corrMsg).text().slice(0, 45), (await corrMsg).text().includes("correction:CH2026CH"));
+  const corrPath = await withDownload(async () => page.locator(".built .btn.primary").first().click());
+  // reopen the last saved registry through the upload fallback: both messages are there
+  await page.locator("#reg-file").setInputFiles(regFile);
+  check("saved registry reopened: 2 messages (accepted + built)", (await page.locator("#reg-list .status.accepted").count()) === 1 && (await page.locator("#reg-list .status.built").count()) === 1);
+  // verify the encrypted packages and the registry outside the browser
+  const verify = join(fixtures, "verify.txt");
+  await run(py, ["-c", `
+from aeoi.estv import packaging
+from aeoi.crs import validate
+from aeoi.registry import Registry
+from cryptography.hazmat.primitives import serialization
+import re
+priv = serialization.load_pem_private_key(open(r"${fixtures}/test-private.pem", "rb").read(), password=None)
+pub = packaging.load_public_key(open(r"${fixtures}/ESTV-PublicKey.pem", "rb").read())
+out = []
+for path, expect in ((r"${pkgPath}", ["OECD11", "OECD11", "OECD11"]), (r"${corrPath}", ["OECD10", "OECD12", "OECD13"])):
+    data = open(path, "rb").read()
+    name = path.replace(chr(92), "/").rsplit("/", 1)[-1]
+    insp = packaging.inspect_package(data, public_key=pub, file_name=name, test=True)
+    xml = packaging.unpackage(data, priv)
+    open(r"${fixtures}/Test-unpacked.xml", "wb").write(xml)
+    rep = validate.validate_file(r"${fixtures}/Test-unpacked.xml", test=True)
+    indics = re.findall(r"<stf:DocTypeIndic>(OECD1\\d)</stf:DocTypeIndic>", xml.decode())
+    out.append(f"{name}: inspect={'ok' if not insp.problems else insp.problems} validate={'OK' if rep.ok else rep.render()} indics={indics} expected={expect} {'ok' if indics == expect else 'MISMATCH'}")
+with Registry(r"${regFile}") as reg:
+    statuses = [m['status'] for m in reg.messages()]
+    out.append(f"registry: {statuses} key={'yes' if reg.get_setting('estv_public_key_pem') else 'no'}")
+open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
+`]);
+  const verifyText = readFileSync(verify, "utf-8");
+  console.log(verifyText.split("\n").map((l) => "     " + l).join("\n"));
+  check("packages decrypt to valid test files with the right DocTypeIndics", verifyText.split(/\r?\n/).slice(0, 2).every((l) => l.includes("inspect=ok") && l.includes("validate=OK") && l.trim().endsWith(" ok")));
+  check("saved registry: accepted + built, key remembered", verifyText.includes("['accepted', 'built'] key=yes"));
 
   const after = requests.slice(bootRequests);
   check(`no network request after the file selection (${after.length} after boot)`, after.length === 0);

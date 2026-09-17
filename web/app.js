@@ -3,11 +3,12 @@
 "use strict";
 
 const WHEEL = "aeoi-0.0.1-py3-none-any.whl";
-const PYODIDE_PACKAGES = ["lxml", "pydantic", "micropip", "cryptography"];
+const PYODIDE_PACKAGES = ["lxml", "pydantic", "micropip", "cryptography", "sqlite3"]; // sqlite3: the registry
 const PYPI_PACKAGES = ["xmlschema", "xsdata==24.12", "openpyxl"]; // xsdata 26 needs typing-extensions>=4.12, Pyodide ships 4.11
 const LOCALES = { de: "de-CH", fr: "fr-CH", it: "it-CH" };
 
 const $ = (id) => document.getElementById(id);
+applyLanguage(initialLanguage()); // every dictionary file is loaded now
 const status = $("status");
 const out = $("out");
 let py = null;
@@ -126,6 +127,7 @@ def sample_xlsx():
     setStatus("ready");
     status.className = "ok";
     unlock();
+    document.dispatchEvent(new CustomEvent("aeoi:booted"));
     console.info("aeoi:ready", Math.round(performance.now() - t0) + "ms");
   } catch (e) {
     setStatus("boot_error", String(e));
@@ -259,10 +261,12 @@ function render(scroll = true) {
 
   // findings
   renderFindings(data);
+  document.dispatchEvent(new CustomEvent("aeoi:rendered", { detail: last }));
   if (scroll) results.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function renderError(message) {
+  document.dispatchEvent(new CustomEvent("aeoi:rendered", { detail: null }));
   $("verdict").classList.remove("ok"); $("verdict").classList.add("bad");
   $("sigil").replaceChildren(svg(ICON_BAD));
   $("verdict-title").textContent = t("verdict_unreadable");

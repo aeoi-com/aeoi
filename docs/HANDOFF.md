@@ -177,6 +177,17 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
    samples (valid, four errors, workbook), report download (blob:), copy, theme toggle.
    `aeoi.crs.overview.report_dict` is the JSON the page renders; `ValidationReport.message`
    carries the parsed content. Browser test: 16 checks incl. samples, download, three languages.
+   Flow in the page (17.09.2026, after the review "registry as a file, browser only a cache"):
+   `web/flow.js` + `aeoi.crs.workflow` (plan/build/record_outcome/registry_view); the registry
+   is `institut.sqlite` chosen by the user - File System Access API on Chrome/Edge (handle kept
+   in IndexedDB, one permission click per session), download after every change elsewhere and
+   with `#nofsa` (the automated test); `sqlite3` must be loaded explicitly in Pyodide
+   (`loadPackage("sqlite3")`); the ESTV public key is remembered in the registry (`settings`
+   table); build produces correction + new message when the workbook implies both; productive
+   builds need the registry, test builds do not. Browser test: 30 checks incl. the fallback flow
+   (new registry, key, build, package + XML download, outcome accepted, changed workbook ->
+   correction with a deletion, reopen the saved registry) and an outside-the-browser verification
+   (inspect_package, decrypt with the test key, validate, DocTypeIndics, registry statuses).
    The technical messages stay English. Not translated on purpose until
    the pilot confirms the German content: the two long German guides and the ~200 program
    messages (would need a message catalogue keyed by rule code first).

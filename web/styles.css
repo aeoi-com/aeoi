@@ -366,6 +366,41 @@ h3 { font-size: 0.95rem; margin: 0 0 8px; }
 .skeleton { height: 14px; border-radius: 6px; background: linear-gradient(90deg, var(--border) 25%, var(--surface-2) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; margin-top: 10px; }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
+/* registry, plan, build, outcome */
+.regbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.regstatus { font-weight: 600; }
+.regstatus.ok { color: var(--ok); }
+.reglist { margin-top: 12px; overflow-x: auto; }
+.reglist table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.reglist th, .reglist td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.reglist th { color: var(--muted); font-weight: 500; }
+.reglist td.mono { font-family: var(--mono); font-size: 0.8rem; word-break: break-all; }
+.reglist .status { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+.reglist .status.built, .reglist .status.submitted { background: var(--warn-soft); color: var(--warn); }
+.reglist .status.accepted { background: var(--ok-soft); color: var(--ok); }
+.reglist .status.rejected { background: var(--err-soft); color: var(--err); }
+.reglist .status.discarded { background: var(--surface-2); color: var(--muted); }
+.reglist .btn { padding: 4px 10px; font-size: 0.8rem; }
+.plan { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 8px 0 12px; }
+.plan .tag { padding: 5px 11px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; background: var(--surface-2); border: 1px solid var(--border); }
+.plan .tag.new { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
+.plan .tag.changed { background: var(--info-soft); color: var(--info); border-color: transparent; }
+.plan .tag.deleted { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.plan .tag.blocked { background: var(--err-soft); color: var(--err); border-color: transparent; }
+.plan .sum { flex-basis: 100%; font-size: 0.9rem; }
+.pill.text { padding: 7px 12px; background-image: none; min-width: 140px; }
+.keyrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 10px 0; font-size: 0.9rem; }
+.builtlist { display: grid; gap: 10px; margin-top: 12px; }
+.built { border: 1px solid var(--border); border-left: 5px solid var(--accent); border-radius: var(--radius-sm); padding: 12px 14px; background: var(--surface); }
+.built .head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
+.built .ref { font-family: var(--mono); font-size: 0.8rem; word-break: break-all; color: var(--muted); margin-top: 4px; }
+.built .actions { margin-top: 10px; }
+.next { margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--accent-soft); font-size: 0.92rem; }
+label.block { display: block; margin-top: 8px; }
+textarea { width: 100%; box-sizing: border-box; margin-top: 6px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: 0.88rem/1.5 var(--mono); resize: vertical; }
+.msg-ok { color: var(--ok); font-weight: 600; }
+.msg-err { color: var(--err); font-weight: 600; }
+
 /* how it works + footer */
 .how { margin-top: 28px; }
 .how .grid { margin-top: 12px; }
