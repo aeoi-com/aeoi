@@ -4,7 +4,7 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
-## 0.0.1 - 2026-09-16
+## 0.0.1 - 2026-09-17
 
 First working version, CRS for the Swiss ESTV portal.
 

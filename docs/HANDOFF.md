@@ -190,4 +190,5 @@ Why: no open implementation exists (GitHub/PyPI: zero); the closed ones are pric
   pending publisher on PyPI: owner/aeoi, workflow release.yml, environment pypi), so no token is
   handed over; `git tag v0.0.1 && git push origin v0.0.1` releases.
 - Pilot fiduciary: name, `ESTV-PublicKey.pem`, test-channel access.
-- GitHub org/user and whether the repo is public from day one.
+- Done 17.09.2026: public repository `https://github.com/aeoi-com/aeoi` (org `aeoi-com`, commits
+  under the pseudonymous account `aeoi-ch`), Pages enabled, PyPI pending publisher configured.
