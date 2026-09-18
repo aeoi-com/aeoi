@@ -88,6 +88,13 @@ def discard_message(ref):
 def template_path(lang):
     template.write_template("/tmp/template.xlsx", lang=lang)
     return "/tmp/template.xlsx"
+
+def restore_files(paths, workbook, status, lang):
+    from pathlib import Path
+    try:
+        return json.dumps(workflow.restore_registry(reg, [Path(p) for p in json.loads(paths)], status=status, workbook=workbook or None, lang=lang))
+    except (workflow.WorkflowError, RegistryError, ValueError) as exc:
+        return _error(exc, lang)
 `);
   for (const id of ["reg-open", "reg-new", "template-download"]) $(id).disabled = false;
   $("reg-note").textContent = t(FSA ? "reg_fsa_note" : "reg_fallback_note");
@@ -232,6 +239,7 @@ function renderRegistry(savedAt) {
     table.append(body); list.append(table);
   }
   fillOutcomeSelect();
+  $("restore-card").classList.remove("hidden");
   $("outcome-card").classList.toggle("hidden", !v.pending.length);
   refreshKeyStatus();
   if (last && last.kind === "workbook" && last.data.ok) refreshPlan();
@@ -241,6 +249,39 @@ async function discardMessage(ref) {
   reg.view = JSON.parse(pyCall("discard_message", ref));
   await persistRegistry();
 }
+
+// ---------- restore a lost registry from the sent XML files ----------
+$("restore-files").addEventListener("change", async (ev) => {
+  const files = [...ev.target.files];
+  ev.target.value = "";
+  if (!files.length || !reg.open) return;
+  const outNode = $("restore-out"); outNode.replaceChildren(); msg($("restore-msg"), "", true);
+  try { py.FS.mkdir("/tmp/restore"); } catch (e) { /* exists */ }
+  const paths = [];
+  let workbook = last && last.kind === "workbook" && last.data.ok ? "/tmp/input.xlsx" : "";
+  for (const file of files) {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    if (/\.xlsx$/i.test(file.name)) { workbook = "/tmp/restore/workbook.xlsx"; py.FS.writeFile(workbook, bytes); continue; }
+    const path = "/tmp/restore/" + file.name.replace(/[^\w.-]+/g, "_");
+    py.FS.writeFile(path, bytes); paths.push(path);
+  }
+  const res = JSON.parse(pyCall("restore_files", JSON.stringify(paths), workbook, $("restore-status").value, LANG));
+  if (res.error) { msg($("restore-msg"), t("error_prefix") + res.error, false); console.info("aeoi:restored error"); return; }
+  for (const f of res.restored) {
+    const card = el("div", { class: "built" });
+    const kind = (f.kind === "correction" ? t("kind_correction") : f.kind === "nil" ? t("kind_nil") : t("kind_new")) + (f.test ? " · " + t("kind_test") : "") + " · " + f.version + " · " + f.year;
+    card.append(el("div", { class: "head" }, el("span", { text: f.name }), el("span", { class: "muted", text: kind + " · " + t("built_records", { n: f.records }) + " · " + t("st_" + f.status) })));
+    card.append(el("div", { class: "ref", text: f.message_ref_id }));
+    const keys = f.keys_from_workbook ? t("restore_keys_workbook", { n: f.keys_from_workbook }) : f.keys_from_number ? t("restore_keys_number", { n: f.keys_from_number }) : "";
+    if (keys) card.append(el("div", { class: "small muted", text: keys }));
+    for (const n of f.notes) card.append(el("div", { class: "small muted", text: n }));
+    outNode.append(card);
+  }
+  for (const s of res.skipped) outNode.append(el("div", { class: "small msg-err", text: s.name + ": " + s.reason }));
+  msg($("restore-msg"), t("restore_done", { n: res.restored.length, accounts: res.accounts }), true);
+  if (res.restored.length) await persistRegistry();
+  console.info("aeoi:restored " + res.restored.length + " " + res.skipped.length);
+});
 
 // ---------- template ----------
 $("template-download").addEventListener("click", () => download(py.FS.readFile(pyCall("template_path", LANG)), `meldbar-vorlage-${LANG}.xlsx`, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));

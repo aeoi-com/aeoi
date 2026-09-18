@@ -27,6 +27,7 @@ import hashlib
 import json
 import sqlite3
 from dataclasses import dataclass
+from decimal import Decimal
 from pathlib import Path
 from typing import Self
 
@@ -88,14 +89,24 @@ class RegistryError(ValueError):
     """A rule of Wegleitung Ziffer 6 / 5.3.x would be violated (the ESTV code is in the text)."""
 
 
+def _money(value: str) -> str:
+    """Amounts as the XML carries them (two decimals): 1500, 1500.0 and 1500.00 are one value."""
+    return str(Decimal(value).quantize(Decimal("0.01")))
+
+
 def projected(acc: Account, version: str) -> dict:
     """The account as the given schema version reports it (key and DocRefId excluded).
 
     Under 2.0 the 3.0-only elements are not written, and a controlling person carries at most
     one CtrlgPersonType and no SelfCert: comparing a 3.0 workbook with a record sent in 2.0 must
     ignore exactly those fields, otherwise every row looks changed after the schema switch.
+    Amounts are compared as written into the XML, so a record restored from a sent file equals
+    the workbook row it came from.
     """
     data = acc.model_dump(mode="json", exclude={"key", "doc_ref_id"})
+    data["balance"] = _money(data["balance"])
+    for payment in data.get("payments", []):
+        payment["amount"] = _money(payment["amount"])
     if version == "2.0":
         for name in V2_ONLY_EXCLUDED:
             data.pop(name, None)
@@ -111,6 +122,20 @@ def content_hash(acc: Account, version: str = "3.0") -> str:
         projected(acc, version), sort_keys=True, ensure_ascii=True, separators=(",", ":")
     )
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def identity(acc: Account) -> str:
+    """What makes two rows the same report to the ESTV: account number and holder. Used to adopt
+    workbook keys when a registry is restored from sent files, and to stop a renamed key from
+    reporting an account twice."""
+    if acc.holder_person is not None:
+        p = acc.holder_person
+        who = f"P|{p.last_name}|{p.first_name}|{p.birth_date or ''}"
+    elif acc.holder_organisation is not None:
+        who = f"O|{acc.holder_organisation.name}"
+    else:
+        who = ""
+    return f"{acc.account_number.strip()}|{who}".casefold()
 
 
 def res_country_codes(acc: Account) -> list[str]:
@@ -351,27 +376,38 @@ class Registry:
         fi_doc_ref_id: str,
         fi_resend: bool,
         records: list[tuple[str, Account, str, str | None]],
+        fi_doc_type_indic: str = "OECD1",
+        created_at: str | None = None,
+        status: str = "built",
+        status_source: str | None = None,
     ) -> None:
-        """Store a built message: (doc_ref_id, account, doc_type_indic, corr_doc_ref_id) per record."""
+        """Store a built message: (doc_ref_id, account, doc_type_indic, corr_doc_ref_id) per record.
+
+        A message restored from a sent file passes its Timestamp as ``created_at`` (chains are
+        ordered by it) and the portal's verdict as ``status``."""
         self.assert_message_ref_id_unused(message_ref_id)
         for doc_ref_id, _, _, _ in records:
             self.assert_doc_ref_id_unused(doc_ref_id)
         if not fi_resend:
             self.assert_doc_ref_id_unused(fi_doc_ref_id)
+        if status not in VALID_STATUSES:
+            raise RegistryError(Msg("reg_unknown_status", status=repr(status)))
         now = _now()
+        created_at = created_at or now
         with self.conn:
             self.conn.execute(
                 "INSERT INTO messages VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
-                    message_ref_id, reporting_year, version, message_type_indic, int(test), now,
-                    hashlib.sha256(xml.encode("utf-8")).hexdigest(), xml_path, "built", None, None,
+                    message_ref_id, reporting_year, version, message_type_indic, int(test),
+                    created_at, hashlib.sha256(xml.encode("utf-8")).hexdigest(), xml_path, status,
+                    now if status != "built" else None, status_source,
                 ),
             )  # fmt: skip
             if not fi_resend:
                 self.conn.execute(
                     "INSERT INTO records (doc_ref_id, message_ref_id, kind, doc_type_indic, "
                     "created_at, version) VALUES (?,?,?,?,?,?)",
-                    (fi_doc_ref_id, message_ref_id, "FI", "OECD1", now, version),
+                    (fi_doc_ref_id, message_ref_id, "FI", fi_doc_type_indic, created_at, version),
                 )
             for doc_ref_id, acc, indic, corr in records:
                 self.conn.execute(
@@ -379,10 +415,10 @@ class Registry:
                     (
                         doc_ref_id, message_ref_id, "AR", acc.key, indic, corr,
                         content_hash(acc, version), acc.model_dump_json(exclude={"doc_ref_id"}),
-                        json.dumps(res_country_codes(acc)), None, now, version,
+                        json.dumps(res_country_codes(acc)), None, created_at, version,
                     ),
                 )  # fmt: skip
-                if corr:
+                if corr and status not in DEAD_STATUSES:
                     self.conn.execute(
                         "UPDATE records SET superseded_by = ? WHERE doc_ref_id = ?",
                         (doc_ref_id, corr),

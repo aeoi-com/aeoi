@@ -80,6 +80,18 @@
     </div>
     <p class="small muted" id="reg-note"></p>
     <div id="reg-list" class="reglist"></div>
+    <details class="plain hidden" id="restore-card">
+      <summary data-i18n="restore_summary">Register verloren? Aus den gesendeten XML-Dateien wiederherstellen</summary>
+      <p class="small muted" data-i18n="restore_intro">Alle Kennungen stehen in den XML-Dateien, die hochgeladen wurden (der XML-Download beim Erstellen, nicht das verschlüsselte Paket). Die Dateien wählen, die das Portal angenommen hat; ist die aktuelle Excel-Vorlage unten geprüft oder hier mit ausgewählt, erhalten die Konten ihre Schlüssel aus der Vorlage.</p>
+      <div class="options">
+        <label><span data-i18n="restore_status_label">Diese Dateien hat das Portal</span>
+          <select id="restore-status" class="pill"><option value="accepted" data-i18n="restore_status_accepted">angenommen</option><option value="submitted" data-i18n="restore_status_submitted">noch nicht beantwortet</option></select>
+        </label>
+        <label class="btn"><span data-i18n="restore_choose">XML-Dateien wählen (und die Vorlage)</span><input type="file" id="restore-files" class="hidden" multiple accept=".xml,.XML,.xlsx,.XLSX,text/xml,application/xml,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"></label>
+      </div>
+      <div id="restore-msg" class="small"></div>
+      <div id="restore-out" class="builtlist"></div>
+    </details>
   </section>
 
   <section class="card" id="input">

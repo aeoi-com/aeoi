@@ -28,7 +28,8 @@ da una tabella Excel e lo verifica **prima** del caricamento, come fa il portale
 - crittografia e impacchettamento secondo il numero 3.3.1, comunicazioni test con i contrassegni
   corretti;
 - un registro locale delle comunicazioni inviate, così che correzioni e annullamenti abbiano i
-  riferimenti giusti (numero 6), anche attraverso il passaggio dalla 2.0 alla 3.0;
+  riferimenti giusti (numero 6), anche attraverso il passaggio dalla 2.0 alla 3.0; un registro
+  perso si ricostruisce dai file XML inviati;
 - lettura della risposta del portale: ogni codice viene spiegato.
 
 Chi non vuole installare nulla fa tutto il flusso su una pagina web, direttamente nel browser, in

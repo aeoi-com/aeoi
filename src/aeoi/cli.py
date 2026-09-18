@@ -5,6 +5,7 @@ aeoi crs check     --input filled.xlsx --version 3.0
 aeoi crs build     --input filled.xlsx --version 3.0 --out report.xml [--test] [--registry reg.sqlite] [--key ESTV-PublicKey.pem --package Test-report.zip]
 aeoi crs correct   --input fixed.xlsx --version 3.0 --out corr.xml --registry reg.sqlite [--cancel KEY ...] [--test] [--key ... --package ...]
 aeoi crs registry  --registry reg.sqlite [--discard REF]
+aeoi crs restore   --registry reg.sqlite sent1.xml sent2.xml ... [--input filled.xlsx] [--status accepted|submitted]
 aeoi crs validate  report.xml [--test|--prod]
 aeoi estv package  --xml report.xml --key ESTV-PublicKey.pem --out Test-report.zip --test
 aeoi estv inspect  Test-report.zip [--key ESTV-PublicKey.pem] [--test|--prod]
@@ -194,6 +195,26 @@ def _cmd_crs_registry(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_crs_restore(args: argparse.Namespace) -> int:
+    from aeoi.crs import workflow
+    from aeoi.registry import Registry, RegistryError
+
+    try:
+        with Registry(args.registry) as reg:
+            report = workflow.restore_registry(
+                reg,
+                [Path(p) for p in args.files],
+                status=args.status,
+                workbook=args.input,
+                lang=args.lang,
+            )
+    except (RegistryError, workflow.WorkflowError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    return 0 if not report["skipped"] else 1
+
+
 def _cmd_estv_package(args: argparse.Namespace) -> int:
     xml = Path(args.xml).read_bytes()
     public_key = packaging.load_public_key(Path(args.key))
@@ -314,6 +335,26 @@ def build_parser() -> argparse.ArgumentParser:
         help="mark a built, never uploaded message as discarded",
     )
     rg.set_defaults(func=_cmd_crs_registry)
+
+    rs = crs_sub.add_parser(
+        "restore",
+        help="rebuild a lost registry from the XML files that were uploaded to the portal",
+    )
+    rs.add_argument("--registry", required=True, help="registry file to fill (created if missing)")
+    rs.add_argument("files", nargs="+", help="the XML files (not the encrypted packages)")
+    rs.add_argument(
+        "--input", help="the current workbook: its keys are adopted for the accounts it contains"
+    )
+    rs.add_argument(
+        "--status",
+        default="accepted",
+        choices=["accepted", "submitted"],
+        help="what the portal said about these files (default: accepted)",
+    )
+    rs.add_argument(
+        "--lang", default="en", choices=["en", "de", "fr", "it"], help="language of the notes"
+    )
+    rs.set_defaults(func=_cmd_crs_restore)
 
     estv = sub.add_parser("estv", help="Swiss ESTV AIA portal tools")
     estv_sub = estv.add_subparsers(dest="estv_command", required=True)

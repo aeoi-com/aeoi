@@ -77,7 +77,10 @@ aeoi crs registry --registry fi.sqlite
 ```
 
 The registry file contains the account data needed to build deletions: keep it next to the
-workbook, back it up, never send it.
+workbook, back it up, never send it. A lost registry is rebuilt from the XML files that were
+uploaded (`aeoi crs restore --registry new.sqlite sent1.xml sent2.xml --input filled.xlsx`, or
+the «Register verloren?» block of the app): the identifiers are in the files, the workbook
+supplies the account keys.
 
 ## Browser validator
 

@@ -905,5 +905,53 @@
     "de": "{n} Fehler",
     "fr": "{n} erreur|{n} erreurs",
     "it": "{n} errore|{n} errori"
+  },
+  "restore_not_crs": {
+    "en": "{name}: not a CRS XML file that can be read ({error})",
+    "de": "{name}: keine lesbare CRS-XML-Datei ({error})",
+    "fr": "{name} : pas un fichier XML CRS lisible ({error})",
+    "it": "{name}: non è un file XML CRS leggibile ({error})"
+  },
+  "restore_mixed_test": {
+    "en": "{name}: test and productive DocTypeIndics in one file - not a file the portal accepted (50011)",
+    "de": "{name}: Test- und produktive DocTypeIndic in einer Datei - keine vom Portal angenommene Datei (50011)",
+    "fr": "{name} : DocTypeIndic de test et productifs dans un même fichier - pas un fichier accepté par le portail (50011)",
+    "it": "{name}: DocTypeIndic di test e produttivi nello stesso file - non è un file accettato dal portale (50011)"
+  },
+  "restore_bad_status": {
+    "en": "restore status {status} is not one of accepted, submitted",
+    "de": "Status {status} für die Wiederherstellung ist weder angenommen noch hochgeladen",
+    "fr": "le statut {status} pour la restauration n'est ni accepté ni chargé",
+    "it": "lo stato {status} per il ripristino non è né accettato né caricato"
+  },
+  "restore_already": {
+    "en": "message {ref} is already in the registry - skipped",
+    "de": "Meldung {ref} steht bereits im Register - übersprungen",
+    "fr": "la déclaration {ref} est déjà dans le registre - ignorée",
+    "it": "la comunicazione {ref} è già nel registro - saltata"
+  },
+  "restore_wegleitung_header": {
+    "en": "header as in Wegleitung 5.3.1 (v2 namespace with version 3.0); stored as a 3.0 message",
+    "de": "Header wie Wegleitung 5.3.1 (Namensraum v2 mit Version 3.0); als 3.0-Meldung gespeichert",
+    "fr": "en-tête comme dans la Directive 5.3.1 (espace de noms v2 avec version 3.0) ; enregistré comme déclaration 3.0",
+    "it": "intestazione come nella Direttiva 5.3.1 (namespace v2 con versione 3.0); salvata come comunicazione 3.0"
+  },
+  "restore_target_missing": {
+    "en": "record {doc} corrects {ref}, which is in none of the files - the chain starts here; add the earlier file if you have it",
+    "de": "Datensatz {doc} korrigiert {ref}, das in keiner der Dateien steht - die Kette beginnt hier; die frühere Datei ergänzen, falls vorhanden",
+    "fr": "l'enregistrement {doc} corrige {ref}, absent des fichiers - la chaîne commence ici ; ajoutez le fichier antérieur si vous l'avez",
+    "it": "il record {doc} corregge {ref}, che non è in nessuno dei file - la catena inizia qui; aggiungere il file precedente se disponibile"
+  },
+  "restore_keys_from_number": {
+    "en": "{n} account(s) not found in the workbook: the account number is the key ({keys})",
+    "de": "{n} Konto nicht in der Vorlage gefunden: die Kontonummer ist der Schlüssel ({keys})|{n} Konten nicht in der Vorlage gefunden: die Kontonummer ist der Schlüssel ({keys})",
+    "fr": "{n} compte absent du classeur : le numéro de compte est la clé ({keys})|{n} comptes absents du classeur : le numéro de compte est la clé ({keys})",
+    "it": "{n} conto non trovato nel modello: il numero di conto è la chiave ({keys})|{n} conti non trovati nel modello: il numero di conto è la chiave ({keys})"
+  },
+  "wf_key_renamed": {
+    "en": "account {key}: the same account number and holder were sent under key {other} - use that key in the workbook (or cancel {other}); reporting it again as new would duplicate the record",
+    "de": "Konto {key}: dieselbe Kontonummer mit demselben Inhaber wurde unter Schlüssel {other} gesendet - diesen Schlüssel in der Vorlage verwenden (oder {other} stornieren); als neu gemeldet wäre der Datensatz doppelt",
+    "fr": "compte {key} : le même numéro de compte avec le même titulaire a été envoyé sous la clé {other} - utilisez cette clé dans le classeur (ou annulez {other}) ; déclaré comme nouveau, l'enregistrement serait en double",
+    "it": "conto {key}: lo stesso numero di conto con lo stesso titolare è stato inviato con la chiave {other} - usare quella chiave nel modello (o stornare {other}); comunicato come nuovo, il record sarebbe doppio"
   }
 }

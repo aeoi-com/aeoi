@@ -175,9 +175,19 @@ try {
   regFile = await withDownload(async () => page.locator("#build").click(), "institut-4.sqlite");
   check("correction built: " + (await corrMsg).text().slice(0, 45), (await corrMsg).text().includes("correction:CH2026CH"));
   const corrPath = await withDownload(async () => page.locator(".built .btn.primary").first().click());
+  const corrXmlPath = await withDownload(async () => page.locator(".built .btn:not(.primary)").first().click());
   // reopen the last saved registry through the upload fallback: both messages are there
   await page.locator("#reg-file").setInputFiles(regFile);
   check("saved registry reopened: 2 messages (accepted + built)", (await page.locator("#reg-list .status.accepted").count()) === 1 && (await page.locator("#reg-list .status.built").count()) === 1);
+  // the registry is lost: a fresh one is rebuilt from the two XML files (keys from the loaded workbook)
+  await page.locator("#cancel-keys").fill("");
+  await withDownload(async () => { const s = consoleEvent("aeoi:registry-saved"); await page.locator("#reg-new").click(); await s; }, "institut-5.sqlite");
+  check("fresh registry: the restore block is offered, plan says 2 new", await page.locator("#restore-card").isVisible() && (await page.locator("#plan .tag.new").textContent()).startsWith("2"));
+  const restoredMsg = consoleEvent("aeoi:restored");
+  const restoredFile = await withDownload(async () => page.locator("#restore-files").setInputFiles([corrXmlPath, xmlPath]), "institut-6.sqlite");
+  check("two files restored, none skipped: " + (await restoredMsg).text(), (await restoredMsg).text() === "aeoi:restored 2 0");
+  check("restored messages are accepted; keys taken from the workbook", (await page.locator("#reg-list .status.accepted").count()) === 2 && (await page.locator("#restore-out .built").count()) === 2 && (await page.locator("#restore-out .built").first().textContent()).includes("2 Schlüssel aus der Vorlage"));
+  check("plan against the restored registry: 1 unchanged, 1 new (the cancelled account)", (await page.locator("#plan .tag.unchanged").textContent()).startsWith("1") && (await page.locator("#plan .tag.new").textContent()).startsWith("1"));
   // verify the encrypted packages and the registry outside the browser
   const verify = join(fixtures, "verify.txt");
   await run(py, ["-c", `
@@ -202,6 +212,10 @@ for path, expect in ((r"${pkgPath}", ["OECD11", "OECD11", "OECD11"]), (r"${corrP
 with Registry(r"${regFile}") as reg:
     statuses = [m['status'] for m in reg.messages()]
     out.append(f"registry: {statuses} key={'yes' if reg.get_setting('estv_public_key_pem') else 'no'}")
+    heads = {(h.account_key, h.doc_ref_id, h.content_sha256, h.doc_type_indic) for h in reg.chain_heads(year=2026, test=True)}
+with Registry(r"${restoredFile}") as reg:
+    restored = {(h.account_key, h.doc_ref_id, h.content_sha256, h.doc_type_indic) for h in reg.chain_heads(year=2026, test=True)}
+    out.append(f"restored: {'same chain heads' if restored == heads else 'DIFFERENT ' + str(restored ^ heads)} ({len(restored)} head(s), {reg.conn.execute('select count(*) from records').fetchone()[0]} records)")
 open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
 `]);
   const verifyText = readFileSync(verify, "utf-8");
@@ -210,6 +224,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check("packages decrypt to valid test files with the right DocTypeIndics", lines.slice(0, 2).every((l) => l.includes("inspect=ok") && l.includes("validate=OK") && l.trim().endsWith(" ok")));
   check("first message carries the Wegleitung 5.3.1 header, the correction the OECD namespace", lines[0].includes("header=wegleitung") && lines[1].includes("header=oecd"));
   check("saved registry: accepted + built, key remembered", verifyText.includes("['accepted', 'built'] key=yes"));
+  check("restored registry has the same chain heads as the original: " + (lines[3] || ""), lines[3].includes("same chain heads") && lines[3].includes("(1 head(s), 5 records)"));
 
   const after = requests.slice(bootRequests);
   check(`no network request after the file selection (${after.length} after boot)`, after.length === 0);

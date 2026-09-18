@@ -259,6 +259,21 @@ user or on request (competitor details are kept out of this public file). Swiss 
    (`packaging.load_public_key`, stored as PEM); the 3.0 header exists in both variants (see
    OPEN-QUESTIONS 1) in build/submit/workflow/CLI/page; browser test builds the first message with
    the Wegleitung header and the correction with the OECD one (52 checks).
+   Registry restore (18.09): `aeoi.crs.restore.restore(reg, files, status=, workbook=)` reads
+   the sent XML files (`build.canonical_xml` + `read_xml.parse`), orders them by Timestamp,
+   maps OECD1x to the productive DocTypeIndic with the test flag on the message, takes the key
+   of a correction from its target record, of a new record from the workbook (`registry.identity`
+   = account number + holder) or the account number; `Registry.register_message` accepts
+   `created_at`, `status`, `status_source`, `fi_doc_type_indic` (an unknown OECD0 ReportingFI is
+   stored so later messages resend it). `workflow.restore_registry`, `aeoi crs restore`, page
+   block «Register verloren?» (`#restore-files`, multi-select incl. the workbook). `projected()`
+   quantises amounts to 0.01 (a restored record hashes like its workbook row; also removes the
+   1500 vs 1500.0 false "changed"). `plan()` blocks a "new" row whose identity is a valid record
+   under a key the workbook no longer uses (`wf_key_renamed`). Tests: `tests/test_restore.py`
+   (round trip with identical chain heads, fallback keys + guard, joint accounts, Wegleitung
+   header + 2.0, duplicates/junk/mixed/clash, missing target, submitted status, CLI); browser
+   test rebuilds a fresh registry from the two downloaded XML files and compares chain heads
+   with the original (57 checks).
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

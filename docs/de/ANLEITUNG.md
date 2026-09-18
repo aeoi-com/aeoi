@@ -149,6 +149,16 @@ mit der Excel-Datei auf, sichern Sie es, und senden Sie es niemandem. Bei Rückf
 Support des Werkzeugs genügen der Fehlercode, die DocRefId und die MessageRefId - nie die Datei
 (Ziffer 5.3.2: die MessageRefId darf keine Kundendaten enthalten).
 
+**Register verloren?** Alle Kennungen stehen in den XML-Dateien, die Sie hochgeladen haben
+(der XML-Download beim Erstellen; das verschlüsselte Paket kann nur die ESTV lesen). In der
+Web-App unter «Register» → «Register verloren? …» ein neues Register anlegen, die vom Portal
+angenommenen XML-Dateien wählen (zusammen mit der aktuellen Excel-Vorlage, damit die Konten ihre
+Schlüssel behalten) - das Register ist wieder vollständig, und die nächste Korrektur verweist
+auf die richtigen DocRefIds. Auf der Kommandozeile: `aeoi crs restore --registry neu.sqlite
+gesendet1.xml gesendet2.xml --input vorlage.xlsx`. Ohne Vorlage gilt die Kontonummer als
+Schlüssel; ein Konto, das unter einem anderen Schlüssel schon gemeldet wurde, wird nie ein
+zweites Mal als neu gemeldet, sondern blockiert, bis die Schlüssel übereinstimmen.
+
 ## Fristen 2027
 
 - 14.12.2026: letzter Tag für Dateien nach Schema 2.0.

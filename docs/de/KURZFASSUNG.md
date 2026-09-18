@@ -26,6 +26,7 @@ die CRS-XML-Datei erstellt und sie **vor** dem Hochladen so prüft, wie es das P
 - Verschlüsselung und Paketierung nach Ziffer 3.3.1, Testmeldungen mit den richtigen Kennzeichen;
 - ein lokales Register der gesendeten Meldungen, damit Korrekturen und Stornierungen mit den
   richtigen Verweisen erstellt werden (Ziffer 6), auch über den Wechsel von 2.0 auf 3.0 hinweg;
+  ein verlorenes Register wird aus den gesendeten XML-Dateien wiederhergestellt;
 - Auswertung der Rückmeldung des Portals: jeder Code wird erklärt.
 
 Wer nichts installieren will, macht den ganzen Ablauf auf einer Webseite direkt im Browser, auf

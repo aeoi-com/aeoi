@@ -4,6 +4,13 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Registry restore from the sent XML files (`aeoi.crs.restore`, `aeoi crs restore`, block
+  «Register verloren?» in the app): identifiers, chains, test/productive flag, version and the
+  Wegleitung header variant come from the files, the portal verdict from the caller, the
+  account keys from the current workbook (account number + holder) or the account number.
+  Amounts hash as the XML carries them (1500 = 1500.0 = 1500.00). The plan now refuses to
+  report an account a second time under a renamed key (same number and holder as a valid
+  record whose key the workbook no longer uses).
 - Excel template in German, French and Italian (column comments, ReadMe, Codes sheet):
   `aeoi crs template --lang de|fr|it`, the app generates it in the page language, and
   `tools/build_web.py` publishes the four empty templates as static downloads (`web/vorlage/`),

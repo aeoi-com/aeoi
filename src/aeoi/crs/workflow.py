@@ -17,11 +17,12 @@ from typing import Any
 
 from aeoi.crs import build as builder
 from aeoi.crs import check, submit
+from aeoi.crs import restore as restorer
 from aeoi.crs.build import BuildResult
 from aeoi.crs.model import Message, Version
 from aeoi.estv import ids, packaging, status, titles
 from aeoi.messages import Msg, text
-from aeoi.registry import Registry, RegistryError, content_hash
+from aeoi.registry import Registry, RegistryError, content_hash, identity
 
 PUBLIC_KEY_SETTING = "estv_public_key_pem"
 
@@ -175,7 +176,31 @@ def plan(
         except RegistryError as exc:
             intent.blocked.append(key)
             intent.problems.append(exc.args[0])
+    if intent.new_keys:  # a "new" row that is a sent account under another key: never twice
+        _refuse_renamed_keys(msg, reg, intent, test=test)
     return intent
+
+
+def _refuse_renamed_keys(msg: Message, reg: Registry, intent: Intent, *, test: bool) -> None:
+    """Same account number and holder as a valid record whose key the workbook no longer uses
+    (a renamed key, or a registry restored without the workbook): reporting it as new would
+    duplicate the record at the ESTV, so the row is blocked until the keys agree."""
+    known = {a.key for a in msg.accounts}
+    sent: dict[str, str] = {}
+    for head in reg.chain_heads(year=msg.reporting_year, test=test):
+        if head.account_key in known or not head.account_key:
+            continue
+        acc = reg.stored_account(head.doc_ref_id)
+        if acc is not None:
+            sent[identity(acc)] = head.account_key
+    if not sent:
+        return
+    for acc in msg.accounts:
+        other = sent.get(identity(acc))
+        if acc.key in intent.new_keys and other is not None:
+            intent.new_keys.remove(acc.key)
+            intent.blocked.append(acc.key)
+            intent.problems.append(Msg("wf_key_renamed", key=repr(acc.key), other=repr(other)))
 
 
 # --- building ------------------------------------------------------------------------------------
@@ -341,6 +366,28 @@ def record_outcome(
     view = outcome_view(outcome, lang)
     view.update(message_ref_id=ref, status=new_status)
     return view
+
+
+# --- restoring a lost registry ---------------------------------------------------------------
+
+
+def restore_registry(
+    reg: Registry,
+    files: list[Path] | list[tuple[str, bytes]],
+    *,
+    status: str = "accepted",
+    workbook: str | Path | None = None,
+    lang: str = "en",
+) -> dict[str, Any]:
+    """Register the sent XML files (see :mod:`aeoi.crs.restore`); the workbook, when given,
+    supplies the account keys."""
+    message = None
+    if workbook is not None:
+        report = check.check_workbook(workbook, "3.0")
+        if report.message is None:
+            raise WorkflowError(Msg("wf_workbook_errors"))
+        message = report.message
+    return restorer.restore(reg, files, status=status, workbook=message).as_dict(lang)
 
 
 def message_ref_id_for(msg: Message, year: int | None = None) -> str:

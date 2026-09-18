@@ -30,7 +30,8 @@ partir d'un tableau Excel et le vérifie **avant** le téléchargement, comme le
 - chiffrement et empaquetage selon le chiffre 3.3.1, déclarations test avec les marqueurs
   corrects ;
 - un registre local des déclarations envoyées, pour que corrections et annulations portent les
-  bonnes références (chiffre 6), y compris lors du passage de la 2.0 à la 3.0 ;
+  bonnes références (chiffre 6), y compris lors du passage de la 2.0 à la 3.0 ; un registre
+  perdu se reconstruit à partir des fichiers XML envoyés ;
 - lecture de la réponse du portail : chaque code est expliqué.
 
 Qui ne veut rien installer fait tout le flux sur une page web, directement dans le navigateur, en
