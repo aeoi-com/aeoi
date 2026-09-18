@@ -6,10 +6,10 @@ Writes into web/:
   logo.svg           horizontal lockup: mark + wordmark + tagline (text as paths)
   logo-mark.svg      the mark alone, transparent background (favicon, inline use)
   icon.svg           PWA icon "any": mark on a rounded light tile
-  icon-maskable.svg  PWA icon "maskable": mark inside the 80 % safe zone on a solid tile
+  icon-maskable.svg  PWA icon "maskable": mark inside the 80 % safe zone on the light tile
 
-The mark: three slanted sheets stacked on the diagonal - the Excel rows that become one file that
-goes out - in deep blue, blue and the site's teal. Colours are the tokens below; change them here.
+The mark: four rising bars - the rows of the return - under a check mark: the declaration,
+right the first time. Green to teal to navy; the check in navy. Colours are the tokens below.
 """
 
 from __future__ import annotations
@@ -27,16 +27,18 @@ ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 FONT = WEB / "fonts" / "inter-latin.woff2"
 
-NAVY = "#12305b"  # wordmark
-MUTED = "#5c6773"  # tagline (site token --muted)
-SHEET_TOP = "#1c4f9e"
-SHEET_MID = "#2b86c9"
-SHEET_BOTTOM = "#13a89e"  # site token --accent-2
+NAVY = "#12305b"  # wordmark, check mark, bar 4 bottom
+MUTED = "#5b6b83"  # tagline
+BAR_GRADIENTS = [  # top -> bottom colour of the four bars, left to right
+    ("#7ccfa8", "#4fbf9f"),
+    ("#8ad6ab", "#66c8a2"),
+    ("#4dc0a6", "#2ea9b1"),
+    ("#265a90", "#12305b"),
+]
 TILE_LIGHT = "#f4f6f8"  # site token --bg
-TILE_DARK = "#12305b"
 
 WORDMARK = "meldbar"
-TAGLINE = "From Excel to XML. Securely."
+TAGLINE = "YOUR DECLARATION. FIRST TIME RIGHT."
 
 
 def _instance(weight: int) -> tuple[TTFont, bytes]:
@@ -75,31 +77,37 @@ def text_path(
     return pen.getCommands(), x * scale
 
 
-def mark(x: float, y: float, s: float) -> str:
-    """Three slanted sheets in a box of side `s` at (x, y)."""
-
-    # geometry in a 64-unit box: sheets 40 wide, 13 high, skewed, stacked with a diagonal offset
-    def sheet(ox: float, oy: float, colour: str) -> str:
-        w, h, r, k = 37.0, 17.0, 4.0, 12.0  # width, height, corner radius, horizontal skew
-        pts = [(ox + k, oy), (ox + k + w, oy), (ox + w, oy + h), (ox, oy + h)]
-        # rounded parallelogram via quadratic corners
-        (x0, y0), (x1, y1), (x2, y2), (x3, y3) = pts
-        d = (
-            f"M{x0 + r:.2f},{y0:.2f} L{x1 - r:.2f},{y1:.2f} Q{x1:.2f},{y1:.2f} {x1 - r * 0.6:.2f},{y1 + r * 0.8:.2f} "
-            f"L{x2 + r * 0.6:.2f},{y2 - r * 0.8:.2f} Q{x2:.2f},{y2:.2f} {x2 - r:.2f},{y2:.2f} "
-            f"L{x3 + r:.2f},{y3:.2f} Q{x3:.2f},{y3:.2f} {x3 + r * 0.6:.2f},{y3 - r * 0.8:.2f} "
-            f"L{x0 - r * 0.6:.2f},{y0 + r * 0.8:.2f} Q{x0:.2f},{y0:.2f} {x0 + r:.2f},{y0:.2f} Z"
-        )
-        return f'<path d="{d}" fill="{colour}"/>'
-
-    inner = sheet(14, 5, SHEET_TOP) + sheet(9, 21, SHEET_MID) + sheet(4, 37, SHEET_BOTTOM)
+def mark(x: float, y: float, s: float, uid: str = "m") -> str:
+    """Four bars and a check mark in a box of side `s` at (x, y); gradients get ids prefixed `uid`."""
+    # geometry in a 64-unit box, measured on the reference artwork
+    bars = [
+        (0.0, 22.4),
+        (18.4, 39.6),
+        (36.8, 34.4),
+        (55.2, 22.4),
+    ]  # (x, top); bottom at 61, width 8.8
+    defs = "".join(
+        f'<linearGradient id="{uid}{i}" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0" stop-color="{top}"/><stop offset="1" stop-color="{bottom}"/></linearGradient>'
+        for i, (top, bottom) in enumerate(BAR_GRADIENTS)
+    )
+    rects = "".join(
+        f'<rect x="{bx:.1f}" y="{top:.1f}" width="8.8" height="{61 - top:.1f}" rx="2.2" fill="url(#{uid}{i})"/>'
+        for i, (bx, top) in enumerate(bars)
+    )
+    check = (
+        f'<path d="M17.2,15.8 L29.4,28.6 L56.6,2.4" fill="none" stroke="{NAVY}" stroke-width="7.4" '
+        'stroke-linecap="round" stroke-linejoin="round"/>'
+    )
     f = s / 64.0
-    return f'<g transform="translate({x:.2f},{y:.2f}) scale({f:.4f})">{inner}</g>'
+    return f'<defs>{defs}</defs><g transform="translate({x:.2f},{y:.2f}) scale({f:.4f})">{rects}{check}</g>'
 
 
 def build() -> None:
     word_d, word_w = text_path(WORDMARK, 700, 44, letter_spacing=-0.6)
-    tag_d, tag_w = text_path(TAGLINE, 500, 15, letter_spacing=0.1)
+    tag_d, tag_w = text_path(TAGLINE, 600, 10, letter_spacing=0.9)
+    tag_scale = word_w / tag_w  # the tagline spans exactly the wordmark, as in the artwork
+    tag_d, tag_w = text_path(TAGLINE, 600, 10 * tag_scale, letter_spacing=0.9 * tag_scale)
 
     # lockup: mark 64px, gap 16, wordmark baseline 44, tagline baseline 68
     mark_size, gap = 64.0, 18.0
@@ -109,7 +117,7 @@ def build() -> None:
     lockup = (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" '
         f'width="{width:.0f}" height="{height:.0f}" role="img" aria-label="meldbar - {TAGLINE}">'
-        f"{mark(0, 6, mark_size)}"
+        f"{mark(0, 6, mark_size, 'l')}"
         f'<path transform="translate({text_x:.2f},44)" d="{word_d}" fill="{NAVY}"/>'
         f'<path transform="translate({text_x + 1:.2f},68)" d="{tag_d}" fill="{MUTED}"/>'
         "</svg>"
@@ -118,21 +126,21 @@ def build() -> None:
 
     mark_only = (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="meldbar">'
-        f"{mark(0, 0, 64)}</svg>"
+        f"{mark(0, 0, 64, 'k')}</svg>"
     )
     (WEB / "logo-mark.svg").write_text(mark_only, encoding="utf-8")
 
     icon = (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
         f'<rect width="64" height="64" rx="14" fill="{TILE_LIGHT}"/>'
-        f"{mark(6, 6, 52)}</svg>"
+        f"{mark(6, 6, 52, 'i')}</svg>"
     )
     (WEB / "icon.svg").write_text(icon, encoding="utf-8")
 
     maskable = (
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">'
-        f'<rect width="64" height="64" fill="{TILE_DARK}"/>'
-        f"{mark(13, 13, 38)}</svg>"
+        f'<rect width="64" height="64" fill="{TILE_LIGHT}"/>'
+        f"{mark(13, 13, 38, 'a')}</svg>"
     )
     (WEB / "icon-maskable.svg").write_text(maskable, encoding="utf-8")
     print(f"logo.svg {width:.0f}x{height:.0f}, logo-mark.svg, icon.svg, icon-maskable.svg written")

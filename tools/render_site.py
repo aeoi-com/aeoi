@@ -7,6 +7,7 @@ HTML is the no-JS fallback.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,10 +19,10 @@ CSP = (
     "form-action 'self'"
 )
 
-MARK = (
-    '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 5h29q4 0 1.6 3.2l-7.2 10.6Q51 22 47 22H18q-4 0-1.6-3.2l7.2-10.6Q26 5 30 5Z" fill="#1c4f9e"/>'
-    '<path d="M25 21h29q4 0 1.6 3.2l-7.2 10.6Q46 38 42 38H13q-4 0-1.6-3.2l7.2-10.6Q21 21 25 21Z" fill="#2b86c9"/>'
-    '<path d="M20 37h29q4 0 1.6 3.2l-7.2 10.6Q41 54 37 54H8q-4 0-1.6-3.2l7.2-10.6Q16 37 20 37Z" fill="#13a89e"/></svg>'
+MARK = re.sub(  # the mark built by tools/build_logo.py, inlined (header, footer)
+    r"^<svg[^>]*>",
+    '<svg viewBox="0 0 64 64" aria-hidden="true">',
+    (WEB / "logo-mark.svg").read_text(encoding="utf-8"),
 )
 CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'
 
