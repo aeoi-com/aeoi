@@ -111,8 +111,10 @@ The file never leaves the browser; the page has no analytics and no server side.
 headlessly (see the script header for the one-time Pyodide setup);
 `PW_CHANNEL=chrome node tools/web_browser_test.mjs` drives the real page in an installed Chrome
 or Edge with the page's Content-Security-Policy enforced and asserts that no request leaves the
-browser after the file selection. CI publishes the page to GitHub Pages once Pages is enabled
-for the repository.
+browser after the file selection. `PW_CHANNEL=chrome node tools/web_load_test.mjs` runs the
+whole flow with a 3'000-account institution and times every step in the browser (validate 17 s,
+workbook check 4 s, build + encrypt 21 s, correction 12 s, restore 21 s; registry 4.8 MB).
+CI publishes the page to GitHub Pages once Pages is enabled for the repository.
 
 ## Sources
 

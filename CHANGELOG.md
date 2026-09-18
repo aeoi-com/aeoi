@@ -4,6 +4,10 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Load test `tools/web_load_test.mjs`: the browser flow with 3'000 accounts (19 timed checks).
+  The page now paints its busy state before each long synchronous step (check, plan, build,
+  outcome, restore) and re-plans 400 ms after the last keystroke in the cancel field instead of
+  on every keystroke (a plan of 3'000 accounts takes 5 s).
 - Registry restore from the sent XML files (`aeoi.crs.restore`, `aeoi crs restore`, block
   «Register verloren?» in the app): identifiers, chains, test/productive flag, version and the
   Wegleitung header variant come from the files, the portal verdict from the caller, the

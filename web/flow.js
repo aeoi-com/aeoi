@@ -255,7 +255,8 @@ $("restore-files").addEventListener("change", async (ev) => {
   const files = [...ev.target.files];
   ev.target.value = "";
   if (!files.length || !reg.open) return;
-  const outNode = $("restore-out"); outNode.replaceChildren(); msg($("restore-msg"), "", true);
+  const outNode = $("restore-out"); outNode.replaceChildren(); msg($("restore-msg"), t("working"), true);
+  await nextPaint();
   try { py.FS.mkdir("/tmp/restore"); } catch (e) { /* exists */ }
   const paths = [];
   let workbook = last && last.kind === "workbook" && last.data.ok ? "/tmp/input.xlsx" : "";
@@ -297,12 +298,20 @@ document.addEventListener("aeoi:rendered", (ev) => {
 });
 $("build-mode").addEventListener("change", refreshPlan);
 $("version").addEventListener("change", () => { const v3 = $("version").value === "3.0"; $("header-row").classList.toggle("hidden", !v3); $("header-note").classList.toggle("hidden", !v3); });
-$("cancel-keys").addEventListener("input", refreshPlan);
-function refreshPlan() {
-  const plan = $("plan"); plan.replaceChildren();
-  if (!last || last.kind !== "workbook") return;
+let planTimer = null; // a plan of 3'000 accounts takes seconds: not on every keystroke
+$("cancel-keys").addEventListener("input", () => { clearTimeout(planTimer); planTimer = setTimeout(refreshPlan, 400); });
+let planSeq = 0;
+async function refreshPlan() {
+  const plan = $("plan");
+  if (!last || last.kind !== "workbook") { plan.replaceChildren(); return; }
+  const seq = ++planSeq;
+  plan.replaceChildren(el("span", { class: "muted", text: t("working") }));
+  $("build").disabled = true;
+  await nextPaint();
+  if (seq !== planSeq) return; // a newer request took over
   const test = $("build-mode").value === "test";
   const p = JSON.parse(pyCall("plan_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, LANG));
+  plan.replaceChildren();
   if (!p.ok) return;
   const tags = [["new", p.new.length, "plan_new"], ["changed", p.changed.length, "plan_changed"], ["unchanged", p.unchanged.length, "plan_unchanged"], ["deleted", p.deletions.length, "plan_deleted"], ["blocked", p.blocked.length, "plan_blocked"]];
   for (const [cls, n, key] of tags) if (n) plan.append(el("span", { class: "tag " + cls, text: t(key, { n }) }));
@@ -341,6 +350,9 @@ $("key-file").addEventListener("change", async (ev) => {
 $("build").addEventListener("click", async () => {
   const test = $("build-mode").value === "test";
   const outNode = $("build-out"); outNode.replaceChildren();
+  msg($("build-msg"), t("working"), true);
+  $("build").disabled = true;
+  await nextPaint();
   try {
     const header = $("version").value === "3.0" ? $("build-header").value : "oecd";
     const res = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || "", LANG, header));
@@ -365,6 +377,8 @@ $("build").addEventListener("click", async () => {
     const text = String(e).split("\n").filter((l) => l.includes("Error")).pop() || String(e);
     msg($("build-msg"), t("error_prefix") + text.replace(/^.*?Error: /, ""), false);
     console.info("aeoi:built error");
+  } finally {
+    $("build").disabled = false;
   }
 });
 
@@ -388,6 +402,8 @@ $("outcome-file").addEventListener("change", async (ev) => {
 });
 $("outcome-record").addEventListener("click", async () => {
   const out = $("outcome-out"); out.replaceChildren();
+  msg($("outcome-msg"), t("working"), true);
+  await nextPaint();
   try {
     const v = JSON.parse(pyCall("record", $("outcome-text").value, $("outcome-ref").value, LANG));
     if (v.error) { msg($("outcome-msg"), t("error_prefix") + v.error, false); console.info("aeoi:outcome error"); return; }

@@ -134,10 +134,15 @@ function unlock() {
 function kindOf(name) {
   return /\.xlsx$/i.test(name) ? "workbook" : "xml";
 }
+// Python runs synchronously on the main thread: give the browser one frame to paint the busy
+// state before a long call (a large institution takes seconds), otherwise the page looks frozen.
+const nextPaint = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+
 async function checkFile(name, bytes) {
   if (!py) return;
   $("busy").classList.remove("hidden");
   $("results").classList.add("hidden");
+  await nextPaint();
   const t0 = performance.now();
   try {
     const kind = kindOf(name);

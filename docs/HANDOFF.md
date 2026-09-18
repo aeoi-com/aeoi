@@ -274,6 +274,16 @@ user or on request (competitor details are kept out of this public file). Swiss 
    header + 2.0, duplicates/junk/mixed/clash, missing target, submitted status, CLI); browser
    test rebuilds a fresh registry from the two downloaded XML files and compares chain heads
    with the original (57 checks).
+   Load test (18.09): `tools/web_load_test.mjs` (`AEOI_LOAD_N`, default 3'000; valid IBANs,
+   2/3 persons with a payment, 1/3 entities with a controlling person) in Chrome on this
+   machine: boot 8 s, validate the 5.3 MB XML 17 s, workbook check 4 s, plan against an empty
+   registry +0 s, build + encrypt + register 21 s (registry 4.3 MB, package 0.2 MB), outcome
+   1 s, changed workbook check + plan 9 s, re-plan after a cancel key 5 s, correction (300
+   OECD2 + 1 OECD3) 12 s, restore from the two files 21 s; JS heap stays around 20 MB (Pyodide's
+   WASM memory is separate); no page error. Consequences applied: `nextPaint()` before every
+   long synchronous Python call so the busy state is visible, the cancel-key input is debounced
+   (400 ms), the build button is disabled while a plan or build runs. Budgets in the script are
+   generous (2-6x) so it doubles as a regression test on slower machines; it is not in CI.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

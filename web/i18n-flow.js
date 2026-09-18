@@ -60,6 +60,7 @@ Object.assign(I18N.de, {
   outcome_bug: "Diese Regel prüft aeoi selbst - bitte den Fall melden (Code + DocRefId, keine Datei).",
   outcome_no_pending: "Keine Meldung wartet auf ein Ergebnis.",
   error_prefix: "Fehler: ",
+  working: "Wird verarbeitet …",
   how_flow_title: "Der ganze Ablauf",
   how_flow: "Vorlage herunterladen → in Excel ausfüllen → hier prüfen → Register öffnen und Schlüssel wählen → Erstellen → Paket im Portal hochladen → Ergebnis erfassen. Im nächsten Jahr: dieselbe Vorlage anpassen, prüfen, Erstellen - das Register macht daraus die Korrektur.",
 });
@@ -123,6 +124,7 @@ Object.assign(I18N.fr, {
   outcome_bug: "aeoi vérifie lui-même cette règle - merci de signaler le cas (code + DocRefId, pas de fichier).",
   outcome_no_pending: "Aucune déclaration n'attend de résultat.",
   error_prefix: "Erreur : ",
+  working: "Traitement en cours …",
   how_flow_title: "Le flux complet",
   how_flow: "Télécharger le modèle → remplir dans Excel → vérifier ici → ouvrir le registre et choisir la clé → Créer → télécharger le paquet sur le portail → saisir le résultat. L'année suivante : adapter le même modèle, vérifier, Créer - le registre en fait la correction.",
 });
@@ -186,6 +188,7 @@ Object.assign(I18N.it, {
   outcome_bug: "Questa regola la verifica aeoi stesso - segnalare il caso (codice + DocRefId, nessun file).",
   outcome_no_pending: "Nessuna comunicazione è in attesa di un esito.",
   error_prefix: "Errore: ",
+  working: "Elaborazione in corso …",
   how_flow_title: "Il flusso completo",
   how_flow: "Scaricare il modello → compilare in Excel → verificare qui → aprire il registro e scegliere la chiave → Creare → caricare il pacchetto nel portale → registrare l'esito. L'anno dopo: adattare lo stesso modello, verificare, Creare - il registro ne fa la correzione.",
 });
