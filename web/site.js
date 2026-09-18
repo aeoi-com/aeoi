@@ -17,9 +17,11 @@ function applyLanguage(lang) {
   if (page && I18N_SITE.de[page + "_title"]) document.title = t(page + "_title");
   for (const el of document.querySelectorAll("[data-i18n]")) {
     const key = el.dataset.i18n;
+    if (!I18N_SITE.de[key] && !I18N_SITE[LANG][key]) continue; // texts baked in at render time only
     if (key.endsWith("_html")) el.innerHTML = t(key);
-    else el.textContent = t(key);
+    else el.textContent = t(key, el.dataset.n ? { n: el.dataset.n } : undefined);
   }
+  for (const el of document.querySelectorAll("[data-i18n-ph]")) el.placeholder = t(el.dataset.i18nPh);
   for (const sel of document.querySelectorAll("select.lang")) sel.value = LANG;
   for (const a of document.querySelectorAll("[data-vorlage]")) a.setAttribute("href", `vorlage/meldbar-vorlage-${LANG}.xlsx`);
   try { localStorage.setItem("aeoi-lang", LANG); } catch (e) { /* ignore */ }
@@ -30,9 +32,17 @@ function initialLanguage() {
   const nav = (navigator.language || "de").slice(0, 2).toLowerCase();
   return I18N_SITE[nav] ? nav : "de";
 }
-for (const sel of document.querySelectorAll("select.lang")) sel.addEventListener("change", (e) => applyLanguage(e.target.value));
-
-applyLanguage(initialLanguage());
+// Every marketing page exists once per language (/, /fr/, /it/): the switch navigates to the
+// sibling URL, and the page's own language wins over the stored preference (which it updates).
+const PAGE_LANG = document.body.dataset.lang;
+function siblingUrl(lang) {
+  const path = location.pathname.replace(/^\/(fr|it)\//, "/");
+  return (lang === "de" ? "" : "/" + lang) + path + location.hash;
+}
+for (const sel of document.querySelectorAll("select.lang")) {
+  sel.addEventListener("change", (e) => (PAGE_LANG ? (location.href = siblingUrl(e.target.value)) : applyLanguage(e.target.value)));
+}
+applyLanguage(PAGE_LANG || initialLanguage());
 
 // mobile navigation
 (function nav() {
@@ -118,6 +128,34 @@ applyLanguage(initialLanguage());
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll);
   render();
+})();
+
+// error-code page: filter by code or word
+(function codes() {
+  const box = document.getElementById("fc-search");
+  if (!box) return;
+  const cards = [...document.querySelectorAll("article.fc")];
+  const groups = [...document.querySelectorAll(".fc-group")];
+  const count = document.getElementById("fc-count");
+  const none = document.getElementById("fc-none");
+  const apply = () => {
+    const q = box.value.trim().toLowerCase();
+    let shown = 0;
+    for (const c of cards) {
+      const hit = !q || c.textContent.toLowerCase().includes(q);
+      c.classList.toggle("hidden", !hit);
+      if (hit) shown += 1;
+    }
+    for (const g of groups) {
+      const list = g.nextElementSibling;
+      g.classList.toggle("hidden", list && !list.querySelector("article.fc:not(.hidden)"));
+    }
+    count.textContent = t("fc_count", { n: shown });
+    none.hidden = shown > 0;
+  };
+  box.addEventListener("input", apply);
+  if (location.hash && /^#\d{5}$/.test(location.hash)) box.value = location.hash.slice(1);
+  apply();
 })();
 
 // contact form: opens the visitor's mail client, sends nothing itself

@@ -51,9 +51,9 @@
     "code": "50005",
     "section": "5.1 Dateivalidierung",
     "page": 17,
-    "text_de": "Datenelemente duerfen nur Zeichen aus ISO 8859-1 ohne die Ausnahmen des Anhangs 7.2 enthalten; ungueltige Zeichen werden als Fehler 50005 zurueckgemeldet",
+    "text_de": "Datenelemente dürfen nur Zeichen aus ISO 8859-1 ohne die Ausnahmen des Anhangs 7.2 enthalten; ungültige Zeichen werden als Fehler 50005 zurückgemeldet",
     "texts_de": [
-      "Datenelemente duerfen nur Zeichen aus ISO 8859-1 ohne die Ausnahmen des Anhangs 7.2 enthalten; ungueltige Zeichen werden als Fehler 50005 zurueckgemeldet"
+      "Datenelemente dürfen nur Zeichen aus ISO 8859-1 ohne die Ausnahmen des Anhangs 7.2 enthalten; ungültige Zeichen werden als Fehler 50005 zurückgemeldet"
     ],
     "status": "implemented",
     "where": "aeoi.estv.ids.invalid_characters via model._check_text on every text element",

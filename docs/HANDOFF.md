@@ -246,6 +246,15 @@ user or on request (competitor details are kept out of this public file). Swiss 
    to do for search: one URL per language with hreflang (`/fr/`, `/it/`), an error-code page
    from rule_titles + catalogue, the 3.0 guide as a page; owner: Search Console and Bing
    verification tokens, Google Business Profile, links from associations, PyPI.
+   Done 18.09 (evening): one URL per language - render_site evaluates the JS dictionaries with
+   node (`load_i18n`), bakes fr/it texts into `web/fr/*.html` and `web/it/*.html` (regex over
+   `data-i18n` elements; no nested same-name tags in the templates), assets referenced one level
+   up (the CSP forbids <base>), hreflang de/fr/it/x-default on every page, sitemap with all 25
+   URLs; site.js treats the page language as authoritative and the switch navigates to the
+   sibling URL. `fehlercodes.html` (de/fr/it): all 68 catalogue codes with title and remedy in
+   the page language, status (checked by meldbar / portal only / OECD), Wegleitung reference,
+   official German wording behind a disclosure, client-side search, anchors `#50005`; linked
+   from the home features and the footer. Browser test: 51 checks.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

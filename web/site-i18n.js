@@ -16,7 +16,7 @@ const I18N_SITE = {
     foot_note: "Ihre Daten bleiben in Ihrem Browser. Keine Analytics, keine Cookies, kein Server.",
 
     // home
-    home_title: "meldbar - CRS-Meldungen an die ESTV, ohne Installation",
+    home_title: "CRS-Meldungen an die ESTV prüfen und erstellen - meldbar",
     hero_kicker: "Ab 16. Januar 2027 nur noch CRS-Schema 3.0",
     hero_h1: "CRS-Meldungen. Geprüft, verschlüsselt, bereit zum Hochladen.",
     hero_lead: "meldbar macht aus Ihrer Excel-Tabelle die fertige AIA-Meldung für das Portal der ESTV - und prüft sie vorher wie das Portal. Im Browser, ohne Installation. Ihre Kontodaten verlassen Ihren Rechner nicht.",
@@ -69,7 +69,7 @@ const I18N_SITE = {
     cta_btn: "App öffnen",
 
     // pricing page
-    pricing_title: "meldbar - Preise",
+    pricing_title: "Preise - meldbar, AIA-Meldesoftware für die Schweiz",
     pr_h1: "Preise",
     pr_lead: "Das Werkzeug ist und bleibt kostenlos - der Quellcode ist offen. Wer Sicherheit in der Meldesaison will, wählt ein Abonnement pro Organisation: eine Rechnung, beliebig viele meldende Institute, beliebig viele Benutzer.",
     pr_free: "Basis", pr_free_price: "0 CHF", pr_free_per: "für immer",
@@ -140,7 +140,7 @@ const I18N_SITE = {
     foot_rights: "© 2026 meldbar. Tous droits réservés.",
     foot_note: "Vos données restent dans votre navigateur. Pas d'analytique, pas de cookies, pas de serveur.",
 
-    home_title: "meldbar - Déclarations CRS à l'AFC, sans installation",
+    home_title: "Déclarations CRS à l'AFC : vérifier et créer - meldbar",
     hero_kicker: "Dès le 16 janvier 2027, seul le schéma CRS 3.0",
     hero_h1: "Déclarations CRS. Vérifiées, chiffrées, prêtes à télécharger.",
     hero_lead: "meldbar transforme votre tableau Excel en déclaration EAR prête pour le portail de l'AFC - et la vérifie avant, comme le portail. Dans le navigateur, sans installation. Vos données de comptes ne quittent pas votre ordinateur.",
@@ -192,7 +192,7 @@ const I18N_SITE = {
     cta_p: "Ouvrez l'app et vérifiez votre premier fichier. Sans compte, sans installation.",
     cta_btn: "Ouvrir l'app",
 
-    pricing_title: "meldbar - Tarifs",
+    pricing_title: "Tarifs - meldbar, logiciel de déclaration EAR pour la Suisse",
     pr_h1: "Tarifs",
     pr_lead: "L'outil est et reste gratuit - le code source est ouvert. Qui veut de la sécurité pendant la saison des déclarations choisit un abonnement par organisation : une facture, autant d'institutions déclarantes et d'utilisateurs que nécessaire.",
     pr_free: "Base", pr_free_price: "0 CHF", pr_free_per: "pour toujours",
@@ -260,7 +260,7 @@ const I18N_SITE = {
     foot_rights: "© 2026 meldbar. Tutti i diritti riservati.",
     foot_note: "I suoi dati restano nel suo browser. Niente analytics, niente cookie, nessun server.",
 
-    home_title: "meldbar - Comunicazioni CRS all'AFC, senza installazione",
+    home_title: "Comunicazioni CRS all'AFC: verificare e creare - meldbar",
     hero_kicker: "Dal 16 gennaio 2027 solo lo schema CRS 3.0",
     hero_h1: "Comunicazioni CRS. Verificate, cifrate, pronte da caricare.",
     hero_lead: "meldbar trasforma la sua tabella Excel nella comunicazione SAI pronta per il portale dell'AFC - e la verifica prima, come fa il portale. Nel browser, senza installazione. I dati dei conti non lasciano il suo computer.",
@@ -312,7 +312,7 @@ const I18N_SITE = {
     cta_p: "Apra l'app e verifichi il suo primo file. Senza account, senza installazione.",
     cta_btn: "Apri l'app",
 
-    pricing_title: "meldbar - Prezzi",
+    pricing_title: "Prezzi - meldbar, software per le comunicazioni SAI in Svizzera",
     pr_h1: "Prezzi",
     pr_lead: "Lo strumento è e resta gratuito - il codice sorgente è aperto. Chi vuole sicurezza nella stagione delle comunicazioni sceglie un abbonamento per organizzazione: una fattura, istituti e utenti illimitati.",
     pr_free: "Base", pr_free_price: "0 CHF", pr_free_per: "per sempre",

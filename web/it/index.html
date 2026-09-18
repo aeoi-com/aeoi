@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Verificare, creare e cifrare le comunicazioni CRS per il portale SAI dell'AFC - nel browser, senza installazione, senza che i dati dei conti lascino il computer.">
+<title>Comunicazioni CRS all'AFC: verificare e creare - meldbar</title>
+<link rel="canonical" href="https://meldbar.ch/it/">
+<link rel="alternate" hreflang="de" href="https://meldbar.ch/">
+<link rel="alternate" hreflang="fr" href="https://meldbar.ch/fr/">
+<link rel="alternate" hreflang="it" href="https://meldbar.ch/it/">
+<link rel="alternate" hreflang="x-default" href="https://meldbar.ch/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="meldbar">
+<meta property="og:locale" content="it_CH">
+<meta property="og:url" content="https://meldbar.ch/it/">
+<meta property="og:title" content="Comunicazioni CRS all'AFC: verificare e creare - meldbar">
+<meta property="og:description" content="Verificare, creare e cifrare le comunicazioni CRS per il portale SAI dell'AFC - nel browser, senza installazione, senza che i dati dei conti lascino il computer.">
+<meta property="og:image" content="https://meldbar.ch/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="meldbar - CRS-Meldungen an die ESTV, ohne Installation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Comunicazioni CRS all'AFC: verificare e creare - meldbar">
+<meta name="twitter:description" content="Verificare, creare e cifrare le comunicazioni CRS per il portale SAI dell'AFC - nel browser, senza installazione, senza che i dati dei conti lascino il computer.">
+<meta name="twitter:image" content="https://meldbar.ch/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://meldbar.ch/#organization", "name": "meldbar", "url": "https://meldbar.ch/", "logo": "https://meldbar.ch/logo-512.png", "email": "kontakt@meldbar.ch", "address": {"@type": "PostalAddress", "streetAddress": "Salvatorstrasse 8", "postalCode": "8050", "addressLocality": "Zürich", "addressCountry": "CH"}, "areaServed": "CH", "sameAs": ["https://github.com/aeoi-com/aeoi"]}, {"@type": "WebSite", "url": "https://meldbar.ch/", "name": "meldbar", "inLanguage": "it"}, {"@type": "WebPage", "url": "https://meldbar.ch/it/", "name": "Comunicazioni CRS all'AFC: verificare e creare - meldbar", "description": "Verificare, creare e cifrare le comunicazioni CRS per il portale SAI dell'AFC - nel browser, senza installazione, senza che i dati dei conti lascino il computer.", "inLanguage": "it", "isPartOf": {"@id": "https://meldbar.ch/"}}, {"@type": "SoftwareApplication", "name": "meldbar", "url": "https://meldbar.ch/app.html", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "inLanguage": ["de", "fr", "it"], "description": "CRS-Meldungen (AIA) für das Portal der ESTV prüfen, erstellen und verschlüsseln - im Browser, ohne Installation.", "publisher": {"@id": "https://meldbar.ch/#organization"}, "offers": [{"@type": "Offer", "name": "Basis", "price": "0", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, 1-10 Vehikel", "price": "900", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, 11-50 Vehikel", "price": "1500", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, über 50 Vehikel", "price": "2400", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}]}]}</script>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../site.css">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#1c4f9e">
+<link rel="icon" href="../logo-mark.svg" type="image/svg+xml">
+</head>
+<body data-page="home" data-lang="it">
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="k0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ccfa8"/><stop offset="1" stop-color="#4fbf9f"/></linearGradient><linearGradient id="k1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ad6ab"/><stop offset="1" stop-color="#66c8a2"/></linearGradient><linearGradient id="k2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dc0a6"/><stop offset="1" stop-color="#2ea9b1"/></linearGradient><linearGradient id="k3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#265a90"/><stop offset="1" stop-color="#12305b"/></linearGradient></defs><g transform="translate(0.00,0.00) scale(1.0000)"><rect x="0.0" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k0)"/><rect x="18.4" y="39.6" width="8.8" height="21.4" rx="2.2" fill="url(#k1)"/><rect x="36.8" y="34.4" width="8.8" height="26.6" rx="2.2" fill="url(#k2)"/><rect x="55.2" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k3)"/><path d="M17.2,15.8 L29.4,28.6 L56.6,2.4" fill="none" stroke="#12305b" stroke-width="7.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span>meldbar</span></a>
+    <nav class="site-nav" aria-label="Hauptnavigation"><a href="index.html#funktionen" data-i18n="nav_features">Funzioni</a><a href="index.html#ablauf" data-i18n="nav_how">Come funziona</a><a href="preise.html" data-i18n="nav_pricing">Prezzi</a><a href="ueber-uns.html" data-i18n="nav_about">Chi siamo</a><a href="kontakt.html" data-i18n="nav_contact">Contatto</a></nav>
+    <div class="header-actions">
+      <label class="sr-only" for="lang">Sprache / Langue / Lingua</label>
+      <select id="lang" class="pill lang"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
+      <a class="btn primary" href="../app.html" data-i18n="nav_app">Apri l'app</a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav"><span class="sr-only" data-i18n="nav_menu">Menu</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Navigation"><a href="index.html#funktionen" data-i18n="nav_features">Funzioni</a><a href="index.html#ablauf" data-i18n="nav_how">Come funziona</a><a href="preise.html" data-i18n="nav_pricing">Prezzi</a><a href="ueber-uns.html" data-i18n="nav_about">Chi siamo</a><a href="kontakt.html" data-i18n="nav_contact">Contatto</a><a class="btn primary" href="../app.html" data-i18n="nav_app">Apri l'app</a></nav>
+</header>
+<main>
+
+<section class="hero-section">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-kicker"><i class="pulse"></i><span data-i18n="hero_kicker">Dal 16 gennaio 2027 solo lo schema CRS 3.0</span></span>
+      <h1 class="hero-h1" data-i18n="hero_h1">Comunicazioni CRS. Verificate, cifrate, pronte da caricare.</h1>
+      <p class="hero-lead" data-i18n="hero_lead">meldbar trasforma la sua tabella Excel nella comunicazione SAI pronta per il portale dell'AFC - e la verifica prima, come fa il portale. Nel browser, senza installazione. I dati dei conti non lasciano il suo computer.</p>
+      <div class="hero-actions">
+        <a class="btn primary lg" href="../app.html" data-i18n="hero_cta">Verifica un file</a>
+        <a class="btn lg ghost" href="#ablauf" data-i18n="hero_cta2">Come funziona</a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust1">59 delle 65 regole dell'AFC</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust2">Nessun file lascia il browser</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust3">Deutsch · Français · Italiano</span></span>
+      </div>
+    </div>
+    <div class="illu" aria-hidden="true">
+      <svg viewBox="8 62 516 304">
+        <path class="flow" d="M150 128 C 230 128, 230 208, 300 208"/>
+        <path class="flow" d="M150 300 C 230 300, 230 208, 300 208"/>
+        <path class="flow" d="M410 208 C 440 208, 440 208, 470 208"/>
+        <g class="float1">
+          <rect class="card-f" x="20" y="76" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="102" data-i18n="ill_excel">Excel</text>
+          <rect class="row y" x="36" y="116" width="98" height="8" rx="4"/><rect class="row" x="36" y="132" width="98" height="8" rx="4"/><rect class="row" x="36" y="148" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float2">
+          <rect class="card-f" x="20" y="248" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="274" data-i18n="ill_check">Verifica</text>
+          <rect class="row g" x="36" y="288" width="98" height="8" rx="4"/><rect class="row g" x="36" y="304" width="98" height="8" rx="4"/><rect class="row g" x="36" y="320" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float3">
+          <rect class="card-f" x="300" y="156" width="110" height="104" rx="12"/>
+          <text class="lbl" x="316" y="182" data-i18n="ill_xml">CRS-XML</text>
+          <text class="sub" x="316" y="200">&lt;crs:CRS_OECD&gt;</text>
+          <rect class="row" x="316" y="212" width="78" height="8" rx="4"/><rect class="row" x="316" y="228" width="60" height="8" rx="4"/>
+        </g>
+        <g class="float1">
+          <rect class="lock" x="470" y="176" width="48" height="64" rx="12"/>
+          <rect x="484" y="204" width="20" height="16" rx="3" fill="#fff"/>
+          <path d="M487 204v-6a7 7 0 0 1 14 0v6" fill="none" stroke="#fff" stroke-width="3"/>
+        </g>
+        <circle cx="150" cy="128" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 128l5 5 9-10"/>
+        <circle cx="150" cy="300" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 300l5 5 9-10"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section tight" id="frist">
+  <div class="wrap">
+    <div class="deadline reveal">
+      <span class="kicker" data-i18n="deadline_kicker">Cosa vale dal 1° gennaio</span>
+      <h2 class="h2" data-i18n="deadline_h2">Il CRS riveduto è in vigore - e il portale cambia schema.</h2>
+      <p data-i18n="deadline_p">Dal 1° gennaio 2026 in Svizzera si applica lo standard comune di comunicazione riveduto. L'AFC accetta solo lo schema 2.0 fino al 14 dicembre 2026 e solo lo schema 3.0 dal 16 gennaio 2027. Le comunicazioni per l'anno 2026 - termine 30 giugno 2027 - sono le prime da creare nel nuovo formato: autocertificazione, procedura di adeguata verifica, tipo di conto e tipo delle persone che esercitano il controllo per ogni conto.</p>
+      <div class="countdown">
+        <div class="cd"><div class="n" data-until="2027-01-16">-</div><div class="l" data-i18n="cd_switch">giorni al cambio di schema (16.01.2027)</div></div>
+        <div class="cd"><div class="n" data-until="2027-06-30">-</div><div class="l" data-i18n="cd_deadline">giorni al termine (30.06.2027)</div></div>
+      </div>
+      <p class="src" data-i18n="deadline_src">Fonte: Direttiva tecnica SAI dell'AFC, settembre 2026, numero 5.3.1; art. 15 cpv. 1 LSAI.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="funktionen">
+  <div class="wrap">
+    <span class="kicker reveal" data-i18n="features_kicker">Funzioni</span>
+    <h2 class="h2 reveal" data-i18n="features_h2">Tutto ciò che sta tra la sua tabella e il portale.</h2>
+    <div class="features">
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3 data-i18n="f1_t">Verificare come il portale</h3>
+        <p data-i18n="f1_p">Schema OCSE 2.0 e 3.0, 59 delle 65 regole della Direttiva tecnica, set di caratteri, Stati partner dell'anno, IBAN/ISIN - ogni rilievo con codice AFC, punto e rimedio.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M18 15l3 3-3 3"/></svg></div>
+        <h3 data-i18n="f2_t">Entra Excel, esce XML</h3>
+        <p data-i18n="f2_p">Un modello con quattro fogli, elenchi a discesa e commenti. Un clic crea il file CRS-XML con tutti gli identificativi.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3 data-i18n="f3_t">Cifrato per l'AFC</h3>
+        <p data-i18n="f3_p">Il pacchetto nasce esattamente secondo il numero 3.3.1 della Direttiva - AES-256, chiave pubblica dell'AFC, nome file corretto per test e produzione.</p>
+      </div>
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+        <h3 data-i18n="f4_t">Correzioni senza grattacapi</h3>
+        <p data-i18n="f4_p">Il registro ricorda cosa è stato inviato. L'anno dopo si adatta la stessa tabella: i conti modificati diventano correzioni, quelli tolti annullamenti, quelli nuovi una nuova comunicazione.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H8l-4 4z"/><path d="M9 10h6"/></svg></div>
+        <h3 data-i18n="f5_t">Capire la risposta del portale</h3>
+        <p data-i18n="f5_p">Incolli la conferma di validazione - ogni codice viene spiegato, il registro sa se la comunicazione è stata accettata.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="f6_t">I suoi dati restano da lei</h3>
+        <p data-i18n="f6_p">Nessun server, niente analytics, niente cookie. La verifica avviene nel suo browser; una regola di sicurezza vieta qualsiasi altra connessione. Offline dopo la prima visita.</p>
+      </div>
+    </div>
+    <p class="reveal" style="margin-top:18px"><a href="fehlercodes.html" data-i18n="home_codes_link">Tutti i codici di errore del portale SAI spiegati</a> →</p>
+    <div class="stats">
+      <div class="stat-b reveal"><div class="n" data-count="59">0</div><div class="l" data-i18n="stat1_l">regole dell'AFC verificate prima che il portale le veda</div></div>
+      <div class="stat-b reveal d1"><div class="n" data-count="0">0</div><div class="l" data-i18n="stat2_l">server che vedono i dati dei suoi conti</div></div>
+      <div class="stat-b reveal d2"><div class="n" data-count="3">0</div><div class="l" data-i18n="stat3_l">lingue: tedesco, francese, italiano</div></div>
+      <div class="stat-b reveal d3"><div class="n" data-count="2">0</div><div class="l" data-i18n="stat4_l">schemi: 2.0 fino al 14.12.2026, 3.0 dal 16.01.2027</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ablauf">
+  <div class="how-wrap">
+    <div class="how-sticky">
+      <div class="wrap">
+        <span class="kicker reveal" data-i18n="how_kicker">Come funziona</span>
+        <h2 class="h2 reveal" data-i18n="how_h2">Cinque passi. Nessun manuale.</h2>
+        <p class="how-hint" data-i18n="how_hint">Continui a scorrere - i passi avanzano verso destra.</p>
+        <div class="how-track">
+          <div class="step-card"><div class="n">1</div><h3 data-i18n="s1_t">Scaricare il modello</h3><p data-i18n="s1_p">Il modello Excel dall'app: un foglio per l'istituto, uno per i conti, uno per le persone che esercitano il controllo, uno per i pagamenti.</p><p class="step-link"><a href="../vorlage/meldbar-vorlage-it.xlsx" data-vorlage download data-i18n="s1_dl">Scaricare il modello Excel</a></p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="58" y="14" width="30" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="26" width="104" height="5" rx="2.5" fill="var(--border)"/><rect x="12" y="36" width="104" height="5" rx="2.5" fill="var(--border)"/><path d="M150 28l30 0M172 18l10 10-10 10" fill="none" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="step-card"><div class="n">2</div><h3 data-i18n="s2_t">Compilare</h3><p data-i18n="s2_p">Nel suo Excel, come sempre. Le colonne gialle sono obbligatorie, gli elenchi mostrano i codici ammessi, ogni colonna si spiega con un commento.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="60" height="6" rx="3" fill="var(--warn)"/><rect x="80" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="128" y="14" width="40" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="28" width="60" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="80" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="128" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="12" y="39" width="60" height="5" rx="2.5" fill="var(--border)"/><rect x="80" y="39" width="40" height="5" rx="2.5" fill="var(--border)"/></svg></div></div><div class="step-card"><div class="n">3</div><h3 data-i18n="s3_t">Verificare</h3><p data-i18n="s3_p">Trascini il file nell'app. Pochi secondi dopo: verde, oppure un elenco di rilievi - conto, campo, codice AFC, cosa fare.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--ok-soft)" stroke="var(--ok)"/><circle cx="26" cy="28" r="10" fill="var(--ok)"/><path d="M20 28l4 4 8-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="46" y="20" width="90" height="6" rx="3" fill="var(--ok)"/><rect x="46" y="32" width="60" height="5" rx="2.5" fill="color-mix(in srgb, var(--ok) 50%, transparent)"/></svg></div></div><div class="step-card"><div class="n">4</div><h3 data-i18n="s4_t">Creare e cifrare</h3><p data-i18n="s4_p">Apra il registro, scelga una volta la chiave dell'AFC, «Creare». Il pacchetto è pronto per il portale SAI.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="30" y="8" width="60" height="40" rx="5" fill="var(--surface-2)" stroke="var(--border-strong)"/><text x="60" y="33" text-anchor="middle" font-size="11" font-weight="600" fill="var(--muted)" font-family="Inter,system-ui">XML</text><path d="M96 28h22" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round"/><rect x="124" y="8" width="52" height="40" rx="5" fill="var(--accent)"/><rect x="141" y="24" width="18" height="14" rx="3" fill="#fff"/><path d="M144 24v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#fff" stroke-width="2.5"/></svg></div></div><div class="step-card"><div class="n">5</div><h3 data-i18n="s5_t">Caricare e registrare l'esito</h3><p data-i18n="s5_p">Nel portale, come prima. Incolli la conferma nell'app - le correzioni dell'anno dopo sono preparate.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><path d="M64 40V16M52 26l12-12 12 12" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="162" cy="28" r="16" fill="var(--ok-soft)" stroke="var(--ok)"/><path d="M154 28l6 6 10-11" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </div>
+        <div class="how-progress"><i></i></div>
+        <p style="margin-top:22px"><a class="btn primary" href="../app.html" data-i18n="how_cta">Provare con un file</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="datenschutz">
+  <div class="wrap privacy-grid">
+    <div>
+      <span class="kicker reveal" data-i18n="privacy_kicker">Protezione dei dati</span>
+      <h2 class="h2 reveal" data-i18n="privacy_h2">I dati dei suoi conti non lasciano il suo computer. Garantito tecnicamente, non solo promesso.</h2>
+      <p class="lead reveal d1" data-i18n="privacy_p">meldbar è un sito statico senza componente server. Tutta la verifica avviene nel suo browser. Una Content-Security-Policy vieta al browser di contattare qualsiasi altro indirizzo dopo il caricamento - verificabile negli strumenti per sviluppatori di qualsiasi browser. Il registro è un file presso di lei.</p>
+      <div class="checks reveal d2">
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv1">Niente analytics, niente cookie, nessun account</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv2">Codice sorgente aperto (Apache-2.0), ogni regola leggibile</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv3">Funziona offline dopo la prima visita</span></div>
+      </div>
+    </div>
+    <div class="diagram reveal d2" aria-hidden="true">
+      <svg viewBox="0 0 520 300">
+        <rect class="box" x="20" y="40" width="240" height="220" rx="16"/>
+        <text class="t" x="40" y="70" data-i18n="diag_browser">Il suo browser</text>
+        <rect class="file" x="60" y="100" width="150" height="110" rx="10"/>
+        <text class="t" x="78" y="130" data-i18n="diag_file">Il suo file</text>
+        <rect x="78" y="146" width="112" height="8" rx="4" fill="var(--accent)" opacity="0.5"/><rect x="78" y="162" width="90" height="8" rx="4" fill="var(--accent)" opacity="0.35"/><rect x="78" y="178" width="100" height="8" rx="4" fill="var(--accent)" opacity="0.35"/>
+        <g class="glow"><path class="shield" d="M228 96l16 6v12c0 10-7 16-16 18-9-2-16-8-16-18v-12z"/><path d="M222 114l4 4 8-8" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <path class="link" d="M262 150 H 380"/>
+        <path class="cross" d="M312 136l20 28M332 136l-20 28"/>
+        <text class="s" x="322" y="180" text-anchor="middle" data-i18n="diag_no">nessuna connessione</text>
+        <rect class="box" x="384" y="110" width="116" height="80" rx="14"/>
+        <text class="t" x="442" y="155" text-anchor="middle" data-i18n="diag_internet">Internet</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="preise">
+  <div class="wrap center">
+    <span class="kicker reveal" data-i18n="pricing_kicker">Prezzi</span>
+    <h2 class="h2 reveal" data-i18n="pricing_h2">Gratuito per tutti. Abbonamento per chi vuole supporto.</h2>
+    <p class="lead reveal d1" data-i18n="pricing_p">Per organizzazione, non per utente. Istituti tenuti alla comunicazione illimitati.</p>
+    <div class="plans" style="text-align:left">
+      <div class="plan-card reveal"><h3 data-i18n="pr_free">Base</h3><div class="price" data-i18n="pr_free_price">0 CHF</div><div class="per" data-i18n="pr_free_per">per sempre</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_1">App web con tutte le verifiche (59 delle 65 regole dell'AFC)</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_2">Modello Excel, creazione XML, cifratura</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_3">Registro per correzioni e annullamenti</span></li></ul>
+        <a class="btn" href="../app.html" data-i18n="pr_free_btn">Apri l'app</a></div>
+      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Consigliato</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">da 900 CHF</div><div class="per" data-i18n="pr_pro_per">all'anno per organizzazione</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_1">Tutto di Base</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_2">Supporto via e-mail, prioritario nella stagione (maggio-giugno)</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_3">Aggiornamento garantito con nuove regole dell'AFC o dell'OCSE</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_4">Revisione della prima comunicazione prima del caricamento</span></li></ul>
+        <a class="btn primary" href="kontakt.html" data-i18n="pr_pro_btn">Richiedi un'offerta</a></div>
+      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Software house</h3><div class="price" data-i18n="pr_lib_price">2'500 CHF</div><div class="per" data-i18n="pr_lib_per">all'anno</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_1">Usare la libreria Python nel proprio prodotto</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_2">Supporto tecnico all'integrazione</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_3">Informazione anticipata su cambi di schema e regole</span></li></ul>
+        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Contattaci</a></div>
+    </div>
+    <p style="margin-top:20px"><a href="preise.html" data-i18n="pricing_all">Tutti i prezzi e le prestazioni</a></p>
+  </div>
+</section>
+
+<section class="section tight">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2 class="h2" data-i18n="cta_h2">Pronti per lo schema 3.0?</h2>
+      <p data-i18n="cta_p">Apra l'app e verifichi il suo primo file. Senza account, senza installazione.</p>
+      <a class="btn primary lg" href="../app.html" data-i18n="cta_btn">Apri l'app</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="k0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ccfa8"/><stop offset="1" stop-color="#4fbf9f"/></linearGradient><linearGradient id="k1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ad6ab"/><stop offset="1" stop-color="#66c8a2"/></linearGradient><linearGradient id="k2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dc0a6"/><stop offset="1" stop-color="#2ea9b1"/></linearGradient><linearGradient id="k3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#265a90"/><stop offset="1" stop-color="#12305b"/></linearGradient></defs><g transform="translate(0.00,0.00) scale(1.0000)"><rect x="0.0" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k0)"/><rect x="18.4" y="39.6" width="8.8" height="21.4" rx="2.2" fill="url(#k1)"/><rect x="36.8" y="34.4" width="8.8" height="26.6" rx="2.2" fill="url(#k2)"/><rect x="55.2" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k3)"/><path d="M17.2,15.8 L29.4,28.6 L56.6,2.4" fill="none" stroke="#12305b" stroke-width="7.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span>meldbar</span></div>
+        <p data-i18n="foot_note">I suoi dati restano nel suo browser. Niente analytics, niente cookie, nessun server.</p>
+        <p data-i18n="foot_address">meldbar · Salvatorstrasse 8 · 8050 Zurigo · Svizzera</p>
+      </div>
+      <div>
+        <h4 data-i18n="foot_product">Prodotto</h4>
+        <ul>
+          <li><a href="../app.html" data-i18n="foot_app">Applicazione web</a></li>
+          <li><a href="preise.html" data-i18n="foot_pricing">Prezzi</a></li>
+          <li><a href="fehlercodes.html" data-i18n="foot_codes">Codici di errore del portale SAI</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/docs/de/ANLEITUNG.md" data-i18n="foot_docs">Guida</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/CHANGELOG.md" data-i18n="foot_changes">Modifiche</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_company">Azienda</h4>
+        <ul>
+          <li><a href="ueber-uns.html" data-i18n="foot_about">Chi siamo</a></li>
+          <li><a href="kontakt.html" data-i18n="foot_contact">Contatto</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi" data-i18n="foot_source">Codice sorgente (GitHub)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_legal">Note legali</h4>
+        <ul>
+          <li><a href="impressum.html" data-i18n="foot_imprint">Impressum</a></li>
+          <li><a href="datenschutz.html" data-i18n="foot_privacy">Protezione dei dati</a></li>
+          <li><a href="agb.html" data-i18n="foot_terms">CG</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="foot_rights">© 2026 meldbar. Tutti i diritti riservati.</span>
+      <span>Salvatorstrasse 8, 8050 Zürich</span>
+    </div>
+  </div>
+</footer>
+<script src="../site-i18n.js"></script>
+<script src="../site-i18n-agb.js"></script>
+<script src="../site-i18n-pages.js"></script>
+<script src="../site.js"></script>
+</body>
+</html>

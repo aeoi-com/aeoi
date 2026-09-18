@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Vérifier, créer et chiffrer les déclarations CRS pour le portail EAR de l'AFC - dans le navigateur, sans installation, sans que les données de comptes quittent l'ordinateur.">
+<title>Déclarations CRS à l'AFC : vérifier et créer - meldbar</title>
+<link rel="canonical" href="https://meldbar.ch/fr/">
+<link rel="alternate" hreflang="de" href="https://meldbar.ch/">
+<link rel="alternate" hreflang="fr" href="https://meldbar.ch/fr/">
+<link rel="alternate" hreflang="it" href="https://meldbar.ch/it/">
+<link rel="alternate" hreflang="x-default" href="https://meldbar.ch/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="meldbar">
+<meta property="og:locale" content="fr_CH">
+<meta property="og:url" content="https://meldbar.ch/fr/">
+<meta property="og:title" content="Déclarations CRS à l'AFC : vérifier et créer - meldbar">
+<meta property="og:description" content="Vérifier, créer et chiffrer les déclarations CRS pour le portail EAR de l'AFC - dans le navigateur, sans installation, sans que les données de comptes quittent l'ordinateur.">
+<meta property="og:image" content="https://meldbar.ch/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="meldbar - CRS-Meldungen an die ESTV, ohne Installation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Déclarations CRS à l'AFC : vérifier et créer - meldbar">
+<meta name="twitter:description" content="Vérifier, créer et chiffrer les déclarations CRS pour le portail EAR de l'AFC - dans le navigateur, sans installation, sans que les données de comptes quittent l'ordinateur.">
+<meta name="twitter:image" content="https://meldbar.ch/og.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://meldbar.ch/#organization", "name": "meldbar", "url": "https://meldbar.ch/", "logo": "https://meldbar.ch/logo-512.png", "email": "kontakt@meldbar.ch", "address": {"@type": "PostalAddress", "streetAddress": "Salvatorstrasse 8", "postalCode": "8050", "addressLocality": "Zürich", "addressCountry": "CH"}, "areaServed": "CH", "sameAs": ["https://github.com/aeoi-com/aeoi"]}, {"@type": "WebSite", "url": "https://meldbar.ch/", "name": "meldbar", "inLanguage": "fr"}, {"@type": "WebPage", "url": "https://meldbar.ch/fr/", "name": "Déclarations CRS à l'AFC : vérifier et créer - meldbar", "description": "Vérifier, créer et chiffrer les déclarations CRS pour le portail EAR de l'AFC - dans le navigateur, sans installation, sans que les données de comptes quittent l'ordinateur.", "inLanguage": "fr", "isPartOf": {"@id": "https://meldbar.ch/"}}, {"@type": "SoftwareApplication", "name": "meldbar", "url": "https://meldbar.ch/app.html", "applicationCategory": "BusinessApplication", "operatingSystem": "Web browser", "inLanguage": ["de", "fr", "it"], "description": "CRS-Meldungen (AIA) für das Portal der ESTV prüfen, erstellen und verschlüsseln - im Browser, ohne Installation.", "publisher": {"@id": "https://meldbar.ch/#organization"}, "offers": [{"@type": "Offer", "name": "Basis", "price": "0", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, 1-10 Vehikel", "price": "900", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, 11-50 Vehikel", "price": "1500", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}, {"@type": "Offer", "name": "Pro, über 50 Vehikel", "price": "2400", "priceCurrency": "CHF", "url": "https://meldbar.ch/preise.html"}]}]}</script>
+<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../site.css">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#1c4f9e">
+<link rel="icon" href="../logo-mark.svg" type="image/svg+xml">
+</head>
+<body data-page="home" data-lang="fr">
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="index.html"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="k0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ccfa8"/><stop offset="1" stop-color="#4fbf9f"/></linearGradient><linearGradient id="k1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ad6ab"/><stop offset="1" stop-color="#66c8a2"/></linearGradient><linearGradient id="k2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dc0a6"/><stop offset="1" stop-color="#2ea9b1"/></linearGradient><linearGradient id="k3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#265a90"/><stop offset="1" stop-color="#12305b"/></linearGradient></defs><g transform="translate(0.00,0.00) scale(1.0000)"><rect x="0.0" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k0)"/><rect x="18.4" y="39.6" width="8.8" height="21.4" rx="2.2" fill="url(#k1)"/><rect x="36.8" y="34.4" width="8.8" height="26.6" rx="2.2" fill="url(#k2)"/><rect x="55.2" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k3)"/><path d="M17.2,15.8 L29.4,28.6 L56.6,2.4" fill="none" stroke="#12305b" stroke-width="7.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span>meldbar</span></a>
+    <nav class="site-nav" aria-label="Hauptnavigation"><a href="index.html#funktionen" data-i18n="nav_features">Fonctions</a><a href="index.html#ablauf" data-i18n="nav_how">Comment ça marche</a><a href="preise.html" data-i18n="nav_pricing">Tarifs</a><a href="ueber-uns.html" data-i18n="nav_about">À propos</a><a href="kontakt.html" data-i18n="nav_contact">Contact</a></nav>
+    <div class="header-actions">
+      <label class="sr-only" for="lang">Sprache / Langue / Lingua</label>
+      <select id="lang" class="pill lang"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option></select>
+      <a class="btn primary" href="../app.html" data-i18n="nav_app">Ouvrir l'app</a>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="mobile-nav"><span class="sr-only" data-i18n="nav_menu">Menu</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+  <nav class="mobile-nav" id="mobile-nav" aria-label="Navigation"><a href="index.html#funktionen" data-i18n="nav_features">Fonctions</a><a href="index.html#ablauf" data-i18n="nav_how">Comment ça marche</a><a href="preise.html" data-i18n="nav_pricing">Tarifs</a><a href="ueber-uns.html" data-i18n="nav_about">À propos</a><a href="kontakt.html" data-i18n="nav_contact">Contact</a><a class="btn primary" href="../app.html" data-i18n="nav_app">Ouvrir l'app</a></nav>
+</header>
+<main>
+
+<section class="hero-section">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="hero-kicker"><i class="pulse"></i><span data-i18n="hero_kicker">Dès le 16 janvier 2027, seul le schéma CRS 3.0</span></span>
+      <h1 class="hero-h1" data-i18n="hero_h1">Déclarations CRS. Vérifiées, chiffrées, prêtes à télécharger.</h1>
+      <p class="hero-lead" data-i18n="hero_lead">meldbar transforme votre tableau Excel en déclaration EAR prête pour le portail de l'AFC - et la vérifie avant, comme le portail. Dans le navigateur, sans installation. Vos données de comptes ne quittent pas votre ordinateur.</p>
+      <div class="hero-actions">
+        <a class="btn primary lg" href="../app.html" data-i18n="hero_cta">Vérifier un fichier</a>
+        <a class="btn lg ghost" href="#ablauf" data-i18n="hero_cta2">Comment ça marche</a>
+      </div>
+      <div class="trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust1">59 des 65 règles de l'AFC</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust2">Aucun fichier ne quitte le navigateur</span></span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="hero_trust3">Deutsch · Français · Italiano</span></span>
+      </div>
+    </div>
+    <div class="illu" aria-hidden="true">
+      <svg viewBox="8 62 516 304">
+        <path class="flow" d="M150 128 C 230 128, 230 208, 300 208"/>
+        <path class="flow" d="M150 300 C 230 300, 230 208, 300 208"/>
+        <path class="flow" d="M410 208 C 440 208, 440 208, 470 208"/>
+        <g class="float1">
+          <rect class="card-f" x="20" y="76" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="102" data-i18n="ill_excel">Excel</text>
+          <rect class="row y" x="36" y="116" width="98" height="8" rx="4"/><rect class="row" x="36" y="132" width="98" height="8" rx="4"/><rect class="row" x="36" y="148" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float2">
+          <rect class="card-f" x="20" y="248" width="130" height="104" rx="12"/>
+          <text class="lbl" x="36" y="274" data-i18n="ill_check">Vérification</text>
+          <rect class="row g" x="36" y="288" width="98" height="8" rx="4"/><rect class="row g" x="36" y="304" width="98" height="8" rx="4"/><rect class="row g" x="36" y="320" width="70" height="8" rx="4"/>
+        </g>
+        <g class="float3">
+          <rect class="card-f" x="300" y="156" width="110" height="104" rx="12"/>
+          <text class="lbl" x="316" y="182" data-i18n="ill_xml">CRS-XML</text>
+          <text class="sub" x="316" y="200">&lt;crs:CRS_OECD&gt;</text>
+          <rect class="row" x="316" y="212" width="78" height="8" rx="4"/><rect class="row" x="316" y="228" width="60" height="8" rx="4"/>
+        </g>
+        <g class="float1">
+          <rect class="lock" x="470" y="176" width="48" height="64" rx="12"/>
+          <rect x="484" y="204" width="20" height="16" rx="3" fill="#fff"/>
+          <path d="M487 204v-6a7 7 0 0 1 14 0v6" fill="none" stroke="#fff" stroke-width="3"/>
+        </g>
+        <circle cx="150" cy="128" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 128l5 5 9-10"/>
+        <circle cx="150" cy="300" r="14" fill="var(--ok)"/>
+        <path class="tick" d="M143 300l5 5 9-10"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section tight" id="frist">
+  <div class="wrap">
+    <div class="deadline reveal">
+      <span class="kicker" data-i18n="deadline_kicker">Ce qui s'applique depuis le 1er janvier</span>
+      <h2 class="h2" data-i18n="deadline_h2">Le CRS révisé est en vigueur - et le portail change de schéma.</h2>
+      <p data-i18n="deadline_p">Depuis le 1er janvier 2026, la norme commune de déclaration révisée s'applique en Suisse. L'AFC n'accepte que le schéma 2.0 jusqu'au 14 décembre 2026, et uniquement le schéma 3.0 dès le 16 janvier 2027. Les déclarations pour l'année 2026 - délai 30 juin 2027 - sont les premières à devoir être établies dans le nouveau format : autocertification, procédure de diligence, type de compte et type des personnes détenant le contrôle pour chaque compte.</p>
+      <div class="countdown">
+        <div class="cd"><div class="n" data-until="2027-01-16">-</div><div class="l" data-i18n="cd_switch">jours avant le changement de schéma (16.01.2027)</div></div>
+        <div class="cd"><div class="n" data-until="2027-06-30">-</div><div class="l" data-i18n="cd_deadline">jours avant le délai (30.06.2027)</div></div>
+      </div>
+      <p class="src" data-i18n="deadline_src">Source : Directive technique EAR de l'AFC, septembre 2026, chiffre 5.3.1 ; art. 15 al. 1 LEAR.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="funktionen">
+  <div class="wrap">
+    <span class="kicker reveal" data-i18n="features_kicker">Fonctions</span>
+    <h2 class="h2 reveal" data-i18n="features_h2">Tout ce qui sépare votre tableau du portail.</h2>
+    <div class="features">
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3 data-i18n="f1_t">Vérifier comme le portail</h3>
+        <p data-i18n="f1_p">Schéma OCDE 2.0 et 3.0, 59 des 65 règles de la Directive technique, jeu de caractères, États partenaires de l'année, IBAN/ISIN - chaque constatation avec code AFC, endroit et remède.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M18 15l3 3-3 3"/></svg></div>
+        <h3 data-i18n="f2_t">Excel entre, XML sort</h3>
+        <p data-i18n="f2_p">Un modèle à quatre feuilles, listes déroulantes et commentaires. Un clic crée le fichier CRS-XML avec tous ses identifiants.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+        <h3 data-i18n="f3_t">Chiffré pour l'AFC</h3>
+        <p data-i18n="f3_p">Le paquet est créé exactement selon le chiffre 3.3.1 de la Directive - AES-256, clé publique de l'AFC, nom de fichier correct pour test et production.</p>
+      </div>
+      <div class="feature reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></div>
+        <h3 data-i18n="f4_t">Corrections sans casse-tête</h3>
+        <p data-i18n="f4_p">Le registre retient ce qui a été envoyé. L'année suivante, adaptez le même tableau : comptes modifiés en corrections, comptes retirés en annulations, nouveaux comptes en nouvelle déclaration.</p>
+      </div>
+      <div class="feature reveal d3">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H8l-4 4z"/><path d="M9 10h6"/></svg></div>
+        <h3 data-i18n="f5_t">Comprendre la réponse du portail</h3>
+        <p data-i18n="f5_p">Collez la confirmation de validation - chaque code est expliqué, le registre sait si la déclaration a été acceptée.</p>
+      </div>
+      <div class="feature reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="f6_t">Vos données restent chez vous</h3>
+        <p data-i18n="f6_p">Pas de serveur, pas d'analytique, pas de cookies. La vérification s'exécute dans votre navigateur ; une politique de sécurité interdit toute autre connexion. Hors ligne après la première visite.</p>
+      </div>
+    </div>
+    <p class="reveal" style="margin-top:18px"><a href="fehlercodes.html" data-i18n="home_codes_link">Tous les codes d'erreur du portail EAR expliqués</a> →</p>
+    <div class="stats">
+      <div class="stat-b reveal"><div class="n" data-count="59">0</div><div class="l" data-i18n="stat1_l">règles de l'AFC vérifiées avant que le portail ne les voie</div></div>
+      <div class="stat-b reveal d1"><div class="n" data-count="0">0</div><div class="l" data-i18n="stat2_l">serveur qui voit vos données de comptes</div></div>
+      <div class="stat-b reveal d2"><div class="n" data-count="3">0</div><div class="l" data-i18n="stat3_l">langues : allemand, français, italien</div></div>
+      <div class="stat-b reveal d3"><div class="n" data-count="2">0</div><div class="l" data-i18n="stat4_l">schémas : 2.0 jusqu'au 14.12.2026, 3.0 dès le 16.01.2027</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ablauf">
+  <div class="how-wrap">
+    <div class="how-sticky">
+      <div class="wrap">
+        <span class="kicker reveal" data-i18n="how_kicker">Comment ça marche</span>
+        <h2 class="h2 reveal" data-i18n="how_h2">Cinq étapes. Aucun manuel nécessaire.</h2>
+        <p class="how-hint" data-i18n="how_hint">Continuez à faire défiler - les étapes avancent vers la droite.</p>
+        <div class="how-track">
+          <div class="step-card"><div class="n">1</div><h3 data-i18n="s1_t">Télécharger le modèle</h3><p data-i18n="s1_p">Le modèle Excel depuis l'app : une feuille pour l'institution, une pour les comptes, une pour les personnes détenant le contrôle, une pour les paiements.</p><p class="step-link"><a href="../vorlage/meldbar-vorlage-fr.xlsx" data-vorlage download data-i18n="s1_dl">Télécharger le modèle Excel</a></p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="58" y="14" width="30" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="26" width="104" height="5" rx="2.5" fill="var(--border)"/><rect x="12" y="36" width="104" height="5" rx="2.5" fill="var(--border)"/><path d="M150 28l30 0M172 18l10 10-10 10" fill="none" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="step-card"><div class="n">2</div><h3 data-i18n="s2_t">Remplir</h3><p data-i18n="s2_p">Dans votre Excel, comme d'habitude. Les colonnes jaunes sont obligatoires, les listes montrent les codes admis, chaque colonne s'explique par un commentaire.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><rect x="12" y="14" width="60" height="6" rx="3" fill="var(--warn)"/><rect x="80" y="14" width="40" height="6" rx="3" fill="var(--warn)"/><rect x="128" y="14" width="40" height="6" rx="3" fill="var(--border-strong)"/><rect x="12" y="28" width="60" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="80" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="128" y="28" width="40" height="5" rx="2.5" fill="var(--accent-2)"/><rect x="12" y="39" width="60" height="5" rx="2.5" fill="var(--border)"/><rect x="80" y="39" width="40" height="5" rx="2.5" fill="var(--border)"/></svg></div></div><div class="step-card"><div class="n">3</div><h3 data-i18n="s3_t">Vérifier</h3><p data-i18n="s3_p">Glissez le fichier dans l'app. Quelques secondes plus tard : vert, ou une liste de constatations - compte, champ, code AFC, quoi faire.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="192" height="44" rx="6" fill="var(--ok-soft)" stroke="var(--ok)"/><circle cx="26" cy="28" r="10" fill="var(--ok)"/><path d="M20 28l4 4 8-8" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="46" y="20" width="90" height="6" rx="3" fill="var(--ok)"/><rect x="46" y="32" width="60" height="5" rx="2.5" fill="color-mix(in srgb, var(--ok) 50%, transparent)"/></svg></div></div><div class="step-card"><div class="n">4</div><h3 data-i18n="s4_t">Créer et chiffrer</h3><p data-i18n="s4_p">Ouvrez le registre, choisissez une fois la clé de l'AFC, « Créer ». Le paquet est prêt pour le portail EAR.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="30" y="8" width="60" height="40" rx="5" fill="var(--surface-2)" stroke="var(--border-strong)"/><text x="60" y="33" text-anchor="middle" font-size="11" font-weight="600" fill="var(--muted)" font-family="Inter,system-ui">XML</text><path d="M96 28h22" stroke="var(--accent-2)" stroke-width="2.5" stroke-linecap="round"/><rect x="124" y="8" width="52" height="40" rx="5" fill="var(--accent)"/><rect x="141" y="24" width="18" height="14" rx="3" fill="#fff"/><path d="M144 24v-4a6 6 0 0 1 12 0v4" fill="none" stroke="#fff" stroke-width="2.5"/></svg></div></div><div class="step-card"><div class="n">5</div><h3 data-i18n="s5_t">Télécharger et saisir le résultat</h3><p data-i18n="s5_p">Sur le portail, comme avant. Collez la confirmation dans l'app - les corrections de l'année suivante sont préparées.</p><div class="art"><svg viewBox="0 0 200 56"><rect x="4" y="6" width="120" height="44" rx="6" fill="var(--surface-2)" stroke="var(--border-strong)"/><path d="M64 40V16M52 26l12-12 12 12" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="162" cy="28" r="16" fill="var(--ok-soft)" stroke="var(--ok)"/><path d="M154 28l6 6 10-11" fill="none" stroke="var(--ok)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+        </div>
+        <div class="how-progress"><i></i></div>
+        <p style="margin-top:22px"><a class="btn primary" href="../app.html" data-i18n="how_cta">Essayer avec un fichier</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="datenschutz">
+  <div class="wrap privacy-grid">
+    <div>
+      <span class="kicker reveal" data-i18n="privacy_kicker">Protection des données</span>
+      <h2 class="h2 reveal" data-i18n="privacy_h2">Vos données de comptes ne quittent pas votre ordinateur. Garanti techniquement, pas seulement promis.</h2>
+      <p class="lead reveal d1" data-i18n="privacy_p">meldbar est un site statique sans composant serveur. Toute la vérification s'exécute dans votre navigateur. Une Content-Security-Policy interdit au navigateur de contacter une autre adresse après le chargement - vérifiable dans les outils de développement de n'importe quel navigateur. Le registre est un fichier chez vous.</p>
+      <div class="checks reveal d2">
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv1">Pas d'analytique, pas de cookies, pas de comptes</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv2">Code source ouvert (Apache-2.0), chaque règle lisible</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pv3">Fonctionne hors ligne après la première visite</span></div>
+      </div>
+    </div>
+    <div class="diagram reveal d2" aria-hidden="true">
+      <svg viewBox="0 0 520 300">
+        <rect class="box" x="20" y="40" width="240" height="220" rx="16"/>
+        <text class="t" x="40" y="70" data-i18n="diag_browser">Votre navigateur</text>
+        <rect class="file" x="60" y="100" width="150" height="110" rx="10"/>
+        <text class="t" x="78" y="130" data-i18n="diag_file">Votre fichier</text>
+        <rect x="78" y="146" width="112" height="8" rx="4" fill="var(--accent)" opacity="0.5"/><rect x="78" y="162" width="90" height="8" rx="4" fill="var(--accent)" opacity="0.35"/><rect x="78" y="178" width="100" height="8" rx="4" fill="var(--accent)" opacity="0.35"/>
+        <g class="glow"><path class="shield" d="M228 96l16 6v12c0 10-7 16-16 18-9-2-16-8-16-18v-12z"/><path d="M222 114l4 4 8-8" fill="none" stroke="var(--ok)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <path class="link" d="M262 150 H 380"/>
+        <path class="cross" d="M312 136l20 28M332 136l-20 28"/>
+        <text class="s" x="322" y="180" text-anchor="middle" data-i18n="diag_no">aucune connexion</text>
+        <rect class="box" x="384" y="110" width="116" height="80" rx="14"/>
+        <text class="t" x="442" y="155" text-anchor="middle" data-i18n="diag_internet">Internet</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="preise">
+  <div class="wrap center">
+    <span class="kicker reveal" data-i18n="pricing_kicker">Tarifs</span>
+    <h2 class="h2 reveal" data-i18n="pricing_h2">Gratuit pour tous. Abonnement pour qui veut du soutien.</h2>
+    <p class="lead reveal d1" data-i18n="pricing_p">Par organisation, pas par utilisateur. Institutions déclarantes illimitées.</p>
+    <div class="plans" style="text-align:left">
+      <div class="plan-card reveal"><h3 data-i18n="pr_free">Base</h3><div class="price" data-i18n="pr_free_price">0 CHF</div><div class="per" data-i18n="pr_free_per">pour toujours</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_1">Application web avec toutes les vérifications (59 des 65 règles de l'AFC)</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_2">Modèle Excel, création XML, chiffrement</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_free_3">Registre pour corrections et annulations</span></li></ul>
+        <a class="btn" href="../app.html" data-i18n="pr_free_btn">Ouvrir l'app</a></div>
+      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Recommandé</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">dès 900 CHF</div><div class="per" data-i18n="pr_pro_per">par an et par organisation</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_1">Tout de Base</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_2">Support par e-mail, prioritaire en saison (mai-juin)</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_3">Mise à jour garantie en cas de nouvelles règles de l'AFC ou de l'OCDE</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_pro_4">Relecture de la première déclaration avant le téléchargement</span></li></ul>
+        <a class="btn primary" href="kontakt.html" data-i18n="pr_pro_btn">Demander une offre</a></div>
+      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Éditeurs de logiciels</h3><div class="price" data-i18n="pr_lib_price">2'500 CHF</div><div class="per" data-i18n="pr_lib_per">par an</div>
+        <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_1">Utiliser la bibliothèque Python dans votre produit</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_2">Support technique à l'intégration</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-i18n="pr_lib_3">Information anticipée sur les changements de schéma et de règles</span></li></ul>
+        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Prendre contact</a></div>
+    </div>
+    <p style="margin-top:20px"><a href="preise.html" data-i18n="pricing_all">Tous les tarifs et prestations</a></p>
+  </div>
+</section>
+
+<section class="section tight">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <h2 class="h2" data-i18n="cta_h2">Prêt pour le schéma 3.0 ?</h2>
+      <p data-i18n="cta_p">Ouvrez l'app et vérifiez votre premier fichier. Sans compte, sans installation.</p>
+      <a class="btn primary lg" href="../app.html" data-i18n="cta_btn">Ouvrir l'app</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand"><svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="k0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ccfa8"/><stop offset="1" stop-color="#4fbf9f"/></linearGradient><linearGradient id="k1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ad6ab"/><stop offset="1" stop-color="#66c8a2"/></linearGradient><linearGradient id="k2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4dc0a6"/><stop offset="1" stop-color="#2ea9b1"/></linearGradient><linearGradient id="k3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#265a90"/><stop offset="1" stop-color="#12305b"/></linearGradient></defs><g transform="translate(0.00,0.00) scale(1.0000)"><rect x="0.0" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k0)"/><rect x="18.4" y="39.6" width="8.8" height="21.4" rx="2.2" fill="url(#k1)"/><rect x="36.8" y="34.4" width="8.8" height="26.6" rx="2.2" fill="url(#k2)"/><rect x="55.2" y="22.4" width="8.8" height="38.6" rx="2.2" fill="url(#k3)"/><path d="M17.2,15.8 L29.4,28.6 L56.6,2.4" fill="none" stroke="#12305b" stroke-width="7.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg><span>meldbar</span></div>
+        <p data-i18n="foot_note">Vos données restent dans votre navigateur. Pas d'analytique, pas de cookies, pas de serveur.</p>
+        <p data-i18n="foot_address">meldbar · Salvatorstrasse 8 · 8050 Zurich · Suisse</p>
+      </div>
+      <div>
+        <h4 data-i18n="foot_product">Produit</h4>
+        <ul>
+          <li><a href="../app.html" data-i18n="foot_app">Application web</a></li>
+          <li><a href="preise.html" data-i18n="foot_pricing">Tarifs</a></li>
+          <li><a href="fehlercodes.html" data-i18n="foot_codes">Codes d'erreur du portail EAR</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/docs/de/ANLEITUNG.md" data-i18n="foot_docs">Guide</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi/blob/main/CHANGELOG.md" data-i18n="foot_changes">Modifications</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_company">Entreprise</h4>
+        <ul>
+          <li><a href="ueber-uns.html" data-i18n="foot_about">À propos</a></li>
+          <li><a href="kontakt.html" data-i18n="foot_contact">Contact</a></li>
+          <li><a href="https://github.com/aeoi-com/aeoi" data-i18n="foot_source">Code source (GitHub)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot_legal">Mentions</h4>
+        <ul>
+          <li><a href="impressum.html" data-i18n="foot_imprint">Impressum</a></li>
+          <li><a href="datenschutz.html" data-i18n="foot_privacy">Protection des données</a></li>
+          <li><a href="agb.html" data-i18n="foot_terms">CG</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span data-i18n="foot_rights">© 2026 meldbar. Tous droits réservés.</span>
+      <span>Salvatorstrasse 8, 8050 Zürich</span>
+    </div>
+  </div>
+</footer>
+<script src="../site-i18n.js"></script>
+<script src="../site-i18n-agb.js"></script>
+<script src="../site-i18n-pages.js"></script>
+<script src="../site.js"></script>
+</body>
+</html>

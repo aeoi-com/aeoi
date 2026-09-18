@@ -242,6 +242,27 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
     const r = await site.goto(`http://127.0.0.1:${port}/${p}`);
     check(`${p} answers 200 with the footer address`, r.status() === 200 && (await site.locator(".foot-bottom").textContent()).includes("Salvatorstrasse 8, 8050 Zürich"));
   }
+  // one URL per language: /fr/ and /it/ are pre-rendered, hreflang links point at each other,
+  // the language switch navigates between them
+  await site.goto(`http://127.0.0.1:${port}/fr/index.html`);
+  await site.waitForTimeout(400);
+  check("fr/: French hero, html lang=fr, four hreflang links, assets one level up", (await site.locator(".hero-h1").textContent()).trim().startsWith("Déclarations") && (await site.locator("html").getAttribute("lang")) === "fr" && (await site.locator('link[rel="alternate"][hreflang]').count()) === 4 && (await site.locator('link[rel="stylesheet"][href="../styles.css"]').count()) === 1);
+  await site.goto(`http://127.0.0.1:${port}/fr/preise.html`);
+  await site.waitForTimeout(300);
+  await Promise.all([site.waitForURL(/\/it\/preise\.html$/), site.locator("#lang").selectOption("it")]);
+  check("language switch on /fr/preise.html navigates to /it/preise.html in Italian", (await site.locator("h1").textContent()).trim() === "Prezzi");
+  await site.locator("#lang").selectOption("de");
+  await site.waitForURL(/\/preise\.html$/);
+  // the error-code page: every catalogue code, search filter, anchors
+  await site.goto(`http://127.0.0.1:${port}/fehlercodes.html`);
+  await site.waitForTimeout(300);
+  const codeCards = await site.locator("article.fc").count();
+  await site.locator("#fc-search").fill("IBAN");
+  await site.waitForTimeout(200);
+  const visible = await site.locator("article.fc:not(.hidden)").count();
+  check(`error-code page: ${codeCards} codes, search "IBAN" leaves ${visible}, #50005 anchor`, codeCards >= 65 && visible >= 1 && visible < codeCards && (await site.locator("article[id='50005']").count()) === 1);
+  await site.goto(`http://127.0.0.1:${port}/it/fehlercodes.html`);
+  check("it/fehlercodes: Italian titles, German official wording kept", (await site.locator("article.fc .title").first().textContent()).startsWith("File non") && (await site.locator("article.fc blockquote").first().textContent()).includes("Datei"));
   check("marketing pages: own origin only, no page error", siteHosts.size === 1 && siteHosts.has(`127.0.0.1:${port}`) && siteErrors.length === 0);
   if (siteErrors.length) console.log(siteErrors.slice(0, 3).join("\n"));
   await site.close();

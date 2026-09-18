@@ -10,11 +10,71 @@ from __future__ import annotations
 import datetime as dt
 import json
 import re
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
 SITE = "https://meldbar.ch/"
+LANGS = ("de", "fr", "it")
+LOCALES = {"de": "de_CH", "fr": "fr_CH", "it": "it_CH"}
+I18N_FILES = ("site-i18n.js", "site-i18n-agb.js", "site-i18n-pages.js")
+ASSET_RE = re.compile(
+    r'(href|src)="(styles\.css|site\.css|site\.js|site-i18n[^"]*\.js|logo-mark\.svg|manifest\.webmanifest|app\.html[^"]*|vorlage/[^"]+)"'
+)
+I18N_EL_RE = re.compile(r'<(\w+)([^>]*?\sdata-i18n="([^"]+)"[^>]*)>(.*?)</\1>', re.DOTALL)
+PLACEHOLDER_RE = re.compile(r'(<[^>]*\sdata-i18n-ph="([^"]+)"[^>]*\splaceholder=")([^"]*)(")')
+
+
+def load_i18n() -> dict[str, dict[str, str]]:
+    """The page dictionaries, evaluated by node from the JS files the browser uses."""
+    script = (
+        'const vm=require("vm"),fs=require("fs");const ctx=vm.createContext({});'
+        + "".join(f'vm.runInContext(fs.readFileSync("{f}","utf8"),ctx);' for f in I18N_FILES)
+        + 'process.stdout.write(vm.runInContext("JSON.stringify(I18N_SITE)",ctx));'
+    )
+    out = subprocess.run(
+        ["node", "-e", script], cwd=WEB, capture_output=True, encoding="utf-8", check=True
+    )
+    return json.loads(out.stdout)
+
+
+I18N = load_i18n()
+
+
+def t(lang: str, key: str, **vars) -> str:
+    s = I18N[lang].get(key) or I18N["de"].get(key) or key
+    for k, v in vars.items():
+        s = s.replace("{" + k + "}", str(v))
+    return s
+
+
+def localise(html: str, lang: str) -> str:
+    """Bake the texts of one language into the German markup (same rule as site.js: elements with
+    data-i18n get the text, keys ending in _html the markup, data-i18n-ph the placeholder)."""
+    if lang == "de":
+        return html
+
+    def repl(m: re.Match) -> str:
+        tag, attrs, key, _inner = m.groups()
+        text = I18N[lang].get(key)
+        if text is None:
+            return m.group(0)
+        return f"<{tag}{attrs}>{text}</{tag}>"
+
+    html, n = I18N_EL_RE.subn(repl, html)
+    del n  # nested same-name tags would break the regex: there are none in the templates
+    html = PLACEHOLDER_RE.sub(lambda m: m.group(1) + t(lang, m.group(2)) + m.group(4), html)
+    html = html.replace(
+        'href="vorlage/meldbar-vorlage-de.xlsx"', f'href="vorlage/meldbar-vorlage-{lang}.xlsx"'
+    )
+    return html
+
+
+def subdir_paths(html: str) -> str:
+    """Pages under /fr/ and /it/ reach the shared assets one level up (the CSP forbids <base>)."""
+    return ASSET_RE.sub(lambda m: f'{m.group(1)}="../{m.group(2)}"', html)
+
 
 CSP = (
     "default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; "
@@ -72,6 +132,7 @@ FOOTER = f"""<footer class="site-footer">
         <ul>
           <li><a href="app.html" data-i18n="foot_app">Web-App</a></li>
           <li><a href="preise.html" data-i18n="foot_pricing">Preise</a></li>
+          <li><a href="fehlercodes.html" data-i18n="foot_codes">Fehlercodes des AIA-Portals</a></li>
           <li><a href="https://github.com/aeoi-com/aeoi/blob/main/docs/de/ANLEITUNG.md" data-i18n="foot_docs">Anleitung</a></li>
           <li><a href="https://github.com/aeoi-com/aeoi/blob/main/CHANGELOG.md" data-i18n="foot_changes">Änderungen</a></li>
         </ul>
@@ -178,12 +239,12 @@ FAQ = [
 ]
 
 
-def structured_data(name: str, url: str, title: str, desc: str) -> str:
+def structured_data(name: str, url: str, title: str, desc: str, lang: str = "de") -> str:
     """JSON-LD per page: the organisation everywhere, the software on the home page, the FAQ on
     the pricing page. Data blocks are not executed, so the CSP does not apply to them."""
     graph: list[dict] = [
         ORGANIZATION,
-        {"@type": "WebSite", "url": SITE, "name": "meldbar", "inLanguage": "de"},
+        {"@type": "WebSite", "url": SITE, "name": "meldbar", "inLanguage": lang},
     ]
     page_type = {
         "home": "WebPage",
@@ -197,7 +258,7 @@ def structured_data(name: str, url: str, title: str, desc: str) -> str:
             "url": url,
             "name": title,
             "description": desc,
-            "inLanguage": "de",
+            "inLanguage": lang,
             "isPartOf": {"@id": SITE},
         }
     )
@@ -214,7 +275,7 @@ def structured_data(name: str, url: str, title: str, desc: str) -> str:
                         "name": q,
                         "acceptedAnswer": {"@type": "Answer", "text": a},
                     }
-                    for q, a in FAQ
+                    for q, a in [(t(lang, f"pr_q{i}"), t(lang, f"pr_a{i}")) for i in range(1, 5)]
                 ],
             }
         )
@@ -222,12 +283,34 @@ def structured_data(name: str, url: str, title: str, desc: str) -> str:
     return f'<script type="application/ld+json">{data}</script>'
 
 
-def page(name: str, title: str, body: str, *, desc: str, file: str = "") -> str:
-    url = SITE if file in ("", "index.html") else SITE + file
+def page_url(file: str, lang: str) -> str:
+    prefix = "" if lang == "de" else f"{lang}/"
+    return SITE + prefix + ("" if file in ("", "index.html") else file)
+
+
+def page(
+    name: str,
+    title: str,
+    body: str,
+    *,
+    desc: str,
+    file: str = "",
+    lang: str = "de",
+    alternates: bool = True,
+) -> str:
+    url = page_url(file, lang)
+    hreflang = (
+        "".join(
+            f'<link rel="alternate" hreflang="{lg}" href="{page_url(file, lg)}">\n' for lg in LANGS
+        )
+        + f'<link rel="alternate" hreflang="x-default" href="{page_url(file, "de")}">\n'
+        if alternates
+        else ""
+    )
     seo = f'''<link rel="canonical" href="{url}">
-<meta property="og:type" content="website">
+{hreflang}<meta property="og:type" content="website">
 <meta property="og:site_name" content="meldbar">
-<meta property="og:locale" content="de_CH">
+<meta property="og:locale" content="{LOCALES[lang]}">
 <meta property="og:url" content="{url}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
@@ -239,9 +322,9 @@ def page(name: str, title: str, body: str, *, desc: str, file: str = "") -> str:
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{SITE}og.png">
-{structured_data(name, url, title, desc)}'''
-    return f'''<!doctype html>
-<html lang="de">
+{structured_data(name, url, title, desc, lang)}'''
+    html = f'''<!doctype html>
+<html lang="{lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -257,7 +340,7 @@ def page(name: str, title: str, body: str, *, desc: str, file: str = "") -> str:
 <meta name="theme-color" content="#1c4f9e">
 <link rel="icon" href="logo-mark.svg" type="image/svg+xml">
 </head>
-<body data-page="{name}">
+<body data-page="{name}" data-lang="{lang}">
 <div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
 {header(name + ".html" if name != "home" else "index.html")}
 <main>
@@ -266,10 +349,13 @@ def page(name: str, title: str, body: str, *, desc: str, file: str = "") -> str:
 {FOOTER}
 <script src="site-i18n.js"></script>
 <script src="site-i18n-agb.js"></script>
+<script src="site-i18n-pages.js"></script>
 <script src="site.js"></script>
 </body>
 </html>
 '''
+    html = localise(html, lang)
+    return subdir_paths(html) if lang != "de" else html
 
 
 def feature(i: int, icon: str, title: str, text: str) -> str:
@@ -412,6 +498,7 @@ HOME = f"""
 {feature(5, ICONS[5], "Ergebnis des Portals verstehen", "Validierungsbestätigung einfügen - jeder Code wird erklärt, das Register weiss, ob die Meldung angenommen wurde.")}
 {feature(6, ICONS[6], "Ihre Daten bleiben bei Ihnen", "Kein Server, keine Analytics, keine Cookies. Die Prüfung läuft in Ihrem Browser; eine Sicherheitsrichtlinie verbietet jede andere Verbindung. Nach dem ersten Besuch auch offline.")}
     </div>
+    <p class="reveal" style="margin-top:18px"><a href="fehlercodes.html" data-i18n="home_codes_link">Alle Fehlercodes des AIA-Portals erklärt</a> →</p>
     <div class="stats">
       <div class="stat-b reveal"><div class="n" data-count="59">0</div><div class="l" data-i18n="stat1_l">ESTV-Regeln geprüft, bevor das Portal sie sieht</div></div>
       <div class="stat-b reveal d1"><div class="n" data-count="0">0</div><div class="l" data-i18n="stat2_l">Server, die Ihre Kontodaten sehen</div></div>
@@ -658,6 +745,12 @@ PAGES = {
         PRIVACY,
         "Datenschutzerklärung von meldbar.ch: keine Server-Verarbeitung, keine Cookies, keine Analytics.",
     ),
+    "fehlercodes.html": (
+        "codes",
+        "Fehlercodes des AIA-Portals der ESTV erklärt (50005, 80001, 98200 …) - meldbar",
+        None,  # generated per language by codes_body()
+        "Alle 65 Fehlercodes der Technischen Wegleitung AIA der ESTV (CRS) mit Erklärung und Abhilfe.",
+    ),
     "agb.html": (
         "terms",
         "meldbar - Allgemeine Geschäftsbedingungen",
@@ -665,6 +758,68 @@ PAGES = {
         "Allgemeine Geschäftsbedingungen von meldbar: kostenlose Leistungen, Abonnement Pro, Bibliothekslizenz, Haftung, Laufzeit.",
     ),
 }
+
+
+RULES = json.loads((ROOT / "src/aeoi/estv/rules_catalogue.json").read_text(encoding="utf-8"))
+RULES = RULES["rules"] if isinstance(RULES, dict) else RULES
+TITLES = json.loads((ROOT / "src/aeoi/estv/rule_titles.json").read_text(encoding="utf-8"))
+GROUPS = ["50", "60", "70", "80", "98"]
+
+
+def codes_body(lang: str) -> str:
+    """The error-code page: every catalogue code with title, remedy, status and the ESTV wording."""
+    sections = []
+    for g in GROUPS:
+        rules = [r for r in RULES if r["code"].startswith(g)]
+        cards = []
+        for r in rules:
+            entry = TITLES.get(r["code"], {})
+            title = (
+                entry.get("title", {}).get(lang) or entry.get("title", {}).get("de") or r["code"]
+            )
+            fix = entry.get("fix", {}).get(lang) or entry.get("fix", {}).get("de") or ""
+            status_key = (
+                "fc_oecd"
+                if r.get("origin") == "oecd"
+                else ("fc_impl" if r["status"] == "implemented" else "fc_portal")
+            )
+            official = "".join(
+                f"<p>{x}</p>" for x in dict.fromkeys(r.get("texts_de") or [r["text_de"]])
+            )
+            cards.append(
+                f'<article class="finding fc {"error" if r["status"] == "implemented" else "input"}" id="{r["code"]}" data-code="{r["code"]}">'
+                f'<div class="head"><a class="code" href="#{r["code"]}">{r["code"]}</a><span class="title">{title}</span></div>'
+                f'<div class="loc"><span class="{"ok-tag" if r["status"] == "implemented" else ""}" data-i18n="{status_key}">{t("de", status_key)}</span>'
+                f"<span>{t(lang, 'fc_ref', section=r['section'], page=r['page'])}</span></div>"
+                f'<div class="fix"><span><strong data-i18n="fc_fix">{t("de", "fc_fix")}</strong>: {fix}</span></div>'
+                f'<details><summary data-i18n="fc_official">{t("de", "fc_official")}</summary><blockquote>{official}</blockquote></details>'
+                "</article>"
+            )
+        sections.append(
+            f'<h2 class="fc-group" id="g{g}" data-i18n="fc_g{g}">{t("de", "fc_g" + g)}</h2><div class="findings">{"".join(cards)}</div>'
+        )
+    return f'''
+<section class="section">
+  <div class="wrap">
+    <span class="kicker" data-i18n="fc_kicker">Nachschlagewerk</span>
+    <h1 class="h2" data-i18n="fc_h1">Fehlercodes des AIA-Portals der ESTV</h1>
+    <p class="lead" data-i18n="fc_lead">{t("de", "fc_lead")}</p>
+    <div class="fc-tools">
+      <input id="fc-search" class="pill text" type="search" data-i18n-ph="fc_search" placeholder="{t("de", "fc_search")}" autocomplete="off">
+      <span class="small muted" id="fc-count">{t(lang, "fc_count", n=len(RULES))}</span>
+      <nav class="fc-jump">{"".join(f'<a href="#g{g}">{g}000</a>' for g in GROUPS)}</nav>
+    </div>
+    <p class="small muted" id="fc-none" data-i18n="fc_none" hidden>{t("de", "fc_none")}</p>
+    {"".join(sections)}
+    <p class="small muted" style="margin-top:20px" data-i18n="fc_note">{t("de", "fc_note")}</p>
+    <div class="cta-band reveal" style="margin-top:32px">
+      <h2 class="h2" data-i18n="fc_cta_t">{t("de", "fc_cta_t")}</h2>
+      <p data-i18n="fc_cta_p">{t("de", "fc_cta_p")}</p>
+      <a class="btn primary lg" href="app.html" data-i18n="fc_cta">{t("de", "fc_cta")}</a>
+    </div>
+  </div>
+</section>
+'''
 
 
 NOT_FOUND = """
@@ -680,7 +835,7 @@ NOT_FOUND = """
 
 def sitemap() -> str:
     today = dt.datetime.now(tz=dt.UTC).date().isoformat()
-    urls = [SITE, *(SITE + f for f in PAGES if f != "index.html"), SITE + "app.html"]
+    urls = [page_url(f, lg) for lg in LANGS for f in PAGES] + [SITE + "app.html"]
     items = "".join(
         f"<url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>{'weekly' if u == SITE else 'monthly'}</changefreq></url>"
         for u in urls
@@ -697,9 +852,22 @@ Sitemap: {SITE}sitemap.xml
 
 
 def main() -> int:
-    for file, (name, title, body, desc) in PAGES.items():
-        (WEB / file).write_text(page(name, title, body, desc=desc, file=file), encoding="utf-8")
-        print(f"wrote web/{file}")
+    for lang in LANGS:
+        out_dir = WEB if lang == "de" else WEB / lang
+        out_dir.mkdir(exist_ok=True)
+        for file, (name, title_de, body, desc_de) in PAGES.items():
+            title = t(lang, f"{name}_title") if I18N[lang].get(f"{name}_title") else title_de
+            desc = t(lang, f"{name}_desc") if I18N[lang].get(f"{name}_desc") else desc_de
+            html = page(
+                name,
+                title,
+                body if body is not None else codes_body(lang),
+                desc=desc,
+                file=file,
+                lang=lang,
+            )
+            (out_dir / file).write_text(html, encoding="utf-8")
+        print(f"wrote {len(PAGES)} pages for {lang}")
     (WEB / "404.html").write_text(
         page(
             "notfound",
@@ -707,6 +875,7 @@ def main() -> int:
             NOT_FOUND,
             desc="Seite nicht gefunden.",
             file="404.html",
+            alternates=False,
         ).replace(
             '<link rel="canonical" href="https://meldbar.ch/404.html">',
             '<meta name="robots" content="noindex">',
