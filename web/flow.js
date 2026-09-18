@@ -57,10 +57,10 @@ def plan_workbook(path, version, test, cancel, lang):
     intent = workflow.plan(report.message, version, reg, test=test, cancel=keys)
     return json.dumps({"ok": True, **intent.as_dict(lang)})
 
-def build_workbook(path, version, test, cancel, pem, lang):
+def build_workbook(path, version, test, cancel, pem, lang, header):
     keys = [k.strip() for k in cancel.split(",") if k.strip()]
     try:
-        _report, outs = workflow.build_from_workbook(path, version, reg, test=test, cancel=keys, public_key=pem or None)
+        _report, outs = workflow.build_from_workbook(path, version, reg, test=test, cancel=keys, public_key=pem or None, header=header)
     except (workflow.WorkflowError, RegistryError, ValueError) as exc:
         return _error(exc, lang)
     views = []
@@ -255,6 +255,7 @@ document.addEventListener("aeoi:rendered", (ev) => {
   if (show) refreshPlan();
 });
 $("build-mode").addEventListener("change", refreshPlan);
+$("version").addEventListener("change", () => { const v3 = $("version").value === "3.0"; $("header-row").classList.toggle("hidden", !v3); $("header-note").classList.toggle("hidden", !v3); });
 $("cancel-keys").addEventListener("input", refreshPlan);
 function refreshPlan() {
   const plan = $("plan"); plan.replaceChildren();
@@ -284,11 +285,13 @@ function refreshKeyStatus() {
 $("key-file").addEventListener("change", async (ev) => {
   const file = ev.target.files[0];
   if (!file) return;
-  const pem = await file.text();
+  const bytes = new Uint8Array(await file.arrayBuffer()); // PEM or DER, key or certificate
   ev.target.value = "";
   try {
+    py.globals.set("_key_bytes", bytes);
+    const pem = py.runPython("from aeoi.estv import packaging; packaging.public_key_pem(packaging.load_public_key(bytes(_key_bytes.to_py())))");
     if (reg.open) { pyCall("remember_key", pem); await persistRegistry(); }
-    else { py.runPython("from aeoi.estv import packaging"); py.globals.set("_pem", pem); py.runPython("packaging.load_public_key(_pem)"); pendingKeyPem = pem; }
+    else pendingKeyPem = pem;
     refreshKeyStatus();
   } catch (e) {
     msg($("build-msg"), t("key_bad") + e, false);
@@ -298,12 +301,13 @@ $("build").addEventListener("click", async () => {
   const test = $("build-mode").value === "test";
   const outNode = $("build-out"); outNode.replaceChildren();
   try {
-    const res = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || "", LANG));
+    const header = $("version").value === "3.0" ? $("build-header").value : "oecd";
+    const res = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || "", LANG, header));
     if (res.error) { msg($("build-msg"), t("error_prefix") + res.error, false); console.info("aeoi:built error"); return; }
     const views = res.built;
     for (const v of views) {
       const card = el("div", { class: "built" });
-      card.append(el("div", { class: "head" }, el("span", { text: (v.kind === "correction" ? t("kind_correction") : t("kind_new")) + (test ? " · " + t("kind_test") : "") }), el("span", { class: "muted", text: t("built_records", { n: v.records }) })));
+      card.append(el("div", { class: "head" }, el("span", { text: (v.kind === "correction" ? t("kind_correction") : t("kind_new")) + (test ? " · " + t("kind_test") : "") }), el("span", { class: "muted", text: t("built_records", { n: v.records }) + (v.header === "wegleitung" ? " · " + t("built_header_wegleitung") : "") })));
       card.append(el("div", { class: "ref", text: v.message_ref_id }));
       const actions = el("div", { class: "actions" });
       if (v.encrypted) actions.append(el("button", { class: "btn primary", type: "button", text: t("dl_package") + " · " + v.package_name, onclick: () => download(py.FS.readFile(v.package_path), v.package_name, "application/zip") }));

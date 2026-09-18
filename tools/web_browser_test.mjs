@@ -153,8 +153,10 @@ try {
   check("plan: 2 new accounts", (await page.locator("#plan .tag.new").textContent()).startsWith("2"));
   regFile = await withDownload(async () => { const s = consoleEvent("aeoi:registry-saved"); await page.locator("#key-file").setInputFiles(join(fixtures, "ESTV-PublicKey.pem")); await s; }, "institut-1.sqlite");
   check("ESTV key remembered in the registry", (await page.locator("#key-status").textContent()).length > 0 && (await page.locator("#key-status").getAttribute("class")).includes("msg-ok"));
+  await page.locator("#build-header").selectOption("wegleitung"); // first message with the Wegleitung 5.3.1 header
   const builtMsg = consoleEvent("aeoi:built");
   regFile = await withDownload(async () => page.locator("#build").click(), "institut-2.sqlite");
+  await page.locator("#build-header").selectOption("oecd"); // the correction with the OECD namespace
   const builtText = (await builtMsg).text();
   check("test message built and registered: " + builtText.slice(0, 40), builtText.includes("new:CH2026CH"));
   const pkgPath = await withDownload(async () => page.locator(".built .btn.primary").first().click());
@@ -195,7 +197,8 @@ for path, expect in ((r"${pkgPath}", ["OECD11", "OECD11", "OECD11"]), (r"${corrP
     open(r"${fixtures}/Test-unpacked.xml", "wb").write(xml)
     rep = validate.validate_file(r"${fixtures}/Test-unpacked.xml", test=True)
     indics = re.findall(r"<stf:DocTypeIndic>(OECD1\\d)</stf:DocTypeIndic>", xml.decode())
-    out.append(f"{name}: inspect={'ok' if not insp.problems else insp.problems} validate={'OK' if rep.ok else rep.render()} indics={indics} expected={expect} {'ok' if indics == expect else 'MISMATCH'}")
+    header = "wegleitung" if b'xmlns:crs="urn:oecd:ties:crs:v2"' in xml and b'version="3.0"' in xml else "oecd"
+    out.append(f"{name}: inspect={'ok' if not insp.problems else insp.problems} validate={'OK' if rep.ok else rep.render()} indics={indics} expected={expect} header={header} {'ok' if indics == expect else 'MISMATCH'}")
 with Registry(r"${regFile}") as reg:
     statuses = [m['status'] for m in reg.messages()]
     out.append(f"registry: {statuses} key={'yes' if reg.get_setting('estv_public_key_pem') else 'no'}")
@@ -203,7 +206,9 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
 `]);
   const verifyText = readFileSync(verify, "utf-8");
   console.log(verifyText.split("\n").map((l) => "     " + l).join("\n"));
-  check("packages decrypt to valid test files with the right DocTypeIndics", verifyText.split(/\r?\n/).slice(0, 2).every((l) => l.includes("inspect=ok") && l.includes("validate=OK") && l.trim().endsWith(" ok")));
+  const lines = verifyText.split(/\r?\n/);
+  check("packages decrypt to valid test files with the right DocTypeIndics", lines.slice(0, 2).every((l) => l.includes("inspect=ok") && l.includes("validate=OK") && l.trim().endsWith(" ok")));
+  check("first message carries the Wegleitung 5.3.1 header, the correction the OECD namespace", lines[0].includes("header=wegleitung") && lines[1].includes("header=oecd"));
   check("saved registry: accepted + built, key remembered", verifyText.includes("['accepted', 'built'] key=yes"));
 
   const after = requests.slice(bootRequests);
@@ -252,7 +257,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   await Promise.all([site.waitForURL(/\/it\/preise\.html$/), site.locator("#lang").selectOption("it")]);
   check("language switch on /fr/preise.html navigates to /it/preise.html in Italian", (await site.locator("h1").textContent()).trim() === "Prezzi");
   await site.locator("#lang").selectOption("de");
-  await site.waitForURL(/\/preise\.html$/);
+  await site.waitForURL((u) => u.pathname === "/preise.html");
   // the error-code page: every catalogue code, search filter, anchors
   await site.goto(`http://127.0.0.1:${port}/fehlercodes.html`);
   await site.waitForTimeout(300);

@@ -52,25 +52,45 @@ class PackagingError(ValueError):
 
 
 def load_public_key(pem: bytes | str | Path) -> rsa.RSAPublicKey:
-    """Load the ESTV public key from a PEM certificate or a PEM public key.
+    """Load the ESTV public key from a certificate or a public key, PEM or DER (.cer/.crt/.der).
 
     The ESTV distributes ``ESTV-PublicKey.pem`` inside the Encryptor archive and the AIA
-    certificate on the XML upload page of the AIA application (Ziffer 3.3). Both are accepted.
-    A ``str`` without a PEM header is treated as a file path.
+    certificate on the XML upload page of the AIA application (Ziffer 3.3); the portal may hand
+    out either encoding. A ``str`` without a PEM header is treated as a file path.
     """
     if isinstance(pem, Path):
         data = pem.read_bytes()
     elif isinstance(pem, str) and "-----BEGIN" not in pem:
         data = Path(pem).read_bytes()
     else:
-        data = pem.encode() if isinstance(pem, str) else pem
-    try:
-        key = x509.load_pem_x509_certificate(data).public_key()
-    except ValueError:
-        key = serialization.load_pem_public_key(data)
+        data = pem.encode() if isinstance(pem, str) else bytes(pem)
+    loaders = (
+        lambda d: x509.load_pem_x509_certificate(d).public_key(),
+        serialization.load_pem_public_key,
+        lambda d: x509.load_der_x509_certificate(d).public_key(),
+        serialization.load_der_public_key,
+    )
+    key = None
+    for load in loaders:
+        try:
+            key = load(data)
+            break
+        except (ValueError, TypeError):
+            continue
+    if key is None:
+        raise PackagingError(
+            "not a public key or certificate (expected PEM or DER: .pem, .cer, .crt, .der)"
+        )
     if not isinstance(key, rsa.RSAPublicKey):
         raise PackagingError("The ESTV key must be an RSA public key")
     return key
+
+
+def public_key_pem(key: rsa.RSAPublicKey) -> str:
+    """The key as PEM text (SubjectPublicKeyInfo) - the form the registry stores."""
+    return key.public_bytes(
+        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+    ).decode("ascii")
 
 
 @dataclass(frozen=True)

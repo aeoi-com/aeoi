@@ -45,6 +45,9 @@ First working version, CRS for the Swiss ESTV portal.
   feature cards, scroll-driven horizontal steps, privacy diagram, pricing teaser), pages for
   pricing, about, contact (mailto, no server), imprint and privacy policy, in de/fr/it; the app
   moved to `app.html`, built-in samples only with `#demo`; palette aligned to the logo.
+- ESTV public key accepted as PEM or DER, key or certificate; 3.0 header selectable (OECD
+  namespace or the declaration shown in the Wegleitung 5.3.1) in build, CLI and page; the
+  validator treats the Wegleitung header as 3.0 content with a note.
 - Message catalogue (`aeoi.messages`, `messages.json`): every check, input, registry and workflow
   message is a `Msg` - an English string that renders in German on request; reports take
   `lang`, the CLI `--lang de`, the page shows German messages.

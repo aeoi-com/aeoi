@@ -1,8 +1,11 @@
 """Domain model -> OECD CRS XML (schema 2.0 or 3.0) for submission FI -> ESTV.
 
 The two generated schema packages have the same class names; the builder picks one by version.
-For 3.0 the document is written in the OECD namespace ``urn:oecd:ties:crs:v3`` only (see
-docs/OPEN-QUESTIONS.md, item 1). The XML is never signed (Wegleitung 5.2, error 50007).
+For 3.0 the document is written in the OECD namespace ``urn:oecd:ties:crs:v3`` by default;
+``header="wegleitung"`` writes the header the ESTV Technische Wegleitung 5.3.1 shows instead
+(``xmlns:crs="urn:oecd:ties:crs:v2"`` with ``version="3.0"``) - same content, only the namespace
+declaration differs, so a pilot can try the other variant if the portal rejects the first (see
+docs/OPEN-QUESTIONS.md, item 1). :func:`canonical_xml` maps the variant back for schema checks. The XML is never signed (Wegleitung 5.2, error 50007).
 
 Message header (Wegleitung 5.3.2): SendingCompanyIN = ESTV-ID, TransmittingCountry = CH,
 ReceivingCountry = CH, MessageType = CRS, MessageRefId = CH<year>CH<uuid>, ReportingPeriod =
@@ -26,6 +29,22 @@ from xsdata.models.datatype import XmlDate, XmlDateTime
 from aeoi.crs import checksums
 from aeoi.crs.model import TDT_PREFIX, Account, Address, Message, Organisation, Person, Version
 from aeoi.estv import ids
+
+HEADERS = ("oecd", "wegleitung")
+V3_DECL = 'xmlns:crs="urn:oecd:ties:crs:v3"'
+WEGLEITUNG_DECL = 'xmlns:crs="urn:oecd:ties:crs:v2"'
+
+
+def canonical_xml(xml: str) -> str:
+    """The OECD-conformant form of a 3.0 file written with the Wegleitung header."""
+    if 'version="3.0"' in xml[:600] and WEGLEITUNG_DECL in xml[:600]:
+        return xml.replace(WEGLEITUNG_DECL, V3_DECL, 1)
+    return xml
+
+
+def is_wegleitung_header(xml: str) -> bool:
+    return 'version="3.0"' in xml[:600] and WEGLEITUNG_DECL in xml[:600]
+
 
 NS = {
     "2.0": {
@@ -99,6 +118,7 @@ class BuildResult:
     reporting_fi_doc_ref_id: str
     records: tuple[RecordPlan, ...] = ()
     fi_plan: FiPlan | None = None
+    header: str = "oecd"  # "oecd" (namespace v3) or "wegleitung" (v2 declaration, 3.0 content)
 
 
 def _address(m: SimpleNamespace, a: Address):
@@ -288,6 +308,7 @@ def build(
     now: dt.datetime | None = None,
     records: list[RecordPlan] | None = None,
     fi_plan: FiPlan | None = None,
+    header: str = "oecd",
 ) -> BuildResult:
     """Render the message as CRS XML. Run :func:`aeoi.crs.model.check_message` first.
 
@@ -357,6 +378,10 @@ def build(
     xml = XmlSerializer(config=SerializerConfig(indent="  ", encoding="UTF-8")).render(
         doc, ns_map=NS[version]
     )
+    if header not in HEADERS:
+        raise ValueError(f"header must be one of {HEADERS}")
+    if header == "wegleitung" and version == "3.0":
+        xml = xml.replace(V3_DECL, WEGLEITUNG_DECL, 1)
     return BuildResult(
-        xml, version, message_ref_id, doc_ref_ids, fi_doc_ref_id, tuple(used), fi_plan
+        xml, version, message_ref_id, doc_ref_ids, fi_doc_ref_id, tuple(used), fi_plan, header
     )

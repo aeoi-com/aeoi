@@ -156,10 +156,14 @@
           <select id="build-mode" class="pill"><option value="test" data-i18n="build_test">Testmeldung</option><option value="prod" data-i18n="build_prod">produktive Meldung</option></select>
         </label>
         <label><span data-i18n="cancel_label">Konten stornieren</span> <input id="cancel-keys" class="pill text" type="text" placeholder="A2, A7"></label>
+        <label id="header-row"><span data-i18n="header_label">3.0-Header</span>
+          <select id="build-header" class="pill"><option value="oecd" data-i18n="header_oecd">OECD-Schema (Standard)</option><option value="wegleitung" data-i18n="header_wegleitung">wie Wegleitung 5.3.1</option></select>
+        </label>
       </div>
+      <p class="small muted" id="header-note" data-i18n="header_note">Die Wegleitung 5.3.1 zeigt den 3.0-Header mit dem Namensraum der Version 2.0; das OECD-Schema 3.0 verlangt v3. Welchen das Portal annimmt, ist offen: Standard ist das OECD-Schema; wird die Datei mit 98000/50007 abgewiesen, dieselbe Meldung mit der anderen Variante erneut erstellen.</p>
       <div class="keyrow">
         <span><strong data-i18n="key_label">Öffentlicher Schlüssel der ESTV</strong>: <span id="key-status" data-i18n="key_none"></span></span>
-        <label class="btn"><span data-i18n="key_choose">Schlüsseldatei wählen</span><input type="file" id="key-file" class="hidden" accept=".pem,.cer,.crt,.pub,.txt"></label>
+        <label class="btn"><span data-i18n="key_choose">Schlüsseldatei wählen</span><input type="file" id="key-file" class="hidden" accept=".pem,.cer,.crt,.der,.pub,.txt"></label>
       </div>
       <div class="actions">
         <button class="btn primary" id="build" type="button"><span data-i18n="build_btn">Erstellen</span></button>

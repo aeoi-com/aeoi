@@ -70,9 +70,8 @@ def registry_view(reg: Registry | None) -> dict[str, Any]:
 
 def remember_public_key(reg: Registry, pem: bytes | str) -> str:
     """Validate and store the ESTV public key in the registry; returns its SHA-256."""
-    key = packaging.load_public_key(pem)
-    text = pem.decode("utf-8") if isinstance(pem, bytes) else pem
-    reg.set_setting(PUBLIC_KEY_SETTING, text)
+    key = packaging.load_public_key(pem)  # PEM or DER, key or certificate
+    reg.set_setting(PUBLIC_KEY_SETTING, packaging.public_key_pem(key))  # stored as PEM text
     from cryptography.hazmat.primitives import serialization
 
     der = key.public_bytes(
@@ -82,9 +81,9 @@ def remember_public_key(reg: Registry, pem: bytes | str) -> str:
 
 
 def public_key_pem(reg: Registry | None, pem: bytes | str | None) -> str | None:
-    """The key to use: the one given now, else the remembered one."""
+    """The key to use: the one given now (any format), else the remembered one."""
     if pem:
-        return pem.decode("utf-8") if isinstance(pem, bytes) else pem
+        return packaging.public_key_pem(packaging.load_public_key(pem))
     if reg is not None:
         return reg.get_setting(PUBLIC_KEY_SETTING)
     return None
@@ -202,6 +201,7 @@ class Built:
             "xml_name": self.xml_name,
             "xml_bytes": len(self.result.xml.encode("utf-8")),
             "encrypted": self.package is not None,
+            "header": self.result.header,
         }
 
 
@@ -220,6 +220,7 @@ def build(
     cancel: list[str] | None = None,
     public_key: bytes | str | None = None,
     now: dt.datetime | None = None,
+    header: str = "oecd",
 ) -> list[Built]:
     """Build every message the workbook implies (correction first, then new records), register
     them, and encrypt each one when a public key is available. Raises WorkflowError with a
@@ -247,7 +248,7 @@ def build(
         keep = set(intent.changed) | set(intent.deletions) | set(intent.unchanged)
         corr_msg = msg.model_copy(update={"accounts": [a for a in msg.accounts if a.key in keep]})
         result, _plan = submit.build_correction(
-            corr_msg, version, reg, test=test, cancel=intent.deletions, now=now
+            corr_msg, version, reg, test=test, cancel=intent.deletions, now=now, header=header
         )
         if result is not None:
             finish("correction", result)
@@ -258,9 +259,9 @@ def build(
         if not new_msg.accounts:
             new_msg = new_msg.model_copy(update={"message_type_indic": "CRS703"})
         if reg is None:
-            result = builder.build(new_msg, version, test=test, now=now)
+            result = builder.build(new_msg, version, test=test, now=now, header=header)
         else:
-            result = submit.build_new(new_msg, version, reg, test=test, now=now)
+            result = submit.build_new(new_msg, version, reg, test=test, now=now, header=header)
         finish("new", result)
     if not outputs:
         raise WorkflowError(Msg("wf_nothing_to_send"))
@@ -276,14 +277,16 @@ def build_from_workbook(
     cancel: list[str] | None = None,
     public_key: bytes | str | None = None,
     now: dt.datetime | None = None,
+    header: str = "oecd",
 ) -> tuple[check.WorkbookReport, list[Built]]:
     """Check the workbook first; build only when it is clean."""
     report = check.check_workbook(path, version)
     if not report.ok or report.message is None:
         raise WorkflowError(Msg("wf_workbook_errors"))
     return report, build(
-        report.message, version, reg, test=test, cancel=cancel, public_key=public_key, now=now
-    )
+        report.message, version, reg, test=test, cancel=cancel, public_key=public_key, now=now,
+        header=header,
+    )  # fmt: skip
 
 
 # --- outcomes ------------------------------------------------------------------------------------

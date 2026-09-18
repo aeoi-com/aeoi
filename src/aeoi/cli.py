@@ -85,13 +85,15 @@ def _cmd_crs_build(args: argparse.Namespace) -> int:
 
         try:
             with Registry(args.registry) as reg:
-                result = submit.build_new(msg, args.version, reg, test=args.test, out_path=args.out)
+                result = submit.build_new(
+                    msg, args.version, reg, test=args.test, out_path=args.out, header=args.header
+                )
         except RegistryError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 1
     else:
-        result = build.build(msg, args.version, test=args.test)
-        xsd_errors = xsd.validate(result.xml, args.version)
+        result = build.build(msg, args.version, test=args.test, header=args.header)
+        xsd_errors = xsd.validate(build.canonical_xml(result.xml), args.version)
         if xsd_errors:  # never hand over a file the portal would reject with 50007
             for e in xsd_errors:
                 print(f"xsd    | {e}", file=sys.stderr)
@@ -135,6 +137,7 @@ def _cmd_crs_correct(args: argparse.Namespace) -> int:
                 test=args.test,
                 cancel=args.cancel or [],
                 out_path=args.out,
+                header=args.header,
             )
     except RegistryError as exc:
         print(f"error: {exc}", file=sys.stderr)
@@ -274,6 +277,8 @@ def build_parser() -> argparse.ArgumentParser:
     b.add_argument("--out", required=True, help="XML file to write")
     b.add_argument("--test", action="store_true", help="test message (OECD11 DocTypeIndic)")
     b.add_argument("--key", help="ESTV public key PEM, needed with --package")
+    b.add_argument("--header", default="oecd", choices=["oecd", "wegleitung"],
+                   help="3.0 header: OECD namespace v3 (default) or the v2 declaration shown in the Wegleitung 5.3.1")  # fmt: skip
     b.add_argument("--package", help="also write the encrypted ESTV package (zip) to this path")
     b.add_argument("--registry", help="submission registry (SQLite): identifiers and status")
     b.set_defaults(func=_cmd_crs_build)
@@ -286,6 +291,7 @@ def build_parser() -> argparse.ArgumentParser:
     co.add_argument("--cancel", action="append", metavar="KEY", help="delete this account (OECD3)")
     co.add_argument("--test", action="store_true")
     co.add_argument("--key")
+    co.add_argument("--header", default="oecd", choices=["oecd", "wegleitung"])
     co.add_argument("--package")
     co.set_defaults(func=_cmd_crs_correct)
 

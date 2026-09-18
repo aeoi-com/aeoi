@@ -255,6 +255,10 @@ user or on request (competitor details are kept out of this public file). Swiss 
    the page language, status (checked by meldbar / portal only / OECD), Wegleitung reference,
    official German wording behind a disclosure, client-side search, anchors `#50005`; linked
    from the home features and the footer. Browser test: 51 checks.
+   Pilot hedges (18.09): the ESTV key loads as PEM or DER, key or certificate
+   (`packaging.load_public_key`, stored as PEM); the 3.0 header exists in both variants (see
+   OPEN-QUESTIONS 1) in build/submit/workflow/CLI/page; browser test builds the first message with
+   the Wegleitung header and the correction with the OECD one (52 checks).
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

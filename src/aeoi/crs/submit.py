@@ -84,7 +84,7 @@ def _finish(
     reg: Registry, msg: Message, version: Version, result: BuildResult, *, test: bool,
     out_path: str | Path | None,
 ) -> BuildResult:  # fmt: skip
-    errors = xsd.validate(result.xml, version)
+    errors = xsd.validate(builder.canonical_xml(result.xml), version)
     if errors:
         raise RegistryError(Msg("submit_xsd", errors="; ".join(errors)))
     if out_path is not None:
@@ -117,6 +117,7 @@ def build_new(
     test: bool = False,
     out_path: str | Path | None = None,
     now: dt.datetime | None = None,
+    header: str = "oecd",
 ) -> BuildResult:
     """CRS701 (or CRS703 nil report) with the registry: fresh identifiers, FI resend, 98009."""
     _check(msg, version, correction=False)
@@ -134,7 +135,7 @@ def build_new(
         records.append(RecordPlan(acc.key, ref, "OECD1"))
     result = builder.build(
         msg, version, test=test, now=now, records=records,
-        fi_plan=_fi_plan(reg, year=year, test=test),
+        fi_plan=_fi_plan(reg, year=year, test=test), header=header,
     )  # fmt: skip
     return _finish(reg, msg, version, result, test=test, out_path=out_path)
 
@@ -194,6 +195,7 @@ def build_correction(
     cancel: list[str] | None = None,
     out_path: str | Path | None = None,
     now: dt.datetime | None = None,
+    header: str = "oecd",
 ) -> tuple[BuildResult | None, Plan]:
     """CRS702 with the registry. Returns (None, plan) when nothing changed."""
     plan = plan_correction(msg, reg, version=version, test=test, cancel=cancel)
@@ -202,7 +204,7 @@ def build_correction(
     corr = msg.model_copy(update={"accounts": plan.accounts, "message_type_indic": "CRS702"})
     _check(corr, version, correction=True)
     result = builder.build(
-        corr, version, test=test, now=now, records=plan.records, fi_plan=plan.fi_plan
+        corr, version, test=test, now=now, records=plan.records, fi_plan=plan.fi_plan, header=header
     )
     return _finish(reg, corr, version, result, test=test, out_path=out_path), plan
 

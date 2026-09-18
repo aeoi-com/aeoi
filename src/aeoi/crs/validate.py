@@ -16,6 +16,7 @@ from pathlib import Path
 
 from lxml import etree
 
+from aeoi.crs import build as builder
 from aeoi.crs import model, read_xml, xsd
 from aeoi.crs.model import Version
 from aeoi.estv import ids, packaging
@@ -101,8 +102,13 @@ def validate_file(
         )
         return rep
     if version == "2.0" and version_attr == "3.0":
-        rep.add("CRS_OECD", Msg("header_v2_ns_v3"), "98000")
-        return rep
+        # the header the Wegleitung 5.3.1 shows: 3.0 content declared in the v2 namespace.
+        # Checked as 3.0 content; which header the portal accepts is open question 1.
+        rep.info("CRS_OECD", Msg("header_v2_ns_v3"))
+        data = builder.canonical_xml(data.decode("utf-8")).encode("utf-8")
+        root = etree.fromstring(data)
+        version = "3.0"
+        rep.version = version
     if version_attr != version:
         rep.add(
             "CRS_OECD/@version",

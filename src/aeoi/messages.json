@@ -379,8 +379,8 @@
     "it": "namespace sconosciuto dell'elemento radice {namespace}"
   },
   "header_v2_ns_v3": {
-    "en": "namespace urn:oecd:ties:crs:v2 with version=\"3.0\": this is the header shown in the Wegleitung 5.3.1, but the OECD 3.0 schema declares urn:oecd:ties:crs:v3; the file matches neither schema (open question 1)",
-    "de": "Namensraum urn:oecd:ties:crs:v2 mit version=\"3.0\": so zeigt es die Wegleitung 5.3.1, das OECD-Schema 3.0 deklariert aber urn:oecd:ties:crs:v3; die Datei passt zu keinem der beiden Schemata (offene Frage 1)",
+    "en": "header as in the Wegleitung 5.3.1 (namespace urn:oecd:ties:crs:v2 with version=\"3.0\"); the OECD 3.0 schema declares urn:oecd:ties:crs:v3 - content checked as 3.0; which header the portal accepts is open (question 1)",
+    "de": "Header wie in der Wegleitung 5.3.1 (Namensraum urn:oecd:ties:crs:v2 mit version=\"3.0\"); das OECD-Schema 3.0 deklariert urn:oecd:ties:crs:v3 - Inhalt als 3.0 geprüft; welchen Header das Portal annimmt, ist offen (Frage 1)",
     "fr": "espace de noms urn:oecd:ties:crs:v2 avec version=\"3.0\" : c'est l'en-tête montré par la directive 5.3.1, mais le schéma OCDE 3.0 déclare urn:oecd:ties:crs:v3 ; le fichier ne correspond à aucun des deux schémas (question ouverte 1)",
     "it": "namespace urn:oecd:ties:crs:v2 con version=\"3.0\": è l'intestazione mostrata dalla direttiva 5.3.1, ma lo schema OCSE 3.0 dichiara urn:oecd:ties:crs:v3; il file non corrisponde a nessuno dei due schemi (questione aperta 1)"
   },

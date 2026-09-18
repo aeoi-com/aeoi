@@ -3,7 +3,7 @@
 import datetime as dt
 from pathlib import Path
 
-from aeoi.crs import build, read_xml, validate
+from aeoi.crs import build, read_xml, validate, xsd
 from aeoi.crs.example import sample_message
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -62,13 +62,24 @@ def test_structural_rules_are_reported(tmp_path):
     assert {"50012", "50011"} <= rules, rep.render()
 
 
-def test_wegleitung_header_namespace_is_explained(tmp_path):
-    xml = build.build(sample_message(), "3.0").xml.replace(
-        "urn:oecd:ties:crs:v3", "urn:oecd:ties:crs:v2"
+def test_wegleitung_header_variant_is_checked_as_30_and_noted(tmp_path):
+    """The header the Wegleitung 5.3.1 shows (v2 declaration, version 3.0) is a legitimate variant
+    the builder can write; the validator checks the content as 3.0 and notes the open question."""
+    built = build.build(sample_message(), "3.0", header="wegleitung")
+    assert built.header == "wegleitung" and build.is_wegleitung_header(built.xml)
+    assert 'xmlns:crs="urn:oecd:ties:crs:v2"' in built.xml and 'version="3.0"' in built.xml
+    assert "<crs:SelfCert>" in built.xml  # 3.0 content
+    canonical = build.canonical_xml(built.xml)
+    assert 'xmlns:crs="urn:oecd:ties:crs:v3"' in canonical and xsd.validate(canonical, "3.0") == []
+    assert xsd.validate(built.xml, "3.0") != []  # the variant itself is not schema-valid
+    rep = validate.validate_file(_write(tmp_path, built.xml, "prod.xml"), today=TODAY)
+    assert rep.ok and rep.version == "3.0"
+    assert [p.message for p in rep.infos if "Wegleitung 5.3.1" in p.message]
+    # the default header is the OECD namespace and gets no note
+    plain = validate.validate_file(
+        _write(tmp_path, build.build(sample_message(), "3.0").xml, "prod2.xml"), today=TODAY
     )
-    rep = validate.validate_file(_write(tmp_path, xml, "prod.xml"), today=TODAY)
-    assert [p.rule for p in rep.problems] == ["98000"]
-    assert "open question 1" in rep.problems[0].message
+    assert plain.ok and not [p for p in plain.infos if "Wegleitung 5.3.1" in p.message]
 
 
 def test_correction_file_rules(tmp_path):

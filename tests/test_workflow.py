@@ -156,3 +156,53 @@ def test_portal_status_fehler_is_not_a_verdict(reg):
     assert not workflow.parse_outcome("Fehlerbericht: 50005").portal_error
     _accept(reg, ref)
     assert workflow.registry_view(reg)["counts"] == {"accepted": 1}
+
+
+def test_header_variant_and_key_formats(reg, key_pair, tmp_path):
+    """Both 3.0 headers build, register and encrypt; the ESTV key is accepted as PEM or DER,
+    key or certificate, and is stored as PEM."""
+    import datetime as dt
+
+    from cryptography import x509
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.x509.oid import NameOID
+
+    from aeoi.crs import build as builder
+    from aeoi.estv import packaging
+
+    key, pem = key_pair
+    outs = workflow.build(sample_message(), "3.0", reg, test=True, header="wegleitung")
+    assert outs[0].result.header == "wegleitung" and builder.is_wegleitung_header(
+        outs[0].result.xml
+    )
+    assert outs[0].as_dict()["header"] == "wegleitung"
+    outs2 = workflow.build(sample_message(year=2025), "3.0", reg, test=True)
+    assert outs2[0].result.header == "oecd" and not builder.is_wegleitung_header(
+        outs2[0].result.xml
+    )
+
+    der_key = key.public_key().public_bytes(
+        serialization.Encoding.DER, serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "ESTV test")])
+    cert = (
+        x509.CertificateBuilder()
+        .subject_name(name)
+        .issuer_name(name)
+        .public_key(key.public_key())
+        .serial_number(1)
+        .not_valid_before(dt.datetime(2026, 1, 1, tzinfo=dt.UTC))
+        .not_valid_after(dt.datetime(2030, 1, 1, tzinfo=dt.UTC))
+        .sign(key, hashes.SHA256())
+    )
+    forms = {
+        "pem key": pem,
+        "der key": der_key,
+        "pem cert": cert.public_bytes(serialization.Encoding.PEM),
+        "der cert": cert.public_bytes(serialization.Encoding.DER),
+    }
+    digests = {n: workflow.remember_public_key(reg, data) for n, data in forms.items()}
+    assert len(set(digests.values())) == 1, digests
+    assert reg.get_setting(workflow.PUBLIC_KEY_SETTING).startswith("-----BEGIN PUBLIC KEY-----")
+    with pytest.raises(packaging.PackagingError, match="PEM or DER"):
+        packaging.load_public_key(b"not a key")
