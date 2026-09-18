@@ -1,299 +1,1039 @@
 {
   "_comment": "Short human titles and a one-line remedy per rule code, in de/fr/it/en, for the browser page and later the CLI. The official wording stays in rules_catalogue.json (text_de). Keys other than five-digit ESTV/OECD codes are internal: XSD (schema), 3.0 (schema-version rule), 4.1.1 (size limit), aeoi (toolkit rule), input (workbook reading), info (note).",
   "50001": {
-    "title": {"de": "Datei nicht korrekt übertragen", "fr": "Fichier mal transmis", "it": "File non trasmesso correttamente", "en": "File not transferred correctly"},
-    "fix": {"de": "Datei erneut hochladen. Nur das Portal prüft dies.", "fr": "Retéléchargez le fichier. Seul le portail vérifie ce point.", "it": "Ricaricare il file. Solo il portale verifica questo punto.", "en": "Upload the file again. Only the portal checks this."}
+    "title": {
+      "de": "Datei nicht korrekt übertragen",
+      "fr": "Fichier mal transmis",
+      "it": "File non trasmesso correttamente",
+      "en": "File not transferred correctly"
+    },
+    "fix": {
+      "de": "Datei erneut hochladen. Nur das Portal prüft dies.",
+      "fr": "Retéléchargez le fichier. Seul le portail vérifie ce point.",
+      "it": "Ricaricare il file. Solo il portale verifica questo punto.",
+      "en": "Upload the file again. Only the portal checks this."
+    }
   },
   "50002": {
-    "title": {"de": "Datei konnte nicht entschlüsselt werden", "fr": "Fichier impossible à déchiffrer", "it": "File impossibile da decifrare", "en": "File could not be decrypted"},
-    "fix": {"de": "Paket mit dem aktuellen öffentlichen Schlüssel der ESTV neu erstellen.", "fr": "Recréez le paquet avec la clé publique actuelle de l'AFC.", "it": "Ricreare il pacchetto con la chiave pubblica attuale dell'AFC.", "en": "Rebuild the package with the ESTV's current public key."}
+    "title": {
+      "de": "Datei konnte nicht entschlüsselt werden",
+      "fr": "Fichier impossible à déchiffrer",
+      "it": "File impossibile da decifrare",
+      "en": "File could not be decrypted"
+    },
+    "fix": {
+      "de": "Paket mit dem aktuellen öffentlichen Schlüssel der ESTV neu erstellen.",
+      "fr": "Recréez le paquet avec la clé publique actuelle de l'AFC.",
+      "it": "Ricreare il pacchetto con la chiave pubblica attuale dell'AFC.",
+      "en": "Rebuild the package with the ESTV's current public key."
+    }
   },
   "50003": {
-    "title": {"de": "Datei konnte nicht dekomprimiert werden", "fr": "Fichier impossible à décompresser", "it": "File impossibile da decomprimere", "en": "File could not be decompressed"},
-    "fix": {"de": "Paket mit dem Werkzeug neu erstellen (ZIP in ZIP nach Ziffer 3.3.1).", "fr": "Recréez le paquet avec l'outil (ZIP dans ZIP, chiffre 3.3.1).", "it": "Ricreare il pacchetto con lo strumento (ZIP in ZIP, numero 3.3.1).", "en": "Rebuild the package with the toolkit (zip in zip, section 3.3.1)."}
+    "title": {
+      "de": "Datei konnte nicht dekomprimiert werden",
+      "fr": "Fichier impossible à décompresser",
+      "it": "File impossibile da decomprimere",
+      "en": "File could not be decompressed"
+    },
+    "fix": {
+      "de": "Das Paket mit meldbar neu erstellen (Erstellen → Paket herunterladen), nicht von Hand packen.",
+      "fr": "Recréer le paquet avec meldbar (Créer → Télécharger le paquet), sans le compresser à la main.",
+      "it": "Ricreare il pacchetto con meldbar (Crea → Scarica il pacchetto), senza comprimerlo a mano.",
+      "en": "Rebuild the package with meldbar (Build → download the package) instead of zipping by hand."
+    }
   },
   "50004": {
-    "title": {"de": "Signatur fehlt oder ungültig", "fr": "Signature manquante ou invalide", "it": "Firma mancante o non valida", "en": "Signature missing or invalid"},
-    "fix": {"de": "Nur das Portal prüft dies; Paket neu erstellen.", "fr": "Seul le portail vérifie ce point ; recréez le paquet.", "it": "Solo il portale verifica questo punto; ricreare il pacchetto.", "en": "Only the portal checks this; rebuild the package."}
+    "title": {
+      "de": "Signatur fehlt oder ungültig",
+      "fr": "Signature manquante ou invalide",
+      "it": "Firma mancante o non valida",
+      "en": "Signature missing or invalid"
+    },
+    "fix": {
+      "de": "Nur das Portal prüft dies; Paket neu erstellen.",
+      "fr": "Seul le portail vérifie ce point ; recréez le paquet.",
+      "it": "Solo il portale verifica questo punto; ricreare il pacchetto.",
+      "en": "Only the portal checks this; rebuild the package."
+    }
   },
   "50005": {
-    "title": {"de": "Unzulässiges Zeichen", "fr": "Caractère non admis", "it": "Carattere non ammesso", "en": "Character not allowed"},
-    "fix": {"de": "Das Zeichen entfernen oder ersetzen; erlaubt ist ISO 8859-1 ohne die Ausnahmen des Anhangs 7.2 (z. B. kein #, &, <, >, \", ').", "fr": "Supprimez ou remplacez le caractère ; seul ISO 8859-1 sans les exceptions de l'annexe 7.2 est admis (pas de #, &, <, >, \", ').", "it": "Togliere o sostituire il carattere; è ammesso ISO 8859-1 senza le eccezioni dell'allegato 7.2 (niente #, &, <, >, \", ').", "en": "Remove or replace the character; ISO 8859-1 without the Annex 7.2 exceptions is allowed (no #, &, <, >, \", ')."}
+    "title": {
+      "de": "Unzulässiges Zeichen",
+      "fr": "Caractère non admis",
+      "it": "Carattere non ammesso",
+      "en": "Character not allowed"
+    },
+    "fix": {
+      "de": "Das Zeichen entfernen oder ersetzen. Erlaubt sind die Zeichen der westeuropäischen Schrift (Umlaute und Akzente ja); nicht erlaubt sind z. B. #, &, <, >, \", ' sowie €, kyrillische, griechische oder chinesische Schrift.",
+      "fr": "Supprimer ou remplacer le caractère. Sont admis les caractères de l'écriture ouest-européenne (accents compris) ; ne sont pas admis p. ex. #, &, <, >, \", ' ainsi que €, les écritures cyrillique, grecque ou chinoise.",
+      "it": "Togliere o sostituire il carattere. Sono ammessi i caratteri della scrittura dell'Europa occidentale (accenti compresi); non sono ammessi p. es. #, &, <, >, \", ' e nemmeno €, la scrittura cirillica, greca o cinese.",
+      "en": "Remove or replace the character. Western European letters (accents included) are allowed; not allowed are e.g. #, &, <, >, \", ' and €, Cyrillic, Greek or Chinese script."
+    }
   },
   "50006": {
-    "title": {"de": "Virus in der Datei", "fr": "Virus dans le fichier", "it": "Virus nel file", "en": "Virus in the file"},
-    "fix": {"de": "Nur das Portal prüft dies.", "fr": "Seul le portail vérifie ce point.", "it": "Solo il portale verifica questo punto.", "en": "Only the portal checks this."}
+    "title": {
+      "de": "Virus in der Datei",
+      "fr": "Virus dans le fichier",
+      "it": "Virus nel file",
+      "en": "Virus in the file"
+    },
+    "fix": {
+      "de": "Nur das Portal prüft dies.",
+      "fr": "Seul le portail vérifie ce point.",
+      "it": "Solo il portale verifica questo punto.",
+      "en": "Only the portal checks this."
+    }
   },
   "50007": {
-    "title": {"de": "Datei entspricht nicht dem CRS-XML-Schema", "fr": "Fichier non conforme au schéma CRS-XML", "it": "File non conforme allo schema CRS-XML", "en": "File does not match the CRS XML schema"},
-    "fix": {"de": "Die genannte Stelle nach dem OECD-Schema korrigieren (fehlendes Pflichtelement, falsche Reihenfolge, ungültiger Wert).", "fr": "Corrigez l'endroit indiqué selon le schéma OCDE (élément obligatoire manquant, ordre erroné, valeur invalide).", "it": "Correggere il punto indicato secondo lo schema OCSE (elemento obbligatorio mancante, ordine errato, valore non valido).", "en": "Fix the indicated place per the OECD schema (missing mandatory element, wrong order, invalid value)."}
+    "title": {
+      "de": "Datei entspricht nicht dem CRS-XML-Schema",
+      "fr": "Fichier non conforme au schéma CRS-XML",
+      "it": "File non conforme allo schema CRS-XML",
+      "en": "File does not match the CRS XML schema"
+    },
+    "fix": {
+      "de": "Die genannte Stelle nach dem OECD-Schema korrigieren (fehlendes Pflichtelement, falsche Reihenfolge, ungültiger Wert).",
+      "fr": "Corrigez l'endroit indiqué selon le schéma OCDE (élément obligatoire manquant, ordre erroné, valeur invalide).",
+      "it": "Correggere il punto indicato secondo lo schema OCSE (elemento obbligatorio mancante, ordine errato, valore non valido).",
+      "en": "Fix the indicated place per the OECD schema (missing mandatory element, wrong order, invalid value)."
+    }
   },
   "50008": {
-    "title": {"de": "MessageRefId hat nicht das vorgegebene Format", "fr": "MessageRefId sans le format prescrit", "it": "MessageRefId senza il formato prescritto", "en": "MessageRefId not in the prescribed format"},
-    "fix": {"de": "Format CH + Berichtsjahr + CH + eindeutiger Wert (UUID empfohlen), ohne Kundendaten.", "fr": "Format CH + année + CH + valeur unique (UUID recommandé), sans données client.", "it": "Formato CH + anno + CH + valore univoco (UUID consigliato), senza dati dei clienti.", "en": "Format CH + year + CH + unique value (UUID recommended), no customer data."}
+    "title": {
+      "de": "MessageRefId hat nicht das vorgegebene Format",
+      "fr": "MessageRefId sans le format prescrit",
+      "it": "MessageRefId senza il formato prescritto",
+      "en": "MessageRefId not in the prescribed format"
+    },
+    "fix": {
+      "de": "Format CH + Berichtsjahr + CH + eindeutiger Wert (UUID empfohlen), ohne Kundendaten.",
+      "fr": "Format CH + année + CH + valeur unique (UUID recommandé), sans données client.",
+      "it": "Formato CH + anno + CH + valore univoco (UUID consigliato), senza dati dei clienti.",
+      "en": "Format CH + year + CH + unique value (UUID recommended), no customer data."
+    }
   },
   "50009": {
-    "title": {"de": "MessageRefId bereits verwendet", "fr": "MessageRefId déjà utilisée", "it": "MessageRefId già utilizzata", "en": "MessageRefId already used"},
-    "fix": {"de": "Jede Meldung braucht eine neue MessageRefId; das Register verhindert Wiederverwendung.", "fr": "Chaque déclaration a besoin d'une nouvelle MessageRefId ; le registre empêche la réutilisation.", "it": "Ogni comunicazione richiede una nuova MessageRefId; il registro impedisce il riutilizzo.", "en": "Every message needs a fresh MessageRefId; the registry prevents reuse."}
+    "title": {
+      "de": "MessageRefId bereits verwendet",
+      "fr": "MessageRefId déjà utilisée",
+      "it": "MessageRefId già utilizzata",
+      "en": "MessageRefId already used"
+    },
+    "fix": {
+      "de": "Jede Meldung braucht eine neue MessageRefId; das Register verhindert Wiederverwendung.",
+      "fr": "Chaque déclaration a besoin d'une nouvelle MessageRefId ; le registre empêche la réutilisation.",
+      "it": "Ogni comunicazione richiede una nuova MessageRefId; il registro impedisce il riutilizzo.",
+      "en": "Every message needs a fresh MessageRefId; the registry prevents reuse."
+    }
   },
   "50010": {
-    "title": {"de": "Test-Kennzeichen in einer produktiven Meldung", "fr": "Marqueur test dans une déclaration productive", "it": "Contrassegno test in una comunicazione produttiva", "en": "Test indicator in a productive message"},
-    "fix": {"de": "Für eine produktive Meldung ohne --test erstellen; für einen Test den Dateinamen mit «Test» beginnen.", "fr": "Créez la déclaration productive sans --test ; pour un test, le nom du fichier commence par « Test ».", "it": "Creare la comunicazione produttiva senza --test; per un test il nome del file inizia con «Test».", "en": "Build the productive message without --test; for a test, start the file name with \"Test\"."}
+    "title": {
+      "de": "Test-Kennzeichen in einer produktiven Meldung",
+      "fr": "Marqueur test dans une déclaration productive",
+      "it": "Contrassegno test in una comunicazione produttiva",
+      "en": "Test indicator in a productive message"
+    },
+    "fix": {
+      "de": "Beim Erstellen «produktive Meldung» wählen; ein Dateiname, der mit «Test» beginnt, ist nur für Testmeldungen.",
+      "fr": "Choisir « déclaration productive » lors de la création ; un nom de fichier commençant par « Test » n'est admis que pour les déclarations test.",
+      "it": "Nella creazione scegliere «comunicazione produttiva»; un nome di file che inizia con «Test» vale solo per le comunicazioni test.",
+      "en": "Choose 'productive message' when building; a file name starting with 'Test' is for test messages only."
+    }
   },
   "50011": {
-    "title": {"de": "Produktives Kennzeichen in einer Testmeldung", "fr": "Marqueur productif dans une déclaration test", "it": "Contrassegno produttivo in una comunicazione test", "en": "Productive indicator in a test message"},
-    "fix": {"de": "Testmeldungen mit --test erstellen (OECD10/OECD11) und den Dateinamen mit «Test» beginnen.", "fr": "Créez les déclarations test avec --test (OECD10/OECD11), nom de fichier commençant par « Test ».", "it": "Creare le comunicazioni test con --test (OECD10/OECD11), nome del file che inizia con «Test».", "en": "Build test messages with --test (OECD10/OECD11) and start the file name with \"Test\"."}
+    "title": {
+      "de": "Produktives Kennzeichen in einer Testmeldung",
+      "fr": "Marqueur productif dans une déclaration test",
+      "it": "Contrassegno produttivo in una comunicazione test",
+      "en": "Productive indicator in a test message"
+    },
+    "fix": {
+      "de": "Beim Erstellen «Testmeldung» wählen; der Dateiname beginnt dann mit «Test» und die Kennzeichen stimmen.",
+      "fr": "Choisir « déclaration test » lors de la création ; le nom de fichier commence alors par « Test » et les marqueurs sont corrects.",
+      "it": "Nella creazione scegliere «comunicazione test»; il nome del file inizia allora con «Test» e i contrassegni sono corretti.",
+      "en": "Choose 'test message' when building; the file name then starts with 'Test' and the indicators match."
+    }
   },
   "50012": {
-    "title": {"de": "Empfängerland muss CH sein", "fr": "Le pays destinataire doit être CH", "it": "Il Paese destinatario deve essere CH", "en": "Receiving country must be CH"},
-    "fix": {"de": "ReceivingCountry = CH.", "fr": "ReceivingCountry = CH.", "it": "ReceivingCountry = CH.", "en": "ReceivingCountry = CH."}
+    "title": {
+      "de": "Empfängerland muss CH sein",
+      "fr": "Le pays destinataire doit être CH",
+      "it": "Il Paese destinatario deve essere CH",
+      "en": "Receiving country must be CH"
+    },
+    "fix": {
+      "de": "ReceivingCountry = CH.",
+      "fr": "ReceivingCountry = CH.",
+      "it": "ReceivingCountry = CH.",
+      "en": "ReceivingCountry = CH."
+    }
   },
   "50013": {
-    "title": {"de": "Verschlüsselung entspricht nicht der Vorgabe", "fr": "Chiffrement non conforme", "it": "Crittografia non conforme", "en": "Encryption does not follow the specification"},
-    "fix": {"de": "Paket mit dem Werkzeug erstellen (AES-256-CBC, 48-Byte-Schlüsselblock).", "fr": "Créez le paquet avec l'outil (AES-256-CBC, bloc de clé de 48 octets).", "it": "Creare il pacchetto con lo strumento (AES-256-CBC, blocco chiave di 48 byte).", "en": "Build the package with the toolkit (AES-256-CBC, 48-byte key blob)."}
+    "title": {
+      "de": "Verschlüsselung entspricht nicht der Vorgabe",
+      "fr": "Chiffrement non conforme",
+      "it": "Crittografia non conforme",
+      "en": "Encryption does not follow the specification"
+    },
+    "fix": {
+      "de": "Das Paket mit meldbar erstellen (Erstellen → Paket herunterladen); nicht selbst verschlüsseln.",
+      "fr": "Créer le paquet avec meldbar (Créer → Télécharger le paquet) ; ne pas chiffrer soi-même.",
+      "it": "Creare il pacchetto con meldbar (Crea → Scarica il pacchetto); non cifrare da soli.",
+      "en": "Create the package with meldbar (Build → download the package); do not encrypt yourself."
+    }
   },
   "60000": {
-    "title": {"de": "Ungültige IBAN", "fr": "IBAN invalide", "it": "IBAN non valido", "en": "Invalid IBAN"},
-    "fix": {"de": "IBAN prüfen (Länge, Prüfsumme) oder den Kontonummerntyp ändern, wenn es keine IBAN ist.", "fr": "Vérifiez l'IBAN (longueur, clé) ou changez le type de numéro si ce n'est pas un IBAN.", "it": "Verificare l'IBAN (lunghezza, cifra di controllo) o cambiare il tipo di numero se non è un IBAN.", "en": "Check the IBAN (length, checksum) or change the number type if it is not an IBAN."}
+    "title": {
+      "de": "Ungültige IBAN",
+      "fr": "IBAN invalide",
+      "it": "IBAN non valido",
+      "en": "Invalid IBAN"
+    },
+    "fix": {
+      "de": "IBAN prüfen (Länge, Prüfsumme) oder den Kontonummerntyp ändern, wenn es keine IBAN ist.",
+      "fr": "Vérifiez l'IBAN (longueur, clé) ou changez le type de numéro si ce n'est pas un IBAN.",
+      "it": "Verificare l'IBAN (lunghezza, cifra di controllo) o cambiare il tipo di numero se non è un IBAN.",
+      "en": "Check the IBAN (length, checksum) or change the number type if it is not an IBAN."
+    }
   },
   "60001": {
-    "title": {"de": "Ungültige ISIN", "fr": "ISIN invalide", "it": "ISIN non valido", "en": "Invalid ISIN"},
-    "fix": {"de": "ISIN prüfen (12 Zeichen, Prüfziffer) oder den Kontonummerntyp ändern.", "fr": "Vérifiez l'ISIN (12 caractères, chiffre de contrôle) ou changez le type de numéro.", "it": "Verificare l'ISIN (12 caratteri, cifra di controllo) o cambiare il tipo di numero.", "en": "Check the ISIN (12 characters, check digit) or change the number type."}
+    "title": {
+      "de": "Ungültige ISIN",
+      "fr": "ISIN invalide",
+      "it": "ISIN non valido",
+      "en": "Invalid ISIN"
+    },
+    "fix": {
+      "de": "ISIN prüfen (12 Zeichen, Prüfziffer) oder den Kontonummerntyp ändern.",
+      "fr": "Vérifiez l'ISIN (12 caractères, chiffre de contrôle) ou changez le type de numéro.",
+      "it": "Verificare l'ISIN (12 caratteri, cifra di controllo) o cambiare il tipo di numero.",
+      "en": "Check the ISIN (12 characters, check digit) or change the number type."
+    }
   },
   "60002": {
-    "title": {"de": "Negativer Kontosaldo", "fr": "Solde de compte négatif", "it": "Saldo del conto negativo", "en": "Negative account balance"},
-    "fix": {"de": "Saldo auf 0 oder den positiven Wert setzen.", "fr": "Mettez le solde à 0 ou à la valeur positive.", "it": "Impostare il saldo a 0 o al valore positivo.", "en": "Set the balance to 0 or the positive value."}
+    "title": {
+      "de": "Negativer Kontosaldo",
+      "fr": "Solde de compte négatif",
+      "it": "Saldo del conto negativo",
+      "en": "Negative account balance"
+    },
+    "fix": {
+      "de": "Saldo auf 0 oder den positiven Wert setzen.",
+      "fr": "Mettez le solde à 0 ou à la valeur positive.",
+      "it": "Impostare il saldo a 0 o al valore positivo.",
+      "en": "Set the balance to 0 or the positive value."
+    }
   },
   "60003": {
-    "title": {"de": "Geschlossenes Konto mit Saldo", "fr": "Compte clôturé avec solde", "it": "Conto chiuso con saldo", "en": "Closed account with a balance"},
-    "fix": {"de": "Bei geschlossenen Konten Saldo = 0.", "fr": "Pour un compte clôturé, solde = 0.", "it": "Per un conto chiuso, saldo = 0.", "en": "For closed accounts the balance is 0."}
+    "title": {
+      "de": "Geschlossenes Konto mit Saldo",
+      "fr": "Compte clôturé avec solde",
+      "it": "Conto chiuso con saldo",
+      "en": "Closed account with a balance"
+    },
+    "fix": {
+      "de": "Bei geschlossenen Konten Saldo = 0.",
+      "fr": "Pour un compte clôturé, solde = 0.",
+      "it": "Per un conto chiuso, saldo = 0.",
+      "en": "For closed accounts the balance is 0."
+    }
   },
   "60004": {
-    "title": {"de": "Namenstyp OECD201 nicht erlaubt", "fr": "Type de nom OECD201 non admis", "it": "Tipo di nome OECD201 non ammesso", "en": "Name type OECD201 not allowed"},
-    "fix": {"de": "Anderen Namenstyp verwenden (z. B. OECD202 individual, OECD207 legal).", "fr": "Utilisez un autre type de nom (p. ex. OECD202 individual, OECD207 legal).", "it": "Usare un altro tipo di nome (p. es. OECD202 individual, OECD207 legal).", "en": "Use another name type (e.g. OECD202 individual, OECD207 legal)."}
+    "title": {
+      "de": "Namenstyp OECD201 nicht erlaubt",
+      "fr": "Type de nom OECD201 non admis",
+      "it": "Tipo di nome OECD201 non ammesso",
+      "en": "Name type OECD201 not allowed"
+    },
+    "fix": {
+      "de": "Anderen Namenstyp verwenden (z. B. OECD202 individual, OECD207 legal).",
+      "fr": "Utilisez un autre type de nom (p. ex. OECD202 individual, OECD207 legal).",
+      "it": "Usare un altro tipo di nome (p. es. OECD202 individual, OECD207 legal).",
+      "en": "Use another name type (e.g. OECD202 individual, OECD207 legal)."
+    }
   },
   "60005": {
-    "title": {"de": "Beherrschende Personen bei diesem Inhabertyp nicht erlaubt", "fr": "Personnes détenant le contrôle non admises pour ce type de titulaire", "it": "Persone che esercitano il controllo non ammesse per questo tipo di titolare", "en": "Controlling persons not allowed for this holder type"},
-    "fix": {"de": "Beherrschende Personen nur bei Rechtsträgern mit AcctHolderType CRS101 erfassen.", "fr": "Saisissez des personnes détenant le contrôle seulement pour une entité CRS101.", "it": "Inserire persone che esercitano il controllo solo per un ente CRS101.", "en": "Record controlling persons only for entities with AcctHolderType CRS101."}
+    "title": {
+      "de": "Beherrschende Personen bei diesem Inhabertyp nicht erlaubt",
+      "fr": "Personnes détenant le contrôle non admises pour ce type de titulaire",
+      "it": "Persone che esercitano il controllo non ammesse per questo tipo di titolare",
+      "en": "Controlling persons not allowed for this holder type"
+    },
+    "fix": {
+      "de": "Beherrschende Personen nur bei Rechtsträgern mit AcctHolderType CRS101 erfassen.",
+      "fr": "Saisissez des personnes détenant le contrôle seulement pour une entité CRS101.",
+      "it": "Inserire persone che esercitano il controllo solo per un ente CRS101.",
+      "en": "Record controlling persons only for entities with AcctHolderType CRS101."
+    }
   },
   "60006": {
-    "title": {"de": "CRS101 ohne beherrschende Person", "fr": "CRS101 sans personne détenant le contrôle", "it": "CRS101 senza persona che esercita il controllo", "en": "CRS101 without a controlling person"},
-    "fix": {"de": "Mindestens eine beherrschende Person erfassen oder den AcctHolderType prüfen.", "fr": "Saisissez au moins une personne détenant le contrôle ou vérifiez l'AcctHolderType.", "it": "Inserire almeno una persona che esercita il controllo o verificare l'AcctHolderType.", "en": "Record at least one controlling person or check the AcctHolderType."}
+    "title": {
+      "de": "CRS101 ohne beherrschende Person",
+      "fr": "CRS101 sans personne détenant le contrôle",
+      "it": "CRS101 senza persona che esercita il controllo",
+      "en": "CRS101 without a controlling person"
+    },
+    "fix": {
+      "de": "Mindestens eine beherrschende Person erfassen oder den AcctHolderType prüfen.",
+      "fr": "Saisissez au moins une personne détenant le contrôle ou vérifiez l'AcctHolderType.",
+      "it": "Inserire almeno una persona che esercita il controllo o verificare l'AcctHolderType.",
+      "en": "Record at least one controlling person or check the AcctHolderType."
+    }
   },
   "60007": {
-    "title": {"de": "Mehr als eine ReportingGroup", "fr": "Plus d'un ReportingGroup", "it": "Più di un ReportingGroup", "en": "More than one ReportingGroup"},
-    "fix": {"de": "Genau eine ReportingGroup pro Meldung.", "fr": "Exactement un ReportingGroup par déclaration.", "it": "Esattamente un ReportingGroup per comunicazione.", "en": "Exactly one ReportingGroup per message."}
+    "title": {
+      "de": "Mehr als eine ReportingGroup",
+      "fr": "Plus d'un ReportingGroup",
+      "it": "Più di un ReportingGroup",
+      "en": "More than one ReportingGroup"
+    },
+    "fix": {
+      "de": "Genau eine ReportingGroup pro Meldung.",
+      "fr": "Exactement un ReportingGroup par déclaration.",
+      "it": "Esattamente un ReportingGroup per comunicazione.",
+      "en": "Exactly one ReportingGroup per message."
+    }
   },
   "60008": {
-    "title": {"de": "Sponsor darf nicht vorkommen", "fr": "Sponsor non admis", "it": "Sponsor non ammesso", "en": "Sponsor must not be present"},
-    "fix": {"de": "Element Sponsor entfernen.", "fr": "Supprimez l'élément Sponsor.", "it": "Rimuovere l'elemento Sponsor.", "en": "Remove the Sponsor element."}
+    "title": {
+      "de": "Sponsor darf nicht vorkommen",
+      "fr": "Sponsor non admis",
+      "it": "Sponsor non ammesso",
+      "en": "Sponsor must not be present"
+    },
+    "fix": {
+      "de": "Element Sponsor entfernen.",
+      "fr": "Supprimez l'élément Sponsor.",
+      "it": "Rimuovere l'elemento Sponsor.",
+      "en": "Remove the Sponsor element."
+    }
   },
   "60009": {
-    "title": {"de": "Intermediary darf nicht vorkommen", "fr": "Intermediary non admis", "it": "Intermediary non ammesso", "en": "Intermediary must not be present"},
-    "fix": {"de": "Element Intermediary entfernen.", "fr": "Supprimez l'élément Intermediary.", "it": "Rimuovere l'elemento Intermediary.", "en": "Remove the Intermediary element."}
+    "title": {
+      "de": "Intermediary darf nicht vorkommen",
+      "fr": "Intermediary non admis",
+      "it": "Intermediary non ammesso",
+      "en": "Intermediary must not be present"
+    },
+    "fix": {
+      "de": "Element Intermediary entfernen.",
+      "fr": "Supprimez l'élément Intermediary.",
+      "it": "Rimuovere l'elemento Intermediary.",
+      "en": "Remove the Intermediary element."
+    }
   },
   "60010": {
-    "title": {"de": "PoolReport darf nicht vorkommen", "fr": "PoolReport non admis", "it": "PoolReport non ammesso", "en": "PoolReport must not be present"},
-    "fix": {"de": "Element PoolReport entfernen.", "fr": "Supprimez l'élément PoolReport.", "it": "Rimuovere l'elemento PoolReport.", "en": "Remove the PoolReport element."}
+    "title": {
+      "de": "PoolReport darf nicht vorkommen",
+      "fr": "PoolReport non admis",
+      "it": "PoolReport non ammesso",
+      "en": "PoolReport must not be present"
+    },
+    "fix": {
+      "de": "Element PoolReport entfernen.",
+      "fr": "Supprimez l'élément PoolReport.",
+      "it": "Rimuovere l'elemento PoolReport.",
+      "en": "Remove the PoolReport element."
+    }
   },
   "60011": {
-    "title": {"de": "Ansässigkeitsstaat passt nicht zum Empfängerstaat", "fr": "Pays de résidence sans rapport avec le pays destinataire", "it": "Paese di residenza non coerente con il Paese destinatario", "en": "Residence country does not match the receiving country"},
-    "fix": {"de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gelten 98200-98202.", "fr": "Règle OCDE entre autorités ; pour l'AFC, ce sont 98200-98202 qui s'appliquent.", "it": "Regola OCSE tra autorità; per l'AFC valgono 98200-98202.", "en": "OECD rule between authorities; for the ESTV, 98200-98202 apply."}
+    "title": {
+      "de": "Ansässigkeitsstaat passt nicht zum Empfängerstaat",
+      "fr": "Pays de résidence sans rapport avec le pays destinataire",
+      "it": "Paese di residenza non coerente con il Paese destinatario",
+      "en": "Residence country does not match the receiving country"
+    },
+    "fix": {
+      "de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gelten 98200-98202.",
+      "fr": "Règle OCDE entre autorités ; pour l'AFC, ce sont 98200-98202 qui s'appliquent.",
+      "it": "Regola OCSE tra autorità; per l'AFC valgono 98200-98202.",
+      "en": "OECD rule between authorities; for the ESTV, 98200-98202 apply."
+    }
   },
   "60012": {
-    "title": {"de": "Ansässigkeitsstaat (Rechtsträger/beherrschende Person) passt nicht", "fr": "Pays de résidence (entité/personne détenant le contrôle) sans rapport", "it": "Paese di residenza (ente/persona che esercita il controllo) non coerente", "en": "Residence country (entity/controlling person) does not match"},
-    "fix": {"de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gilt 98201.", "fr": "Règle OCDE entre autorités ; pour l'AFC, c'est 98201 qui s'applique.", "it": "Regola OCSE tra autorità; per l'AFC vale 98201.", "en": "OECD rule between authorities; for the ESTV, 98201 applies."}
+    "title": {
+      "de": "Ansässigkeitsstaat (Rechtsträger/beherrschende Person) passt nicht",
+      "fr": "Pays de résidence (entité/personne détenant le contrôle) sans rapport",
+      "it": "Paese di residenza (ente/persona che esercita il controllo) non coerente",
+      "en": "Residence country (entity/controlling person) does not match"
+    },
+    "fix": {
+      "de": "OECD-Regel zwischen Behörden; für Meldungen an die ESTV gilt 98201.",
+      "fr": "Règle OCDE entre autorités ; pour l'AFC, c'est 98201 qui s'applique.",
+      "it": "Regola OCSE tra autorità; per l'AFC vale 98201.",
+      "en": "OECD rule between authorities; for the ESTV, 98201 applies."
+    }
   },
   "60013": {
-    "title": {"de": "Meldendes Institut muss in der Schweiz ansässig sein", "fr": "L'institution déclarante doit être résidente en Suisse", "it": "L'istituto tenuto alla comunicazione deve essere residente in Svizzera", "en": "Reporting FI must be resident in Switzerland"},
-    "fix": {"de": "ReportingFI/ResCountryCode = CH, genau einmal.", "fr": "ReportingFI/ResCountryCode = CH, une seule fois.", "it": "ReportingFI/ResCountryCode = CH, una sola volta.", "en": "ReportingFI/ResCountryCode = CH, exactly once."}
+    "title": {
+      "de": "Meldendes Institut muss in der Schweiz ansässig sein",
+      "fr": "L'institution déclarante doit être résidente en Suisse",
+      "it": "L'istituto tenuto alla comunicazione deve essere residente in Svizzera",
+      "en": "Reporting FI must be resident in Switzerland"
+    },
+    "fix": {
+      "de": "ReportingFI/ResCountryCode = CH, genau einmal.",
+      "fr": "ReportingFI/ResCountryCode = CH, une seule fois.",
+      "it": "ReportingFI/ResCountryCode = CH, una sola volta.",
+      "en": "ReportingFI/ResCountryCode = CH, exactly once."
+    }
   },
   "60014": {
-    "title": {"de": "Unplausibles Geburtsdatum", "fr": "Date de naissance non plausible", "it": "Data di nascita non plausibile", "en": "Implausible birth date"},
-    "fix": {"de": "Datum zwischen dem 2.1.1900 und heute.", "fr": "Date entre le 2.1.1900 et aujourd'hui.", "it": "Data tra il 2.1.1900 e oggi.", "en": "Date between 2 January 1900 and today."}
+    "title": {
+      "de": "Unplausibles Geburtsdatum",
+      "fr": "Date de naissance non plausible",
+      "it": "Data di nascita non plausibile",
+      "en": "Implausible birth date"
+    },
+    "fix": {
+      "de": "Datum zwischen dem 2.1.1900 und heute.",
+      "fr": "Date entre le 2.1.1900 et aujourd'hui.",
+      "it": "Data tra il 2.1.1900 e oggi.",
+      "en": "Date between 2 January 1900 and today."
+    }
   },
   "60015": {
-    "title": {"de": "Keine Konten, aber keine Nullmeldung", "fr": "Aucun compte, mais pas de déclaration néant", "it": "Nessun conto, ma non è una comunicazione nulla", "en": "No accounts, but not a nil report"},
-    "fix": {"de": "Konten erfassen oder MessageTypeIndic CRS703 (Nullmeldung) setzen.", "fr": "Saisissez des comptes ou mettez MessageTypeIndic CRS703 (déclaration néant).", "it": "Inserire conti o impostare MessageTypeIndic CRS703 (comunicazione nulla).", "en": "Record accounts or set MessageTypeIndic CRS703 (nil report)."}
+    "title": {
+      "de": "Keine Konten, aber keine Nullmeldung",
+      "fr": "Aucun compte, mais pas de déclaration néant",
+      "it": "Nessun conto, ma non è una comunicazione nulla",
+      "en": "No accounts, but not a nil report"
+    },
+    "fix": {
+      "de": "Konten erfassen oder MessageTypeIndic CRS703 (Nullmeldung) setzen.",
+      "fr": "Saisissez des comptes ou mettez MessageTypeIndic CRS703 (déclaration néant).",
+      "it": "Inserire conti o impostare MessageTypeIndic CRS703 (comunicazione nulla).",
+      "en": "Record accounts or set MessageTypeIndic CRS703 (nil report)."
+    }
   },
   "60017": {
-    "title": {"de": "E-Geld-Produkt muss ein Einlagenkonto sein", "fr": "Un produit de monnaie électronique doit être un compte de dépôt", "it": "Un prodotto di moneta elettronica deve essere un conto di deposito", "en": "E-money product must be a depository account"},
-    "fix": {"de": "AccountType CRS1101 bei Kontonummerntyp OECD606.", "fr": "AccountType CRS1101 pour le type de numéro OECD606.", "it": "AccountType CRS1101 per il tipo di numero OECD606.", "en": "AccountType CRS1101 for number type OECD606."}
+    "title": {
+      "de": "E-Geld-Produkt muss ein Einlagenkonto sein",
+      "fr": "Un produit de monnaie électronique doit être un compte de dépôt",
+      "it": "Un prodotto di moneta elettronica deve essere un conto di deposito",
+      "en": "E-money product must be a depository account"
+    },
+    "fix": {
+      "de": "AccountType CRS1101 bei Kontonummerntyp OECD606.",
+      "fr": "AccountType CRS1101 pour le type de numéro OECD606.",
+      "it": "AccountType CRS1101 per il tipo di numero OECD606.",
+      "en": "AccountType CRS1101 for number type OECD606."
+    }
   },
   "60018": {
-    "title": {"de": "IBAN-Konto muss ein Einlagenkonto sein", "fr": "Un compte IBAN doit être un compte de dépôt", "it": "Un conto IBAN deve essere un conto di deposito", "en": "IBAN account must be a depository account"},
-    "fix": {"de": "AccountType CRS1101 bei Kontonummerntyp OECD601.", "fr": "AccountType CRS1101 pour le type de numéro OECD601.", "it": "AccountType CRS1101 per il tipo di numero OECD601.", "en": "AccountType CRS1101 for number type OECD601."}
+    "title": {
+      "de": "IBAN-Konto muss ein Einlagenkonto sein",
+      "fr": "Un compte IBAN doit être un compte de dépôt",
+      "it": "Un conto IBAN deve essere un conto di deposito",
+      "en": "IBAN account must be a depository account"
+    },
+    "fix": {
+      "de": "AccountType CRS1101 bei Kontonummerntyp OECD601.",
+      "fr": "AccountType CRS1101 pour le type de numéro OECD601.",
+      "it": "AccountType CRS1101 per il tipo di numero OECD601.",
+      "en": "AccountType CRS1101 for number type OECD601."
+    }
   },
   "60019": {
-    "title": {"de": "Eigenkapitalbeteiligung nur bei AccountType CRS1104", "fr": "Participation en capital seulement avec AccountType CRS1104", "it": "Partecipazione al capitale solo con AccountType CRS1104", "en": "Equity interest only with AccountType CRS1104"},
-    "fix": {"de": "EquityInterestType entfernen oder AccountType CRS1104 setzen.", "fr": "Supprimez EquityInterestType ou mettez AccountType CRS1104.", "it": "Rimuovere EquityInterestType o impostare AccountType CRS1104.", "en": "Remove EquityInterestType or set AccountType CRS1104."}
+    "title": {
+      "de": "Eigenkapitalbeteiligung nur bei AccountType CRS1104",
+      "fr": "Participation en capital seulement avec AccountType CRS1104",
+      "it": "Partecipazione al capitale solo con AccountType CRS1104",
+      "en": "Equity interest only with AccountType CRS1104"
+    },
+    "fix": {
+      "de": "EquityInterestType entfernen oder AccountType CRS1104 setzen.",
+      "fr": "Supprimez EquityInterestType ou mettez AccountType CRS1104.",
+      "it": "Rimuovere EquityInterestType o impostare AccountType CRS1104.",
+      "en": "Remove EquityInterestType or set AccountType CRS1104."
+    }
   },
   "60020": {
-    "title": {"de": "Versicherungsvertrag braucht Kontonummerntyp OECD605", "fr": "Un contrat d'assurance exige le type de numéro OECD605", "it": "Un contratto di assicurazione richiede il tipo di numero OECD605", "en": "Insurance contract needs number type OECD605"},
-    "fix": {"de": "Bei AccountType CRS1103 den Kontonummerntyp OECD605 verwenden.", "fr": "Avec AccountType CRS1103, utilisez le type de numéro OECD605.", "it": "Con AccountType CRS1103 usare il tipo di numero OECD605.", "en": "With AccountType CRS1103 use number type OECD605."}
+    "title": {
+      "de": "Versicherungsvertrag braucht Kontonummerntyp OECD605",
+      "fr": "Un contrat d'assurance exige le type de numéro OECD605",
+      "it": "Un contratto di assicurazione richiede il tipo di numero OECD605",
+      "en": "Insurance contract needs number type OECD605"
+    },
+    "fix": {
+      "de": "Bei AccountType CRS1103 den Kontonummerntyp OECD605 verwenden.",
+      "fr": "Avec AccountType CRS1103, utilisez le type de numéro OECD605.",
+      "it": "Con AccountType CRS1103 usare il tipo di numero OECD605.",
+      "en": "With AccountType CRS1103 use number type OECD605."
+    }
   },
   "60021": {
-    "title": {"de": "Einlagenkonto: nur Zinsen als Zahlung", "fr": "Compte de dépôt : seuls des intérêts comme paiement", "it": "Conto di deposito: solo interessi come pagamento", "en": "Depository account: interest is the only payment type"},
-    "fix": {"de": "Zahlungstyp CRS502 (Zinsen) oder den AccountType prüfen.", "fr": "Type de paiement CRS502 (intérêts) ou vérifiez l'AccountType.", "it": "Tipo di pagamento CRS502 (interessi) o verificare l'AccountType.", "en": "Payment type CRS502 (interest) or check the AccountType."}
+    "title": {
+      "de": "Einlagenkonto: nur Zinsen als Zahlung",
+      "fr": "Compte de dépôt : seuls des intérêts comme paiement",
+      "it": "Conto di deposito: solo interessi come pagamento",
+      "en": "Depository account: interest is the only payment type"
+    },
+    "fix": {
+      "de": "Zahlungstyp CRS502 (Zinsen) oder den AccountType prüfen.",
+      "fr": "Type de paiement CRS502 (intérêts) ou vérifiez l'AccountType.",
+      "it": "Tipo di pagamento CRS502 (interessi) o verificare l'AccountType.",
+      "en": "Payment type CRS502 (interest) or check the AccountType."
+    }
   },
   "60022": {
-    "title": {"de": "Beteiligung an Investmentunternehmen: nur Bruttoerlöse/andere Einkünfte", "fr": "Participation dans une entité d'investissement : seulement produits bruts/autres revenus", "it": "Partecipazione in un'entità di investimento: solo proventi lordi/altri redditi", "en": "Investment-entity interest: only gross proceeds/other income"},
-    "fix": {"de": "Zahlungstyp CRS503 oder CRS504 bei AccountType CRS1104.", "fr": "Type de paiement CRS503 ou CRS504 avec AccountType CRS1104.", "it": "Tipo di pagamento CRS503 o CRS504 con AccountType CRS1104.", "en": "Payment type CRS503 or CRS504 with AccountType CRS1104."}
+    "title": {
+      "de": "Beteiligung an Investmentunternehmen: nur Bruttoerlöse/andere Einkünfte",
+      "fr": "Participation dans une entité d'investissement : seulement produits bruts/autres revenus",
+      "it": "Partecipazione in un'entità di investimento: solo proventi lordi/altri redditi",
+      "en": "Investment-entity interest: only gross proceeds/other income"
+    },
+    "fix": {
+      "de": "Zahlungstyp CRS503 oder CRS504 bei AccountType CRS1104.",
+      "fr": "Type de paiement CRS503 ou CRS504 avec AccountType CRS1104.",
+      "it": "Tipo di pagamento CRS503 o CRS504 con AccountType CRS1104.",
+      "en": "Payment type CRS503 or CRS504 with AccountType CRS1104."
+    }
   },
   "60023": {
-    "title": {"de": "Versicherungsvertrag: nur Bruttoerlöse/andere Einkünfte", "fr": "Contrat d'assurance : seulement produits bruts/autres revenus", "it": "Contratto di assicurazione: solo proventi lordi/altri redditi", "en": "Insurance contract: only gross proceeds/other income"},
-    "fix": {"de": "Zahlungstyp CRS503 oder CRS504 bei AccountType CRS1103.", "fr": "Type de paiement CRS503 ou CRS504 avec AccountType CRS1103.", "it": "Tipo di pagamento CRS503 o CRS504 con AccountType CRS1103.", "en": "Payment type CRS503 or CRS504 with AccountType CRS1103."}
+    "title": {
+      "de": "Versicherungsvertrag: nur Bruttoerlöse/andere Einkünfte",
+      "fr": "Contrat d'assurance : seulement produits bruts/autres revenus",
+      "it": "Contratto di assicurazione: solo proventi lordi/altri redditi",
+      "en": "Insurance contract: only gross proceeds/other income"
+    },
+    "fix": {
+      "de": "Zahlungstyp CRS503 oder CRS504 bei AccountType CRS1103.",
+      "fr": "Type de paiement CRS503 ou CRS504 avec AccountType CRS1103.",
+      "it": "Tipo di pagamento CRS503 o CRS504 con AccountType CRS1103.",
+      "en": "Payment type CRS503 or CRS504 with AccountType CRS1103."
+    }
   },
   "70015": {
-    "title": {"de": "UID des Instituts ungültig", "fr": "IDE de l'institution invalide", "it": "IDI dell'istituto non valido", "en": "FI's UID is invalid"},
-    "fix": {"de": "Format CHE-123.456.789; leer lassen, wenn das Institut keine UID hat.", "fr": "Format CHE-123.456.789 ; laissez vide si l'institution n'a pas d'IDE.", "it": "Formato CHE-123.456.789; lasciare vuoto se l'istituto non ha un IDI.", "en": "Format CHE-123.456.789; leave empty if the FI has no UID."}
+    "title": {
+      "de": "UID des Instituts ungültig",
+      "fr": "IDE de l'institution invalide",
+      "it": "IDI dell'istituto non valido",
+      "en": "FI's UID is invalid"
+    },
+    "fix": {
+      "de": "Format CHE-123.456.789; leer lassen, wenn das Institut keine UID hat.",
+      "fr": "Format CHE-123.456.789 ; laissez vide si l'institution n'a pas d'IDE.",
+      "it": "Formato CHE-123.456.789; lasciare vuoto se l'istituto non ha un IDI.",
+      "en": "Format CHE-123.456.789; leave empty if the FI has no UID."
+    }
   },
   "80000": {
-    "title": {"de": "DocRefId bereits verwendet", "fr": "DocRefId déjà utilisée", "it": "DocRefId già utilizzata", "en": "DocRefId already used"},
-    "fix": {"de": "Jeder Datensatz braucht eine neue DocRefId (das Werkzeug erzeugt sie).", "fr": "Chaque enregistrement a besoin d'une nouvelle DocRefId (l'outil la génère).", "it": "Ogni record richiede una nuova DocRefId (lo strumento la genera).", "en": "Every record needs a fresh DocRefId (the toolkit generates it)."}
+    "title": {
+      "de": "DocRefId bereits verwendet",
+      "fr": "DocRefId déjà utilisée",
+      "it": "DocRefId già utilizzata",
+      "en": "DocRefId already used"
+    },
+    "fix": {
+      "de": "Jeder Datensatz braucht eine neue DocRefId (das Werkzeug erzeugt sie).",
+      "fr": "Chaque enregistrement a besoin d'une nouvelle DocRefId (l'outil la génère).",
+      "it": "Ogni record richiede una nuova DocRefId (lo strumento la genera).",
+      "en": "Every record needs a fresh DocRefId (the toolkit generates it)."
+    }
   },
   "80001": {
-    "title": {"de": "DocRefId hat nicht das vorgegebene Format", "fr": "DocRefId sans le format prescrit", "it": "DocRefId senza il formato prescritto", "en": "DocRefId not in the prescribed format"},
-    "fix": {"de": "Format CH + Berichtsjahr + CH + 1-42 Zeichen; Jahr wie in der MessageRefId.", "fr": "Format CH + année + CH + 1-42 caractères ; même année que la MessageRefId.", "it": "Formato CH + anno + CH + 1-42 caratteri; stesso anno della MessageRefId.", "en": "Format CH + year + CH + 1-42 characters; same year as the MessageRefId."}
+    "title": {
+      "de": "DocRefId hat nicht das vorgegebene Format",
+      "fr": "DocRefId sans le format prescrit",
+      "it": "DocRefId senza il formato prescritto",
+      "en": "DocRefId not in the prescribed format"
+    },
+    "fix": {
+      "de": "Format CH + Berichtsjahr + CH + 1-42 Zeichen; Jahr wie in der MessageRefId.",
+      "fr": "Format CH + année + CH + 1-42 caractères ; même année que la MessageRefId.",
+      "it": "Formato CH + anno + CH + 1-42 caratteri; stesso anno della MessageRefId.",
+      "en": "Format CH + year + CH + 1-42 characters; same year as the MessageRefId."
+    }
   },
   "80002": {
-    "title": {"de": "CorrDocRefId verweist auf keinen früheren Datensatz", "fr": "CorrDocRefId ne renvoie à aucun enregistrement antérieur", "it": "CorrDocRefId non rinvia a nessun record precedente", "en": "CorrDocRefId does not point to an earlier record"},
-    "fix": {"de": "Korrekturen aus dem Register erstellen (aeoi crs correct).", "fr": "Créez les corrections depuis le registre (aeoi crs correct).", "it": "Creare le correzioni dal registro (aeoi crs correct).", "en": "Build corrections from the registry (aeoi crs correct)."}
+    "title": {
+      "de": "CorrDocRefId verweist auf keinen früheren Datensatz",
+      "fr": "CorrDocRefId ne renvoie à aucun enregistrement antérieur",
+      "it": "CorrDocRefId non rinvia a nessun record precedente",
+      "en": "CorrDocRefId does not point to an earlier record"
+    },
+    "fix": {
+      "de": "Korrekturen aus dem Register erstellen: die geänderte Vorlage prüfen und «Erstellen» - das Register setzt den Verweis auf den früheren Datensatz.",
+      "fr": "Créer les corrections à partir du registre : vérifier le classeur modifié puis « Créer » - le registre pose la référence à l'enregistrement antérieur.",
+      "it": "Creare le correzioni dal registro: verificare il modello modificato e «Crea» - il registro inserisce il riferimento al record precedente.",
+      "en": "Build corrections from the registry: check the changed workbook and 'Build' - the registry sets the reference to the earlier record."
+    }
   },
   "80003": {
-    "title": {"de": "Datensatz wurde bereits korrigiert", "fr": "Enregistrement déjà corrigé", "it": "Record già corretto", "en": "Record already corrected"},
-    "fix": {"de": "Auf die letzte gültige DocRefId der Kette verweisen; das Register kennt sie.", "fr": "Renvoyez à la dernière DocRefId valable de la chaîne ; le registre la connaît.", "it": "Rinviare all'ultima DocRefId valida della catena; il registro la conosce.", "en": "Point to the latest valid DocRefId of the chain; the registry knows it."}
+    "title": {
+      "de": "Datensatz wurde bereits korrigiert",
+      "fr": "Enregistrement déjà corrigé",
+      "it": "Record già corretto",
+      "en": "Record already corrected"
+    },
+    "fix": {
+      "de": "Auf die letzte gültige DocRefId der Kette verweisen; das Register kennt sie.",
+      "fr": "Renvoyez à la dernière DocRefId valable de la chaîne ; le registre la connaît.",
+      "it": "Rinviare all'ultima DocRefId valida della catena; il registro la conosce.",
+      "en": "Point to the latest valid DocRefId of the chain; the registry knows it."
+    }
   },
   "80004": {
-    "title": {"de": "ReportingFI kann nicht korrigiert oder storniert werden", "fr": "ReportingFI ne peut être ni corrigé ni annulé", "it": "ReportingFI non può essere corretto né annullato", "en": "ReportingFI cannot be corrected or deleted"},
-    "fix": {"de": "CorrDocRefId beim ReportingFI entfernen.", "fr": "Supprimez CorrDocRefId sur le ReportingFI.", "it": "Rimuovere CorrDocRefId sul ReportingFI.", "en": "Remove CorrDocRefId on the ReportingFI."}
+    "title": {
+      "de": "ReportingFI kann nicht korrigiert oder storniert werden",
+      "fr": "ReportingFI ne peut être ni corrigé ni annulé",
+      "it": "ReportingFI non può essere corretto né annullato",
+      "en": "ReportingFI cannot be corrected or deleted"
+    },
+    "fix": {
+      "de": "CorrDocRefId beim ReportingFI entfernen.",
+      "fr": "Supprimez CorrDocRefId sur le ReportingFI.",
+      "it": "Rimuovere CorrDocRefId sul ReportingFI.",
+      "en": "Remove CorrDocRefId on the ReportingFI."
+    }
   },
   "80005": {
-    "title": {"de": "CorrDocRefId fehlt oder ist überzählig", "fr": "CorrDocRefId manquante ou superflue", "it": "CorrDocRefId mancante o superflua", "en": "CorrDocRefId missing or superfluous"},
-    "fix": {"de": "Korrektur/Storno (OECD2/OECD3) braucht eine CorrDocRefId; Neumeldung (OECD1) keine.", "fr": "Correction/annulation (OECD2/OECD3) exige une CorrDocRefId ; nouvel enregistrement (OECD1) aucune.", "it": "Correzione/annullamento (OECD2/OECD3) richiede una CorrDocRefId; nuovo record (OECD1) nessuna.", "en": "Correction/deletion (OECD2/OECD3) needs a CorrDocRefId; a new record (OECD1) none."}
+    "title": {
+      "de": "CorrDocRefId fehlt oder ist überzählig",
+      "fr": "CorrDocRefId manquante ou superflue",
+      "it": "CorrDocRefId mancante o superflua",
+      "en": "CorrDocRefId missing or superfluous"
+    },
+    "fix": {
+      "de": "Korrektur/Storno (OECD2/OECD3) braucht eine CorrDocRefId; Neumeldung (OECD1) keine.",
+      "fr": "Correction/annulation (OECD2/OECD3) exige une CorrDocRefId ; nouvel enregistrement (OECD1) aucune.",
+      "it": "Correzione/annullamento (OECD2/OECD3) richiede una CorrDocRefId; nuovo record (OECD1) nessuna.",
+      "en": "Correction/deletion (OECD2/OECD3) needs a CorrDocRefId; a new record (OECD1) none."
+    }
   },
   "80006": {
-    "title": {"de": "CorrMessageRefId im DocSpec nicht erlaubt", "fr": "CorrMessageRefId non admis dans DocSpec", "it": "CorrMessageRefId non ammesso nel DocSpec", "en": "CorrMessageRefId not allowed in DocSpec"},
-    "fix": {"de": "Element entfernen.", "fr": "Supprimez l'élément.", "it": "Rimuovere l'elemento.", "en": "Remove the element."}
+    "title": {
+      "de": "CorrMessageRefId im DocSpec nicht erlaubt",
+      "fr": "CorrMessageRefId non admis dans DocSpec",
+      "it": "CorrMessageRefId non ammesso nel DocSpec",
+      "en": "CorrMessageRefId not allowed in DocSpec"
+    },
+    "fix": {
+      "de": "Element entfernen.",
+      "fr": "Supprimez l'élément.",
+      "it": "Rimuovere l'elemento.",
+      "en": "Remove the element."
+    }
   },
   "80007": {
-    "title": {"de": "CorrMessageRefId im MessageSpec nicht erlaubt", "fr": "CorrMessageRefId non admis dans MessageSpec", "it": "CorrMessageRefId non ammesso nel MessageSpec", "en": "CorrMessageRefId not allowed in MessageSpec"},
-    "fix": {"de": "Element entfernen.", "fr": "Supprimez l'élément.", "it": "Rimuovere l'elemento.", "en": "Remove the element."}
+    "title": {
+      "de": "CorrMessageRefId im MessageSpec nicht erlaubt",
+      "fr": "CorrMessageRefId non admis dans MessageSpec",
+      "it": "CorrMessageRefId non ammesso nel MessageSpec",
+      "en": "CorrMessageRefId not allowed in MessageSpec"
+    },
+    "fix": {
+      "de": "Element entfernen.",
+      "fr": "Supprimez l'élément.",
+      "it": "Rimuovere l'elemento.",
+      "en": "Remove the element."
+    }
   },
   "80008": {
-    "title": {"de": "Resend Data bei Kontodaten nicht erlaubt", "fr": "Resend Data non admis pour les comptes", "it": "Resend Data non ammesso per i conti", "en": "Resend Data not allowed for account reports"},
-    "fix": {"de": "Für Konten OECD1/OECD2/OECD3 verwenden; nur das ReportingFI wird erneut gesendet (OECD0).", "fr": "Pour les comptes, OECD1/OECD2/OECD3 ; seul le ReportingFI est renvoyé (OECD0).", "it": "Per i conti OECD1/OECD2/OECD3; solo il ReportingFI viene reinviato (OECD0).", "en": "Use OECD1/OECD2/OECD3 for accounts; only the ReportingFI is resent (OECD0)."}
+    "title": {
+      "de": "Resend Data bei Kontodaten nicht erlaubt",
+      "fr": "Resend Data non admis pour les comptes",
+      "it": "Resend Data non ammesso per i conti",
+      "en": "Resend Data not allowed for account reports"
+    },
+    "fix": {
+      "de": "Für Konten OECD1/OECD2/OECD3 verwenden; nur das ReportingFI wird erneut gesendet (OECD0).",
+      "fr": "Pour les comptes, OECD1/OECD2/OECD3 ; seul le ReportingFI est renvoyé (OECD0).",
+      "it": "Per i conti OECD1/OECD2/OECD3; solo il ReportingFI viene reinviato (OECD0).",
+      "en": "Use OECD1/OECD2/OECD3 for accounts; only the ReportingFI is resent (OECD0)."
+    }
   },
   "80010": {
-    "title": {"de": "Datensatztyp passt nicht zum Meldungstyp", "fr": "Type d'enregistrement incompatible avec le type de déclaration", "it": "Tipo di record incompatibile con il tipo di comunicazione", "en": "Record type does not match the message type"},
-    "fix": {"de": "CRS701 nur mit neuen Datensätzen (OECD1), CRS702 nur mit Korrekturen/Storni (OECD2/OECD3).", "fr": "CRS701 seulement avec de nouveaux enregistrements (OECD1), CRS702 seulement avec corrections/annulations (OECD2/OECD3).", "it": "CRS701 solo con nuovi record (OECD1), CRS702 solo con correzioni/annullamenti (OECD2/OECD3).", "en": "CRS701 only with new records (OECD1), CRS702 only with corrections/deletions (OECD2/OECD3)."}
+    "title": {
+      "de": "Datensatztyp passt nicht zum Meldungstyp",
+      "fr": "Type d'enregistrement incompatible avec le type de déclaration",
+      "it": "Tipo di record incompatibile con il tipo di comunicazione",
+      "en": "Record type does not match the message type"
+    },
+    "fix": {
+      "de": "CRS701 nur mit neuen Datensätzen (OECD1), CRS702 nur mit Korrekturen/Storni (OECD2/OECD3).",
+      "fr": "CRS701 seulement avec de nouveaux enregistrements (OECD1), CRS702 seulement avec corrections/annulations (OECD2/OECD3).",
+      "it": "CRS701 solo con nuovi record (OECD1), CRS702 solo con correzioni/annullamenti (OECD2/OECD3).",
+      "en": "CRS701 only with new records (OECD1), CRS702 only with corrections/deletions (OECD2/OECD3)."
+    }
   },
   "80011": {
-    "title": {"de": "Derselbe Datensatz mehrfach korrigiert", "fr": "Même enregistrement corrigé plusieurs fois", "it": "Stesso record corretto più volte", "en": "Same record corrected more than once"},
-    "fix": {"de": "Pro Meldung jede CorrDocRefId nur einmal.", "fr": "Chaque CorrDocRefId une seule fois par déclaration.", "it": "Ogni CorrDocRefId una sola volta per comunicazione.", "en": "Each CorrDocRefId only once per message."}
+    "title": {
+      "de": "Derselbe Datensatz mehrfach korrigiert",
+      "fr": "Même enregistrement corrigé plusieurs fois",
+      "it": "Stesso record corretto più volte",
+      "en": "Same record corrected more than once"
+    },
+    "fix": {
+      "de": "Pro Meldung jede CorrDocRefId nur einmal.",
+      "fr": "Chaque CorrDocRefId une seule fois par déclaration.",
+      "it": "Ogni CorrDocRefId una sola volta per comunicazione.",
+      "en": "Each CorrDocRefId only once per message."
+    }
   },
   "98000": {
-    "title": {"de": "Schema-Version fehlt oder wird nicht unterstützt", "fr": "Version du schéma absente ou non supportée", "it": "Versione dello schema assente o non supportata", "en": "Schema version missing or unsupported"},
-    "fix": {"de": "version=\"2.0\" bis 14.12.2026, version=\"3.0\" ab 16.01.2027, passend zum Namensraum.", "fr": "version=\"2.0\" jusqu'au 14.12.2026, version=\"3.0\" dès le 16.01.2027, cohérente avec l'espace de noms.", "it": "version=\"2.0\" fino al 14.12.2026, version=\"3.0\" dal 16.01.2027, coerente con il namespace.", "en": "version=\"2.0\" until 14.12.2026, version=\"3.0\" from 16.01.2027, matching the namespace."}
+    "title": {
+      "de": "Schema-Version fehlt oder wird nicht unterstützt",
+      "fr": "Version du schéma absente ou non supportée",
+      "it": "Versione dello schema assente o non supportata",
+      "en": "Schema version missing or unsupported"
+    },
+    "fix": {
+      "de": "version=\"2.0\" bis 14.12.2026, version=\"3.0\" ab 16.01.2027, passend zum Namensraum.",
+      "fr": "version=\"2.0\" jusqu'au 14.12.2026, version=\"3.0\" dès le 16.01.2027, cohérente avec l'espace de noms.",
+      "it": "version=\"2.0\" fino al 14.12.2026, version=\"3.0\" dal 16.01.2027, coerente con il namespace.",
+      "en": "version=\"2.0\" until 14.12.2026, version=\"3.0\" from 16.01.2027, matching the namespace."
+    }
   },
   "98001": {
-    "title": {"de": "ESTV-ID des Instituts fehlt", "fr": "Numéro AFC de l'institution manquant", "it": "Numero AFC dell'istituto mancante", "en": "FI's ESTV ID missing"},
-    "fix": {"de": "SendingCompanyIN = ESTV-ID aus der Registrierung (Format 052.0000.0000).", "fr": "SendingCompanyIN = numéro AFC de l'enregistrement (format 052.0000.0000).", "it": "SendingCompanyIN = numero AFC della registrazione (formato 052.0000.0000).", "en": "SendingCompanyIN = ESTV ID from the registration (format 052.0000.0000)."}
+    "title": {
+      "de": "ESTV-ID des Instituts fehlt",
+      "fr": "Numéro AFC de l'institution manquant",
+      "it": "Numero AFC dell'istituto mancante",
+      "en": "FI's ESTV ID missing"
+    },
+    "fix": {
+      "de": "Die ESTV-ID des Instituts aus der Registrierung im AIA-Portal eintragen (Blatt ReportingFI, Format 052.0000.0000).",
+      "fr": "Inscrire l'ID AFC de l'institution tel qu'enregistré dans le portail EAR (feuille ReportingFI, format 052.0000.0000).",
+      "it": "Inserire l'ID AFC dell'istituto come registrato nel portale SAI (foglio ReportingFI, formato 052.0000.0000).",
+      "en": "Enter the institution's ESTV ID from the AEOI portal registration (sheet ReportingFI, format 052.0000.0000)."
+    }
   },
   "98002": {
-    "title": {"de": "Sendeland muss CH sein", "fr": "Le pays émetteur doit être CH", "it": "Il Paese mittente deve essere CH", "en": "Transmitting country must be CH"},
-    "fix": {"de": "TransmittingCountry = CH.", "fr": "TransmittingCountry = CH.", "it": "TransmittingCountry = CH.", "en": "TransmittingCountry = CH."}
+    "title": {
+      "de": "Sendeland muss CH sein",
+      "fr": "Le pays émetteur doit être CH",
+      "it": "Il Paese mittente deve essere CH",
+      "en": "Transmitting country must be CH"
+    },
+    "fix": {
+      "de": "TransmittingCountry = CH.",
+      "fr": "TransmittingCountry = CH.",
+      "it": "TransmittingCountry = CH.",
+      "en": "TransmittingCountry = CH."
+    }
   },
   "98003": {
-    "title": {"de": "Institut für dieses Berichtsjahr nicht angemeldet", "fr": "Institution non enregistrée pour cette année", "it": "Istituto non registrato per questo anno", "en": "FI not registered for this reporting year"},
-    "fix": {"de": "Registrierung im Portal prüfen; nur das Portal prüft dies.", "fr": "Vérifiez l'enregistrement sur le portail ; seul le portail vérifie ce point.", "it": "Verificare la registrazione nel portale; solo il portale verifica questo punto.", "en": "Check the registration in the portal; only the portal checks this."}
+    "title": {
+      "de": "Institut für dieses Berichtsjahr nicht angemeldet",
+      "fr": "Institution non enregistrée pour cette année",
+      "it": "Istituto non registrato per questo anno",
+      "en": "FI not registered for this reporting year"
+    },
+    "fix": {
+      "de": "Registrierung im Portal prüfen; nur das Portal prüft dies.",
+      "fr": "Vérifiez l'enregistrement sur le portail ; seul le portail vérifie ce point.",
+      "it": "Verificare la registrazione nel portale; solo il portale verifica questo punto.",
+      "en": "Check the registration in the portal; only the portal checks this."
+    }
   },
   "98004": {
-    "title": {"de": "Meldungstyp (MessageTypeIndic) fehlt", "fr": "Type de déclaration (MessageTypeIndic) manquant", "it": "Tipo di comunicazione (MessageTypeIndic) mancante", "en": "Message type (MessageTypeIndic) missing"},
-    "fix": {"de": "CRS701 (neu), CRS702 (Korrektur) oder CRS703 (Nullmeldung) setzen.", "fr": "Mettez CRS701 (nouvelle), CRS702 (correction) ou CRS703 (néant).", "it": "Impostare CRS701 (nuova), CRS702 (correzione) o CRS703 (nulla).", "en": "Set CRS701 (new), CRS702 (correction) or CRS703 (nil)."}
+    "title": {
+      "de": "Meldungstyp (MessageTypeIndic) fehlt",
+      "fr": "Type de déclaration (MessageTypeIndic) manquant",
+      "it": "Tipo di comunicazione (MessageTypeIndic) mancante",
+      "en": "Message type (MessageTypeIndic) missing"
+    },
+    "fix": {
+      "de": "CRS701 (neu), CRS702 (Korrektur) oder CRS703 (Nullmeldung) setzen.",
+      "fr": "Mettez CRS701 (nouvelle), CRS702 (correction) ou CRS703 (néant).",
+      "it": "Impostare CRS701 (nuova), CRS702 (correzione) o CRS703 (nulla).",
+      "en": "Set CRS701 (new), CRS702 (correction) or CRS703 (nil)."
+    }
   },
   "98005": {
-    "title": {"de": "Nullmeldung mit Konten", "fr": "Déclaration néant avec des comptes", "it": "Comunicazione nulla con conti", "en": "Nil report with accounts"},
-    "fix": {"de": "Konten entfernen oder MessageTypeIndic CRS701 verwenden.", "fr": "Supprimez les comptes ou utilisez MessageTypeIndic CRS701.", "it": "Rimuovere i conti o usare MessageTypeIndic CRS701.", "en": "Remove the accounts or use MessageTypeIndic CRS701."}
+    "title": {
+      "de": "Nullmeldung mit Konten",
+      "fr": "Déclaration néant avec des comptes",
+      "it": "Comunicazione nulla con conti",
+      "en": "Nil report with accounts"
+    },
+    "fix": {
+      "de": "Konten entfernen oder MessageTypeIndic CRS701 verwenden.",
+      "fr": "Supprimez les comptes ou utilisez MessageTypeIndic CRS701.",
+      "it": "Rimuovere i conti o usare MessageTypeIndic CRS701.",
+      "en": "Remove the accounts or use MessageTypeIndic CRS701."
+    }
   },
   "98006": {
-    "title": {"de": "Meldezeitraum passt nicht zum Berichtsjahr", "fr": "Période de déclaration incohérente avec l'année", "it": "Periodo di comunicazione incoerente con l'anno", "en": "Reporting period does not match the reporting year"},
-    "fix": {"de": "ReportingPeriod = 31.12. des Berichtsjahrs aus der MessageRefId.", "fr": "ReportingPeriod = 31.12 de l'année de la MessageRefId.", "it": "ReportingPeriod = 31.12 dell'anno della MessageRefId.", "en": "ReportingPeriod = 31 December of the MessageRefId year."}
+    "title": {
+      "de": "Meldezeitraum passt nicht zum Berichtsjahr",
+      "fr": "Période de déclaration incohérente avec l'année",
+      "it": "Periodo di comunicazione incoerente con l'anno",
+      "en": "Reporting period does not match the reporting year"
+    },
+    "fix": {
+      "de": "Das Berichtsjahr prüfen (Blatt ReportingFI): der Meldezeitraum ist immer der 31.12. dieses Jahres.",
+      "fr": "Vérifier l'année de référence (feuille ReportingFI) : la période déclarée est toujours le 31.12 de cette année.",
+      "it": "Verificare l'anno di riferimento (foglio ReportingFI): il periodo comunicato è sempre il 31.12 di quell'anno.",
+      "en": "Check the reporting year (sheet ReportingFI): the reporting period is always 31 December of that year."
+    }
   },
   "98007": {
-    "title": {"de": "Meldezeitraum liegt in der Zukunft", "fr": "Période de déclaration dans le futur", "it": "Periodo di comunicazione nel futuro", "en": "Reporting period lies in the future"},
-    "fix": {"de": "Berichtsjahr prüfen.", "fr": "Vérifiez l'année de déclaration.", "it": "Verificare l'anno di comunicazione.", "en": "Check the reporting year."}
+    "title": {
+      "de": "Meldezeitraum liegt in der Zukunft",
+      "fr": "Période de déclaration dans le futur",
+      "it": "Periodo di comunicazione nel futuro",
+      "en": "Reporting period lies in the future"
+    },
+    "fix": {
+      "de": "Berichtsjahr prüfen.",
+      "fr": "Vérifiez l'année de déclaration.",
+      "it": "Verificare l'anno di comunicazione.",
+      "en": "Check the reporting year."
+    }
   },
   "98008": {
-    "title": {"de": "Zeitstempel unplausibel", "fr": "Horodatage non plausible", "it": "Marca temporale non plausibile", "en": "Timestamp implausible"},
-    "fix": {"de": "Timestamp = Erstellungszeitpunkt (höchstens 1 Tag in der Zukunft, 1 Jahr zurück).", "fr": "Timestamp = moment de création (au plus 1 jour dans le futur, 1 an en arrière).", "it": "Timestamp = momento di creazione (al massimo 1 giorno nel futuro, 1 anno indietro).", "en": "Timestamp = creation time (at most 1 day ahead, 1 year back)."}
+    "title": {
+      "de": "Zeitstempel unplausibel",
+      "fr": "Horodatage non plausible",
+      "it": "Marca temporale non plausibile",
+      "en": "Timestamp implausible"
+    },
+    "fix": {
+      "de": "Timestamp = Erstellungszeitpunkt (höchstens 1 Tag in der Zukunft, 1 Jahr zurück).",
+      "fr": "Timestamp = moment de création (au plus 1 jour dans le futur, 1 an en arrière).",
+      "it": "Timestamp = momento di creazione (al massimo 1 giorno nel futuro, 1 anno indietro).",
+      "en": "Timestamp = creation time (at most 1 day ahead, 1 year back)."
+    }
   },
   "98009": {
-    "title": {"de": "Nullmeldung nach gemeldeten Daten", "fr": "Déclaration néant après des données déclarées", "it": "Comunicazione nulla dopo dati comunicati", "en": "Nil report after reported data"},
-    "fix": {"de": "Stattdessen die gemeldeten Datensätze stornieren (OECD3).", "fr": "Annulez plutôt les enregistrements déclarés (OECD3).", "it": "Annullare invece i record comunicati (OECD3).", "en": "Delete the reported records instead (OECD3)."}
+    "title": {
+      "de": "Nullmeldung nach gemeldeten Daten",
+      "fr": "Déclaration néant après des données déclarées",
+      "it": "Comunicazione nulla dopo dati comunicati",
+      "en": "Nil report after reported data"
+    },
+    "fix": {
+      "de": "Stattdessen die gemeldeten Datensätze stornieren (OECD3).",
+      "fr": "Annulez plutôt les enregistrements déclarés (OECD3).",
+      "it": "Annullare invece i record comunicati (OECD3).",
+      "en": "Delete the reported records instead (OECD3)."
+    }
   },
   "98100": {
-    "title": {"de": "Mehr als ein CrsBody", "fr": "Plus d'un CrsBody", "it": "Più di un CrsBody", "en": "More than one CrsBody"},
-    "fix": {"de": "Genau ein CrsBody pro Meldung.", "fr": "Exactement un CrsBody par déclaration.", "it": "Esattamente un CrsBody per comunicazione.", "en": "Exactly one CrsBody per message."}
+    "title": {
+      "de": "Mehr als ein CrsBody",
+      "fr": "Plus d'un CrsBody",
+      "it": "Più di un CrsBody",
+      "en": "More than one CrsBody"
+    },
+    "fix": {
+      "de": "Genau ein CrsBody pro Meldung.",
+      "fr": "Exactement un CrsBody par déclaration.",
+      "it": "Esattamente un CrsBody per comunicazione.",
+      "en": "Exactly one CrsBody per message."
+    }
   },
   "98101": {
-    "title": {"de": "ReportingFI mit Korrektur- oder Storno-Kennzeichen", "fr": "ReportingFI avec marqueur de correction ou d'annulation", "it": "ReportingFI con contrassegno di correzione o annullamento", "en": "ReportingFI with a correction or deletion indicator"},
-    "fix": {"de": "ReportingFI immer OECD1/OECD11 (neu) oder OECD0/OECD10 (erneut gesendet).", "fr": "ReportingFI toujours OECD1/OECD11 (nouveau) ou OECD0/OECD10 (renvoyé).", "it": "ReportingFI sempre OECD1/OECD11 (nuovo) o OECD0/OECD10 (reinviato).", "en": "ReportingFI always OECD1/OECD11 (new) or OECD0/OECD10 (resent)."}
+    "title": {
+      "de": "ReportingFI mit Korrektur- oder Storno-Kennzeichen",
+      "fr": "ReportingFI avec marqueur de correction ou d'annulation",
+      "it": "ReportingFI con contrassegno di correzione o annullamento",
+      "en": "ReportingFI with a correction or deletion indicator"
+    },
+    "fix": {
+      "de": "ReportingFI immer OECD1/OECD11 (neu) oder OECD0/OECD10 (erneut gesendet).",
+      "fr": "ReportingFI toujours OECD1/OECD11 (nouveau) ou OECD0/OECD10 (renvoyé).",
+      "it": "ReportingFI sempre OECD1/OECD11 (nuovo) o OECD0/OECD10 (reinviato).",
+      "en": "ReportingFI always OECD1/OECD11 (new) or OECD0/OECD10 (resent)."
+    }
   },
   "98102": {
-    "title": {"de": "Erneut gesendeter Datensatz mit anderer DocRefId", "fr": "Enregistrement renvoyé avec une autre DocRefId", "it": "Record reinviato con un'altra DocRefId", "en": "Resent record with a different DocRefId"},
-    "fix": {"de": "Beim erneuten Senden (OECD0) dieselbe DocRefId wie zuletzt verwenden.", "fr": "Lors du renvoi (OECD0), reprenez la dernière DocRefId.", "it": "Nel reinvio (OECD0) usare la stessa DocRefId dell'ultima volta.", "en": "When resending (OECD0) use the same DocRefId as last time."}
+    "title": {
+      "de": "Erneut gesendeter Datensatz mit anderer DocRefId",
+      "fr": "Enregistrement renvoyé avec une autre DocRefId",
+      "it": "Record reinviato con un'altra DocRefId",
+      "en": "Resent record with a different DocRefId"
+    },
+    "fix": {
+      "de": "Beim erneuten Senden (OECD0) dieselbe DocRefId wie zuletzt verwenden.",
+      "fr": "Lors du renvoi (OECD0), reprenez la dernière DocRefId.",
+      "it": "Nel reinvio (OECD0) usare la stessa DocRefId dell'ultima volta.",
+      "en": "When resending (OECD0) use the same DocRefId as last time."
+    }
   },
   "98103": {
-    "title": {"de": "Stornierter Datensatz kann nicht mehr korrigiert werden", "fr": "Un enregistrement annulé ne peut plus être corrigé", "it": "Un record annullato non può più essere corretto", "en": "A deleted record cannot be corrected again"},
-    "fix": {"de": "Den Datensatz neu melden (OECD1) statt zu korrigieren.", "fr": "Déclarez à nouveau l'enregistrement (OECD1) au lieu de le corriger.", "it": "Comunicare di nuovo il record (OECD1) invece di correggerlo.", "en": "Report the record anew (OECD1) instead of correcting it."}
+    "title": {
+      "de": "Stornierter Datensatz kann nicht mehr korrigiert werden",
+      "fr": "Un enregistrement annulé ne peut plus être corrigé",
+      "it": "Un record annullato non può più essere corretto",
+      "en": "A deleted record cannot be corrected again"
+    },
+    "fix": {
+      "de": "Den Datensatz neu melden (OECD1) statt zu korrigieren.",
+      "fr": "Déclarez à nouveau l'enregistrement (OECD1) au lieu de le corriger.",
+      "it": "Comunicare di nuovo il record (OECD1) invece di correggerlo.",
+      "en": "Report the record anew (OECD1) instead of correcting it."
+    }
   },
   "98104": {
-    "title": {"de": "Adresse ohne strukturierte Angaben", "fr": "Adresse sans données structurées", "it": "Indirizzo senza dati strutturati", "en": "Address without structured fields"},
-    "fix": {"de": "AddressFix mit Ort (City) ausfüllen; AddressFree allein genügt nicht.", "fr": "Remplissez AddressFix avec la localité (City) ; AddressFree seul ne suffit pas.", "it": "Compilare AddressFix con la località (City); AddressFree da solo non basta.", "en": "Fill AddressFix with the city; AddressFree alone is not enough."}
+    "title": {
+      "de": "Adresse ohne strukturierte Angaben",
+      "fr": "Adresse sans données structurées",
+      "it": "Indirizzo senza dati strutturati",
+      "en": "Address without structured fields"
+    },
+    "fix": {
+      "de": "Die Adresse braucht mindestens den Ort (Spalte address_city); eine Adresse nur als Freitext genügt der ESTV nicht.",
+      "fr": "L'adresse doit contenir au moins la localité (colonne address_city) ; une adresse en texte libre seule ne suffit pas à l'AFC.",
+      "it": "L'indirizzo deve contenere almeno la località (colonna address_city); un indirizzo solo in testo libero non basta all'AFC.",
+      "en": "The address needs at least the city (column address_city); a free-text address alone is not enough for the ESTV."
+    }
   },
   "98200": {
-    "title": {"de": "Kontoinhaber ohne Ansässigkeit in einem Partnerstaat", "fr": "Titulaire sans résidence dans un État partenaire", "it": "Titolare senza residenza in uno Stato partner", "en": "Account holder not resident in a partner jurisdiction"},
-    "fix": {"de": "Mindestens ein Ansässigkeitsstaat muss für das Berichtsjahr Partnerstaat der Schweiz sein; sonst ist das Konto nicht meldepflichtig.", "fr": "Au moins un pays de résidence doit être un État partenaire de la Suisse pour l'année ; sinon le compte n'est pas à déclarer.", "it": "Almeno un Paese di residenza deve essere Stato partner della Svizzera per l'anno; altrimenti il conto non va comunicato.", "en": "At least one residence country must be a Swiss partner jurisdiction for the year; otherwise the account is not reportable."}
+    "title": {
+      "de": "Kontoinhaber ohne Ansässigkeit in einem Partnerstaat",
+      "fr": "Titulaire sans résidence dans un État partenaire",
+      "it": "Titolare senza residenza in uno Stato partner",
+      "en": "Account holder not resident in a partner jurisdiction"
+    },
+    "fix": {
+      "de": "Mindestens ein Ansässigkeitsstaat muss für das Berichtsjahr Partnerstaat der Schweiz sein; sonst ist das Konto nicht meldepflichtig.",
+      "fr": "Au moins un pays de résidence doit être un État partenaire de la Suisse pour l'année ; sinon le compte n'est pas à déclarer.",
+      "it": "Almeno un Paese di residenza deve essere Stato partner della Svizzera per l'anno; altrimenti il conto non va comunicato.",
+      "en": "At least one residence country must be a Swiss partner jurisdiction for the year; otherwise the account is not reportable."
+    }
   },
   "98201": {
-    "title": {"de": "Rechtsträger ohne Ansässigkeit in einem Partnerstaat", "fr": "Entité sans résidence dans un État partenaire", "it": "Ente senza residenza in uno Stato partner", "en": "Entity not resident in a partner jurisdiction"},
-    "fix": {"de": "Rechtsträger oder mindestens eine beherrschende Person muss in einem Partnerstaat ansässig sein.", "fr": "L'entité ou au moins une personne détenant le contrôle doit résider dans un État partenaire.", "it": "L'ente o almeno una persona che esercita il controllo deve risiedere in uno Stato partner.", "en": "The entity or at least one controlling person must be resident in a partner jurisdiction."}
+    "title": {
+      "de": "Rechtsträger ohne Ansässigkeit in einem Partnerstaat",
+      "fr": "Entité sans résidence dans un État partenaire",
+      "it": "Ente senza residenza in uno Stato partner",
+      "en": "Entity not resident in a partner jurisdiction"
+    },
+    "fix": {
+      "de": "Rechtsträger oder mindestens eine beherrschende Person muss in einem Partnerstaat ansässig sein.",
+      "fr": "L'entité ou au moins une personne détenant le contrôle doit résider dans un État partenaire.",
+      "it": "L'ente o almeno una persona che esercita il controllo deve risiedere in uno Stato partner.",
+      "en": "The entity or at least one controlling person must be resident in a partner jurisdiction."
+    }
   },
   "98202": {
-    "title": {"de": "Beherrschende Person ohne Ansässigkeit in einem Partnerstaat", "fr": "Personne détenant le contrôle sans résidence dans un État partenaire", "it": "Persona che esercita il controllo senza residenza in uno Stato partner", "en": "Controlling person not resident in a partner jurisdiction"},
-    "fix": {"de": "Ansässigkeitsstaaten der beherrschenden Person prüfen.", "fr": "Vérifiez les pays de résidence de la personne détenant le contrôle.", "it": "Verificare i Paesi di residenza della persona che esercita il controllo.", "en": "Check the controlling person's residence countries."}
+    "title": {
+      "de": "Beherrschende Person ohne Ansässigkeit in einem Partnerstaat",
+      "fr": "Personne détenant le contrôle sans résidence dans un État partenaire",
+      "it": "Persona che esercita il controllo senza residenza in uno Stato partner",
+      "en": "Controlling person not resident in a partner jurisdiction"
+    },
+    "fix": {
+      "de": "Ansässigkeitsstaaten der beherrschenden Person prüfen.",
+      "fr": "Vérifiez les pays de résidence de la personne détenant le contrôle.",
+      "it": "Verificare i Paesi di residenza della persona che esercita il controllo.",
+      "en": "Check the controlling person's residence countries."
+    }
   },
   "98203": {
-    "title": {"de": "Nicht dokumentiertes Konto: nur natürliche Person mit CH", "fr": "Compte non documenté : seulement une personne physique avec CH", "it": "Conto non documentato: solo persona fisica con CH", "en": "Undocumented account: only an individual with CH"},
-    "fix": {"de": "Bei UndocumentedAccount: Inhaber natürliche Person, ResCountryCode nur CH.", "fr": "Pour UndocumentedAccount : titulaire personne physique, ResCountryCode CH seulement.", "it": "Per UndocumentedAccount: titolare persona fisica, ResCountryCode solo CH.", "en": "For UndocumentedAccount: individual holder, ResCountryCode CH only."}
+    "title": {
+      "de": "Nicht dokumentiertes Konto: nur natürliche Person mit CH",
+      "fr": "Compte non documenté : seulement une personne physique avec CH",
+      "it": "Conto non documentato: solo persona fisica con CH",
+      "en": "Undocumented account: only an individual with CH"
+    },
+    "fix": {
+      "de": "Bei UndocumentedAccount: Inhaber natürliche Person, ResCountryCode nur CH.",
+      "fr": "Pour UndocumentedAccount : titulaire personne physique, ResCountryCode CH seulement.",
+      "it": "Per UndocumentedAccount: titolare persona fisica, ResCountryCode solo CH.",
+      "en": "For UndocumentedAccount: individual holder, ResCountryCode CH only."
+    }
   },
   "98204": {
-    "title": {"de": "Storno mit anderen Ansässigkeitsländern als das Original", "fr": "Annulation avec d'autres pays de résidence que l'original", "it": "Annullamento con Paesi di residenza diversi dall'originale", "en": "Deletion with different residence countries than the original"},
-    "fix": {"de": "Storni aus dem Register erstellen; sie übernehmen den gespeicherten Inhalt.", "fr": "Créez les annulations depuis le registre ; elles reprennent le contenu enregistré.", "it": "Creare gli annullamenti dal registro; riprendono il contenuto memorizzato.", "en": "Build deletions from the registry; they reuse the stored content."}
+    "title": {
+      "de": "Storno mit anderen Ansässigkeitsländern als das Original",
+      "fr": "Annulation avec d'autres pays de résidence que l'original",
+      "it": "Annullamento con Paesi di residenza diversi dall'originale",
+      "en": "Deletion with different residence countries than the original"
+    },
+    "fix": {
+      "de": "Storni aus dem Register erstellen; sie übernehmen den gespeicherten Inhalt.",
+      "fr": "Créez les annulations depuis le registre ; elles reprennent le contenu enregistré.",
+      "it": "Creare gli annullamenti dal registro; riprendono il contenuto memorizzato.",
+      "en": "Build deletions from the registry; they reuse the stored content."
+    }
   },
   "XSD": {
-    "title": {"de": "Verstoss gegen das OECD-Schema", "fr": "Non-conformité au schéma OCDE", "it": "Non conformità allo schema OCSE", "en": "OECD schema violation"},
-    "fix": {"de": "Die genannte Stelle nach dem Schema korrigieren.", "fr": "Corrigez l'endroit indiqué selon le schéma.", "it": "Correggere il punto indicato secondo lo schema.", "en": "Fix the indicated place per the schema."}
+    "title": {
+      "de": "Verstoss gegen das OECD-Schema",
+      "fr": "Non-conformité au schéma OCDE",
+      "it": "Non conformità allo schema OCSE",
+      "en": "OECD schema violation"
+    },
+    "fix": {
+      "de": "Die genannte Stelle nach dem Schema korrigieren.",
+      "fr": "Corrigez l'endroit indiqué selon le schéma.",
+      "it": "Correggere il punto indicato secondo lo schema.",
+      "en": "Fix the indicated place per the schema."
+    }
   },
   "3.0": {
-    "title": {"de": "Pflichtangabe des Schemas 3.0 fehlt oder ist ungültig", "fr": "Donnée obligatoire du schéma 3.0 manquante ou invalide", "it": "Dato obbligatorio dello schema 3.0 mancante o non valido", "en": "Schema 3.0 mandatory element missing or invalid"},
-    "fix": {"de": "Selbstauskunft, Sorgfaltsverfahren, Kontotyp und Typ der beherrschenden Personen sind ab 3.0 Pflicht.", "fr": "Autocertification, procédure de diligence, type de compte et type des personnes détenant le contrôle sont obligatoires dès la 3.0.", "it": "Autocertificazione, procedura di adeguata verifica, tipo di conto e tipo delle persone che esercitano il controllo sono obbligatori dalla 3.0.", "en": "Self-certification, due-diligence procedure, account type and controlling-person type are mandatory from 3.0."}
+    "title": {
+      "de": "Pflichtangabe des Schemas 3.0 fehlt oder ist ungültig",
+      "fr": "Donnée obligatoire du schéma 3.0 manquante ou invalide",
+      "it": "Dato obbligatorio dello schema 3.0 mancante o non valido",
+      "en": "Schema 3.0 mandatory element missing or invalid"
+    },
+    "fix": {
+      "de": "Selbstauskunft, Sorgfaltsverfahren, Kontotyp und Typ der beherrschenden Personen sind ab 3.0 Pflicht.",
+      "fr": "Autocertification, procédure de diligence, type de compte et type des personnes détenant le contrôle sont obligatoires dès la 3.0.",
+      "it": "Autocertificazione, procedura di adeguata verifica, tipo di conto e tipo delle persone che esercitano il controllo sono obbligatori dalla 3.0.",
+      "en": "Self-certification, due-diligence procedure, account type and controlling-person type are mandatory from 3.0."
+    }
   },
   "4.1.1": {
-    "title": {"de": "Datei zu gross", "fr": "Fichier trop volumineux", "it": "File troppo grande", "en": "File too large"},
-    "fix": {"de": "XML höchstens 100 MB, Paket höchstens 10 MB; Meldung aufteilen.", "fr": "XML 100 Mo au plus, paquet 10 Mo au plus ; scindez la déclaration.", "it": "XML al massimo 100 MB, pacchetto al massimo 10 MB; suddividere la comunicazione.", "en": "XML at most 100 MB, package at most 10 MB; split the message."}
+    "title": {
+      "de": "Datei zu gross",
+      "fr": "Fichier trop volumineux",
+      "it": "File troppo grande",
+      "en": "File too large"
+    },
+    "fix": {
+      "de": "XML höchstens 100 MB, Paket höchstens 10 MB; Meldung aufteilen.",
+      "fr": "XML 100 Mo au plus, paquet 10 Mo au plus ; scindez la déclaration.",
+      "it": "XML al massimo 100 MB, pacchetto al massimo 10 MB; suddividere la comunicazione.",
+      "en": "XML at most 100 MB, package at most 10 MB; split the message."
+    }
   },
   "aeoi": {
-    "title": {"de": "Plausibilitätsregel des Werkzeugs", "fr": "Règle de plausibilité de l'outil", "it": "Regola di plausibilità dello strumento", "en": "Toolkit plausibility rule"},
-    "fix": {"de": "Kein ESTV-Code; die Meldung erklärt, was zu prüfen ist.", "fr": "Pas de code AFC ; le message explique ce qu'il faut vérifier.", "it": "Nessun codice AFC; il messaggio spiega cosa verificare.", "en": "No ESTV code; the message explains what to check."}
+    "title": {
+      "de": "Plausibilitätsregel des Werkzeugs",
+      "fr": "Règle de plausibilité de l'outil",
+      "it": "Regola di plausibilità dello strumento",
+      "en": "Toolkit plausibility rule"
+    },
+    "fix": {
+      "de": "Kein ESTV-Code; die Meldung erklärt, was zu prüfen ist.",
+      "fr": "Pas de code AFC ; le message explique ce qu'il faut vérifier.",
+      "it": "Nessun codice AFC; il messaggio spiega cosa verificare.",
+      "en": "No ESTV code; the message explains what to check."
+    }
   },
   "input": {
-    "title": {"de": "Eingabe in der Vorlage fehlerhaft", "fr": "Saisie erronée dans le modèle", "it": "Inserimento errato nel modello", "en": "Input error in the workbook"},
-    "fix": {"de": "Die genannte Zeile/Spalte der Excel-Vorlage korrigieren.", "fr": "Corrigez la ligne/colonne indiquée du modèle Excel.", "it": "Correggere la riga/colonna indicata del modello Excel.", "en": "Fix the indicated row/column of the Excel workbook."}
+    "title": {
+      "de": "Eingabe in der Vorlage fehlerhaft",
+      "fr": "Saisie erronée dans le modèle",
+      "it": "Inserimento errato nel modello",
+      "en": "Input error in the workbook"
+    },
+    "fix": {
+      "de": "Die genannte Zeile/Spalte der Excel-Vorlage korrigieren.",
+      "fr": "Corrigez la ligne/colonne indiquée du modèle Excel.",
+      "it": "Correggere la riga/colonna indicata del modello Excel.",
+      "en": "Fix the indicated row/column of the Excel workbook."
+    }
   },
   "info": {
-    "title": {"de": "Hinweis", "fr": "Remarque", "it": "Nota", "en": "Note"},
-    "fix": {"de": "Kein Fehler; zur Kenntnis nehmen.", "fr": "Pas une erreur ; pour information.", "it": "Non è un errore; per informazione.", "en": "Not an error; for information."}
+    "title": {
+      "de": "Hinweis",
+      "fr": "Remarque",
+      "it": "Nota",
+      "en": "Note"
+    },
+    "fix": {
+      "de": "Kein Fehler; zur Kenntnis nehmen.",
+      "fr": "Pas une erreur ; pour information.",
+      "it": "Non è un errore; per informazione.",
+      "en": "Not an error; for information."
+    }
   }
 }

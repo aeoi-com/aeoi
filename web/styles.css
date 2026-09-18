@@ -302,6 +302,7 @@ h3 { font-size: 0.95rem; margin: 0 0 8px; }
 .finding .loc { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .finding .loc span { font-size: 0.8rem; padding: 3px 8px; border-radius: 6px; background: var(--surface-2); border: 1px solid var(--border); }
 .finding .loc span.path { font-family: var(--mono); }
+.finding .loc span.path .lbl { font-family: var(--font); font-weight: 600; margin-right: 6px; }
 .finding .msg { margin-top: 8px; font-size: 0.92rem; }
 .finding .fix { margin-top: 6px; font-size: 0.92rem; display: flex; gap: 8px; align-items: flex-start; }
 .finding .fix svg { width: 16px; height: 16px; flex: none; margin-top: 3px; color: var(--accent); }

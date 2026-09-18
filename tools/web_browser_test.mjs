@@ -101,7 +101,7 @@ try {
   const firstTitle = await page.locator(".finding.error .title").first().textContent();
   const firstFix = await page.locator(".finding.error .fix").first().textContent();
   const firstMsg = await page.locator(".finding.error .msg").first().textContent();
-  check("finding card with German title, remedy and German message", firstTitle === "Unzulässiges Zeichen" && firstFix.includes("#") && firstMsg.includes("an Position 9: durch Anhang 7.2 ausgeschlossen"));
+  check("finding card with German title, remedy and German message", firstTitle === "Unzulässiges Zeichen" && firstFix.includes("#") && firstMsg.includes("an Position 9: von der ESTV nicht zugelassen"));
   const wb = await upload(join(fixtures, "EXAMPLE.XLSX"));
   check("workbook (.XLSX) -> OK: " + wb.split("\n")[0], wb.startsWith("OK"));
   check("overview rendered (residence bars, holder ring)", (await page.locator("#ov-bars .row").count()) >= 2 && (await page.locator("#ov-ring circle.seg").count()) >= 1);

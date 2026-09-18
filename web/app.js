@@ -382,19 +382,38 @@ function finding(p) {
   const head = el("div", { class: "head" }, el("span", { class: "code", text: p.rule || "aeoi" }), el("span", { class: "title", text: p.title }));
   const loc = el("div", { class: "loc" });
   for (const c of locationChips(p)) loc.append(el("span", { text: c }));
-  if (p.field) loc.append(el("span", { class: "path", text: p.field }));
+  if (p.field) loc.append(fieldChip(p));
   card.append(head, loc);
-  if (p.severity === "info") {
-    card.append(el("div", { class: "msg", text: p.message }));
-    return card;
-  }
+  // what exactly is wrong, in the page language; then what to do; the ESTV wording and the
+  // technical path are there for whoever needs to quote them
+  card.append(el("div", { class: "msg", text: p.message }));
+  if (p.severity === "info") return card;
   card.append(el("div", { class: "fix" }, svg(ICON_FIX), el("span", {}, el("strong", { text: t("fix_label") + ": " }), p.fix)));
-  const details = el("details", {}, el("summary", { text: t("technical_label") + (p.official ? " · " + t("official_label") : "") }),
-    el("div", { class: "msg mono", text: `${p.where}: ${p.message}` }));
+  const details = el("details", {}, el("summary", { text: (p.official ? t("official_label") + " · " : "") + t("technical_label") }));
   if (p.official) details.append(el("blockquote", { text: p.official }));
+  details.append(el("div", { class: "msg mono", text: p.where }));
   card.append(details);
   return card;
 }
+
+// The field as the reader knows it: a label in the page language plus the column of the Excel
+// template (model paths and XML element names fall back to the raw name).
+function fieldChip(p) {
+  const labels = FIELDS[LANG] || FIELDS.de;
+  let key = p.field;
+  if (p.scope === "fi" && key === "name") key = "fi_name";
+  else if (key === "name") key = "org_name";
+  else if (key === "ins") key = "org_ins";
+  else if (/\.address\./.test(p.where || "") && key in ADDRESS_FIELDS) key = ADDRESS_FIELDS[key];
+  const label = labels[key];
+  const column = COLUMNS[key] || (label ? key : null);
+  if (!label) return el("span", { class: "path", text: p.field });
+  const chip = el("span", { class: "path", title: column || "" }, el("span", { class: "lbl", text: label }));
+  if (column && column !== label) chip.append(column);
+  return chip;
+}
+const ADDRESS_FIELDS = { country: "address_country", street: "address_street", building_identifier: "address_building", suite_identifier: "address_suite", floor_identifier: "address_floor", district_name: "address_district", pob: "address_pob", post_code: "address_post_code", city: "address_city", country_subentity: "address_subentity", address_free: "address_free" };
+const COLUMNS = { fi_name: "name", org_name: "org_name", org_ins: "org_ins", ctrlg_person_types: "ctrlg_person_types", tins: "tins", payments: "payment_type" };
 
 boot();
 

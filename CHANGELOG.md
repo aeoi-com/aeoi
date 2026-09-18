@@ -4,6 +4,11 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Findings readable without the tool's vocabulary: the specific message (which character,
+  which country, why) is visible on the card, only the ESTV wording and the technical path are
+  folded; fields carry a label in the page language next to the template column
+  («Kontonummer account_number»); remedies and messages that quoted ISO 8859-1, Anhang 7.2,
+  `--test`, `aeoi crs correct`, mod 97 or Luhn now say what to do in plain words.
 - Partner-state list rechecked against the SIF page of 18.09.2026 (still "Stand per
   25.08.2026", 123 entries, same table hash); retrieval date updated.
 - Load test `tools/web_load_test.mjs`: the browser flow with 3'000 accounts (19 timed checks).

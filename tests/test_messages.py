@@ -60,7 +60,10 @@ def test_msg_is_a_string_and_renders_other_languages():
     assert m.text("de") == "'X' ist keiner der Werte A, B"
     assert m.text("xx") == str(m)  # unknown language: English
     nested = Msg("charset", text="'#'", position=9, reason=Msg("char_excluded", code="0023"))
-    assert nested.text("de") == "'#' an Position 9: durch Anhang 7.2 ausgeschlossen (U+0023)"
+    assert (
+        nested.text("de")
+        == "'#' an Position 9: von der ESTV nicht zugelassen (Anhang 7.2 der Wegleitung; Zeichen U+0023)"
+    )
     listed = Msg("wf_blocked", problems=[Msg("must_be_ch"), Msg("must_be_crs")])
     assert (
         listed == "must be CH; must be CRS" and listed.text("de") == "muss CH sein; muss CRS sein"
@@ -83,7 +86,10 @@ def test_reports_render_in_german(tmp_path):
     )
     rep = validate.validate_file(bad)
     de = rep.render("de")
-    assert "an Position 9: durch Anhang 7.2 ausgeschlossen (U+0023) [50005]" in de
+    assert (
+        "an Position 9: von der ESTV nicht zugelassen (Anhang 7.2 der Wegleitung; Zeichen U+0023) [50005]"
+        in de
+    )
     assert "keines der Länder US war 2026 ein AIA-Partnerstaat der Schweiz" in de
     assert "die USA sind kein AIA-Partnerstaat" in de
     en = rep.render()

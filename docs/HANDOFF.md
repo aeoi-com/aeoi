@@ -293,6 +293,14 @@ user or on request (competitor details are kept out of this public file). Swiss 
    block) is attached to no state today. Only `retrieved` and the informational page hash
    changed. Next recheck: when the SIF page shows a newer "Stand per" (typically after the
    Federal Council adds states for 01.01.2027) - `python tools/partner_states.py`.
+   Readability pass (18.09, after the question "does a compliance officer understand the
+   output?"): finding card = code + title, location chips (account, controlling person, field
+   label in the page language + template column via `FIELDS`/`fieldChip` in web/i18n.js and
+   app.js), the specific message visible, «Was tun», then a `<details>` with the ESTV wording and
+   the technical path; remedies of 50003/50005/50010/50011/50013/80002/98001/98006/98104 and the
+   messages char_*/account_number_normalised/iban_invalid/isin_invalid/us_hint rewritten in
+   plain language (de/fr/it/en). Remaining vocabulary is the Wegleitung's own (Rechtsträger,
+   beherrschende Person, CRS101-103, OECD601) - a compliance officer's terms, kept on purpose.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

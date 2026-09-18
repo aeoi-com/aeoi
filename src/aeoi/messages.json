@@ -32,27 +32,27 @@
   },
   "char_not_latin1": {
     "en": "not in ISO 8859-1",
-    "de": "nicht in ISO 8859-1 enthalten",
-    "fr": "absent d'ISO 8859-1",
-    "it": "non contenuto in ISO 8859-1"
+    "de": "gehört nicht zur westeuropäischen Schrift (z. B. €, kyrillisch, griechisch, chinesisch); ersetzen",
+    "fr": "n'appartient pas à l'écriture ouest-européenne (p. ex. €, cyrillique, grec, chinois) ; à remplacer",
+    "it": "non appartiene alla scrittura dell'Europa occidentale (p. es. €, cirillico, greco, cinese); sostituire"
   },
   "char_excluded": {
     "en": "excluded by Anhang 7.2 (U+{code})",
-    "de": "durch Anhang 7.2 ausgeschlossen (U+{code})",
-    "fr": "exclu par l'annexe 7.2 (U+{code})",
-    "it": "escluso dall'allegato 7.2 (U+{code})"
+    "de": "von der ESTV nicht zugelassen (Anhang 7.2 der Wegleitung; Zeichen U+{code})",
+    "fr": "non admis par l'AFC (annexe 7.2 de la directive ; caractère U+{code})",
+    "it": "non ammesso dall'AFC (allegato 7.2 della direttiva; carattere U+{code})"
   },
   "char_control": {
     "en": "control character (U+{code})",
-    "de": "Steuerzeichen (U+{code})",
-    "fr": "caractère de contrôle (U+{code})",
-    "it": "carattere di controllo (U+{code})"
+    "de": "unsichtbares Steuerzeichen (U+{code}), meist aus Kopieren und Einfügen; entfernen",
+    "fr": "caractère de contrôle invisible (U+{code}), souvent issu d'un copier-coller ; à supprimer",
+    "it": "carattere di controllo invisibile (U+{code}), spesso da un copia-incolla; rimuovere"
   },
   "char_sequence": {
     "en": "forbidden sequence (Anhang 7.2)",
-    "de": "verbotene Zeichenfolge (Anhang 7.2)",
-    "fr": "séquence interdite (annexe 7.2)",
-    "it": "sequenza vietata (allegato 7.2)"
+    "de": "diese Zeichenfolge lässt die ESTV nicht zu (Anhang 7.2 der Wegleitung)",
+    "fr": "cette séquence n'est pas admise par l'AFC (annexe 7.2 de la directive)",
+    "it": "questa sequenza non è ammessa dall'AFC (allegato 7.2 della direttiva)"
   },
   "address_city": {
     "en": "City is mandatory (AddressFix must be used)",
@@ -145,28 +145,28 @@
     "it": "; eliminare questa riga: se non resta alcuna persona che esercita il controllo e l'ente è esso stesso oggetto di comunicazione, comunicarlo come CRS102 o CRS103 senza persone che esercitano il controllo, altrimenti il conto non è oggetto di comunicazione"
   },
   "us_hint": {
-    "en": " (US is not an AEOI partner state: US persons fall under FATCA, not the CRS)",
-    "de": " (die USA sind kein AIA-Partnerstaat: US-Personen fallen unter FATCA, nicht unter den CRS)",
-    "fr": " (les États-Unis ne sont pas un État partenaire EAR : les personnes américaines relèvent de FATCA, pas du CRS)",
-    "it": " (gli Stati Uniti non sono uno Stato partner SAI: le persone statunitensi rientrano in FATCA, non nel CRS)"
+    "en": "; US is not an AEOI partner state: US persons fall under FATCA, not the CRS",
+    "de": "; die USA sind kein AIA-Partnerstaat: US-Personen fallen unter FATCA, nicht unter den CRS",
+    "fr": " ; les États-Unis ne sont pas un État partenaire EAR : les personnes américaines relèvent de FATCA, pas du CRS",
+    "it": "; gli Stati Uniti non sono uno Stato partner SAI: le persone statunitensi rientrano in FATCA, non nel CRS"
   },
   "account_number_normalised": {
     "en": "will be written as {normalised} (spaces/hyphens removed, upper case): the ESTV checks the raw format",
-    "de": "wird als {normalised} geschrieben (ohne Leerzeichen/Bindestriche, Grossbuchstaben): die ESTV prüft das Rohformat",
-    "fr": "sera écrit {normalised} (sans espaces ni traits d'union, en majuscules) : l'AFC vérifie le format brut",
-    "it": "sarà scritto come {normalised} (senza spazi né trattini, in maiuscolo): l'AFC verifica il formato grezzo"
+    "de": "wird als {normalised} in die Meldung geschrieben (ohne Leerzeichen und Bindestriche, in Grossbuchstaben), weil die ESTV die Kontonummer genau so prüft",
+    "fr": "sera écrit {normalised} dans la déclaration (sans espaces ni traits d'union, en majuscules), car l'AFC vérifie le numéro exactement sous cette forme",
+    "it": "sarà scritto come {normalised} nella comunicazione (senza spazi né trattini, in maiuscolo), perché l'AFC verifica il numero esattamente in questa forma"
   },
   "iban_invalid": {
     "en": "AcctNumberType OECD601 requires a valid IBAN (format and mod-97 checksum)",
-    "de": "AcctNumberType OECD601 verlangt eine gültige IBAN (Format und Prüfsumme mod 97)",
-    "fr": "AcctNumberType OECD601 exige un IBAN valable (format et somme de contrôle mod 97)",
-    "it": "AcctNumberType OECD601 richiede un IBAN valido (formato e checksum mod 97)"
+    "de": "Kontonummerntyp OECD601 (IBAN) verlangt eine gültige IBAN; Länge oder Prüfziffern stimmen nicht",
+    "fr": "le type de numéro de compte OECD601 (IBAN) exige un IBAN valable ; la longueur ou les chiffres de contrôle sont faux",
+    "it": "il tipo di numero di conto OECD601 (IBAN) richiede un IBAN valido; lunghezza o cifre di controllo non tornano"
   },
   "isin_invalid": {
     "en": "AcctNumberType OECD603 requires a valid ISIN (12 characters, Luhn checksum)",
-    "de": "AcctNumberType OECD603 verlangt eine gültige ISIN (12 Zeichen, Luhn-Prüfziffer)",
-    "fr": "AcctNumberType OECD603 exige un ISIN valable (12 caractères, chiffre de contrôle Luhn)",
-    "it": "AcctNumberType OECD603 richiede un ISIN valido (12 caratteri, cifra di controllo Luhn)"
+    "de": "Kontonummerntyp OECD603 (ISIN) verlangt eine gültige ISIN; Länge oder Prüfziffer stimmen nicht",
+    "fr": "le type de numéro de compte OECD603 (ISIN) exige un ISIN valable ; la longueur ou le chiffre de contrôle est faux",
+    "it": "il tipo di numero di conto OECD603 (ISIN) richiede un ISIN valido; lunghezza o cifra di controllo non tornano"
   },
   "account_number_missing": {
     "en": "mandatory; use NANUM when there is no number",

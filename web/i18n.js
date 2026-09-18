@@ -50,7 +50,7 @@ const I18N = {
     no_findings: "Keine Befunde. Die Datei besteht alle Prüfungen, die vor dem Portal möglich sind.",
     f_all: "Alle", f_error: "Fehler", f_input: "Eingabe", f_info: "Hinweise",
     loc_file: "Datei", loc_header: "Meldungskopf", loc_fi: "Meldendes Institut", loc_account: "Konto {ref}", loc_cp: "beherrschende Person {n}", loc_workbook: "Vorlage", loc_sheet: "Blatt {sheet}", loc_row: "Zeile {row}",
-    fix_label: "Was tun", official_label: "Wortlaut der ESTV (Deutsch)", technical_label: "Technische Meldung",
+    fix_label: "Was tun", official_label: "Wortlaut der ESTV (Deutsch)", technical_label: "Technische Stelle",
     how_title: "So funktioniert es",
     how1_t: "Laden", how1: "Der Browser lädt einmalig eine Python-Laufzeit (Pyodide) und das Prüfpaket. Danach kommt alles aus dem Cache.",
     how2_t: "Prüfen", how2: "Die Datei wird im Speicher des Browsers gelesen: OECD-Schema, Header- und DocSpec-Regeln, Zeichensatz, Partnerstaaten des Berichtsjahrs, IBAN/ISIN, 3.0-Querbezüge.",
@@ -109,7 +109,7 @@ const I18N = {
     no_findings: "Aucune constatation. Le fichier passe toutes les vérifications possibles avant le portail.",
     f_all: "Toutes", f_error: "Erreurs", f_input: "Saisie", f_info: "Remarques",
     loc_file: "Fichier", loc_header: "En-tête", loc_fi: "Institution déclarante", loc_account: "Compte {ref}", loc_cp: "personne détenant le contrôle {n}", loc_workbook: "Modèle", loc_sheet: "Feuille {sheet}", loc_row: "Ligne {row}",
-    fix_label: "Que faire", official_label: "Texte de l'AFC (allemand)", technical_label: "Message technique",
+    fix_label: "Que faire", official_label: "Texte de l'AFC (allemand)", technical_label: "Emplacement technique",
     how_title: "Comment ça marche",
     how1_t: "Charger", how1: "Le navigateur charge une seule fois un environnement Python (Pyodide) et le paquet de vérification. Ensuite tout vient du cache.",
     how2_t: "Vérifier", how2: "Le fichier est lu dans la mémoire du navigateur : schéma OCDE, règles d'en-tête et de DocSpec, jeu de caractères, États partenaires de l'année, IBAN/ISIN, références croisées 3.0.",
@@ -168,7 +168,7 @@ const I18N = {
     no_findings: "Nessun rilievo. Il file supera tutte le verifiche possibili prima del portale.",
     f_all: "Tutti", f_error: "Errori", f_input: "Inserimento", f_info: "Note",
     loc_file: "File", loc_header: "Intestazione", loc_fi: "Istituto tenuto alla comunicazione", loc_account: "Conto {ref}", loc_cp: "persona che esercita il controllo {n}", loc_workbook: "Modello", loc_sheet: "Foglio {sheet}", loc_row: "Riga {row}",
-    fix_label: "Cosa fare", official_label: "Testo dell'AFC (tedesco)", technical_label: "Messaggio tecnico",
+    fix_label: "Cosa fare", official_label: "Testo dell'AFC (tedesco)", technical_label: "Posizione tecnica",
     how_title: "Come funziona",
     how1_t: "Caricare", how1: "Il browser carica una sola volta un ambiente Python (Pyodide) e il pacchetto di verifica. Poi tutto arriva dalla cache.",
     how2_t: "Verificare", how2: "Il file viene letto nella memoria del browser: schema OCSE, regole di intestazione e DocSpec, set di caratteri, Stati partner dell'anno, IBAN/ISIN, riferimenti incrociati 3.0.",
@@ -219,3 +219,35 @@ function initialLanguage() {
 
 document.getElementById("lang").addEventListener("change", (ev) => applyLanguage(ev.target.value));
 // applyLanguage(initialLanguage()) is called by app.js once every dictionary file is loaded
+
+// Field labels for the finding cards, keyed by the column of the Excel template (model paths
+// of the same name map onto them; address parts are prefixed by the card).
+const FIELDS = {
+  de: {
+    key: "Schlüssel", doc_ref_id: "DocRefId", account_number: "Kontonummer", account_number_type: "Kontonummerntyp", undocumented: "nicht dokumentiert", closed: "geschlossen", dormant: "ruhend",
+    holder_type: "Inhabertyp", org_name: "Name des Rechtsträgers", org_name_type: "Namenstyp", acct_holder_type: "Typ des Kontoinhabers (CRS101-103)", org_ins: "Steuernummern (IN)",
+    balance: "Saldo", currency: "Währung", self_cert: "Selbstauskunft", dd_procedure: "Sorgfaltsverfahren", account_type: "Kontotyp", joint_account_number: "Gemeinschaftskonto", equity_interest_types: "Art der Beteiligung",
+    ctrlg_person_types: "Typ der beherrschenden Person", payment_type: "Zahlungstyp", payments: "Zahlungen", amount: "Betrag",
+    first_name: "Vorname", last_name: "Nachname", middle_name: "Zweiter Vorname", name_type: "Namenstyp", birth_date: "Geburtsdatum", birth_city: "Geburtsort", birth_country: "Geburtsland", residence_countries: "Ansässigkeitsstaaten", tins: "Steuernummern (TIN)", nationalities: "Staatsangehörigkeiten",
+    address_country: "Land (Adresse)", address_street: "Strasse", address_building: "Hausnummer", address_suite: "Suite", address_floor: "Stockwerk", address_district: "Bezirk", address_pob: "Postfach", address_post_code: "PLZ", address_city: "Ort", address_subentity: "Kanton/Bundesland", address_free: "Adresse als Freitext", legal_address_type: "Adresstyp",
+    estv_id: "ESTV-ID", uid: "UID", fi_name: "Name des Instituts", trustee_documented_trust: "Trustee-documented Trust", reporting_year: "Berichtsjahr", message_type_indic: "Meldungstyp", message_ref_id: "MessageRefId",
+  },
+  fr: {
+    key: "Clé", doc_ref_id: "DocRefId", account_number: "Numéro de compte", account_number_type: "Type de numéro de compte", undocumented: "non documenté", closed: "clôturé", dormant: "dormant",
+    holder_type: "Type de titulaire", org_name: "Nom de l'entité", org_name_type: "Type de nom", acct_holder_type: "Type de titulaire (CRS101-103)", org_ins: "Numéros d'identification (IN)",
+    balance: "Solde", currency: "Monnaie", self_cert: "Autocertification", dd_procedure: "Procédure de diligence", account_type: "Type de compte", joint_account_number: "Compte joint", equity_interest_types: "Type de participation",
+    ctrlg_person_types: "Type de personne détenant le contrôle", payment_type: "Type de paiement", payments: "Paiements", amount: "Montant",
+    first_name: "Prénom", last_name: "Nom", middle_name: "Deuxième prénom", name_type: "Type de nom", birth_date: "Date de naissance", birth_city: "Lieu de naissance", birth_country: "Pays de naissance", residence_countries: "États de résidence", tins: "Numéros fiscaux (TIN)", nationalities: "Nationalités",
+    address_country: "Pays (adresse)", address_street: "Rue", address_building: "Numéro", address_suite: "Suite", address_floor: "Étage", address_district: "Quartier", address_pob: "Case postale", address_post_code: "NPA", address_city: "Localité", address_subentity: "Canton/État", address_free: "Adresse en texte libre", legal_address_type: "Type d'adresse",
+    estv_id: "ID AFC", uid: "IDE", fi_name: "Nom de l'institution", trustee_documented_trust: "Trust documenté par le trustee", reporting_year: "Année de référence", message_type_indic: "Type de déclaration", message_ref_id: "MessageRefId",
+  },
+  it: {
+    key: "Chiave", doc_ref_id: "DocRefId", account_number: "Numero di conto", account_number_type: "Tipo di numero di conto", undocumented: "non documentato", closed: "chiuso", dormant: "dormiente",
+    holder_type: "Tipo di titolare", org_name: "Nome dell'ente", org_name_type: "Tipo di nome", acct_holder_type: "Tipo di titolare (CRS101-103)", org_ins: "Numeri di identificazione (IN)",
+    balance: "Saldo", currency: "Valuta", self_cert: "Autocertificazione", dd_procedure: "Procedura di adeguata verifica", account_type: "Tipo di conto", joint_account_number: "Conto cointestato", equity_interest_types: "Tipo di partecipazione",
+    ctrlg_person_types: "Tipo di persona che esercita il controllo", payment_type: "Tipo di pagamento", payments: "Pagamenti", amount: "Importo",
+    first_name: "Nome", last_name: "Cognome", middle_name: "Secondo nome", name_type: "Tipo di nome", birth_date: "Data di nascita", birth_city: "Luogo di nascita", birth_country: "Paese di nascita", residence_countries: "Stati di residenza", tins: "Numeri fiscali (TIN)", nationalities: "Nazionalità",
+    address_country: "Paese (indirizzo)", address_street: "Via", address_building: "Numero civico", address_suite: "Suite", address_floor: "Piano", address_district: "Quartiere", address_pob: "Casella postale", address_post_code: "NPA", address_city: "Località", address_subentity: "Cantone/Stato", address_free: "Indirizzo in testo libero", legal_address_type: "Tipo di indirizzo",
+    estv_id: "ID AFC", uid: "IDI", fi_name: "Nome dell'istituto", trustee_documented_trust: "Trust documentato dal trustee", reporting_year: "Anno di riferimento", message_type_indic: "Tipo di comunicazione", message_ref_id: "MessageRefId",
+  },
+};
