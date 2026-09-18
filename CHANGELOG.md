@@ -4,6 +4,8 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Partner-state list rechecked against the SIF page of 18.09.2026 (still "Stand per
+  25.08.2026", 123 entries, same table hash); retrieval date updated.
 - Load test `tools/web_load_test.mjs`: the browser flow with 3'000 accounts (19 timed checks).
   The page now paints its busy state before each long synchronous step (check, plan, build,
   outcome, restore) and re-plans 400 ms after the last keystroke in the cancel field instead of

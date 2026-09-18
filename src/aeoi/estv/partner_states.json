@@ -1,9 +1,9 @@
 {
   "source_url": "https://www.sif.admin.ch/de/automatischer-informationsaustausch-aia",
   "source_stand": "25.08.2026",
-  "retrieved": "2026-09-16",
+  "retrieved": "2026-09-18",
   "table_sha256": "502bc336f6b48477afb60064891e99381a9c639f5168149be6b4cd37c1d0739e",
-  "page_sha256": "fb7b053b91c961a055a90375ddad36c9c02582ab210261a30c095218821bd766",
+  "page_sha256": "5a4eed3c62404a35220cdaef56c947276ae31ba1eb5b20ceb95d3f351c26e811",
   "count": 123,
   "states": [
     {

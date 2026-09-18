@@ -284,6 +284,15 @@ user or on request (competitor details are kept out of this public file). Swiss 
    long synchronous Python call so the busy state is visible, the cancel-key input is debounced
    (400 ms), the build button is disabled while a plan or build runs. Budgets in the script are
    generous (2-6x) so it doubles as a regression test on slower machines; it is not in CI.
+   Partner states rechecked (18.09): the SIF page downloaded again still says "Stand per
+   25.08.2026", 123 rows, identical `table_sha256`; every German name -> ISO code mapping read
+   by eye (BQ, CK, IM, GL, FO, NC, MO, HK, KN, LC, VC, TC, KY, CN, RU correct), all 27 EU states
+   in force 2017, the SIF change log matches the notes (25.08.2026 Trinidad und Tobago now
+   reciprocal, 28.11.2025 Curaçao temporarily non-reciprocal, TT and UG in force 01.01.2026,
+   GE/MD/UA 2025, KE/TH 2024), footnote texts 1-9 match `FOOTNOTES`, footnote 7 (Global Forum
+   block) is attached to no state today. Only `retrieved` and the informational page hash
+   changed. Next recheck: when the SIF page shows a newer "Stand per" (typically after the
+   Federal Council adds states for 01.01.2027) - `python tools/partner_states.py`.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English
