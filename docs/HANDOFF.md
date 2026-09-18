@@ -239,6 +239,13 @@ user or on request (competitor details are kept out of this public file). Swiss 
    negligence and capped at one year's fee (Art. 100 OR reserved), Swiss law, Zurich. The
    provider is still "meldbar, Salvatorstrasse 8" - replace with the legal entity once it exists;
    have a Swiss lawyer read the AGB before the first paid contract.
+   SEO basics (18.09.2026): canonical, Open Graph/Twitter (`web/og.png` from `tools/og_image.mjs`),
+   JSON-LD (Organization with the Zurich address, WebSite, per-page type, SoftwareApplication
+   with the CHF offers on home and pricing, FAQPage on pricing), `sitemap.xml` and `robots.txt`
+   (pyodide/ and wheels/ disallowed) written by render_site, `404.html`, keyword titles. Still
+   to do for search: one URL per language with hreflang (`/fr/`, `/it/`), an error-code page
+   from rule_titles + catalogue, the 3.0 guide as a page; owner: Search Console and Bing
+   verification tokens, Google Business Profile, links from associations, PyPI.
    Not translated on purpose until
    the pilot confirms the German content: the two long German guides in fr/it.
    Excel template localised (17.09, night): `src/aeoi/crs/template_i18n.json` keyed by the English

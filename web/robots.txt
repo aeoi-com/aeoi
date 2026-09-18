@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /pyodide/
+Disallow: /wheels/
+Sitemap: https://meldbar.ch/sitemap.xml

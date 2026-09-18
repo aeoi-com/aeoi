@@ -7,11 +7,14 @@ HTML is the no-JS fallback.
 
 from __future__ import annotations
 
+import datetime as dt
+import json
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB = ROOT / "web"
+SITE = "https://meldbar.ch/"
 
 CSP = (
     "default-src 'self'; script-src 'self'; connect-src 'self'; style-src 'self' 'unsafe-inline'; "
@@ -98,7 +101,145 @@ FOOTER = f"""<footer class="site-footer">
 </footer>"""
 
 
-def page(name: str, title: str, body: str, *, desc: str) -> str:
+ORGANIZATION = {
+    "@type": "Organization",
+    "@id": SITE + "#organization",
+    "name": "meldbar",
+    "url": SITE,
+    "logo": SITE + "logo-512.png",
+    "email": "kontakt@meldbar.ch",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Salvatorstrasse 8",
+        "postalCode": "8050",
+        "addressLocality": "Zürich",
+        "addressCountry": "CH",
+    },
+    "areaServed": "CH",
+    "sameAs": ["https://github.com/aeoi-com/aeoi"],
+}
+SOFTWARE = {
+    "@type": "SoftwareApplication",
+    "name": "meldbar",
+    "url": SITE + "app.html",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web browser",
+    "inLanguage": ["de", "fr", "it"],
+    "description": "CRS-Meldungen (AIA) für das Portal der ESTV prüfen, erstellen und verschlüsseln - im Browser, ohne Installation.",
+    "publisher": {"@id": SITE + "#organization"},
+    "offers": [
+        {
+            "@type": "Offer",
+            "name": "Basis",
+            "price": "0",
+            "priceCurrency": "CHF",
+            "url": SITE + "preise.html",
+        },
+        {
+            "@type": "Offer",
+            "name": "Pro, 1-10 Vehikel",
+            "price": "900",
+            "priceCurrency": "CHF",
+            "url": SITE + "preise.html",
+        },
+        {
+            "@type": "Offer",
+            "name": "Pro, 11-50 Vehikel",
+            "price": "1500",
+            "priceCurrency": "CHF",
+            "url": SITE + "preise.html",
+        },
+        {
+            "@type": "Offer",
+            "name": "Pro, über 50 Vehikel",
+            "price": "2400",
+            "priceCurrency": "CHF",
+            "url": SITE + "preise.html",
+        },
+    ],
+}
+FAQ = [
+    (
+        "Was zählt als Vehikel?",
+        "Jedes meldende Finanzinstitut, für das Sie Meldungen einreichen (Trust, Stiftung, Gesellschaft, Fonds). Ein Workbook = ein Institut = ein Register.",
+    ),
+    (
+        "Brauche ich das Abonnement, um die App zu nutzen?",
+        "Nein. Die App ist vollständig und kostenlos. Das Abonnement kauft Unterstützung, Garantien und Zeit.",
+    ),
+    (
+        "Laden Sie die Meldung für uns hoch?",
+        "Nein. Das Hochladen bleibt beim Institut, mit dessen Portal-Zugang. Wir sehen Ihre Datei nie.",
+    ),
+    (
+        "Welche Zahlungsarten?",
+        "Rechnung, jährlich im Voraus, in Schweizer Franken. Preise ohne Mehrwertsteuer.",
+    ),
+]
+
+
+def structured_data(name: str, url: str, title: str, desc: str) -> str:
+    """JSON-LD per page: the organisation everywhere, the software on the home page, the FAQ on
+    the pricing page. Data blocks are not executed, so the CSP does not apply to them."""
+    graph: list[dict] = [
+        ORGANIZATION,
+        {"@type": "WebSite", "url": SITE, "name": "meldbar", "inLanguage": "de"},
+    ]
+    page_type = {
+        "home": "WebPage",
+        "pricing": "WebPage",
+        "about": "AboutPage",
+        "contact": "ContactPage",
+    }.get(name, "WebPage")
+    graph.append(
+        {
+            "@type": page_type,
+            "url": url,
+            "name": title,
+            "description": desc,
+            "inLanguage": "de",
+            "isPartOf": {"@id": SITE},
+        }
+    )
+    if name == "home":
+        graph.append(SOFTWARE)
+    if name == "pricing":
+        graph.append(SOFTWARE)
+        graph.append(
+            {
+                "@type": "FAQPage",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": q,
+                        "acceptedAnswer": {"@type": "Answer", "text": a},
+                    }
+                    for q, a in FAQ
+                ],
+            }
+        )
+    data = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False)
+    return f'<script type="application/ld+json">{data}</script>'
+
+
+def page(name: str, title: str, body: str, *, desc: str, file: str = "") -> str:
+    url = SITE if file in ("", "index.html") else SITE + file
+    seo = f'''<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="meldbar">
+<meta property="og:locale" content="de_CH">
+<meta property="og:url" content="{url}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{SITE}og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="meldbar - CRS-Meldungen an die ESTV, ohne Installation">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{SITE}og.png">
+{structured_data(name, url, title, desc)}'''
     return f'''<!doctype html>
 <html lang="de">
 <head>
@@ -109,6 +250,7 @@ def page(name: str, title: str, body: str, *, desc: str) -> str:
 <meta name="color-scheme" content="light">
 <meta name="description" content="{desc}">
 <title>{title}</title>
+{seo}
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="site.css">
 <link rel="manifest" href="manifest.webmanifest">
@@ -487,13 +629,13 @@ TERMS = f"""
 PAGES = {
     "index.html": (
         "home",
-        "meldbar - CRS-Meldungen an die ESTV, ohne Installation",
+        "CRS-Meldungen an die ESTV prüfen und erstellen - meldbar",
         HOME,
         "CRS-Meldungen für das AIA-Portal der ESTV prüfen, erstellen und verschlüsseln - im Browser, ohne Installation, ohne dass Kontodaten den Rechner verlassen.",
     ),
     "preise.html": (
         "pricing",
-        "meldbar - Preise",
+        "Preise - meldbar, AIA-Meldesoftware für die Schweiz",
         PRICING,
         "Preise von meldbar: kostenlose Web-App, Abonnement pro Organisation, Lizenz für Softwarehäuser.",
     ),
@@ -525,10 +667,55 @@ PAGES = {
 }
 
 
+NOT_FOUND = """
+<section class="section">
+  <div class="wrap center">
+    <h1 class="h2">404 - Seite nicht gefunden · Page introuvable · Pagina non trovata</h1>
+    <p class="lead">Die Adresse existiert nicht (mehr). · L'adresse n'existe pas (plus). · L'indirizzo non esiste (più).</p>
+    <p style="margin-top:20px"><a class="btn primary lg" href="index.html">meldbar.ch</a> <a class="btn lg" href="app.html">App</a></p>
+  </div>
+</section>
+"""
+
+
+def sitemap() -> str:
+    today = dt.datetime.now(tz=dt.UTC).date().isoformat()
+    urls = [SITE, *(SITE + f for f in PAGES if f != "index.html"), SITE + "app.html"]
+    items = "".join(
+        f"<url><loc>{u}</loc><lastmod>{today}</lastmod><changefreq>{'weekly' if u == SITE else 'monthly'}</changefreq></url>"
+        for u in urls
+    )
+    return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{items}</urlset>\n'
+
+
+ROBOTS = f"""User-agent: *
+Allow: /
+Disallow: /pyodide/
+Disallow: /wheels/
+Sitemap: {SITE}sitemap.xml
+"""
+
+
 def main() -> int:
     for file, (name, title, body, desc) in PAGES.items():
-        (WEB / file).write_text(page(name, title, body, desc=desc), encoding="utf-8")
+        (WEB / file).write_text(page(name, title, body, desc=desc, file=file), encoding="utf-8")
         print(f"wrote web/{file}")
+    (WEB / "404.html").write_text(
+        page(
+            "notfound",
+            "Seite nicht gefunden - meldbar",
+            NOT_FOUND,
+            desc="Seite nicht gefunden.",
+            file="404.html",
+        ).replace(
+            '<link rel="canonical" href="https://meldbar.ch/404.html">',
+            '<meta name="robots" content="noindex">',
+        ),
+        encoding="utf-8",
+    )
+    (WEB / "sitemap.xml").write_text(sitemap(), encoding="utf-8")
+    (WEB / "robots.txt").write_text(ROBOTS, encoding="utf-8")
+    print("wrote web/404.html, web/sitemap.xml, web/robots.txt")
     return 0
 
 
