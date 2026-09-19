@@ -20,12 +20,28 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PRO_DEPLOY_KEY: ${{ secrets.PRO_DEPLOY_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: python -m pip install build && python -m build && python -m pip install dist/*.whl && python tools/build_web.py
+      # Optional: the encrypted meldbar Pro bundles (one AES-GCM blob per licence, opened only by
+      # its key in the customer's browser) from the private repository, fetched with a read-only
+      # deploy key and a sparse checkout of dist/pro only. Without the secret the page deploys
+      # without them; nothing of the Pro pack is in this repository.
+      - name: Fetch the encrypted Pro bundles (optional)
+        if: ${{ env.PRO_DEPLOY_KEY != '' }}
+        run: |
+          mkdir -p ~/.ssh && echo "$PRO_DEPLOY_KEY" > ~/.ssh/pro_key && chmod 600 ~/.ssh/pro_key
+          ssh-keyscan -t ed25519,rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/pro_key -o IdentitiesOnly=yes" git clone --quiet --depth 1 --filter=blob:none --sparse git@github.com:aeoi-com/meldbar-pro.git /tmp/pro
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/pro_key -o IdentitiesOnly=yes" git -C /tmp/pro sparse-checkout set dist/pro
+          mkdir -p web/pro && cp /tmp/pro/dist/pro/*.bin web/pro/ 2>/dev/null || true
+          rm -rf /tmp/pro ~/.ssh/pro_key
+          echo "pro bundles: $(ls web/pro | wc -l)"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/

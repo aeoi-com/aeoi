@@ -353,6 +353,11 @@ label.block { display: block; margin-top: 8px; }
 textarea { width: 100%; box-sizing: border-box; margin-top: 6px; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: 0.88rem/1.5 var(--mono); resize: vertical; }
 .msg-ok { color: var(--ok); font-weight: 600; }
 .msg-err { color: var(--err); font-weight: 600; }
+.msg-warn { color: var(--warn); font-weight: 600; }
+.btn.pro { border-color: var(--accent); color: var(--accent); }
+.btn.pro:hover { background: var(--accent); color: #fff; }
+#pro-form .grow { flex: 1 1 320px; }
+#pro-form input.mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; letter-spacing: 0.04em; width: 100%; max-width: 360px; }
 
 /* how it works + footer */
 .how { margin-top: 28px; }

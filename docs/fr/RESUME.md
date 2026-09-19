@@ -57,10 +57,14 @@ inscription et n'envoie rien à personne.
 
 ## Coûts
 
-L'outil est et reste gratuit. Un abonnement de support **par organisation** est prévu, non par
-utilisateur, avec un nombre illimité d'institutions déclarantes : 900 CHF/an jusqu'à 10
-véhicules, 1'500 jusqu'à 50, 2'400 au-delà ; éditeurs de logiciels 2'500 CHF/an. Les
-institutions pilotes ne paient rien pendant le projet pilote.
+L'outil est et reste gratuit. **Pro** achète ce qui va au dossier : un procès-verbal de
+contrôle (PDF) pour chaque contrôle et chaque déclaration créée - hash du fichier, constatations,
+chaque règle vérifiée, identifiants et hashs du fichier envoyé -, la vue d'ensemble de tous les
+véhicules (avant le 16.01.2027) et le support pendant la saison de déclaration. Prix **par
+véhicule**, pour pouvoir le refacturer : 120 CHF par véhicule et par an, minimum 900 CHF par
+organisation, utilisateurs illimités. Une fois 450 CHF : la première déclaration accompagnée (une
+heure en ligne, aussi sans abonnement). Les institutions pilotes reçoivent Pro gratuitement la
+première année.
 
 ## Ce que nous cherchons maintenant : une à trois institutions pilotes
 

@@ -55,10 +55,13 @@ registrazione e non invia nulla a nessuno.
 
 ## Costi
 
-Lo strumento è e resta gratuito. È previsto un abbonamento di supporto **per organizzazione**,
-non per utente, con numero illimitato di istituti tenuti alla comunicazione: 900 CHF/anno fino a
-10 veicoli, 1'500 fino a 50, 2'400 oltre; software house 2'500 CHF/anno. Gli istituti pilota
-non pagano nulla durante il progetto pilota.
+Lo strumento è e resta gratuito. **Pro** compra ciò che va nel dossier: un protocollo di
+verifica (PDF) per ogni verifica e ogni comunicazione creata - hash del file, rilievi, ogni
+regola verificata, identificativi e hash del file inviato -, la panoramica di tutti i veicoli
+(prima del 16.01.2027) e il supporto nella stagione delle comunicazioni. Prezzo **per veicolo**,
+così da poterlo riaddebitare: 120 CHF per veicolo all'anno, minimo 900 CHF per organizzazione,
+utenti illimitati. Una tantum 450 CHF: la prima comunicazione accompagnata (un'ora online, anche
+senza abbonamento). Gli istituti pilota ricevono Pro gratuitamente il primo anno.
 
 ## Cosa cerchiamo ora: da uno a tre istituti pilota
 

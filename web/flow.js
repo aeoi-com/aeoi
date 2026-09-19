@@ -57,12 +57,19 @@ def plan_workbook(path, version, test, cancel, lang):
     intent = workflow.plan(report.message, version, reg, test=test, cancel=keys)
     return json.dumps({"ok": True, **intent.as_dict(lang)})
 
+last_built = []
+last_built_report = None
+last_built_pem = ""
+
 def build_workbook(path, version, test, cancel, pem, lang, header):
+    global last_built, last_built_report, last_built_pem
     keys = [k.strip() for k in cancel.split(",") if k.strip()]
     try:
         _report, outs = workflow.build_from_workbook(path, version, reg, test=test, cancel=keys, public_key=pem or None, header=header)
     except (workflow.WorkflowError, RegistryError, ValueError) as exc:
         return _error(exc, lang)
+    last_built, last_built_report = outs, _report
+    last_built_pem = workflow.public_key_pem(reg, pem or None) or ""
     views = []
     for i, o in enumerate(outs):
         d = o.as_dict()
@@ -358,8 +365,10 @@ $("build").addEventListener("click", async () => {
     const res = JSON.parse(pyCall("build_workbook", "/tmp/input.xlsx", $("version").value, test, $("cancel-keys").value, pendingKeyPem || "", LANG, header));
     if (res.error) { msg($("build-msg"), t("error_prefix") + res.error, false); console.info("aeoi:built error"); return; }
     const views = res.built;
+    const cards = [];
     for (const v of views) {
       const card = el("div", { class: "built" });
+      cards.push(card);
       card.append(el("div", { class: "head" }, el("span", { text: (v.kind === "correction" ? t("kind_correction") : t("kind_new")) + (test ? " · " + t("kind_test") : "") }), el("span", { class: "muted", text: t("built_records", { n: v.records }) + (v.header === "wegleitung" ? " · " + t("built_header_wegleitung") : "") })));
       card.append(el("div", { class: "ref", text: v.message_ref_id }));
       const actions = el("div", { class: "actions" });
@@ -371,6 +380,7 @@ $("build").addEventListener("click", async () => {
     }
     outNode.append(el("div", { class: "next" }, el("strong", { text: t("next_steps_title") + ": " }), t("next_steps")));
     msg($("build-msg"), t("build_done", { n: views.length }), true);
+    document.dispatchEvent(new CustomEvent("aeoi:built", { detail: { views, cards, file: last, test } }));
     if (reg.open) await persistRegistry();
     console.info("aeoi:built " + views.map((v) => v.kind + ":" + v.message_ref_id).join(" "));
   } catch (e) {

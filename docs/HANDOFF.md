@@ -1,4 +1,4 @@
-# Handoff — state of the project (updated 2026-09-16)
+# Handoff — state of the project (updated 2026-09-19)
 
 Read this first in any new session. It is the memory of the project when the chat history is not
 at hand.
@@ -21,8 +21,35 @@ user or on request (competitor details are kept out of this public file). Swiss 
   browser validator. Apache-2.0 core + DCO; PRO packs proprietary.
 - Module order: CRS 3.0 for Switzerland → CARF 1.5 (Jan–Feb 2027) → portal packs BZSt, HMRC, ACD
   (verify each portal's envelope before promising) → FATCA/IDES last.
-- Price per organisation, reporting FIs unlimited, bands by number of vehicles: 1-10: 900 CHF/yr,
-  11-50: 1'500, more: 2'400, support included; library licence for software houses 2'500 CHF/yr.
+- Pricing (decided 19.09.2026, replaces the three flat bands): Basis free and complete; **Pro
+  120 CHF per vehicle and year, minimum 900 CHF per organisation**, users unlimited, from 100
+  vehicles on request - priced per vehicle so fiduciaries can re-bill it. Pro buys something
+  tangible, not support alone: the **Prüfprotokoll** (PDF per check and per built message,
+  shipped 19.09), Mandantenübersicht + batch over all vehicles (promised on the pricing page
+  "before 16.01.2027" - still to build), support (2 working days, 1 in May-June), rule updates
+  within 30 days, 1-hour onboarding. One-off **Begleitete erste Meldung** 450 CHF (1 h screen
+  share, also without Pro). Software houses: a note (2'500 CHF/yr integration support; the
+  library is Apache-2.0 anyway). Pilots get Pro free for the first year.
+- **Pro is proprietary and lives in the private repository `aeoi-com/meldbar-pro`** (never in
+  this repo, never in clear on the page). Delivery: one AES-256-GCM blob per licence at
+  `web/pro/<blob_id>.bin`, blob id and key derived from the licence key `MB1-XXXXX-XXXXX-XXXXX-
+  XXXXX` (HMAC / HKDF, mirrored in `web/pro.js` with WebCrypto, test vectors in the private
+  tests); the page installs the decrypted wheel into Pyodide. `web/pro/` is git-ignored; the
+  Pages workflow clones the private repository with a read-only deploy key (secret
+  `PRO_DEPLOY_KEY`, set 19.09.2026; org setting "deploy keys" enabled for that) and copies
+  `dist/pro/*.bin` - the blobs are tracked in the private repo, rebuilt and pushed after every
+  licence change.
+  Licences: `tools/issue_licence.py` appends to `licences/licences.json` (the only record of the
+  keys), `tools/build_bundle.py` rebuilds every blob; expired keys (30-day grace) get no blob.
+  Example key `MB1-TESTA-TESTB-TESTC-TESTD` is used by both test suites (unknown on a public
+  deploy, active on a developer machine after `build_bundle.py --into ../aeoi/web`).
+- Market research 19.09.2026 (kept out of this public file; see the owner's notes): the direct
+  Swiss incumbent is a desktop product with a perpetual starter licence cheaper than three
+  years of the old bands; hence the per-vehicle price and the tangible Pro contents.
+- CARF for Switzerland: at the earliest 1.1.2027 (SIF FAQ 18.05.2026; parliament must approve
+  the partner states first, the ESTV Wegleitung comes only after that) -> first Swiss CARF
+  filings 2028. The "CARF 1.5 in Jan-Feb 2027" step of the module order is premature for CH:
+  keep the generated models, build nothing until the Wegleitung exists.
 - The pilot reporting FI is a prerequisite (portal access, `ESTV-PublicKey.pem`, test uploads).
   The pilot sends validation results (DocRefId + codes), never the file.
 - Gates: mid-Dec 2026 developer signals in OR, **measurable ones only** (the page has no
@@ -121,7 +148,8 @@ user or on request (competitor details are kept out of this public file). Swiss 
   passes; the wheel installs and runs in a clean venv. GitHub readiness: `.github/workflows/ci.yml`
   (tests on Linux/Windows, 3.11-3.13, ruff, build + twine + clean install, web smoke, DCO check on
   pull requests), `pages.yml` (publishes web/ to GitHub Pages), CHANGELOG.md, CONTRIBUTING.md (DCO).
-- 187 tests: `.venv/Scripts/python -m pytest`.
+- 217 tests: `.venv/Scripts/python -m pytest`; browser test 61 checks (incl. Pro activation with
+  the example key and both Prüfprotokoll downloads when the private blob is in `web/pro/`).
 
 ## Verified facts to keep
 
@@ -315,6 +343,7 @@ user or on request (competitor details are kept out of this public file). Swiss 
    links in README/pyproject/docs/de/ANLEITUNG.md and web/index.html).
 
 ## Waiting on the owner
+
 
 - PyPI account with 2FA; publishing goes through Trusted Publishing (`.github/workflows/release.yml`,
   pending publisher on PyPI: owner/aeoi, workflow release.yml, environment pypi), so no token is

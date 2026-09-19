@@ -12,7 +12,7 @@ applyLanguage(initialLanguage()); // every dictionary file is loaded now
 const status = $("status");
 const out = $("out");
 let py = null;
-let last = null; // { name, kind, ms, data } of the last check; the report object stays in Python
+let last = null; // { name, kind, ms, data, size, sha256, test } of the last check; the report object stays in Python
 
 // ---------- small DOM helpers (no innerHTML for anything that carries file content) ----------
 function el(tag, attrs, ...children) {
@@ -137,6 +137,12 @@ function kindOf(name) {
 // Python runs synchronously on the main thread: give the browser one frame to paint the busy
 // state before a long call (a large institution takes seconds), otherwise the page looks frozen.
 const nextPaint = () => new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+async function sha256Hex(bytes) {
+  try {
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  } catch (e) { return ""; } // insecure context: no SubtleCrypto
+}
 
 async function checkFile(name, bytes) {
   if (!py) return;
@@ -148,16 +154,18 @@ async function checkFile(name, bytes) {
     const kind = kindOf(name);
     const path = kind === "workbook" ? "/tmp/input.xlsx" : "/tmp/input.xml"; // fixed in-memory path; the name is only used for the Test rule
     py.FS.writeFile(path, bytes);
+    const sha256 = await sha256Hex(bytes);
     let json;
+    let test = false;
     if (kind === "workbook") {
       json = py.globals.get("run_workbook")(path, $("version").value, LANG);
     } else {
       const mode = $("mode").value;
-      const test = mode === "auto" ? name.toLowerCase().startsWith("test") : mode === "test";
+      test = mode === "auto" ? name.toLowerCase().startsWith("test") : mode === "test";
       json = py.globals.get("run_xml")(path, test, LANG);
     }
     const ms = performance.now() - t0;
-    last = { name, kind, ms, data: JSON.parse(json) };
+    last = { name, kind, ms, data: JSON.parse(json), size: bytes.length, sha256, test };
     render();
   } catch (e) {
     last = null;

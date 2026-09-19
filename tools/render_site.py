@@ -198,45 +198,25 @@ SOFTWARE = {
         },
         {
             "@type": "Offer",
-            "name": "Pro, 1-10 Vehikel",
-            "price": "900",
-            "priceCurrency": "CHF",
+            "name": "Pro (Prüfprotokoll, Mandantenübersicht, Support)",
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "120",
+                "priceCurrency": "CHF",
+                "unitText": "Vehikel und Jahr",
+                "minPrice": "900",
+            },
             "url": SITE + "preise.html",
         },
         {
             "@type": "Offer",
-            "name": "Pro, 11-50 Vehikel",
-            "price": "1500",
-            "priceCurrency": "CHF",
-            "url": SITE + "preise.html",
-        },
-        {
-            "@type": "Offer",
-            "name": "Pro, über 50 Vehikel",
-            "price": "2400",
+            "name": "Begleitete erste Meldung (einmalig)",
+            "price": "450",
             "priceCurrency": "CHF",
             "url": SITE + "preise.html",
         },
     ],
 }
-FAQ = [
-    (
-        "Was zählt als Vehikel?",
-        "Jedes meldende Finanzinstitut, für das Sie Meldungen einreichen (Trust, Stiftung, Gesellschaft, Fonds). Ein Workbook = ein Institut = ein Register.",
-    ),
-    (
-        "Brauche ich das Abonnement, um die App zu nutzen?",
-        "Nein. Die App ist vollständig und kostenlos. Das Abonnement kauft Unterstützung, Garantien und Zeit.",
-    ),
-    (
-        "Laden Sie die Meldung für uns hoch?",
-        "Nein. Das Hochladen bleibt beim Institut, mit dessen Portal-Zugang. Wir sehen Ihre Datei nie.",
-    ),
-    (
-        "Welche Zahlungsarten?",
-        "Rechnung, jährlich im Voraus, in Schweizer Franken. Preise ohne Mehrwertsteuer.",
-    ),
-]
 
 
 def structured_data(name: str, url: str, title: str, desc: str, lang: str = "de") -> str:
@@ -275,7 +255,7 @@ def structured_data(name: str, url: str, title: str, desc: str, lang: str = "de"
                         "name": q,
                         "acceptedAnswer": {"@type": "Answer", "text": a},
                     }
-                    for q, a in [(t(lang, f"pr_q{i}"), t(lang, f"pr_a{i}")) for i in range(1, 5)]
+                    for q, a in [(t(lang, f"pr_q{i}"), t(lang, f"pr_a{i}")) for i in range(1, 6)]
                 ],
             }
         )
@@ -564,12 +544,12 @@ HOME = f"""
       <div class="plan-card reveal"><h3 data-i18n="pr_free">Basis</h3><div class="price" data-i18n="pr_free_price">0 CHF</div><div class="per" data-i18n="pr_free_per">für immer</div>
         <ul><li>{CHECK}<span data-i18n="pr_free_1">Web-App mit allen Prüfungen</span></li><li>{CHECK}<span data-i18n="pr_free_2">Excel-Vorlage, XML-Erstellung, Verschlüsselung</span></li><li>{CHECK}<span data-i18n="pr_free_3">Register für Korrekturen und Storni</span></li></ul>
         <a class="btn" href="app.html" data-i18n="pr_free_btn">App öffnen</a></div>
-      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Empfohlen</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">ab 900 CHF</div><div class="per" data-i18n="pr_pro_per">pro Jahr und Organisation</div>
-        <ul><li>{CHECK}<span data-i18n="pr_pro_1">Alles aus Basis</span></li><li>{CHECK}<span data-i18n="pr_pro_2">Support mit Vorrang in der Meldesaison</span></li><li>{CHECK}<span data-i18n="pr_pro_3">Garantierte Aktualisierung bei neuen Regeln</span></li><li>{CHECK}<span data-i18n="pr_pro_4">Durchsicht der ersten Meldung</span></li></ul>
+      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Empfohlen</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">120 CHF</div><div class="per" data-i18n="pr_pro_per">pro Vehikel und Jahr, mindestens 900 CHF pro Organisation</div>
+        <ul><li>{CHECK}<span data-i18n="pr_pro_2">Prüfprotokoll als PDF zu jeder Meldung</span></li><li>{CHECK}<span data-i18n="pr_pro_3">Mandantenübersicht und Stapelverarbeitung</span></li><li>{CHECK}<span data-i18n="pr_pro_4">Support in der Meldesaison, Regeländerungen innert 30 Tagen</span></li></ul>
         <a class="btn primary" href="kontakt.html" data-i18n="pr_pro_btn">Angebot anfragen</a></div>
-      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Softwarehäuser</h3><div class="price" data-i18n="pr_lib_price">2'500 CHF</div><div class="per" data-i18n="pr_lib_per">pro Jahr</div>
-        <ul><li>{CHECK}<span data-i18n="pr_lib_1">Python-Bibliothek in Ihrem Produkt</span></li><li>{CHECK}<span data-i18n="pr_lib_2">Technischer Support bei der Integration</span></li><li>{CHECK}<span data-i18n="pr_lib_3">Frühzeitige Information zu Änderungen</span></li></ul>
-        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Kontakt aufnehmen</a></div>
+      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Begleitete erste Meldung</h3><div class="price" data-i18n="pr_lib_price">450 CHF</div><div class="per" data-i18n="pr_lib_per">einmalig, auch ohne Abonnement</div>
+        <ul><li>{CHECK}<span data-i18n="pr_lib_1">Eine Stunde online: Sie erstellen, wir schauen zu</span></li><li>{CHECK}<span data-i18n="pr_lib_2">Jeder Befund wird erklärt, bevor Sie hochladen</span></li><li>{CHECK}<span data-i18n="pr_lib_3">Prüfprotokoll inklusive</span></li></ul>
+        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Termin anfragen</a></div>
     </div>
     <p style="margin-top:20px"><a href="preise.html" data-i18n="pricing_all">Alle Preise und Leistungen</a></p>
   </div>
@@ -603,22 +583,24 @@ PRICING = f"""
       <div class="plan-card reveal"><h3 data-i18n="pr_free">Basis</h3><div class="price" data-i18n="pr_free_price">0 CHF</div><div class="per" data-i18n="pr_free_per">für immer</div>
         <ul>{plan_li(["pr_free_1", "pr_free_2", "pr_free_3", "pr_free_4", "pr_free_5"], ["Web-App mit allen Prüfungen (59 von 65 ESTV-Regeln)", "Excel-Vorlage, XML-Erstellung, Verschlüsselung", "Register für Korrekturen und Storni", "Deutsch, Französisch, Italienisch", "Hilfe über das öffentliche Repository"])}</ul>
         <a class="btn" href="app.html" data-i18n="pr_free_btn">App öffnen</a></div>
-      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Empfohlen</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">ab 900 CHF</div><div class="per" data-i18n="pr_pro_per">pro Jahr und Organisation</div>
-        <ul>{plan_li(["pr_pro_1", "pr_pro_2", "pr_pro_3", "pr_pro_4", "pr_pro_5"], ["Alles aus Basis", "Support per E-Mail, mit Vorrang in der Meldesaison (Mai-Juni)", "Garantierte Aktualisierung bei neuen Regeln der ESTV oder der OECD", "Durchsicht der ersten Meldung vor dem Hochladen", "Einführung (1 Stunde, online) für Ihr Team"])}</ul>
-        <div class="bands"><div><span data-i18n="pr_band1">1-10 Vehikel</span><b data-i18n="pr_band1_p">900 CHF / Jahr</b></div><div><span data-i18n="pr_band2">11-50 Vehikel</span><b data-i18n="pr_band2_p">1'500 CHF / Jahr</b></div><div><span data-i18n="pr_band3">über 50 Vehikel</span><b data-i18n="pr_band3_p">2'400 CHF / Jahr</b></div></div>
+      <div class="plan-card featured reveal d1"><span class="badge-top" data-i18n="pr_popular">Empfohlen</span><h3 data-i18n="pr_pro">Pro</h3><div class="price" data-i18n="pr_pro_price">120 CHF</div><div class="per" data-i18n="pr_pro_per">pro Vehikel und Jahr, mindestens 900 CHF pro Organisation</div>
+        <ul>{plan_li(["pr_pro_1", "pr_pro_2", "pr_pro_3", "pr_pro_4", "pr_pro_5"], ["Alles aus Basis", "Prüfprotokoll als PDF zu jeder Prüfung und jeder erstellten Meldung", "Mandantenübersicht und Stapelverarbeitung für alle Vehikel (in Arbeit, verfügbar vor dem 16.01.2027)", "Support per E-Mail in zwei Arbeitstagen, einem in der Meldesaison; Regeländerungen innert 30 Tagen", "Einführung (1 Stunde, online) für Ihr Team"])}</ul>
+        <div class="bands"><div><span data-i18n="pr_band1">1-7 Vehikel</span><b data-i18n="pr_band1_p">900 CHF / Jahr</b></div><div><span data-i18n="pr_band2">8-99 Vehikel</span><b data-i18n="pr_band2_p">120 CHF pro Vehikel / Jahr</b></div><div><span data-i18n="pr_band3">ab 100 Vehikel</span><b data-i18n="pr_band3_p">auf Anfrage</b></div></div>
         <a class="btn primary" href="kontakt.html" data-i18n="pr_pro_btn" style="margin-top:18px">Angebot anfragen</a></div>
-      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Softwarehäuser</h3><div class="price" data-i18n="pr_lib_price">2'500 CHF</div><div class="per" data-i18n="pr_lib_per">pro Jahr</div>
-        <ul>{plan_li(["pr_lib_1", "pr_lib_2", "pr_lib_3", "pr_lib_4"], ["Python-Bibliothek in Ihrem Produkt einsetzen", "Technischer Support bei der Integration", "Frühzeitige Information zu Schema- und Regeländerungen", "Nennung als Partner, wenn gewünscht"])}</ul>
-        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Kontakt aufnehmen</a></div>
+      <div class="plan-card reveal d2"><h3 data-i18n="pr_lib">Begleitete erste Meldung</h3><div class="price" data-i18n="pr_lib_price">450 CHF</div><div class="per" data-i18n="pr_lib_per">einmalig, auch ohne Abonnement</div>
+        <ul>{plan_li(["pr_lib_1", "pr_lib_2", "pr_lib_3", "pr_lib_4"], ["Eine Stunde online, per Bildschirmfreigabe: Sie erstellen Ihre erste produktive Meldung, wir schauen zu", "Jeder Befund wird erklärt, bevor Sie hochladen", "Prüfprotokoll zur Meldung inklusive", "Ihre Datei bleibt auf Ihrem Rechner"])}</ul>
+        <a class="btn" href="kontakt.html" data-i18n="pr_lib_btn">Termin anfragen</a></div>
     </div>
+    <p class="small muted" style="margin-top:10px" data-i18n="pr_lib_note">Softwarehäuser: Die Python-Bibliothek ist Apache-2.0 und frei nutzbar. Integrationssupport und frühzeitige Information zu Schemaänderungen: 2'500 CHF pro Jahr - Kontakt.</p>
     <p class="small muted" style="margin-top:14px"><span data-i18n="pr_terms_note">Für Abonnemente gelten unsere Allgemeinen Geschäftsbedingungen.</span> <a href="agb.html" data-i18n="foot_terms">AGB</a></p>
-    <div class="pilot reveal"><h3 data-i18n="pr_pilot_t">Pilotinstitute</h3><p data-i18n="pr_pilot_p">Ein bis drei Institute, die im November 2026 und im Januar 2027 Testmeldungen über das Portal senden, zahlen während des Pilotversuchs nichts und erhalten den vollen Pro-Support.</p></div>
+    <div class="pilot reveal"><h3 data-i18n="pr_pilot_t">Pilotinstitute</h3><p data-i18n="pr_pilot_p">Ein bis drei Institute, die im November 2026 und im Januar 2027 Testmeldungen über das Portal senden, erhalten Pro für das erste Jahr kostenlos.</p></div>
     <h2 class="h2" style="margin-top:40px" data-i18n="pr_faq_t">Häufige Fragen</h2>
     <div class="faq">
       <details><summary data-i18n="pr_q1">Was zählt als Vehikel?</summary><p data-i18n="pr_a1">Jedes meldende Finanzinstitut, für das Sie Meldungen einreichen.</p></details>
       <details><summary data-i18n="pr_q2">Brauche ich das Abonnement, um die App zu nutzen?</summary><p data-i18n="pr_a2">Nein.</p></details>
       <details><summary data-i18n="pr_q3">Laden Sie die Meldung für uns hoch?</summary><p data-i18n="pr_a3">Nein.</p></details>
       <details><summary data-i18n="pr_q4">Welche Zahlungsarten?</summary><p data-i18n="pr_a4">Rechnung.</p></details>
+      <details><summary data-i18n="pr_q5">Was steht im Prüfprotokoll?</summary><p data-i18n="pr_a5">Datei-Hash, Meldung, Ergebnis, Befunde, jede Regel, Kennungen.</p></details>
     </div>
   </div>
 </section>
@@ -701,7 +683,7 @@ PRIVACY = """
 """
 
 sections = "".join(
-    f'<h2 data-i18n="agb_{i}_t"></h2><p data-i18n="agb_{i}"></p>' for i in range(1, 13)
+    f'<h2 data-i18n="agb_{i}_t"></h2><p data-i18n="agb_{i}"></p>' for i in ["1", "2", "3", "3b", *range(4, 13)]
 )
 TERMS = f"""
 <section class="section legal">

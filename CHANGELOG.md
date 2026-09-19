@@ -4,6 +4,16 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- meldbar Pro loader (`web/pro.js`): licence key in the app, encrypted per-licence bundle from
+  the page's own origin (HMAC/HKDF/AES-GCM in WebCrypto), installed into Pyodide; `aeoi:built`
+  event with the built cards; the checked file's size, SHA-256 and test flag kept on the page;
+  `last_built` / `last_built_report` / `last_built_pem` kept on the Python side. `web/pro/` is
+  git-ignored and filled by CI from the private repository (read-only deploy key, optional
+  secret `PRO_DEPLOY_KEY`).
+- Pricing: Pro at 120 CHF per vehicle and year (minimum 900 CHF per organisation) with the
+  Prüfprotokoll as its first tangible content; one-off "Begleitete erste Meldung" (450 CHF);
+  software houses as a note. AGB clause 3 rewritten, clause 3a added. Privacy texts mention the
+  locally stored licence key and the encrypted bundle.
 - Findings readable without the tool's vocabulary: the specific message (which character,
   which country, why) is visible on the card, only the ESTV wording and the technical path are
   folded; fields carry a label in the page language next to the template column

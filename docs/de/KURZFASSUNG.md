@@ -52,10 +52,13 @@ verlangt keine Registrierung und sendet nichts nach Hause.
 
 ## Kosten
 
-Das Werkzeug ist und bleibt kostenlos. Geplant ist ein Support-Abonnement **pro Organisation**,
-nicht pro Benutzer, mit unbegrenzter Zahl meldender Institute: 900 CHF/Jahr bis 10 Vehikel,
-1'500 bis 50, 2'400 darüber; Softwarehäuser 2'500 CHF/Jahr. Pilotinstitute zahlen während des
-Pilotversuchs nichts.
+Das Werkzeug ist und bleibt kostenlos. **Pro** kauft, was ins Dossier gehört: ein
+Prüfprotokoll (PDF) zu jeder Prüfung und jeder erstellten Meldung - Datei-Hash, Befunde, jede
+geprüfte Regel, Kennungen und Hashes der gesendeten Datei -, die Übersicht über alle Vehikel
+(vor dem 16.01.2027) und Support in der Meldesaison. Preis **pro Vehikel**, damit er
+weiterverrechnet werden kann: 120 CHF pro Vehikel und Jahr, mindestens 900 CHF pro Organisation,
+Benutzer unbegrenzt. Einmalig 450 CHF: die begleitete erste Meldung (eine Stunde online, auch
+ohne Abonnement). Pilotinstitute erhalten Pro im ersten Jahr kostenlos.
 
 ## Was wir jetzt suchen: ein bis drei Pilotinstitute
 

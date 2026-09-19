@@ -116,6 +116,19 @@ whole flow with a 3'000-account institution and times every step in the browser 
 workbook check 4 s, build + encrypt 21 s, correction 12 s, restore 21 s; registry 4.8 MB).
 CI publishes the page to GitHub Pages once Pages is enabled for the repository.
 
+## meldbar Pro (proprietary add-on)
+
+The page has a small, open loader (`web/pro.js`) for a proprietary add-on that is **not** in this
+repository: with a licence key it fetches an encrypted bundle from the page's own origin
+(`pro/<id>.bin`, AES-256-GCM; file name and key are derived from the licence key in the browser
+with WebCrypto), decrypts it locally and installs the contained wheel into the Python runtime.
+No server, no other host; an unknown key names a file that does not exist. What the add-on does
+today: a **Prüfprotokoll** (PDF, de/fr/it/en) for every check and every built message. The
+bundles are copied into the Pages deployment by CI from a private repository (read-only deploy
+key, secret `PRO_DEPLOY_KEY`) when that secret is set; without it the page works exactly as before and every key is
+"unknown". Everything that validates, builds, encrypts and keeps the registry stays here, under
+Apache-2.0.
+
 ## Sources
 
 All schemas and guidance documents are pinned with SHA-256 in [docs/SOURCES.md](docs/SOURCES.md).

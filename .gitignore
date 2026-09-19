@@ -15,6 +15,7 @@ Test*.zip
 CRS_Payload*
 CRS_KEY
 .local/
+web/pro/
 docs/sources/estv/*.pdf
 web/*.whl
 web/pyodide/

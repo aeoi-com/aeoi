@@ -78,7 +78,19 @@ try {
   await page.goto(`http://127.0.0.1:${port}/app.html#nofsa,demo`);
   await ready;
   console.log("runtime ready; version", await page.locator("#ver").textContent());
-  const bootRequests = requests.length;
+  let bootRequests = requests.length;
+
+  // meldbar Pro: the loader is public, the pack is not. With the private bundle built into
+  // web/pro/ (developer machine) the example key activates; on a public checkout it is unknown.
+  // Either way: a same-origin GET only, before any file is selected.
+  const proEvent = page.waitForEvent("console", { predicate: (m) => m.text().startsWith("aeoi:pro"), timeout: 120000 });
+  await page.locator("#pro-key").fill("mb1 testa-testb testc testd");
+  await page.locator("#pro-activate").click();
+  const proText = (await proEvent).text();
+  const proActive = proText === "aeoi:pro active valid";
+  check("Pro key handled: " + proText + (proActive ? "" : " (no private bundle here)"), proActive || proText === "aeoi:pro unknown");
+  check("Pro status line and form state agree", proActive ? (await page.locator("#pro-status").textContent()).includes("Muster Treuhand AG") && !(await page.locator("#pro-form").isVisible()) : (await page.locator("#pro-status").textContent()).includes("nicht bekannt"));
+  const bootRequestsWithPro = requests.length;
 
   const resultText = () => page.locator("#out").textContent();
   async function upload(file) {
@@ -93,6 +105,7 @@ try {
     await done;
     return await resultText();
   }
+  bootRequests = bootRequestsWithPro;
   const good = await upload(join(fixtures, "Test-report.xml"));
   check("valid XML -> OK: " + good.split("\n")[0], good.startsWith("OK"));
   check("verdict card in the OK state", (await page.locator("#verdict").getAttribute("class")).includes("ok") && (await page.locator("#verdict-title").textContent()).length > 0);
@@ -116,6 +129,16 @@ try {
   check("downloaded report equals the shown text", readFileSync(saved, "utf-8") === demo);
   const okSample = await click("sample-ok");
   check("valid sample -> OK", okSample.startsWith("OK"));
+  if (proActive) {
+    const pdl = page.waitForEvent("download", { timeout: 60000 });
+    await page.locator("#protokoll").click();
+    const pdfPath = join(fixtures, "protokoll-check.pdf");
+    await (await pdl).saveAs(pdfPath);
+    const pdf = readFileSync(pdfPath);
+    check("Pro: Prüfprotokoll for the checked file downloaded (" + pdf.length + " bytes)", (await pdl).suggestedFilename().startsWith("Pruefprotokoll-") && pdf.subarray(0, 5).toString() === "%PDF-" && pdf.length > 5000);
+  } else {
+    check("Pro inactive: no protocol button", (await page.locator("#protokoll").count()) === 0);
+  }
 
   // the Excel template generated in the browser, in the language of the page (German by default)
   const tplDl = page.waitForEvent("download", { timeout: 60000 });
@@ -162,6 +185,11 @@ try {
   const pkgPath = await withDownload(async () => page.locator(".built .btn.primary").first().click());
   const xmlPath = await withDownload(async () => page.locator(".built .btn:not(.primary)").first().click());
   check("package and XML downloaded: " + pkgPath.split(/[\\/]/).pop(), /Test-CRS-2026-.*\.zip$/.test(pkgPath) && xmlPath.endsWith(".xml"));
+  if (proActive) {
+    const builtPdf = await withDownload(async () => page.locator(".built .btn.pro").first().click());
+    const pdf = readFileSync(builtPdf);
+    check("Pro: Prüfprotokoll for the built message downloaded (" + pdf.length + " bytes)", builtPdf.endsWith(".pdf") && pdf.subarray(0, 5).toString() === "%PDF-" && pdf.length > 5000);
+  }
   check("registry lists the message as built, outcome card visible", (await page.locator("#reg-list .status.built").count()) === 1 && await page.locator("#outcome-card").isVisible());
   await page.locator("#outcome-text").fill("Validierungsbestätigung: Die Meldung wurde akzeptiert.");
   const outcomeMsg = consoleEvent("aeoi:outcome");
@@ -255,7 +283,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check("home: template link follows the language", (await tplLink.getAttribute("href")) === "vorlage/meldbar-vorlage-it.xlsx");
   await site.locator("#lang").selectOption("de");
   await site.goto(`http://127.0.0.1:${port}/preise.html`);
-  check("pricing page: three plans, FAQ", (await site.locator(".plan-card").count()) === 3 && (await site.locator(".faq details").count()) === 4);
+  check("pricing page: three plans, five FAQ entries, per-vehicle price", (await site.locator(".plan-card").count()) === 3 && (await site.locator(".faq details").count()) === 5 && (await site.locator(".plan-card.featured .price").textContent()).includes("120 CHF"));
   await site.goto(`http://127.0.0.1:${port}/kontakt.html`);
   check("contact page: form without a server (mailto)", (await site.locator("#contact-form").getAttribute("data-to")) === "kontakt@meldbar.ch");
   for (const p of ["ueber-uns.html", "impressum.html", "datenschutz.html", "agb.html"]) {

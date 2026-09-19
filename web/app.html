@@ -202,6 +202,20 @@
     <div id="outcome-out" class="findings"></div>
   </section>
 
+  <section class="card" id="pro-card">
+    <h2 data-i18n="pro_title">meldbar Pro</h2>
+    <p class="small muted" data-i18n="pro_intro"></p>
+    <div class="keyrow" id="pro-form">
+      <label class="grow"><span data-i18n="pro_key_label">Lizenzschlüssel</span> <input type="text" id="pro-key" class="pill mono" autocomplete="off" spellcheck="false" placeholder="MB1-XXXXX-XXXXX-XXXXX-XXXXX"></label>
+      <button class="btn primary" id="pro-activate" type="button" disabled><span data-i18n="pro_activate">Aktivieren</span></button>
+    </div>
+    <div id="pro-status" class="small"></div>
+    <div class="actions">
+      <button class="btn hidden" id="pro-remove" type="button"><span data-i18n="pro_remove">Lizenz entfernen</span></button>
+      <a class="small muted" href="preise.html" data-i18n="pro_more">Pro-Lizenz: ab 900 CHF pro Jahr und Organisation - siehe Preise.</a>
+    </div>
+  </section>
+
   <section class="how">
     <h2 data-i18n="how_title">So funktioniert es</h2>
     <div class="grid three">
@@ -244,5 +258,6 @@
 <script src="i18n-flow.js"></script>
 <script src="app.js"></script>
 <script src="flow.js"></script>
+<script src="pro.js"></script>
 </body>
 </html>
