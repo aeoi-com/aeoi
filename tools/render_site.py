@@ -20,7 +20,7 @@ LANGS = ("de", "fr", "it")
 LOCALES = {"de": "de_CH", "fr": "fr_CH", "it": "it_CH"}
 I18N_FILES = ("site-i18n.js", "site-i18n-agb.js", "site-i18n-pages.js")
 ASSET_RE = re.compile(
-    r'(href|src)="(styles\.css|site\.css|site\.js|site-i18n[^"]*\.js|logo-mark\.svg|manifest\.webmanifest|app\.html[^"]*|vorlage/[^"]+)"'
+    r'(href|src)="(styles\.css|site\.css|site\.js|site-i18n[^"]*\.js|logo-mark\.svg|manifest\.webmanifest|app\.html[^"]*|vorlage/[^"]+|team/[^"]+)"'
 )
 I18N_EL_RE = re.compile(r'<(\w+)([^>]*?\sdata-i18n="([^"]+)"[^>]*)>(.*?)</\1>', re.DOTALL)
 PLACEHOLDER_RE = re.compile(r'(<[^>]*\sdata-i18n-ph="([^"]+)"[^>]*\splaceholder=")([^"]*)(")')
@@ -620,6 +620,15 @@ ABOUT = f"""
       <div class="feature reveal"><div class="ico">{ICONS[1]}</div><h3 data-i18n="ab_v1_t">Aus den Quellen</h3><p data-i18n="ab_v1_p"></p></div>
       <div class="feature reveal d1"><div class="ico">{ICONS[2]}</div><h3 data-i18n="ab_v2_t">Offen</h3><p data-i18n="ab_v2_p"></p></div>
       <div class="feature reveal d2"><div class="ico">{ICONS[6]}</div><h3 data-i18n="ab_v3_t">Ohne Neugier</h3><p data-i18n="ab_v3_p"></p></div>
+    </div>
+    <!-- PLATZHALTER (19.09.2026): Namen und Biografien der drei Inhaber sind erfundene
+         Entwürfe, vor der Veröffentlichung durch die echten Angaben ersetzen (web/site-i18n.js, ab_m*). -->
+    <h2 class="h2" style="margin-top:44px" data-i18n="ab_team_t">Die Inhaber</h2>
+    <p class="lead" data-i18n="ab_team_p"></p>
+    <div class="team">
+      <div class="member reveal"><img src="team/gruender-1.jpg" alt="" width="720" height="900" loading="lazy"><h3 data-i18n="ab_m1_n"></h3><div class="role" data-i18n="ab_m1_r"></div><p data-i18n="ab_m1_p"></p></div>
+      <div class="member reveal d1"><img src="team/gruender-2.jpg" alt="" width="720" height="900" loading="lazy"><h3 data-i18n="ab_m2_n"></h3><div class="role" data-i18n="ab_m2_r"></div><p data-i18n="ab_m2_p"></p></div>
+      <div class="member reveal d2"><img src="team/gruender-3.jpg" alt="" width="720" height="900" loading="lazy"><h3 data-i18n="ab_m3_n"></h3><div class="role" data-i18n="ab_m3_r"></div><p data-i18n="ab_m3_p"></p></div>
     </div>
     <div class="prose"><p class="reveal" data-i18n="ab_p3"></p></div>
     <p style="margin-top:24px"><a class="btn primary lg" href="kontakt.html" data-i18n="ab_cta">Schreiben Sie uns</a></p>

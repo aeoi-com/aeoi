@@ -257,7 +257,14 @@ user or on request (competitor details are kept out of this public file). Swiss 
    message, 1-hour onboarding) and the software-house licence contents are proposals; the About
    page claims only what is true (Zurich, built from the primary sources, small team) - no
    invented credentials, customers or numbers; contact address kontakt@meldbar.ch must exist;
-   the imprint names "meldbar" without a legal-entity form. Browser test: 43 checks.
+   the imprint names "meldbar" without a legal-entity form.
+   Team section on the About page (19.09.2026, owner's request): three owner photos in
+   `web/team/gruender-{1,2,3}.jpg` (720x900, cropped from the originals) with **invented
+   placeholder bios and "[Vorname Name]" as names** (`ab_team_*`, `ab_m*` in
+   `web/site-i18n.js`, de/fr/it). The owner asked for invented text "for now"; the claims
+   (decades of experience etc.) are not verified and must be replaced with the real names and
+   facts before this commit is pushed - misleading statements about the business would be a
+   UWG problem and would undo the trust positioning. Committed locally, deliberately not pushed. Browser test: 43 checks.
    Dark mode removed on the owner's request (light only; no theme toggle, no `aeoi-theme` key).
    AGB (`agb.html`, `web/site-i18n-agb.js`, de binding + fr/it courtesy): free part under Apache
    "as is", Pro contents defined (support within 2 working days, 1 in May-June; rule updates
