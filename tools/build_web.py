@@ -38,7 +38,7 @@ PYODIDE_PACKAGES = ["lxml", "pydantic", "micropip", "cryptography", "sqlite3"]
 PYPI_WHEELS = ["xmlschema", "elementpath", "xsdata==24.12", "openpyxl", "et_xmlfile"]
 STATIC = ["index.html", "app.html", "preise.html", "ueber-uns.html", "kontakt.html", "impressum.html", "datenschutz.html", "agb.html", "fehlercodes.html",
           "app.js", "flow.js", "pro.js", "i18n.js", "i18n-flow.js", "site.js", "site-i18n.js", "site-i18n-agb.js", "site-i18n-pages.js", "styles.css", "site.css", "manifest.webmanifest",
-          "icon.svg", "icon-maskable.svg", "logo.svg", "logo-mark.svg", "team/gruender-1.jpg", "team/gruender-2.jpg", "team/gruender-3.jpg", "fonts/inter-latin.woff2", "fonts/inter-latin-ext.woff2"]  # fmt: skip
+          "icon.svg", "icon-maskable.svg", "logo.svg", "logo-mark.svg", "fonts/inter-latin.woff2", "fonts/inter-latin-ext.woff2"]  # fmt: skip
 
 
 def log(msg: str) -> None:

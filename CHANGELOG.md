@@ -4,8 +4,6 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
-- About page: "Die Inhaber" section with three owner photos (`web/team/`) and bios in de/fr/it.
-  Names and bios are placeholders to be replaced with the real ones before publishing.
 - meldbar Pro loader (`web/pro.js`): licence key in the app, encrypted per-licence bundle from
   the page's own origin (HMAC/HKDF/AES-GCM in WebCrypto), installed into Pyodide; `aeoi:built`
   event with the built cards; the checked file's size, SHA-256 and test flag kept on the page;
