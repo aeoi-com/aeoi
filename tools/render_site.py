@@ -683,7 +683,8 @@ PRIVACY = """
 """
 
 sections = "".join(
-    f'<h2 data-i18n="agb_{i}_t"></h2><p data-i18n="agb_{i}"></p>' for i in ["1", "2", "3", "3b", *range(4, 13)]
+    f'<h2 data-i18n="agb_{i}_t"></h2><p data-i18n="agb_{i}"></p>'
+    for i in ["1", "2", "3", "3b", *range(4, 13)]
 )
 TERMS = f"""
 <section class="section legal">
