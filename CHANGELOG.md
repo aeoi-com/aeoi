@@ -4,6 +4,13 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Registry knows its institution: `Registry.remember_fi()` / `fi()` (settings), set by every
+  build with a registry and by a restore; `registry_view()["fi"]`. Registries older than this
+  carry none until their next build.
+- Mandanten card: portal outcomes for all vehicles at once (status-message XML or pasted text,
+  matched by MessageRefId or DocRefId), quick "akzeptiert / abgelehnt" per pending message,
+  changed registries written back into the folder or downloaded as one zip; vehicles paired by
+  ESTV-ID when file names differ, and a registry of another institution is refused.
 - Mandantenübersicht + Stapelverarbeitung on the page (Pro): folder or multi-file selection of
   workbook/registry pairs, table per vehicle, batch build of every ready vehicle with encrypted
   packages, updated registries and one Prüfprotokoll per message - written back into the folder

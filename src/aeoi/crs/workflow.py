@@ -66,6 +66,7 @@ def registry_view(reg: Registry | None) -> dict[str, Any]:
         "counts": counts,
         "pending": [m["message_ref_id"] for m in messages if m["status"] in ("built", "submitted")],
         "has_key": bool(reg.get_setting(PUBLIC_KEY_SETTING)),
+        "fi": reg.fi(),
     }
 
 
@@ -290,6 +291,8 @@ def build(
         finish("new", result)
     if not outputs:
         raise WorkflowError(Msg("wf_nothing_to_send"))
+    if reg is not None:
+        reg.remember_fi(msg.reporting_fi.estv_id, msg.reporting_fi.name)
     return outputs
 
 

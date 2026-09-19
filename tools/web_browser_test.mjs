@@ -241,6 +241,22 @@ try {
     check("zip: outputs per vehicle, protocol PDFs, Alpha's registry under Register/: " + zipPath.split(/[\\/]/).pop(),
       /^Stapel-.*\.zip$/.test(zipPath.split(/[\\/]/).pop()) && zipNames.includes("Alpha-Trust/Test-CRS-") && zipNames.includes("Beta-Stiftung/Pruefprotokoll-") && zipNames.includes("Register/Alpha-Trust.sqlite") && zipNames.includes("manifest.json"));
     check("Alpha (key in registry) encrypted, Beta (no key) XML only", (await page.locator("#mand-out .built").count()) === 2 && (await page.locator("#mand-out").textContent()).includes("nicht verschlüsselt"));
+    // the batch left Alpha with a pending message (in memory): quick verdict, then the portal's text
+    await page.locator("#mand-table .quick .btn").first().waitFor({ timeout: 60000 }); // overview refreshed after the zip
+    check("overview after the batch: Alpha pending with quick buttons", (await page.locator("#mand-table .mini.pending").count()) === 1 && (await page.locator("#mand-table .quick .btn").count()) === 2);
+    const alphaRef = (await page.locator("#mand-out .built .ref").first().textContent()).split(" · ").pop().trim();
+    const manual = consoleEvent("aeoi:mandanten manual");
+    await page.locator("#mand-table .quick .btn").nth(1).click(); // ✗ abgelehnt
+    check("quick verdict recorded: " + (await manual).text(), (await manual).text() === "aeoi:mandanten manual rejected" && await page.locator("#mand-save").isVisible());
+    await page.locator("#mand-table .mini.rejected").first().waitFor({ timeout: 60000 });
+    await page.locator("#mand-oc-text").fill(`Validierungsbestätigung: Die Meldung ${alphaRef} wurde akzeptiert.`);
+    const oc = consoleEvent("aeoi:mandanten outcomes");
+    await page.locator("#mand-oc-record").click();
+    check("pasted portal text matched by MessageRefId and recorded: " + (await oc).text(), (await oc).text() === "aeoi:mandanten outcomes 1 unmatched=0" && (await page.locator("#mand-oc-out .built").textContent()).includes("accepted"));
+    await page.locator("#mand-table .mini.accepted").first().waitFor({ timeout: 60000 });
+    check("Alpha now accepted, nothing pending", (await page.locator("#mand-table .mini.accepted").count()) === 1 && (await page.locator("#mand-table .mini.pending").count()) === 0);
+    const regZip = await withDownload(async () => page.locator("#mand-save").click());
+    check("changed registries downloaded as one zip: " + regZip.split(/[\\/]/).pop(), /^Register-.*\.zip$/.test(regZip.split(/[\\/]/).pop()) && readFileSync(regZip).toString("latin1").includes("Register/Alpha-Trust.sqlite") && !(await page.locator("#mand-save").isVisible()));
   }
 
   // verify the encrypted packages and the registry outside the browser

@@ -85,6 +85,9 @@ V2_ONLY_EXCLUDED = {
 }  # fmt: skip
 
 
+FI_SETTING = "reporting_fi"
+
+
 class RegistryError(ValueError):
     """A rule of Wegleitung Ziffer 6 / 5.3.x would be violated (the ESTV code is in the text)."""
 
@@ -211,6 +214,16 @@ class Registry:
             (key, value),
         )
         self.conn.commit()
+
+    # --- identity: which reporting FI this registry belongs to (settings, since the first
+    # build or restore that knew it; registries older than that carry none) ---------------
+
+    def remember_fi(self, estv_id: str, name: str) -> None:
+        self.set_setting(FI_SETTING, json.dumps({"estv_id": estv_id, "name": name}))
+
+    def fi(self) -> dict[str, str] | None:
+        raw = self.get_setting(FI_SETTING)
+        return json.loads(raw) if raw else None
 
     # --- queries ---------------------------------------------------------------------------
 

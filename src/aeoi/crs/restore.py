@@ -183,6 +183,9 @@ def restore(
             report.restored.append(_register(reg, f, status, by_identity))
         except RegistryError as exc:
             report.skipped.append((f.name, exc.args[0]))
+    if report.restored:
+        fi = loaded[0].parsed.message.reporting_fi
+        reg.remember_fi(fi.estv_id, fi.name)
     return report
 
 

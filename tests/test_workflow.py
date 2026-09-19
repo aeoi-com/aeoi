@@ -206,3 +206,20 @@ def test_header_variant_and_key_formats(reg, key_pair, tmp_path):
     assert reg.get_setting(workflow.PUBLIC_KEY_SETTING).startswith("-----BEGIN PUBLIC KEY-----")
     with pytest.raises(packaging.PackagingError, match="PEM or DER"):
         packaging.load_public_key(b"not a key")
+
+
+def test_registry_remembers_its_institution(reg, tmp_path):
+    """A build with a registry records which FI the file belongs to (the Mandantenübersicht
+    pairs workbooks and registries by it); a fresh registry knows nothing; a restored one learns
+    it from the sent XML files."""
+    assert reg.fi() is None and workflow.registry_view(reg)["fi"] is None
+    msg = sample_message()
+    outs = workflow.build(msg, "3.0", reg, test=True)
+    assert reg.fi() == {"estv_id": msg.reporting_fi.estv_id, "name": msg.reporting_fi.name}
+    assert workflow.registry_view(reg)["fi"]["name"] == msg.reporting_fi.name
+    xml = tmp_path / "sent.xml"
+    xml.write_text(outs[0].result.xml, encoding="utf-8")
+    fresh = Registry(tmp_path / "fresh.sqlite")
+    workflow.restore_registry(fresh, [xml], status="accepted")
+    assert fresh.fi() == reg.fi()
+    fresh.close()

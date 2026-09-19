@@ -29,7 +29,12 @@ user or on request (competitor details are kept out of this public file). Swiss 
   `meldbar_pro.mandanten` - pairs `<stem>.xlsx` + `<stem>.sqlite`, `overview()` without side
   effects, `batch_build()` = check -> plan -> build -> package -> protocol per message, registries
   updated in place, `zip_outputs()` for browsers without the File System Access API; UI in
-  `web/pro.js`, card `#mand-card`), support (2 working days, 1 in May-June), rule updates
+  `web/pro.js`, card `#mand-card`; since 19.09 late: pairing by ESTV-ID when the file names
+  differ (the registry remembers its FI - public `Registry.remember_fi()/fi()`, set on build and
+  restore), a registry of another institution is refused, `record_outcomes()` matches portal
+  answers to messages by MessageRefId or DocRefId across all registries, `record_manual()` for
+  the quick verdict; changed registries go back into the folder or into `Register-<date>.zip`),
+  support (2 working days, 1 in May-June), rule updates
   within 30 days, 1-hour onboarding. One-off **Begleitete erste Meldung** 450 CHF (1 h screen
   share, also without Pro). Software houses: a note (2'500 CHF/yr integration support; the
   library is Apache-2.0 anyway). Pilots get Pro free for the first year.
@@ -151,7 +156,7 @@ user or on request (competitor details are kept out of this public file). Swiss 
   passes; the wheel installs and runs in a clean venv. GitHub readiness: `.github/workflows/ci.yml`
   (tests on Linux/Windows, 3.11-3.13, ruff, build + twine + clean install, web smoke, DCO check on
   pull requests), `pages.yml` (publishes web/ to GitHub Pages), CHANGELOG.md, CONTRIBUTING.md (DCO).
-- 217 tests: `.venv/Scripts/python -m pytest`; browser test 68 checks (incl. Pro activation with
+- 217 tests: `.venv/Scripts/python -m pytest`; browser test 73 checks (incl. Pro activation with
   the example key, both Prüfprotokoll downloads and the Mandanten batch flow when the private
   blob is in `web/pro/` - `build_bundle.py --licences licences/licences.example.json --into
   ../aeoi/web` in the private repo).

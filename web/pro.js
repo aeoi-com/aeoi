@@ -55,6 +55,20 @@ Object.assign(I18N.de, {
   mand_plan: { new: "neu", changed: "geändert", deleted: "Storno", unchanged: "unverändert", blocked: "blockiert" },
   mand_pending: "{n} offen",
   mand_error: "Fehler: ",
+  mand_paired: "Register «{file}» über die ESTV-ID zugeordnet",
+  mand_quick_ok: "akzeptiert",
+  mand_quick_bad: "abgelehnt",
+  mand_quick_title: "Ergebnis des Portals für {ref} ohne Text erfassen",
+  mand_oc_title: "Portal-Ergebnisse erfassen",
+  mand_oc_hint: "Validierungsbestätigungen oder Statusmeldungen (XML oder Text) für beliebig viele Vehikel auf einmal - jede wird über ihre MessageRefId oder DocRefId der richtigen Meldung zugeordnet.",
+  mand_oc_files: "Ergebnisdateien wählen",
+  mand_oc_paste: "… oder den Text aus dem Portal hier einfügen",
+  mand_oc_record: "Zuordnen und erfassen",
+  mand_oc_done: "{r} Ergebnis(se) erfasst, {u} nicht zuzuordnen.",
+  mand_oc_row: "{file} → {fi} · {ref} · {status}",
+  mand_save: "Geänderte Register herunterladen",
+  mand_saved_dir: "Register im Ordner aktualisiert.",
+  mand_unsaved: "Register geändert, noch nicht gespeichert: {n}",
 });
 Object.assign(I18N.fr, {
   pro_title: "meldbar Pro",
@@ -104,6 +118,20 @@ Object.assign(I18N.fr, {
   mand_plan: { new: "nouveau", changed: "modifié", deleted: "annulation", unchanged: "inchangé", blocked: "bloqué" },
   mand_pending: "{n} en attente",
   mand_error: "Erreur : ",
+  mand_paired: "Registre « {file} » associé par l'ID AFC",
+  mand_quick_ok: "acceptée",
+  mand_quick_bad: "rejetée",
+  mand_quick_title: "Saisir le résultat du portail pour {ref} sans texte",
+  mand_oc_title: "Saisir les résultats du portail",
+  mand_oc_hint: "Confirmations de validation ou messages de statut (XML ou texte) pour autant de véhicules que vous voulez, d'un coup - chacun est associé à la bonne déclaration par son MessageRefId ou un DocRefId.",
+  mand_oc_files: "Choisir les fichiers de résultats",
+  mand_oc_paste: "… ou coller ici le texte du portail",
+  mand_oc_record: "Associer et saisir",
+  mand_oc_done: "{r} résultat(s) saisi(s), {u} sans correspondance.",
+  mand_oc_row: "{file} → {fi} · {ref} · {status}",
+  mand_save: "Télécharger les registres modifiés",
+  mand_saved_dir: "Registres mis à jour dans le dossier.",
+  mand_unsaved: "Registres modifiés, pas encore enregistrés : {n}",
 });
 Object.assign(I18N.it, {
   pro_title: "meldbar Pro",
@@ -153,6 +181,20 @@ Object.assign(I18N.it, {
   mand_plan: { new: "nuovo", changed: "modificato", deleted: "storno", unchanged: "invariato", blocked: "bloccato" },
   mand_pending: "{n} in sospeso",
   mand_error: "Errore: ",
+  mand_paired: "Registro «{file}» abbinato tramite l'ID AFC",
+  mand_quick_ok: "accettata",
+  mand_quick_bad: "respinta",
+  mand_quick_title: "Registrare l'esito del portale per {ref} senza testo",
+  mand_oc_title: "Registrare gli esiti del portale",
+  mand_oc_hint: "Conferme di validazione o messaggi di stato (XML o testo) per quanti veicoli vuole, in una volta - ognuno viene abbinato alla comunicazione giusta tramite il suo MessageRefId o un DocRefId.",
+  mand_oc_files: "Scegli i file degli esiti",
+  mand_oc_paste: "… oppure incolli qui il testo del portale",
+  mand_oc_record: "Abbina e registra",
+  mand_oc_done: "{r} esito/i registrato/i, {u} non abbinabili.",
+  mand_oc_row: "{file} → {fi} · {ref} · {status}",
+  mand_save: "Scarica i registri modificati",
+  mand_saved_dir: "Registri aggiornati nella cartella.",
+  mand_unsaved: "Registri modificati, non ancora salvati: {n}",
 });
 
 const PRO = { active: false, meta: null, state: null };
@@ -314,6 +356,23 @@ def pro_mandanten_build(names_json, version, test, lang, pem, header, meta_json)
 def pro_mandanten_zip(manifest_json):
     m = json.loads(manifest_json)
     return str(_pro_mandanten.zip_outputs(m, m["registries"], "/tmp/mandanten/Stapel.zip"))
+
+def pro_mandanten_outcomes(names_json, outcomes_json, lang):
+    paths = [os.path.join(MAND_IN, n) for n in json.loads(names_json)]
+    outcomes = [(o["name"], o["text"]) for o in json.loads(outcomes_json)]
+    return json.dumps(_pro_mandanten.record_outcomes(paths, outcomes, lang))
+
+def pro_mandanten_manual(names_json, stem, ref, accepted, lang):
+    paths = [os.path.join(MAND_IN, n) for n in json.loads(names_json)]
+    return json.dumps(_pro_mandanten.record_manual(paths, stem, ref, bool(accepted), lang))
+
+def pro_mandanten_zip_registries(paths_json):
+    import zipfile
+    p = "/tmp/mandanten/Register.zip"
+    with zipfile.ZipFile(p, "w", zipfile.ZIP_DEFLATED) as z:
+        for path in json.loads(paths_json):
+            z.write(path, "Register/" + os.path.basename(path))
+    return p
 `;
 
 // ---------- protocol buttons ----------
@@ -409,6 +468,7 @@ async function mandOverview() {
     st.textContent = t("mand_overview", { v: tt.vehicles, r: tt.ready, e: tt.with_errors, p: tt.pending, n: tt.without_registry });
     st.className = "small " + (tt.with_errors ? "msg-warn" : "msg-ok");
     $("mand-build").disabled = tt.ready === 0;
+    $("mand-oc-record").disabled = false;
     console.info(`aeoi:mandanten overview ${tt.vehicles} ready=${tt.ready}`);
   } catch (e) {
     st.textContent = t("mand_error") + e; st.className = "small msg-err";
@@ -422,13 +482,21 @@ function mandRender(ov) {
   const labels = I18N[LANG].mand_plan || I18N.de.mand_plan;
   for (const v of ov.vehicles) {
     const tr = el("tr", { class: v.ready ? "ready" : v.check_ok === false ? "bad" : "idle" });
-    tr.append(el("td", {}, el("strong", { text: v.fi_name || v.stem }), el("div", { class: "small muted", text: (v.estv_id ? v.estv_id + " · " : "") + v.stem })));
+    const who = el("td", {}, el("strong", { text: v.fi_name || (v.registry_fi && v.registry_fi.name) || v.stem }), el("div", { class: "small muted", text: (v.estv_id ? v.estv_id + " · " : "") + v.stem }));
+    if (v.paired_by === "estv_id" && v.registry) who.append(el("span", { class: "paired", text: t("mand_paired", { file: v.registry.split("/").pop() }) }));
+    tr.append(who);
     tr.append(el("td", {}, v.workbook === null ? t("mand_no_workbook") : el("span", { class: "mini " + (v.check_ok ? "ok" : "err"), text: v.check_ok ? t("mand_check_ok") : t("mand_check_bad", { n: v.check_errors + v.check_inputs }) })));
     const reg = el("td");
     if (v.registry === null) reg.textContent = t("mand_no_registry");
     else {
       for (const [status, n] of Object.entries(v.counts)) reg.append(el("span", { class: "mini " + status, text: `${n} ${status}` }));
       if (v.pending.length) reg.append(el("span", { class: "mini pending", text: t("mand_pending", { n: v.pending.length }) }));
+      for (const ref of v.pending) {
+        const q = el("span", { class: "quick", title: t("mand_quick_title", { ref }) });
+        q.append(el("button", { class: "btn", type: "button", text: "✓ " + t("mand_quick_ok"), onclick: () => mandManual(v.stem, ref, true) }));
+        q.append(el("button", { class: "btn", type: "button", text: "✗ " + t("mand_quick_bad"), onclick: () => mandManual(v.stem, ref, false) }));
+        reg.append(el("div", { class: "small mono", text: ref.slice(-12) }, q));
+      }
       if (!Object.keys(v.counts).length) reg.append(el("span", { class: "muted small", text: "0" }));
     }
     tr.append(reg);
@@ -476,6 +544,10 @@ async function mandBuild() {
       const zip = py.globals.get("pro_mandanten_zip")(JSON.stringify(m));
       download(py.FS.readFile(zip), `Stapel-${stamp.replace(" ", "-")}.zip`, "application/zip");
       note = t("mand_zipped");
+      for (const path of Object.values(m.registries)) { // the session goes on with the updated registries
+        const entry = MAND.files.get(path.split("/").pop());
+        if (entry) entry.bytes = py.FS.readFile(path);
+      }
     }
     for (const r of m.vehicles) {
       if (!r.built.length && !r.error) continue;
@@ -492,12 +564,83 @@ async function mandBuild() {
     $("mand-out").prepend(el("div", { class: "next " + (tt.errors ? "msg-warn" : "msg-ok"), text: summary }));
     console.info(`aeoi:mandanten built ${tt.built} vehicles=${tt.vehicles_built} errors=${tt.errors}`);
     if (MAND.dir) await mandLoadFromDir(MAND.dir); // registries changed on disk: re-read, fresh overview
-    else { st.textContent = summary; st.className = "small " + (tt.errors ? "msg-warn" : "msg-ok"); }
+    else if (MAND.files.size) await mandOverview(); // in-memory registries updated: fresh overview
   } catch (e) {
     st.textContent = t("mand_error") + e; st.className = "small msg-err";
     console.info("aeoi:mandanten error");
   } finally { $("mand-refresh").disabled = false; }
 }
+
+// Registries changed by an outcome: written back into the folder, or kept in memory (the
+// staged copy is re-read from the runtime) until "Geänderte Register herunterladen" zips them.
+MAND.dirty = new Set();
+async function mandPersistRegistries(registries) {
+  for (const [stem, path] of Object.entries(registries)) {
+    const name = path.split("/").pop();
+    const bytes = py.FS.readFile(path);
+    const entry = MAND.files.get(name);
+    if (entry) entry.bytes = bytes;
+    if (MAND.dir && entry && entry.handle) { const w = await entry.handle.createWritable(); await w.write(bytes); await w.close(); }
+    else MAND.dirty.add(name);
+  }
+  $("mand-save").classList.toggle("hidden", MAND.dirty.size === 0);
+  if (MAND.dirty.size) $("mand-save").querySelector("span").textContent = t("mand_save") + ` (${MAND.dirty.size})`;
+  return MAND.dir ? t("mand_saved_dir") : t("mand_unsaved", { n: MAND.dirty.size });
+}
+async function mandRecordOutcomes() {
+  const st = $("mand-status");
+  const items = [];
+  for (const f of $("mand-oc-files").files) items.push({ name: f.name, text: await f.text() });
+  const pasted = $("mand-oc-text").value.trim();
+  if (pasted) items.push({ name: t("mand_oc_paste").replace(/^… /, "").slice(0, 24) + " …", text: pasted });
+  if (!items.length) return;
+  $("mand-oc-record").disabled = true;
+  await nextPaint();
+  try {
+    const names = mandStage();
+    const res = JSON.parse(py.globals.get("pro_mandanten_outcomes")(names, JSON.stringify(items), LANG));
+    const out = $("mand-oc-out"); out.replaceChildren();
+    for (const r of res.rows) {
+      const line = r.error ? `${r.file}: ${r.error}` : t("mand_oc_row", { file: r.file, fi: r.fi_name || r.stem, ref: r.message_ref_id, status: r.status });
+      out.append(el("div", { class: "built " + (r.error ? "msg-err" : ""), text: line }));
+    }
+    const note = await mandPersistRegistries(res.registries);
+    st.textContent = t("mand_oc_done", { r: res.totals.recorded, u: res.totals.unmatched }) + " " + note;
+    st.className = "small " + (res.totals.unmatched ? "msg-warn" : "msg-ok");
+    console.info(`aeoi:mandanten outcomes ${res.totals.recorded} unmatched=${res.totals.unmatched}`);
+    $("mand-oc-text").value = ""; $("mand-oc-files").value = "";
+    await mandOverview();
+  } catch (e) {
+    st.textContent = t("mand_error") + e; st.className = "small msg-err";
+    console.info("aeoi:mandanten error");
+  } finally { $("mand-oc-record").disabled = false; }
+}
+async function mandManual(stem, ref, accepted) {
+  const st = $("mand-status");
+  try {
+    const names = mandStage();
+    const res = JSON.parse(py.globals.get("pro_mandanten_manual")(names, stem, ref, accepted, LANG));
+    const note = await mandPersistRegistries(res.registries);
+    st.textContent = `${stem} · ${ref.slice(-12)} · ${res.status}. ${note}`;
+    st.className = "small msg-ok";
+    console.info(`aeoi:mandanten manual ${res.status}`);
+    await mandOverview();
+  } catch (e) {
+    st.textContent = t("mand_error") + e; st.className = "small msg-err";
+    console.info("aeoi:mandanten error");
+  }
+}
+$("mand-oc-record").addEventListener("click", mandRecordOutcomes);
+$("mand-oc-files").addEventListener("change", () => { $("mand-oc-record").disabled = !MAND.files.size; });
+$("mand-oc-text").addEventListener("input", () => { $("mand-oc-record").disabled = !MAND.files.size; });
+$("mand-save").addEventListener("click", () => {
+  mandStage();
+  const paths = [...MAND.dirty].map((n) => `/tmp/mandanten/in/${n}`);
+  const zip = py.globals.get("pro_mandanten_zip_registries")(JSON.stringify(paths));
+  download(py.FS.readFile(zip), `Register-${localIso().slice(0, 16).replace("T", "-").replace(":", "")}.zip`, "application/zip");
+  MAND.dirty.clear(); $("mand-save").classList.add("hidden");
+  console.info("aeoi:mandanten registries-zipped");
+});
 
 $("mand-folder").addEventListener("click", async () => {
   try { const dir = await window.showDirectoryPicker({ mode: "readwrite" }); await mandLoadFromDir(dir); } catch (e) { /* cancelled */ }
@@ -518,7 +661,8 @@ document.addEventListener("aeoi:pro", () => {
   $("mand-card").classList.toggle("hidden", !PRO.active);
   $("mand-folder").classList.toggle("hidden", !MAND_FSA);
 });
-document.addEventListener("aeoi:language", () => { if (PRO.active && MAND.files.size) mandOverview(); });
+document.addEventListener("aeoi:language", () => { $("mand-oc-text").placeholder = t("mand_oc_paste"); if (PRO.active && MAND.files.size) mandOverview(); });
+$("mand-oc-text").placeholder = t("mand_oc_paste");
 
 // ---------- wiring ----------
 document.addEventListener("aeoi:booted", () => {
