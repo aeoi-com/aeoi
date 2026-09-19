@@ -15,7 +15,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scratch = process.env.PYODIDE_DIR || join(root, ".local", "pyodide-test");
@@ -216,6 +216,33 @@ try {
   check("two files restored, none skipped: " + (await restoredMsg).text(), (await restoredMsg).text() === "aeoi:restored 2 0");
   check("restored messages are accepted; keys taken from the workbook", (await page.locator("#reg-list .status.accepted").count()) === 2 && (await page.locator("#restore-out .built").count()) === 2 && (await page.locator("#restore-out .built").first().textContent()).includes("2 Schlüssel aus der Vorlage"));
   check("plan against the restored registry: 1 unchanged, 1 new (the cancelled account)", (await page.locator("#plan .tag.unchanged").textContent()).startsWith("1") && (await page.locator("#plan .tag.new").textContent()).startsWith("1"));
+  // ---- Mandantenübersicht + Stapelverarbeitung (Pro, file-input fallback -> one zip) ----
+  if (proActive) {
+    const mand = join(fixtures, "mandanten");
+    mkdirSync(mand, { recursive: true });
+    copyFileSync(join(fixtures, "EXAMPLE.XLSX"), join(mand, "Alpha-Trust.xlsx"));
+    copyFileSync(join(fixtures, "EXAMPLE.XLSX"), join(mand, "Beta-Stiftung.xlsx"));
+    copyFileSync(join(fixtures, "institut-1.sqlite"), join(mand, "Alpha-Trust.sqlite")); // empty registry with the ESTV key
+    copyFileSync(join(fixtures, "institut-0.sqlite"), join(mand, "Gamma-Holding.sqlite")); // registry only
+    check("Mandanten card visible with Pro, folder button hidden without FSA", await page.locator("#mand-card").isVisible() && !(await page.locator("#mand-folder").isVisible()));
+    const ovMsg = consoleEvent("aeoi:mandanten");
+    await page.locator("#mand-files").setInputFiles(["Alpha-Trust.xlsx", "Beta-Stiftung.xlsx", "Alpha-Trust.sqlite", "Gamma-Holding.sqlite"].map((n) => join(mand, n)));
+    check("overview: 3 vehicles, 2 ready (test mode): " + (await ovMsg).text(), (await ovMsg).text() === "aeoi:mandanten overview 3 ready=2");
+    check("overview table: 3 rows, Gamma has no workbook, Alpha shows the registry", (await page.locator("#mand-table tr.ready").count()) === 2 && (await page.locator("#mand-table tr").count()) === 4 && (await page.locator("#mand-table").textContent()).includes("Gamma-Holding"));
+    await page.locator("#mand-mode").selectOption("prod");
+    const ovProd = consoleEvent("aeoi:mandanten");
+    check("productive mode: only the vehicle with a registry is ready: " + (await ovProd).text(), (await ovProd).text() === "aeoi:mandanten overview 3 ready=1");
+    await page.locator("#mand-mode").selectOption("test");
+    await consoleEvent("aeoi:mandanten");
+    const builtMand = consoleEvent("aeoi:mandanten built");
+    const zipPath = await withDownload(async () => page.locator("#mand-build").click());
+    check("batch built 2 messages for 2 vehicles: " + (await builtMand).text(), (await builtMand).text() === "aeoi:mandanten built 2 vehicles=2 errors=0");
+    const zipNames = readFileSync(zipPath).toString("latin1"); // central directory carries the names
+    check("zip: outputs per vehicle, protocol PDFs, Alpha's registry under Register/: " + zipPath.split(/[\\/]/).pop(),
+      /^Stapel-.*\.zip$/.test(zipPath.split(/[\\/]/).pop()) && zipNames.includes("Alpha-Trust/Test-CRS-") && zipNames.includes("Beta-Stiftung/Pruefprotokoll-") && zipNames.includes("Register/Alpha-Trust.sqlite") && zipNames.includes("manifest.json"));
+    check("Alpha (key in registry) encrypted, Beta (no key) XML only", (await page.locator("#mand-out .built").count()) === 2 && (await page.locator("#mand-out").textContent()).includes("nicht verschlüsselt"));
+  }
+
   // verify the encrypted packages and the registry outside the browser
   const verify = join(fixtures, "verify.txt");
   await run(py, ["-c", `
@@ -255,7 +282,7 @@ open(r"${verify}", "w", encoding="utf-8").write(chr(10).join(out))
   check("restored registry has the same chain heads as the original: " + (lines[3] || ""), lines[3].includes("same chain heads") && lines[3].includes("(1 head(s), 5 records)"));
 
   const after = requests.slice(bootRequests);
-  check(`no network request after the file selection (${after.length} after boot)`, after.length === 0);
+  check(`no network request after the file selection (${after.length} after boot)${after.length ? ": " + after.map((r) => r.url).join(", ") : ""}`, after.length === 0);
   check("no non-GET request at all", requests.every((r) => r.method === "GET"));
   const hosts = [...new Set(requests.map((r) => r.host))].sort();
   check("only the page's own origin, ever: " + hosts.join(", "), hosts.length === 1 && hosts[0] === `127.0.0.1:${port}`);

@@ -17,6 +17,9 @@
 <meta property="og:image" content="https://meldbar.ch/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="styles.css">
+<!-- both font subsets at boot: a glyph outside Latin-1 (e.g. the French œ) must not trigger a request after the file selection -->
+<link rel="preload" href="fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter-latin-ext.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="site.css">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1c4f9e">
@@ -214,6 +217,25 @@
       <button class="btn hidden" id="pro-remove" type="button"><span data-i18n="pro_remove">Lizenz entfernen</span></button>
       <a class="small muted" href="preise.html" data-i18n="pro_more">Pro-Lizenz: ab 900 CHF pro Jahr und Organisation - siehe Preise.</a>
     </div>
+  </section>
+
+  <section class="card hidden" id="mand-card">
+    <h2 data-i18n="mand_title">Mandantenübersicht</h2>
+    <p class="small muted" data-i18n="mand_intro"></p>
+    <div class="options">
+      <button class="btn primary hidden" id="mand-folder" type="button"><span data-i18n="mand_folder">Ordner wählen</span></button>
+      <label class="btn"><span data-i18n="mand_files">Dateien wählen</span><input type="file" id="mand-files" class="hidden" multiple accept=".xlsx,.xlsm,.sqlite,.db"></label>
+      <label><span data-i18n="mand_mode">Meldungen</span> <select id="mand-mode" class="pill"><option value="test" data-i18n="mand_mode_test">Testmeldungen</option><option value="prod" data-i18n="mand_mode_prod">produktiv</option></select></label>
+      <label class="btn"><span data-i18n="mand_key">ESTV-Schlüssel für alle</span><input type="file" id="mand-key" class="hidden" accept=".pem,.cer,.crt,.der,.pub,.txt"></label>
+      <span id="mand-key-status" class="small muted"></span>
+    </div>
+    <div id="mand-status" class="small"></div>
+    <div class="reglist" id="mand-table"></div>
+    <div class="actions">
+      <button class="btn" id="mand-refresh" type="button" disabled><span data-i18n="mand_refresh">Neu prüfen</span></button>
+      <button class="btn primary" id="mand-build" type="button" disabled><span data-i18n="mand_build">Alle bereiten Vehikel erstellen</span></button>
+    </div>
+    <div id="mand-out" class="findings"></div>
   </section>
 
   <section class="how">

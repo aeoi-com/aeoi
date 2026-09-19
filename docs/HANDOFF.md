@@ -25,8 +25,11 @@ user or on request (competitor details are kept out of this public file). Swiss 
   120 CHF per vehicle and year, minimum 900 CHF per organisation**, users unlimited, from 100
   vehicles on request - priced per vehicle so fiduciaries can re-bill it. Pro buys something
   tangible, not support alone: the **Prüfprotokoll** (PDF per check and per built message,
-  shipped 19.09), Mandantenübersicht + batch over all vehicles (promised on the pricing page
-  "before 16.01.2027" - still to build), support (2 working days, 1 in May-June), rule updates
+  shipped 19.09), Mandantenübersicht + batch over all vehicles (shipped 19.09 evening:
+  `meldbar_pro.mandanten` - pairs `<stem>.xlsx` + `<stem>.sqlite`, `overview()` without side
+  effects, `batch_build()` = check -> plan -> build -> package -> protocol per message, registries
+  updated in place, `zip_outputs()` for browsers without the File System Access API; UI in
+  `web/pro.js`, card `#mand-card`), support (2 working days, 1 in May-June), rule updates
   within 30 days, 1-hour onboarding. One-off **Begleitete erste Meldung** 450 CHF (1 h screen
   share, also without Pro). Software houses: a note (2'500 CHF/yr integration support; the
   library is Apache-2.0 anyway). Pilots get Pro free for the first year.
@@ -148,8 +151,10 @@ user or on request (competitor details are kept out of this public file). Swiss 
   passes; the wheel installs and runs in a clean venv. GitHub readiness: `.github/workflows/ci.yml`
   (tests on Linux/Windows, 3.11-3.13, ruff, build + twine + clean install, web smoke, DCO check on
   pull requests), `pages.yml` (publishes web/ to GitHub Pages), CHANGELOG.md, CONTRIBUTING.md (DCO).
-- 217 tests: `.venv/Scripts/python -m pytest`; browser test 61 checks (incl. Pro activation with
-  the example key and both Prüfprotokoll downloads when the private blob is in `web/pro/`).
+- 217 tests: `.venv/Scripts/python -m pytest`; browser test 68 checks (incl. Pro activation with
+  the example key, both Prüfprotokoll downloads and the Mandanten batch flow when the private
+  blob is in `web/pro/` - `build_bundle.py --licences licences/licences.example.json --into
+  ../aeoi/web` in the private repo).
 
 ## Verified facts to keep
 

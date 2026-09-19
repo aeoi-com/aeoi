@@ -24,6 +24,37 @@ Object.assign(I18N.de, {
   pro_more: "Pro-Lizenz: ab 900 CHF pro Jahr und Organisation - siehe Preise.",
   protokoll_btn: "Prüfprotokoll (PDF)",
   protokoll_name: "Pruefprotokoll",
+  mand_title: "Mandantenübersicht",
+  mand_intro: "Alle Vehikel auf einen Blick: Wählen Sie den Ordner (Chrome, Edge) oder die Dateien, in denen Ihre Workbooks und Register liegen - ein Vehikel = «Name.xlsx» + «Name.sqlite». Die Tabelle zeigt pro Vehikel die Prüfung des Workbooks, den Stand des Registers und was gesendet würde. «Alle bereiten Vehikel erstellen» baut, verschlüsselt und protokolliert jede fällige Meldung und aktualisiert die Register - im Ordner direkt, sonst als Zip. Nichts verlässt den Browser.",
+  mand_folder: "Ordner wählen",
+  mand_files: "Dateien wählen",
+  mand_mode: "Meldungen",
+  mand_mode_test: "Testmeldungen",
+  mand_mode_prod: "produktiv",
+  mand_key: "ESTV-Schlüssel für alle",
+  mand_key_set: "Schlüssel für alle Vehikel gesetzt",
+  mand_refresh: "Neu prüfen",
+  mand_build: "Alle bereiten Vehikel erstellen",
+  mand_reading: "{n} Dateien werden gelesen …",
+  mand_overview: "{v} Vehikel · {r} bereit · {e} mit Fehlern · {p} ohne Portal-Ergebnis · {n} ohne Register",
+  mand_building: "Meldungen werden erstellt …",
+  mand_built: "{m} Meldung(en) für {v} Vehikel erstellt, {s} übersprungen, {e} Fehler",
+  mand_written: "Ausgaben im Ordner «{dir}», Register aktualisiert.",
+  mand_zipped: "Zip heruntergeladen: Ausgaben pro Vehikel und die aktualisierten Register unter «Register/» - diese ersetzen Ihre bisherigen Registerdateien.",
+  mand_nothing: "Kein Vehikel ist bereit.",
+  mand_no_files: "Keine Workbooks (.xlsx) oder Register (.sqlite) gefunden.",
+  mand_col_vehicle: "Vehikel",
+  mand_col_check: "Workbook",
+  mand_col_registry: "Register",
+  mand_col_plan: "Zu senden",
+  mand_col_state: "Status",
+  mand_check_ok: "OK",
+  mand_check_bad: "{n} Fehler",
+  mand_no_workbook: "-",
+  mand_no_registry: "kein Register",
+  mand_plan: { new: "neu", changed: "geändert", deleted: "Storno", unchanged: "unverändert", blocked: "blockiert" },
+  mand_pending: "{n} offen",
+  mand_error: "Fehler: ",
 });
 Object.assign(I18N.fr, {
   pro_title: "meldbar Pro",
@@ -42,6 +73,37 @@ Object.assign(I18N.fr, {
   pro_more: "Licence Pro : dès 900 CHF par an et par organisation - voir les prix.",
   protokoll_btn: "Procès-verbal (PDF)",
   protokoll_name: "Proces-verbal",
+  mand_title: "Vue d'ensemble des mandats",
+  mand_intro: "Tous les véhicules d'un coup d'œil : choisissez le dossier (Chrome, Edge) ou les fichiers où se trouvent vos classeurs et registres - un véhicule = « Nom.xlsx » + « Nom.sqlite ». Le tableau montre par véhicule le contrôle du classeur, l'état du registre et ce qui serait envoyé. « Créer tous les véhicules prêts » construit, chiffre et documente chaque déclaration due et met à jour les registres - directement dans le dossier, sinon en zip. Rien ne quitte le navigateur.",
+  mand_folder: "Choisir le dossier",
+  mand_files: "Choisir les fichiers",
+  mand_mode: "Déclarations",
+  mand_mode_test: "de test",
+  mand_mode_prod: "productives",
+  mand_key: "Clé AFC pour tous",
+  mand_key_set: "Clé définie pour tous les véhicules",
+  mand_refresh: "Revérifier",
+  mand_build: "Créer tous les véhicules prêts",
+  mand_reading: "Lecture de {n} fichiers …",
+  mand_overview: "{v} véhicules · {r} prêts · {e} avec erreurs · {p} sans résultat du portail · {n} sans registre",
+  mand_building: "Création des déclarations …",
+  mand_built: "{m} déclaration(s) créée(s) pour {v} véhicules, {s} ignorés, {e} erreurs",
+  mand_written: "Résultats dans le dossier « {dir} », registres mis à jour.",
+  mand_zipped: "Zip téléchargé : résultats par véhicule et registres mis à jour sous « Register/ » - ils remplacent vos anciens fichiers de registre.",
+  mand_nothing: "Aucun véhicule n'est prêt.",
+  mand_no_files: "Aucun classeur (.xlsx) ni registre (.sqlite) trouvé.",
+  mand_col_vehicle: "Véhicule",
+  mand_col_check: "Classeur",
+  mand_col_registry: "Registre",
+  mand_col_plan: "À envoyer",
+  mand_col_state: "État",
+  mand_check_ok: "OK",
+  mand_check_bad: "{n} erreurs",
+  mand_no_workbook: "-",
+  mand_no_registry: "pas de registre",
+  mand_plan: { new: "nouveau", changed: "modifié", deleted: "annulation", unchanged: "inchangé", blocked: "bloqué" },
+  mand_pending: "{n} en attente",
+  mand_error: "Erreur : ",
 });
 Object.assign(I18N.it, {
   pro_title: "meldbar Pro",
@@ -60,6 +122,37 @@ Object.assign(I18N.it, {
   pro_more: "Licenza Pro: da 900 CHF all'anno per organizzazione - vedi prezzi.",
   protokoll_btn: "Protocollo di verifica (PDF)",
   protokoll_name: "Protocollo-di-verifica",
+  mand_title: "Panoramica dei mandati",
+  mand_intro: "Tutti i veicoli in un colpo d'occhio: scelga la cartella (Chrome, Edge) o i file dove stanno i suoi workbook e registri - un veicolo = «Nome.xlsx» + «Nome.sqlite». La tabella mostra per veicolo la verifica del workbook, lo stato del registro e cosa verrebbe inviato. «Crea tutti i veicoli pronti» costruisce, cifra e protocolla ogni comunicazione dovuta e aggiorna i registri - direttamente nella cartella, altrimenti in uno zip. Nulla lascia il browser.",
+  mand_folder: "Scegli cartella",
+  mand_files: "Scegli file",
+  mand_mode: "Comunicazioni",
+  mand_mode_test: "di prova",
+  mand_mode_prod: "produttive",
+  mand_key: "Chiave AFC per tutti",
+  mand_key_set: "Chiave impostata per tutti i veicoli",
+  mand_refresh: "Verifica di nuovo",
+  mand_build: "Crea tutti i veicoli pronti",
+  mand_reading: "Lettura di {n} file …",
+  mand_overview: "{v} veicoli · {r} pronti · {e} con errori · {p} senza esito del portale · {n} senza registro",
+  mand_building: "Creazione delle comunicazioni …",
+  mand_built: "{m} comunicazione/i creata/e per {v} veicoli, {s} saltati, {e} errori",
+  mand_written: "Output nella cartella «{dir}», registri aggiornati.",
+  mand_zipped: "Zip scaricato: output per veicolo e registri aggiornati in «Register/» - sostituiscono i suoi file di registro precedenti.",
+  mand_nothing: "Nessun veicolo è pronto.",
+  mand_no_files: "Nessun workbook (.xlsx) o registro (.sqlite) trovato.",
+  mand_col_vehicle: "Veicolo",
+  mand_col_check: "Workbook",
+  mand_col_registry: "Registro",
+  mand_col_plan: "Da inviare",
+  mand_col_state: "Stato",
+  mand_check_ok: "OK",
+  mand_check_bad: "{n} errori",
+  mand_no_workbook: "-",
+  mand_no_registry: "nessun registro",
+  mand_plan: { new: "nuovo", changed: "modificato", deleted: "storno", unchanged: "invariato", blocked: "bloccato" },
+  mand_pending: "{n} in sospeso",
+  mand_error: "Errore: ",
 });
 
 const PRO = { active: false, meta: null, state: null };
@@ -195,6 +288,32 @@ def pro_protokoll_built(i, meta_json, lang):
     out = _pro_protokoll.from_dict(data, meta, lang)
     open("/tmp/protokoll.pdf", "wb").write(out)
     return "/tmp/protokoll.pdf"
+
+import os, shutil, datetime as _dt
+from meldbar_pro import mandanten as _pro_mandanten
+MAND_IN, MAND_OUT = "/tmp/mandanten/in", "/tmp/mandanten/out"
+
+def pro_mandanten_reset():
+    shutil.rmtree("/tmp/mandanten", ignore_errors=True)
+    os.makedirs(MAND_IN); os.makedirs(MAND_OUT)
+    return MAND_IN
+
+def pro_mandanten_overview(names_json, version, test, lang):
+    paths = [os.path.join(MAND_IN, n) for n in json.loads(names_json)]
+    return json.dumps(_pro_mandanten.overview(paths, version, test, lang))
+
+def pro_mandanten_build(names_json, version, test, lang, pem, header, meta_json):
+    meta = json.loads(meta_json)
+    paths = [os.path.join(MAND_IN, n) for n in json.loads(names_json)]
+    shutil.rmtree(MAND_OUT, ignore_errors=True); os.makedirs(MAND_OUT)
+    m = _pro_mandanten.batch_build(paths, MAND_OUT, version, test, lang=lang, public_key=pem or None, header=header,
+                                   holder=meta["holder"], licence_id=meta["licence_id"], created=_dt.datetime.fromisoformat(meta["created"]))
+    m["registries"] = {r["stem"]: r["registry"] for r in m["vehicles"] if r["built"] and r["registry"]}
+    return json.dumps(m)
+
+def pro_mandanten_zip(manifest_json):
+    m = json.loads(manifest_json)
+    return str(_pro_mandanten.zip_outputs(m, m["registries"], "/tmp/mandanten/Stapel.zip"))
 `;
 
 // ---------- protocol buttons ----------
@@ -246,6 +365,160 @@ document.addEventListener("aeoi:built", (ev) => {
   });
 });
 document.addEventListener("aeoi:pro", () => { if (last && PRO.active) document.dispatchEvent(new CustomEvent("aeoi:rendered", { detail: last })); });
+
+// ---------- Mandantenübersicht + Stapelverarbeitung (Pro) ----------
+// Files come from a folder (File System Access API: outputs and registries are written back in
+// place) or from a multi-file input (outputs and updated registries leave as one zip). The
+// page only moves bytes and renders JSON; what a vehicle needs and what gets built is decided
+// by the Pro package.
+const MAND = { dir: null, files: new Map(), pem: "" }; // files: name -> { bytes, handle? }
+const MAND_FSA = typeof window.showDirectoryPicker === "function" && !location.hash.includes("nofsa");
+const mandSuffix = (name) => /\.(xlsx|xlsm|sqlite|db)$/i.test(name);
+
+async function mandLoadFromDir(dir) {
+  MAND.dir = dir; MAND.files = new Map();
+  for await (const [name, h] of dir.entries()) {
+    if (h.kind === "file" && mandSuffix(name)) MAND.files.set(name, { bytes: new Uint8Array(await (await h.getFile()).arrayBuffer()), handle: h });
+  }
+  await mandOverview();
+}
+async function mandLoadFromFiles(list) {
+  MAND.dir = null; MAND.files = new Map();
+  for (const f of list) if (mandSuffix(f.name)) MAND.files.set(f.name, { bytes: new Uint8Array(await f.arrayBuffer()) });
+  await mandOverview();
+}
+function mandStage() {
+  const dir = py.globals.get("pro_mandanten_reset")();
+  for (const [name, f] of MAND.files) py.FS.writeFile(`${dir}/${name}`, f.bytes);
+  return JSON.stringify([...MAND.files.keys()]);
+}
+const mandTest = () => $("mand-mode").value === "test";
+const mandHeader = () => ($("version").value === "3.0" ? $("build-header").value : "oecd");
+
+async function mandOverview() {
+  const st = $("mand-status");
+  if (!MAND.files.size) { st.textContent = t("mand_no_files"); st.className = "small msg-err"; $("mand-table").replaceChildren(); return; }
+  st.textContent = t("mand_reading", { n: MAND.files.size }); st.className = "small";
+  $("mand-refresh").disabled = $("mand-build").disabled = true;
+  await nextPaint();
+  try {
+    const names = mandStage();
+    const ov = JSON.parse(py.globals.get("pro_mandanten_overview")(names, $("version").value, mandTest(), LANG));
+    mandRender(ov);
+    const tt = ov.totals;
+    st.textContent = t("mand_overview", { v: tt.vehicles, r: tt.ready, e: tt.with_errors, p: tt.pending, n: tt.without_registry });
+    st.className = "small " + (tt.with_errors ? "msg-warn" : "msg-ok");
+    $("mand-build").disabled = tt.ready === 0;
+    console.info(`aeoi:mandanten overview ${tt.vehicles} ready=${tt.ready}`);
+  } catch (e) {
+    st.textContent = t("mand_error") + e; st.className = "small msg-err";
+    console.info("aeoi:mandanten error");
+  } finally { $("mand-refresh").disabled = false; }
+}
+
+function mandRender(ov) {
+  const table = el("table");
+  table.append(el("tr", {}, ...["mand_col_vehicle", "mand_col_check", "mand_col_registry", "mand_col_plan", "mand_col_state"].map((k) => el("th", { text: t(k) }))));
+  const labels = I18N[LANG].mand_plan || I18N.de.mand_plan;
+  for (const v of ov.vehicles) {
+    const tr = el("tr", { class: v.ready ? "ready" : v.check_ok === false ? "bad" : "idle" });
+    tr.append(el("td", {}, el("strong", { text: v.fi_name || v.stem }), el("div", { class: "small muted", text: (v.estv_id ? v.estv_id + " · " : "") + v.stem })));
+    tr.append(el("td", {}, v.workbook === null ? t("mand_no_workbook") : el("span", { class: "mini " + (v.check_ok ? "ok" : "err"), text: v.check_ok ? t("mand_check_ok") : t("mand_check_bad", { n: v.check_errors + v.check_inputs }) })));
+    const reg = el("td");
+    if (v.registry === null) reg.textContent = t("mand_no_registry");
+    else {
+      for (const [status, n] of Object.entries(v.counts)) reg.append(el("span", { class: "mini " + status, text: `${n} ${status}` }));
+      if (v.pending.length) reg.append(el("span", { class: "mini pending", text: t("mand_pending", { n: v.pending.length }) }));
+      if (!Object.keys(v.counts).length) reg.append(el("span", { class: "muted small", text: "0" }));
+    }
+    tr.append(reg);
+    const plan = el("td");
+    if (v.plan) for (const k of ["new", "changed", "deleted", "unchanged", "blocked"]) {
+      const n = v.plan[k === "deleted" ? "deletions" : k];
+      if (n) plan.append(el("span", { class: "mini " + k, text: `${n} ${labels[k]}` }));
+    }
+    tr.append(plan);
+    tr.append(el("td", { class: "reason", text: v.reason }));
+    table.append(tr);
+  }
+  $("mand-table").replaceChildren(table);
+}
+
+async function mandBuild() {
+  const st = $("mand-status");
+  st.textContent = t("mand_building"); st.className = "small";
+  $("mand-build").disabled = $("mand-refresh").disabled = true;
+  $("mand-out").replaceChildren();
+  await nextPaint();
+  try {
+    const names = mandStage();
+    const meta = JSON.stringify({ holder: PRO.meta.holder, licence_id: PRO.meta.licence_id, created: localIso() });
+    const m = JSON.parse(py.globals.get("pro_mandanten_build")(names, $("version").value, mandTest(), LANG, MAND.pem, mandHeader(), meta));
+    const tt = m.totals;
+    const stamp = m.created.slice(0, 16).replace("T", " ").replace(":", "");
+    let note = "";
+    if (MAND.dir) {
+      const dirName = `Meldungen ${stamp}`;
+      const outDir = await MAND.dir.getDirectoryHandle(dirName, { create: true });
+      for (const r of m.vehicles) {
+        if (!r.built.length) continue;
+        const sub = await outDir.getDirectoryHandle(r.stem, { create: true });
+        for (const b of r.built) for (const path of Object.values(b.files)) {
+          const w = await (await sub.getFileHandle(path.split("/").pop(), { create: true })).createWritable();
+          await w.write(py.FS.readFile(path)); await w.close();
+        }
+        const regName = m.registries[r.stem] && m.registries[r.stem].split("/").pop();
+        const src = regName && MAND.files.get(regName);
+        if (src && src.handle) { const w = await src.handle.createWritable(); await w.write(py.FS.readFile(m.registries[r.stem])); await w.close(); }
+      }
+      note = t("mand_written", { dir: dirName });
+    } else if (tt.built) {
+      const zip = py.globals.get("pro_mandanten_zip")(JSON.stringify(m));
+      download(py.FS.readFile(zip), `Stapel-${stamp.replace(" ", "-")}.zip`, "application/zip");
+      note = t("mand_zipped");
+    }
+    for (const r of m.vehicles) {
+      if (!r.built.length && !r.error) continue;
+      const card = el("div", { class: "built" });
+      card.append(el("div", { class: "head" }, el("span", { text: r.fi_name || r.stem }), r.error ? el("span", { class: "msg-err", text: t("mand_error") + r.error }) : null));
+      for (const b of r.built) {
+        const kind = b.kind === "correction" ? t("kind_correction") : t("kind_new");
+        const enc = b.encrypted ? "" : " · " + t("built_unencrypted");
+        card.append(el("div", { class: "ref", text: `${kind} · ${t("built_records", { n: b.records })} · ${b.message_ref_id}${enc}` }));
+      }
+      $("mand-out").append(card);
+    }
+    const summary = t("mand_built", { m: tt.built, v: tt.vehicles_built, s: tt.skipped, e: tt.errors }) + (note ? " " + note : "");
+    $("mand-out").prepend(el("div", { class: "next " + (tt.errors ? "msg-warn" : "msg-ok"), text: summary }));
+    console.info(`aeoi:mandanten built ${tt.built} vehicles=${tt.vehicles_built} errors=${tt.errors}`);
+    if (MAND.dir) await mandLoadFromDir(MAND.dir); // registries changed on disk: re-read, fresh overview
+    else { st.textContent = summary; st.className = "small " + (tt.errors ? "msg-warn" : "msg-ok"); }
+  } catch (e) {
+    st.textContent = t("mand_error") + e; st.className = "small msg-err";
+    console.info("aeoi:mandanten error");
+  } finally { $("mand-refresh").disabled = false; }
+}
+
+$("mand-folder").addEventListener("click", async () => {
+  try { const dir = await window.showDirectoryPicker({ mode: "readwrite" }); await mandLoadFromDir(dir); } catch (e) { /* cancelled */ }
+});
+$("mand-files").addEventListener("change", (ev) => mandLoadFromFiles([...ev.target.files]));
+$("mand-refresh").addEventListener("click", mandOverview);
+$("mand-build").addEventListener("click", mandBuild);
+$("mand-mode").addEventListener("change", () => { if (MAND.files.size) mandOverview(); });
+$("mand-key").addEventListener("change", async (ev) => {
+  const file = ev.target.files[0]; if (!file) return;
+  try {
+    py.globals.set("_key_bytes", new Uint8Array(await file.arrayBuffer()));
+    MAND.pem = py.runPython("from aeoi.estv import packaging; packaging.public_key_pem(packaging.load_public_key(bytes(_key_bytes.to_py())))");
+    $("mand-key-status").textContent = t("mand_key_set");
+  } catch (e) { $("mand-key-status").textContent = t("key_bad") + e; }
+});
+document.addEventListener("aeoi:pro", () => {
+  $("mand-card").classList.toggle("hidden", !PRO.active);
+  $("mand-folder").classList.toggle("hidden", !MAND_FSA);
+});
+document.addEventListener("aeoi:language", () => { if (PRO.active && MAND.files.size) mandOverview(); });
 
 // ---------- wiring ----------
 document.addEventListener("aeoi:booted", () => {

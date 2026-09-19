@@ -4,6 +4,11 @@ All notable changes to aeoi. Dates are the day the work was completed.
 
 ## Unreleased
 
+- Mandantenübersicht + Stapelverarbeitung on the page (Pro): folder or multi-file selection of
+  workbook/registry pairs, table per vehicle, batch build of every ready vehicle with encrypted
+  packages, updated registries and one Prüfprotokoll per message - written back into the folder
+  (Chrome/Edge) or downloaded as one zip. Generic UI in `web/pro.js`; the logic is in the
+  private package. Browser test: Mandanten flow through the file-input fallback.
 - meldbar Pro loader (`web/pro.js`): licence key in the app, encrypted per-licence bundle from
   the page's own origin (HMAC/HKDF/AES-GCM in WebCrypto), installed into Pyodide; `aeoi:built`
   event with the built cards; the checked file's size, SHA-256 and test flag kept on the page;

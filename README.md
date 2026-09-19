@@ -123,7 +123,11 @@ repository: with a licence key it fetches an encrypted bundle from the page's ow
 (`pro/<id>.bin`, AES-256-GCM; file name and key are derived from the licence key in the browser
 with WebCrypto), decrypts it locally and installs the contained wheel into the Python runtime.
 No server, no other host; an unknown key names a file that does not exist. What the add-on does
-today: a **Prüfprotokoll** (PDF, de/fr/it/en) for every check and every built message. The
+today: a **Prüfprotokoll** (PDF, de/fr/it/en) for every check and every built message, and the
+**Mandantenübersicht** with batch building: a folder (File System Access API) or a file selection
+of `<vehicle>.xlsx` + `<vehicle>.sqlite` pairs becomes one table (workbook check, registry
+status, what would be sent), and one click builds, encrypts and protocols every vehicle that is
+ready, writing outputs and updated registries back into the folder (or into one zip). The
 bundles are copied into the Pages deployment by CI from a private repository (read-only deploy
 key, secret `PRO_DEPLOY_KEY`) when that secret is set; without it the page works exactly as before and every key is
 "unknown". Everything that validates, builds, encrypts and keeps the registry stays here, under
